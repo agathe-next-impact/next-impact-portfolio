@@ -13,8 +13,8 @@ export default function ServicesFAQ({ faqs }: { faqs: { question: string; answer
       title={isEn ? "Frequently asked questions" : "Questions fréquentes"}
       description={
         isEn
-          ? "Some answers to the most common questions about our solutions."
-          : "Quelques réponses aux questions les plus courantes sur les solutions."
+          ? "Some answers to the most common questions about the three services."
+          : "Quelques réponses aux questions les plus courantes sur les trois prestations."
       }
       sectionId="solutions-faq"
       index="№ 10"

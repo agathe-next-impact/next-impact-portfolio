@@ -146,7 +146,8 @@ const STEPS: DiagnosticStep[] = [
     questions: [
       {
         // Seuils alignés sur la référence tarifaire du blog 2026
-        // (build headless : 2 250 / 4 000 / 6 500 €).
+        // (Refonte en WordPress sur mesure dès 2 250 €, en headless dès
+        // 4 000 €, Évolution dès 6 500 €).
         question: "Budget disponible pour le projet",
         options: [
           { label: "Moins de 2 250 €", points: -2 },

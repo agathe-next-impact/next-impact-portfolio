@@ -203,7 +203,7 @@ export function CtaPaire({
         <div className="flex flex-wrap gap-3 lg:shrink-0">
           {/* /scan vit hors de app/[locale]/ : balise <a>, pas le Link i18n. */}
           <a href="/scan" className={HERO_BTN_PRIMARY}>
-            {isEn ? "Analyze your site in 2 minutes" : "Analysez votre site en 2 minutes"}
+            {isEn ? "Analyze your site" : "Analysez votre site"}
             <ArrowRight size={14} />
           </a>
           <a href={CTA_CHAUD.href} target="_blank" rel="noopener noreferrer" className={HERO_BTN_SECONDARY}>

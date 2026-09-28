@@ -11,9 +11,9 @@ const handleI18n = createMiddleware(routing);
 // canonicals pointent bien ici, mais un canonical est un conseil : il ne coûte
 // rien d'être explicite. Tout hôte non canonique répond en noindex.
 //
-// Ceci empêche l'indexation, pas la consultation : agat.dev reste navigable
-// pour les tests. Pour consolider vraiment les signaux, poser en plus une
-// redirection de domaine dans Vercel → Domains.
+// Ceci empêche l'indexation des hôtes non canoniques (dont les URL
+// *.vercel.app). agat.dev est, lui, redirigé en 308 vers le domaine canonique
+// (next.config.mjs, 2026-09-28).
 const CANONICAL_HOST = "www.next-impact.digital";
 
 export default function proxy(request: NextRequest) {
@@ -38,7 +38,13 @@ export const config = {
   // volontairement non localisées. Sans cette exclusion, next-intl réécrit
   // /scan en /fr/scan (localePrefix "as-needed") — route inexistante → 404.
   // Voir docs/sentinelle/plan-mise-en-oeuvre.md §2 (E1).
+  //
+  // La négation `espace` est un préfixe : elle attrape aussi /espace-client,
+  // page vitrine localisée (app/[locale]/espace-client). Sans l'entrée
+  // explicite ci-dessous, /espace-client n'était pas réécrite en /fr/… et
+  // répondait 404 en production (constaté le 2026-09-28).
   matcher: [
     "/((?!api|_next|_vercel|scan|admin|espace|espace-direction|sitemap.xml|robots.txt|llms.txt|manifest.webmanifest|favicon.ico|.*\\..*).*)",
+    "/espace-client",
   ],
 };

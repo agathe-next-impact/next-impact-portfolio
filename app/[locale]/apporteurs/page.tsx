@@ -17,7 +17,7 @@ export async function generateMetadata({
   return generatePageMetadata({
     title: isEn
       ? "Referral partners: earn 10–15% on every project you recommend"
-      : "Apporteurs d'affaires : touchez 10 à 15 % sur chaque projet recommandé",
+      : "Apporteurs d'affaires : 10 à 15 % par projet recommandé",
     description: isEn
       ? "Know a business with an ageing website? Refer them and earn 10 to 15% of the signed project, paid on settlement. Fixed price, no surprises for them."
       : "Vous connaissez une PME dont le site vieillit mal ? Recommandez-la et touchez 10 à 15 % du projet signé, versés à l'encaissement. Forfait garanti.",

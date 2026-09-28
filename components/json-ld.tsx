@@ -3,6 +3,7 @@
  * pour améliorer le SEO et l'affichage dans les résultats de recherche
  */
 
+import { ENGLISH_PUBLISHED } from "@/i18n/routing";
 import { siteConfig } from "@/lib/metadata";
 import {
   CTO_PATH,
@@ -18,8 +19,8 @@ import {
   MAINTENANCE_PRICE_VALUE,
   MAINTENANCE_PRIX_VALIDES,
 } from "@/lib/maintenance-offer";
-import { TRAJECTOIRES, TRAJECTOIRE_ORDER, type TrajectoireSlug } from "@/lib/trajectoires";
-import { OFFERS as CONSEIL_OFFERS, ECHANGE_URL } from "@/lib/visio-conseil";
+import { TRAJECTOIRES, TRAJECTOIRE_ORDER, formatEuros, type TrajectoireSlug } from "@/lib/trajectoires";
+import { OFFERS as CONSEIL_OFFERS, ECHANGE_URL, ECHANGE_NAME } from "@/lib/visio-conseil";
 import { VEILLE_TITRE } from "@/lib/situations";
 
 type SchemaLocale = "fr" | "en";
@@ -119,10 +120,20 @@ const trajectoireDescription = (slug: TrajectoireSlug, locale: SchemaLocale): st
       ? " This is the recommended service."
       : " C'est la prestation recommandée."
     : "";
+  // Les variantes (la Refonte, ADR-031) : à égalité, chacune avec son plancher.
+  const variantes = trajectoire.variantes?.length
+    ? isEn
+      ? ` Two variants on an equal footing, chosen according to the situation: ${trajectoire.variantes
+          .map((v) => `${v.technique.en}, from ${formatEuros(v.priceValue, "en")} excl. VAT`)
+          .join("; ")}.`
+      : ` Deux variantes à égalité, choisies selon la situation : ${trajectoire.variantes
+          .map((v) => `${v.technique.fr}, à partir de ${formatEuros(v.priceValue, "fr")} HT`)
+          .join(" ; ")}.`
+    : "";
   const veille = isEn
     ? " It starts with a first technical and strategic watch analysis."
     : " Elle commence par une première analyse de veille technique et stratégique.";
-  return `${trajectoire.enClair[locale]}${recommended}${veille}`;
+  return `${trajectoire.enClair[locale]}${variantes}${recommended}${veille}`;
 };
 
 /** Les deux offres du moment « Diagnostiquer » (échange de 15 minutes gratuit, ADR-023, puis audit) : nom et prix lus dans lib/visio-conseil.ts. */
@@ -141,20 +152,21 @@ const AUDIT = conseilOffer("architecture-projet-ia");
  * figure pas. Un pack n'est pas un type de service : il n'y figure pas.
  */
 const SERVICE_TYPES: string[] = [
-  "Conseil refonte de site WordPress",
+  // Diagnostiquer
+  ECHANGE_NAME.fr,
   "Audit de site web et roadmap",
+  // Évoluer : les trois prestations, sous leur nom et leur nom technique.
   ...TRAJECTOIRE_ORDER.map(
     (slug) => `${TRAJECTOIRES[slug].name.fr} : ${TRAJECTOIRES[slug].technique.fr}`,
   ),
-  "Refonte de site WordPress",
-  "Migration WordPress vers Headless",
-  "Création de sites web WordPress",
-  "Création d'applications web sur-mesure",
-  "Création d'applications mobiles (PWA)",
-  "Développement Next.js",
-  VEILLE_TITRE.fr,
+  // Gérer
   ...(MAINTENANCE_PRIX_VALIDES ? ["Suivi et maintenance de site web"] : []),
   "Expert technique externalisé (direction technique à temps partagé)",
+  VEILLE_TITRE.fr,
+  // Les anciennes lignes hors catalogue (« Conseil refonte », « Création de
+  // sites WordPress », « Applications mobiles (PWA) », « Développement
+  // Next.js »…) sont retirées le 2026-09-28 : charte § 1, toute métadonnée qui
+  // cite une offre cite l'une des sept lignes.
 ];
 
 /**
@@ -242,6 +254,19 @@ const OFFER_CATALOG = (locale: SchemaLocale) => {
   } as const;
 };
 
+/**
+ * Le catalogue complet, prix compris, en nœud autonome : pour /tarifs, la
+ * seule page qui affiche toutes les offres et leurs prix. Même source que le
+ * hasOfferCatalog de l'entité (OFFER_CATALOG) : aucun prix recopié.
+ */
+export function OfferCatalogJsonLd({ locale = "fr" }: { locale?: SchemaLocale }) {
+  const data = {
+    "@context": "https://schema.org",
+    ...OFFER_CATALOG(locale),
+  };
+  return <JsonLd data={data} />;
+}
+
 interface JsonLdProps {
   data: Record<string, unknown>;
 }
@@ -271,7 +296,7 @@ export function OrganizationJsonLd() {
     // déclarer la variante évite deux entités distinctes côté moteurs.
     alternateName: "Next Impact Digital",
     url: siteConfig.url,
-    logo: `${siteConfig.url}/img/logo-rouge-noir-carre-icon.png`,
+    logo: `${siteConfig.url}/img/logo-next-impact-bleu.png`,
     image: `${siteConfig.url}${siteConfig.ogImage}`,
     description: siteConfig.description,
     founder: {
@@ -279,7 +304,10 @@ export function OrganizationJsonLd() {
       "@id": `${siteConfig.url}/#person`,
       name: "Agathe Karinthi-Martin",
       jobTitle: "Conseil techno web à l'heure de l'IA",
-      url: "https://www.linkedin.com/in/agat-dev/",
+      // Même url que les autres déclarations de #person (profil sur le site) ;
+      // LinkedIn reste dans ses sameAs.
+      url: `${siteConfig.url}/a-propos`,
+      sameAs: ["https://www.linkedin.com/in/agat-dev/"],
     },
     telephone: "+33673981638",
     email: "agathe@next-impact.digital",
@@ -373,6 +401,8 @@ export function OrganizationJsonLd() {
  * Headless, Next.js…) — c'est le sous-type Schema.org reconnu par Google
  * Search et valorisé par les moteurs IA pour les sujets dev.
  */
+const AUTHOR_NAME = "Agathe Karinthi-Martin";
+
 export function ArticleJsonLd({
   title,
   description,
@@ -424,19 +454,25 @@ export function ArticleJsonLd({
     ...(inLanguage ? { inLanguage } : {}),
     // Référence le nœud Person partagé du site (@id commun) plutôt qu'un doublon
     // anonyme : c'est ce qui consolide le graphe d'entités auteur ↔ organisation.
+    //
+    // Le nom n'est plus repris du front matter : 100 articles déclaraient
+    // `author: Next Impact`, ce qui nommait « Next Impact » la Person #person.
+    // Les articles sont tous signés par la même personne.
     author: {
       "@type": "Person",
       "@id": `${siteConfig.url}/#person`,
-      name: author,
+      name: AUTHOR_NAME,
       url: `${siteConfig.url}/a-propos`,
     },
+    // Même entité que le nœud du layout ; le logo est le vrai logo, pas la
+    // capture d'écran 2560×1600 utilisée jusqu'ici.
     publisher: {
       "@type": "Organization",
       "@id": `${siteConfig.url}/#organization`,
       name: siteConfig.name,
       logo: {
         "@type": "ImageObject",
-        url: `${siteConfig.url}${siteConfig.ogImage}`,
+        url: `${siteConfig.url}/img/logo-next-impact-bleu.png`,
       },
     },
     url: canonicalUrl,
@@ -515,7 +551,10 @@ export function ServiceJsonLd({
    * qui n'est pas visible sur la page.
    */
   offer?: {
-    minPrice: number;
+    /** Plancher, quand la page écrit « à partir de ». */
+    minPrice?: number;
+    /** Montant exact affiché (ex. Sentinelle 19 €/mois, audit 650 €). */
+    price?: number;
     priceCurrency?: string;
     billingUnitCode?: string;
   };
@@ -574,7 +613,7 @@ export function ServiceJsonLd({
             priceSpecification: {
               "@type": "UnitPriceSpecification",
               priceCurrency: offer.priceCurrency ?? "EUR",
-              minPrice: offer.minPrice,
+              ...(offer.price !== undefined ? { price: offer.price } : { minPrice: offer.minPrice }),
               valueAddedTaxIncluded: false,
               ...(offer.billingUnitCode
                 ? {
@@ -706,15 +745,17 @@ export function ContactPageJsonLd({ locale }: { locale?: string } = {}) {
     // Le suivi et maintenance n'est cité que si ses prix sont validés, comme
     // dans le formulaire de la page.
     description: isEn
-      ? `Talk about a redesign or a new site: a free 15-minute call, audit + roadmap (${AUDIT.tiers[0].price.en}), WordPress, headless or web app project, ${MAINTENANCE_PRIX_VALIDES ? "care and maintenance, " : ""}outsourced technical expert (from €${CTO_PRICE_VALUE}/month), or a free diagnostic.`
-      : `Parler d'une refonte ou d'une création : un échange gratuit de 15 minutes, audit + roadmap (${AUDIT.tiers[0].price.fr}), projet WordPress, headless ou web app, ${MAINTENANCE_PRIX_VALIDES ? "suivi et maintenance, " : ""}expert technique externalisé (dès ${CTO_PRICE_VALUE} €/mois), ou diagnostic gratuit.`,
+      ? `Talk about a redesign or a new site: a free 15-minute call, audit + roadmap (${AUDIT.tiers[0].price.en} excl. VAT), Optimization, Redesign (custom or headless WordPress) or Evolution project, ${MAINTENANCE_PRIX_VALIDES ? "care and maintenance, " : ""}outsourced technical expert (from €${CTO_PRICE_VALUE}/month), or a free diagnostic.`
+      : `Parler d'une refonte ou d'une création : un échange gratuit de 15 minutes, audit + roadmap (${AUDIT.tiers[0].price.fr} HT), projet d'Optimisation, de Refonte (WordPress sur mesure ou headless) ou d'Évolution, ${MAINTENANCE_PRIX_VALIDES ? "suivi et maintenance, " : ""}expert technique externalisé (dès ${CTO_PRICE_VALUE} €/mois), ou diagnostic gratuit.`,
     url: `${siteConfig.url}${localePath(lang, "/contact")}`,
     inLanguage: isEn ? "en-US" : "fr-FR",
+    // Même entité que le nœud du layout (un seul @id pour l'entreprise).
     mainEntity: {
       "@type": "ProfessionalService",
+      "@id": `${siteConfig.url}/#organization`,
       name: siteConfig.name,
       url: siteConfig.url,
-      logo: `${siteConfig.url}/img/logo-rouge-noir-carre-icon.png`,
+      logo: `${siteConfig.url}/img/logo-next-impact-bleu.png`,
       image: `${siteConfig.url}/img/contact-facilitation.jpg`,
       telephone: "+33673981638",
       email: "agathe@next-impact.digital",
@@ -766,8 +807,8 @@ export function ContactPageJsonLd({ locale }: { locale?: string } = {}) {
           name: isEn ? "Talk about a redesign project" : "Parler d'un projet de refonte",
           target: `${siteConfig.url}${localePath(lang, "/contact")}`,
           description: isEn
-            ? "Free 15-minute call, audit + roadmap, redesign or new site project (WordPress, headless or web app), care and maintenance, outsourced technical expert or free diagnostic"
-            : "Échange de 15 minutes gratuit, audit + roadmap, projet de refonte ou de création (WordPress, headless ou web app), suivi et maintenance, expert technique externalisé ou diagnostic gratuit",
+            ? "Free 15-minute call, audit + roadmap, redesign or new site project (Optimization, Redesign in custom or headless WordPress, or Evolution), care and maintenance, outsourced technical expert or free diagnostic"
+            : "Échange de 15 minutes gratuit, audit + roadmap, projet de refonte ou de création (Optimisation, Refonte en WordPress sur mesure ou headless, ou Évolution), suivi et maintenance, expert technique externalisé ou diagnostic gratuit",
         },
       ],
       hasOfferCatalog: OFFER_CATALOG(lang),
@@ -789,7 +830,7 @@ export function WebsiteJsonLd() {
     alternateName: "Next Impact Digital",
     url: siteConfig.url,
     description: siteConfig.description,
-    inLanguage: ["fr-FR", "en-US"],
+    inLanguage: ENGLISH_PUBLISHED ? ["fr-FR", "en-US"] : "fr-FR",
     publisher: {
       "@type": "Organization",
       "@id": `${siteConfig.url}/#organization`,
@@ -815,7 +856,7 @@ export function PersonJsonLd({
   name = "Agathe Karinthi-Martin",
   jobTitle = "Conseil techno web à l'heure de l'IA",
   description = siteConfig.description,
-  url = siteConfig.url,
+  url = `${siteConfig.url}/a-propos`,
   image = `${siteConfig.url}${siteConfig.ogImage}`,
 }: {
   name?: string;
@@ -919,7 +960,7 @@ export function HomepageJsonLd({ locale }: { locale?: string } = {}) {
       //   assistants vocaux / lecture IA). Les sélecteurs pointent du contenu visible. —
       {
         "@type": "WebPage",
-        "@id": `${homeUrl}/#webpage`,
+        "@id": `${homeUrl}#webpage`,
         url: homeUrl,
         name: siteConfig.name,
         inLanguage: isEn ? "en-US" : "fr-FR",
@@ -943,7 +984,7 @@ export function HomepageJsonLd({ locale }: { locale?: string } = {}) {
         name: "Agathe Karinthi-Martin",
         jobTitle: "Conseil techno web à l'heure de l'IA",
         description: siteConfig.description,
-        url: baseUrl,
+        url: `${baseUrl}/a-propos`,
         image: `${baseUrl}${siteConfig.ogImage}`,
         email: "agathe@next-impact.digital",
         telephone: "+33673981638",
@@ -1008,10 +1049,12 @@ export function HomepageJsonLd({ locale }: { locale?: string } = {}) {
       // — LocalBusiness —
       {
         "@type": ["LocalBusiness", "ProfessionalService"],
-        "@id": `${baseUrl}/#localbusiness`,
+        // Même entité que le nœud du layout (OrganizationJsonLd) : un seul @id,
+        // sinon les moteurs voient deux entreprises homonymes (audit 2026-09-28).
+        "@id": `${baseUrl}/#organization`,
         name: siteConfig.name,
         url: baseUrl,
-        logo: `${baseUrl}/img/logo-rouge-noir-carre-icon.png`,
+        logo: `${baseUrl}/img/logo-next-impact-bleu.png`,
         image: `${baseUrl}${siteConfig.ogImage}`,
         description: siteConfig.description,
         telephone: "+33673981638",
@@ -1082,8 +1125,8 @@ export function HomepageJsonLd({ locale }: { locale?: string } = {}) {
             name: isEn ? "Talk about a redesign project" : "Parler d'un projet de refonte",
             target: `${baseUrl}${localePath(lang, "/contact")}`,
             description: isEn
-              ? "Free 15-minute call, audit + roadmap, redesign or new site project (WordPress, headless or web app), care and maintenance, outsourced technical expert or free diagnostic"
-              : "Échange de 15 minutes gratuit, audit + roadmap, projet de refonte ou de création (WordPress, headless ou web app), suivi et maintenance, expert technique externalisé ou diagnostic gratuit",
+              ? "Free 15-minute call, audit + roadmap, redesign or new site project (Optimization, Redesign in custom or headless WordPress, or Evolution), care and maintenance, outsourced technical expert or free diagnostic"
+              : "Échange de 15 minutes gratuit, audit + roadmap, projet de refonte ou de création (Optimisation, Refonte en WordPress sur mesure ou headless, ou Évolution), suivi et maintenance, expert technique externalisé ou diagnostic gratuit",
           },
         ],
       },
@@ -1185,6 +1228,7 @@ export function WebApplicationJsonLd({
     },
     provider: {
       "@type": "Organization",
+      "@id": `${siteConfig.url}/#organization`,
       name: siteConfig.name,
       url: siteConfig.url,
     },
@@ -1220,14 +1264,17 @@ export function VideoObjectJsonLd({
       ? thumbnailUrl
       : `${siteConfig.url}${thumbnailUrl}`,
     uploadDate,
-    ...(contentUrl && { contentUrl }),
+    // `contentUrl` désigne le fichier média : une page YouTube (youtu.be,
+    // youtube.com/watch) n'en est pas un, `embedUrl` suffit alors.
+    ...(contentUrl && !/youtu\.?be/.test(contentUrl) && { contentUrl }),
     ...(embedUrl && { embedUrl }),
     publisher: {
       "@type": "Organization",
+      "@id": `${siteConfig.url}/#organization`,
       name: siteConfig.name,
       logo: {
         "@type": "ImageObject",
-        url: `${siteConfig.url}/img/logo-rouge-noir-carre-icon.png`,
+        url: `${siteConfig.url}/img/logo-next-impact-bleu.png`,
       },
     },
   };

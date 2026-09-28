@@ -38,7 +38,7 @@ export const HERO_VARIANTS: Record<ProfileId | "default", HeroVariant> = {
     // Héros de la charte v1.7 (ADR-019) : les trois idées, pas la douleur.
     // `headline` + `subHeadline` forment le h1, `tagline` le sous-titre ; la
     // description porte le mesurable.
-    headline: "Pilotage de",
+    headline: "Menons",
     subHeadline: "votre projet web",
     tagline: "Surveiller, maintenir, réaliser.",
     description: `Un avis tranché avant d'engager un budget, puis ${PRESTATIONS_OU} au forfait : prix et délai écrits avant de commencer, performance mesurée avant et après, veille technique et stratégique à chaque étape.`,
@@ -49,7 +49,7 @@ export const HERO_VARIANTS: Record<ProfileId | "default", HeroVariant> = {
     // Premier bouton de chaque héros : l'échange gratuit (Calendly) ; l'analyse
     // du site passe en second.
     ctaPrimary: { label: CTA_ECHANGE.label.fr, href: CTA_ECHANGE.href },
-    ctaSecondary: { label: "Analysez votre site en 2 minutes", href: "/scan" },
+    ctaSecondary: { label: "Analysez votre site", href: "/scan" },
     auditTitle: "Qu'est-ce qui ralentit votre site ?",
     auditSubtitle: "Diagnostic en 2 minutes",
     auditDescription: `Une adresse, un rapport : voyez ce qui ralentit votre site et laquelle des trois prestations (${PRESTATIONS_LISTE}) correspond à votre situation.`,
@@ -162,19 +162,19 @@ export const SERVICES_PAGE_VARIANTS: Record<
           "Oui. Avec l'Optimisation et la Refonte, vous gardez l'interface WordPress que vous connaissez pour gérer vos contenus, images et pages. L'Évolution remplace WordPress par une administration sur mesure, pensée pour votre métier, avec formation incluse. Aucune compétence technique n'est requise.",
       },
       {
-        question: "Le Headless est-il plus cher à maintenir ?",
+        question: "Refonte sur mesure ou headless : laquelle coûte le moins à maintenir ?",
         answer:
-          "Légèrement, car il y a deux systèmes à maintenir (WordPress + front-end). Cependant, la sécurité renforcée et les performances accrues réduisent souvent les coûts d'intervention d'urgence et de perte de trafic.",
+          "WordPress sur mesure : un seul outil à tenir, le suivi reste léger. WordPress headless : deux parties à maintenir (WordPress et le site affiché), donc un suivi un peu plus cher, compensé par la vitesse et la sécurité quand le trafic est décisif. Les deux variantes de la Refonte sont à égalité : votre situation tranche, avant le devis.",
       },
       {
         question: "Combien de temps prend la mise en place ?",
         answer:
-          "Comptez 2-4 semaines pour un site WordPress classique optimisé, 4-6 semaines pour une architecture Headless + Next.js standard, et 6-10 semaines pour une plateforme Headless complexe ou une application sur-mesure, selon la complexité du projet.",
+          "Comptez 2 à 4 semaines pour une Optimisation (le site existant remis à niveau), 4 à 6 semaines pour une Refonte, en WordPress sur mesure ou headless, et 6 à 10 semaines pour une Évolution (web app ou plateforme), selon la complexité du projet.",
       },
       {
         question: "Mes plugins WordPress fonctionneront-ils encore ?",
         answer:
-          "Les plugins front-end (sliders, formulaires affichés) sont remplacés par des équivalents plus performants. Les plugins back-end (SEO, analytics, sécurité) continuent de fonctionner normalement.",
+          "Dans une Optimisation, les extensions utiles restent et les redondantes sont retirées. Dans une Refonte, les extensions d'affichage (sliders, formulaires affichés) sont remplacées par des équivalents plus légers ; les extensions d'administration (SEO, statistiques, sécurité) continuent de fonctionner normalement.",
       },
     ],
   },
@@ -272,7 +272,7 @@ export const SERVICES_PAGE_VARIANTS: Record<
       {
         question: "Mes contenus actuels seront-ils conservés ?",
         answer:
-          "Oui, tous vos contenus (textes, images, médias) sont migrés automatiquement. Rien n'est perdu. La migration est incluse dans les forfaits Headless et Web app.",
+          "Oui, tous vos contenus (textes, images, médias) sont conservés. Rien n'est perdu. Dans une Optimisation, ils ne bougent pas ; dans une Refonte ou une Évolution, la reprise des contenus est incluse.",
       },
     ],
   },

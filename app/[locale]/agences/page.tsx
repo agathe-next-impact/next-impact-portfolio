@@ -17,7 +17,7 @@ export async function generateMetadata({
   return generatePageMetadata({
     title: isEn
       ? "Agencies & studios: white-label web subcontracting, fixed scope"
-      : "Agences & studios : sous-traitance web en marque blanche, forfait garanti",
+      : "Sous-traitance web en marque blanche pour agences",
     description: isEn
       ? "A client needs a fast, modern website and you have no dev team? I build it under your brand: fixed price and timeline, no-poaching guarantee."
       : "Un client veut un site rapide et moderne, vous n'avez pas le pôle dev ? Je le construis sous votre marque : forfait, délai annoncé, non-démarchage.",

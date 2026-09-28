@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { generatePageMetadata } from "@/lib/metadata";
-import { BreadcrumbJsonLd, VideoObjectJsonLd } from "@/components/json-ld";
+import { VideoObjectJsonLd } from "@/components/json-ld";
 import DemoClient, { type DemoVideo } from "@/components/demo/DemoClient";
 import { getVideoCaseStudies, type CaseStudy } from "@/lib/case-studies-data";
 import type { Locale } from "@/i18n/routing";
@@ -65,19 +65,13 @@ export default async function DemoPage({
   params: Promise<{ locale: Locale }>;
 }) {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: "demoPage" });
-  const breadcrumbItems = [
-    { name: t("breadcrumbHome"), url: "/" },
-    { name: t("breadcrumbDemo"), url: "/demo" },
-  ];
-
   const studies = getVideoCaseStudies(locale);
   const featured = studies.find((s) => s.slug === FEATURED_SLUG) ?? studies[0];
   const others = studies.filter((s) => s.slug !== featured.slug);
 
   return (
     <>
-      <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
+      {/* Le fil d'Ariane JSON-LD est émis par demo/layout.tsx (évite le doublon). */}
       {[featured, ...others].map((study) => (
         <VideoObjectJsonLd
           key={study.slug}

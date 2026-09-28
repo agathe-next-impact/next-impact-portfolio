@@ -957,3 +957,52 @@ propositions dans l'espace client, une par scénario.
   écrit une version datée, renommer le scénario retire l'ancienne proposition.
   Décocher « Validé » les retire toutes ; une lecture d'audit incomplète n'en
   retire aucune.
+
+## ADR-031 — 2026-09-28 — La Refonte se livre en WordPress sur mesure ou en headless
+
+Demande d'Agathe : la refonte peut être un WordPress sur mesure ou un
+WordPress headless. Arbitrages du 2026-09-28 :
+
+- **Optimisation** (`forfait-classique`) change de périmètre : le site
+  existant est gardé et remis à niveau (vitesse, ménage des extensions,
+  sécurité, hébergement), sans reconstruction ni nouveau thème. **À partir de
+  1 500 € HT** (était 2 250 €).
+- **Refonte** (`forfait-headless`, identifiant inchangé) a deux variantes **à
+  égalité**, choisies selon la situation : **WordPress sur mesure** (thème
+  écrit pour le site, à partir de 2 250 € HT) ou **WordPress headless** (à
+  partir de 4 000 € HT). Elle s'affiche « à partir de 2 250 € HT », nom
+  technique « WordPress sur mesure ou headless ». Elle garde le badge
+  « recommandée » face aux deux autres prestations.
+- Le headless n'est plus l'option par défaut de la refonte : il se choisit
+  quand la vitesse, le design ou le trafic sont décisifs. La doctrine
+  « Headless au centre » du CLAUDE.md est amendée en conséquence.
+- **Scan** : le diagnostic tranche entre les deux variantes (champ
+  `refonte: { variante, raison }` de la grille, donné même quand la Refonte
+  n'est pas recommandée). Le rapport et l'e-mail affichent la variante retenue
+  et sa raison. Les diagnostics antérieurs, sans ce champ, affichent
+  « WordPress sur mesure ou headless ».
+- Sources : `lib/trajectoires.ts` (`variantes`), `src/sentinelle/audit/prestations.ts`
+  (`VARIANTES_REFONTE`, copie en dur, règle d'isolation), prompt
+  `diagnostic-redaction-system-prompt.md`.
+
+## ADR-032 — 2026-09-28 — Version anglaise fermée, /scan indexé
+
+Demande d'Agathe (audit SEO/GEO du 2026-09-28). Deux constats : 25 articles
+étaient servis en français sous `/en/…` (doublons indexés), et 97 liens des
+contenus anglais renvoyaient vers les pages françaises. Plutôt que traduire,
+l'anglais est fermé aux visiteurs et aux robots.
+
+- Drapeau unique `ENGLISH_PUBLISHED = false` (`i18n/routing.ts`), recopié dans
+  `next.config.mjs` (fichier .mjs, ne lit pas le TypeScript). Toute URL `/en…`
+  part en 301 vers son équivalent français, en un saut.
+- Sélecteur de langue masqué (footer), aucun hreflang `en-US`, sitemap en
+  URL françaises seulement, `inLanguage` du WebSite en `fr-FR`.
+- Le code et les traductions restent : rouvrir = repasser les deux drapeaux à
+  `true`, redéployer. Les 301 étant mis en cache par les navigateurs, prévoir
+  une réouverture comme un vrai lancement (nouvelles URL indexées de zéro).
+- `llms-full.txt` reste en anglais (résumé pour les agents) et précise que le
+  site est en français seulement.
+- `/scan` (page d'atterrissage de l'analyse, CTA froid) est indexée et au
+  sitemap ; les rapports `/scan/<id>` restent en noindex et exclus de
+  robots.txt (`Disallow: /scan/`). Surcharge dans `app/(sentinelle)/scan/page.tsx`,
+  prévue par le layout du groupe.

@@ -152,6 +152,8 @@ export const PROPS = {
     annex: "Annexe",
     /** Cochée : les scénarios de l'audit deviennent des propositions (`scenarios.ts`). */
     validated: "Validé",
+    /** La prestation vendue que cet audit livre. Le pilotage n'en montre alors qu'une mission. */
+    prestation: "Prestation",
   },
   /**
    * Base « Propositions » de l'atelier : une ligne par proposition envoyée,
@@ -724,6 +726,10 @@ export function mapPage(
         annexe: null,
         fichiers: [],
       };
+      // Posée seulement si elle existe : un audit sans prestation liée garde
+      // son empreinte, et la synchro n'écrit pas de version pour rien.
+      const prestations = p.relation(page, PROPS.audit.prestation);
+      if (prestations.length === 1) payload.prestation = prestations[0];
       return {
         clientId,
         notionPageId: page.id,

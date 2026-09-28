@@ -206,6 +206,7 @@ export function bornerGrille(grille: Grille): Grille | null {
       examens,
     ),
     examens,
+    refonte: { ...grille.refonte, raison: ligneBornee(grille.refonte.raison) },
   };
 
   const vide =

@@ -27,7 +27,7 @@ import {
   trajectoireDuPack,
   veilleDuPack,
 } from "@/lib/situations";
-import { formatEuros } from "@/lib/trajectoires";
+import { formatEuros, variantePriceHT } from "@/lib/trajectoires";
 import { CTA_ECHANGE } from "@/lib/visio-conseil";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -174,6 +174,7 @@ export default async function PackPage({
   const solution = page.solution;
   const trajectoire = solution ? trajectoireDuPack(situation) : undefined;
   const prixForfait = trajectoire ? `à partir de ${formatEuros(trajectoire.priceValue, "fr")} HT` : undefined;
+  const variantes = trajectoire?.variantes ?? [];
 
   // La méthode Blueprint (section « Le processus ») ne s'affiche que sur les
   // prestations de réalisation de site web : Optimisation, Refonte, Évolution
@@ -338,7 +339,12 @@ export default async function PackPage({
         offer={
           situation.mensuel
             ? { minPrice: situation.mensuel, billingUnitCode: MAINTENANCE_BILLING_UNIT_CODE }
-            : { minPrice: trajectoire ? trajectoire.priceValue : budget.total }
+            : trajectoire
+            ? { minPrice: trajectoire.priceValue }
+            : page.prestation
+            ? // Page d'une prestation à prix fixe (Audit + roadmap) : montant exact.
+              { price: budget.total }
+            : { minPrice: budget.total }
         }
       />
       {/* La FAQ structurée ne décrit que ce qui est affiché : pas de FAQ sur une page réduite. */}
@@ -369,7 +375,7 @@ export default async function PackPage({
               <ArrowRight size={14} />
             </a>
             <a href="/scan" className={HERO_BTN_SECONDARY}>
-              Analysez votre site en 2 minutes
+              Analysez votre site
             </a>
           </>
         }
@@ -421,9 +427,36 @@ export default async function PackPage({
                 </ul>
               </Volet>
 
+              {/* Les variantes à égalité (Refonte : sur mesure ou headless,
+                  ADR-031), lues dans lib/trajectoires.ts : deux cartes de même
+                  poids, le choix se fait selon la situation. */}
+              {variantes.length > 0 && (
+                <Volet
+                  numero="02"
+                  titre="Deux variantes, à égalité"
+                  sousTitre="Le choix se fait selon votre situation, pas par défaut"
+                  open
+                >
+                  <div className="grid gap-4 md:grid-cols-2">
+                    {variantes.map((v) => (
+                      <div key={v.slug} className="flex flex-col gap-3 border border-dark-gray bg-obsidian p-5">
+                        <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                          <h3 className="text-lg font-normal tracking-tight text-foreground">{v.technique.fr}</h3>
+                          <span className="font-mono text-2xs tracking-[0.08em] text-accent-secondary">
+                            {variantePriceHT(v, "fr")}
+                          </span>
+                        </div>
+                        <p className="font-inter-tight text-base leading-relaxed text-foreground/85">{v.enClair.fr}</p>
+                        <p className="font-inter-tight text-base leading-relaxed text-mid-gray">{v.quand.fr}</p>
+                      </div>
+                    ))}
+                  </div>
+                </Volet>
+              )}
+
               {/* Prestations de mise en œuvre : tous les volets ouverts au chargement
                   (demande d'Agathe du 2026-09-27). */}
-              <Volet numero="02" titre="Pour quelles situations" sousTitre={`« ${situation.phrase.fr} »`} open>
+              <Volet numero={variantes.length > 0 ? "03" : "02"} titre="Pour quelles situations" sousTitre={`« ${situation.phrase.fr} »`} open>
                 <ul className="flex flex-col gap-3">
                   {solution.situations.map((item) => (
                     <li

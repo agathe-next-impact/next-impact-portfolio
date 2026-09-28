@@ -372,8 +372,8 @@ function sansInformation(key: SectionKey, infos: Informations): boolean {
  * mèneraient qu'à « En préparation » ou à une page vide. Elles quittent la
  * barre latérale et les synthèses de groupe dès maintenant — un lien qui ne
  * mène à rien est du bruit (décision du 2026-09-27, qui remplace la semaine
- * de grâce). Elles restent accessibles depuis « Votre accompagnement », et
- * reviennent d'elles-mêmes au premier contenu.
+ * de grâce). Elles restent accessibles par leur URL et reviennent
+ * d'elles-mêmes au premier contenu.
  */
 export function sectionsSansInformation(sections: readonly Section[], infos: Informations): Set<SectionKey> {
   return new Set(sections.filter((section) => sansInformation(section.key, infos)).map((section) => section.key));

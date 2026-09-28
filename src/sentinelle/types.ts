@@ -197,6 +197,18 @@ export type DiagnosticTonalite = "solide" | "a_renforcer" | "fragile" | "indeter
  */
 export type DiagnosticIssue = "optimisation" | "refonte" | "evolution";
 
+/**
+ * Les deux variantes de la Refonte, à égalité (ADR-031) : WordPress sur mesure
+ * ou WordPress headless. Le diagnostic tranche d'après ce qu'il observe.
+ */
+export type DiagnosticVariante = "sur_mesure" | "headless";
+
+/** La variante de Refonte qui conviendrait, et pourquoi (vingt mots au plus). */
+export interface DiagnosticRefonte {
+  variante: DiagnosticVariante;
+  raison: string;
+}
+
 /** La réponse à la question du dirigeant : faut-il le faire ? */
 export type DiagnosticBesoin = "necessaire" | "utile" | "pas_prioritaire";
 
@@ -272,6 +284,8 @@ export type ScanDiagnostic =
       };
       /** Les trois prestations examinées, dans l'ordre du catalogue. */
       examens?: DiagnosticExamen[];
+      /** La variante de Refonte retenue ; absente des diagnostics d'avant le 2026-09-28. */
+      refonte?: DiagnosticRefonte;
       /** URLs des faits externes retenus — affichées sous la grille. */
       sources: string[];
       genereLe: string;

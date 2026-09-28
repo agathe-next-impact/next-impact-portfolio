@@ -154,7 +154,7 @@ export function FloatingContact() {
       <div
         ref={railRef}
         aria-label={t("ariaLabel")}
-        className="fixed right-0 top-1/2 z-50 -translate-y-1/2 border border-vermilion/50 bg-obsidian"
+        className="fixed right-0 top-1/2 z-50 -translate-y-1/2 border border-r-0 border-obsidian/20 bg-accent-secondary shadow-lg"
       >
         {options.map((opt, i) => {
           const Icon = opt.Icon;
@@ -168,12 +168,12 @@ export function FloatingContact() {
               onClick={() => toggle(opt.key)}
               className={cn(
                 "flex h-10 w-10 cursor-pointer items-center justify-center border-l-[3px] transition-colors duration-150",
-                i > 0 && "border-t border-t-vermilion/50",
+                i > 0 && "border-t border-t-obsidian/20",
                 isActive
-                  ? "border-l-accent-secondary bg-accent-secondary/15 text-accent-secondary"
+                  ? "border-l-obsidian bg-obsidian/15 text-obsidian"
                   : hoveredKey === opt.key
-                  ? "border-l-transparent bg-accent-secondary/15 text-accent-secondary"
-                  : "border-l-transparent bg-transparent text-accent-secondary",
+                  ? "border-l-transparent bg-obsidian/10 text-obsidian"
+                  : "border-l-transparent bg-transparent text-obsidian",
               )}
               onMouseEnter={() => setHoveredKey(opt.key)}
               onMouseLeave={() => setHoveredKey(null)}

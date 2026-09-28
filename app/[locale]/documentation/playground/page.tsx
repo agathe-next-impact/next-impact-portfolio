@@ -54,15 +54,15 @@ export default async function PlaygroundPage({
     <div style={{ minHeight: "100vh" }}>
       <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       <VideoObjectJsonLd
-        name="Billeterie événementielle — WordPress Headless Next.js"
-        description="Présentation complète d'une plateforme de billeterie propulsée par WordPress Headless et Next.js."
+        name="Billetterie événementielle : WordPress Headless Next.js"
+        description="Présentation complète d'une plateforme de billetterie propulsée par WordPress Headless et Next.js."
         thumbnailUrl="https://img.youtube.com/vi/I1qi5o31Lnk/maxresdefault.jpg"
         uploadDate="2024-06-01"
         contentUrl="https://youtu.be/I1qi5o31Lnk"
         embedUrl="https://www.youtube.com/embed/I1qi5o31Lnk"
       />
       <VideoObjectJsonLd
-        name="Comme des Fous — Média participatif WordPress Headless"
+        name="Comme des Fous : Média participatif WordPress Headless"
         description="Le média participatif Comme des Fous, propulsé par WordPress Headless et Next.js."
         thumbnailUrl="https://img.youtube.com/vi/6vUSbG6F50w/maxresdefault.jpg"
         uploadDate="2024-06-01"
@@ -70,7 +70,7 @@ export default async function PlaygroundPage({
         embedUrl="https://www.youtube.com/embed/6vUSbG6F50w"
       />
       <VideoObjectJsonLd
-        name="Les Doléances — Plateforme citoyenne WordPress Headless"
+        name="Les Doléances : Plateforme citoyenne WordPress Headless"
         description="Un site de promotion des doléances citoyennes avec WordPress Headless et Next.js."
         thumbnailUrl="https://img.youtube.com/vi/_OjiGiOWJus/maxresdefault.jpg"
         uploadDate="2024-06-01"
@@ -78,7 +78,7 @@ export default async function PlaygroundPage({
         embedUrl="https://www.youtube.com/embed/_OjiGiOWJus"
       />
       <VideoObjectJsonLd
-        name="États Généraux Communaux — WordPress Headless Next.js"
+        name="États Généraux Communaux : WordPress Headless Next.js"
         description="Plateforme pour les États Généraux Communaux utilisant WordPress Headless et Next.js."
         thumbnailUrl="https://img.youtube.com/vi/dJIndpLBm7o/maxresdefault.jpg"
         uploadDate="2024-06-01"
@@ -86,7 +86,7 @@ export default async function PlaygroundPage({
         embedUrl="https://www.youtube.com/embed/dJIndpLBm7o"
       />
       <VideoObjectJsonLd
-        name="Comme des Fous — Jeux en ligne WordPress Headless"
+        name="Comme des Fous : Jeux en ligne WordPress Headless"
         description="Section de jeux en ligne intégrée au site Comme des Fous, développée en headless."
         thumbnailUrl="https://img.youtube.com/vi/SIj61ECS1Mo/maxresdefault.jpg"
         uploadDate="2024-06-01"

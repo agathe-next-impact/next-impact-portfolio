@@ -18,9 +18,9 @@ const videos: DemoVideo[] = [
   {
     id: "plateforme",
     url: "https://youtu.be/I1qi5o31Lnk",
-    title: "Billeterie événementielle",
+    title: "Billetterie événementielle",
     description:
-      "Présentation complète d'une plateforme de billeterie propulsée par WordPress Headless et Next.js.",
+      "Présentation complète d'une plateforme de billetterie propulsée par WordPress Headless et Next.js.",
     projectLink: "/etudes-de-cas/next-event",
   },
   {

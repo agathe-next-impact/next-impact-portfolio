@@ -86,44 +86,38 @@ const CATEGORY_THEMES: Record<string, ThemeCard[]> = {
       icon: "/icons/brand-reach-icon.svg",
       title: "Identité visuelle",
       description: "Construire une identité de marque cohérente",
-      slugs: ["identite-visuelle", "creer-son-identite-visuelle"],
+      slugs: ["identite-visuelle"],
     },
     {
       icon: "/icons/content-icon.svg",
       title: "Charte graphique",
       description: "Formaliser les règles visuelles du projet",
-      slugs: ["charte-graphique", "creer-une-charte-graphique"],
+      slugs: ["charte-graphique"],
     },
     {
       icon: "/icons/scan-icon.svg",
       title: "UX Design",
       description: "Concevoir l'expérience utilisateur",
-      slugs: ["ux", "definir-son-ux"],
+      slugs: ["ux"],
     },
     {
       icon: "/icons/frontend-icon.svg",
       title: "UI Design",
       description: "Créer des interfaces efficaces",
-      slugs: ["ui", "definir-son-ui"],
+      slugs: ["ui"],
     },
     {
       icon: "/icons/dashboard-icon.svg",
       title: "Maquettage",
       description: "Wireframes et prototypes",
-      slugs: ["pourquoi-des-maquettes", "comment-creer-des-maquettes"],
+      slugs: ["comment-creer-des-maquettes"],
     },
   ],
   seo: [
     {
-      icon: "/icons/seo-icon.svg",
-      title: "Vision stratégique",
-      description: "Penser le référencement dès le départ",
-      slugs: ["penser-seo-en-amont"],
-    },
-    {
       icon: "/icons/workflow-icon.svg",
       title: "Planification",
-      description: "Planifier les actions SEO en amont",
+      description: "Penser et planifier le SEO dès le départ",
       slugs: ["planifier-seo-en-amont"],
     },
     {
@@ -149,32 +143,20 @@ const CATEGORY_THEMES: Record<string, ThemeCard[]> = {
     {
       icon: "/icons/growth-icon.svg",
       title: "Fondamentaux",
-      description: "Les bases du marketing digital",
+      description: "Définir et mener sa stratégie marketing",
       slugs: ["strategie-marketing"],
-    },
-    {
-      icon: "/icons/workflow-icon.svg",
-      title: "Plan d'action",
-      description: "Définir et exécuter sa stratégie",
-      slugs: ["definir-sa-strategie-marketing"],
     },
     {
       icon: "/icons/brand-reach-icon.svg",
       title: "Image de marque",
       description: "Positionnement et stratégie de marque",
-      slugs: ["strategie-de-marque", "mettre-en-oeuvre-strategie-de-marque"],
+      slugs: ["strategie-de-marque"],
     },
     {
       icon: "/icons/globe-network-icon.svg",
       title: "Réseaux sociaux",
-      description: "Présence et visibilité sociale",
+      description: "Présence et stratégie sur les réseaux sociaux",
       slugs: ["presence-sur-les-reseaux-sociaux"],
-    },
-    {
-      icon: "/icons/notification-icon.svg",
-      title: "Stratégie sociale",
-      description: "Élaborer un plan de médias sociaux",
-      slugs: ["definir-sa-strategie-de-medias-sociaux"],
     },
   ],
   "projet-site-web": [
@@ -191,15 +173,9 @@ const CATEGORY_THEMES: Record<string, ThemeCard[]> = {
       slugs: ["creer-site-web-6-etapes"],
     },
     {
-      icon: "/icons/team-icon.svg",
-      title: "Pilotage",
-      description: "Pourquoi structurer son projet web",
-      slugs: ["pourquoi-gerer-projet-web"],
-    },
-    {
       icon: "/icons/settings-icon.svg",
       title: "Guide pratique",
-      description: "Méthodes et outils de gestion",
+      description: "Pourquoi et comment piloter son projet web",
       slugs: ["gestion-projet-web-guide-pratique"],
     },
     {
@@ -209,7 +185,6 @@ const CATEGORY_THEMES: Record<string, ThemeCard[]> = {
       slugs: [
         "cahier-des-charges",
         "creer-site-web-6-etapes",
-        "pourquoi-gerer-projet-web",
         "gestion-projet-web-guide-pratique",
       ],
     },

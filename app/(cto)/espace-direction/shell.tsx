@@ -489,7 +489,7 @@ export async function Espace({
         admin={viewer.admin}
       />
 
-      <main id="contenu" tabIndex={-1} className="min-w-0 flex-1 focus:outline-none">
+      <main id="contenu" tabIndex={-1} className="cto-liens min-w-0 flex-1 focus:outline-none">
         {/* Pleine largeur : la barre latérale prend déjà la gauche, et les vues
             d'ensemble (cartes, frise, colonnes) ont besoin de toute la place. Le
             texte long garde sa propre mesure, dans ses composants. */}

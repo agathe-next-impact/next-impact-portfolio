@@ -87,7 +87,7 @@ const RUBRIQUES: Record<RubriqueSlug, Rubrique> = {
     },
     cta: {
       label: { fr: "Auditer mon site", en: "Audit my site" },
-      href: "/audit-site-web",
+      href: "/scan",
       note: { fr: "Gratuit · sur rendez-vous", en: "Free · by appointment" },
     },
   },
@@ -134,7 +134,7 @@ const RUBRIQUES: Record<RubriqueSlug, Rubrique> = {
     },
     cta: {
       label: { fr: "Lancer le Diagnostic Web & IA", en: "Run the Web & AI diagnostic" },
-      href: "/audit-site-web",
+      href: "/scan",
       note: { fr: "Gratuit · sur rendez-vous", en: "Free · by appointment" },
     },
   },

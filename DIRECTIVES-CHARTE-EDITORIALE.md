@@ -1,6 +1,6 @@
 # Charte éditoriale · Vitrine next-impact.digital · Refonte éditoriale
 
-> Version 1.7 · 27 septembre 2026. Document de travail pour la refonte éditoriale de la vitrine. Il remplace, pour le site, la charte « Offre et site » générique et s'appuie sur l'état du site en production relevé le 27 août 2026 (version anglaise crawlée) et sur le catalogue d'offres déjà en place sur le site en développement : Visio conseil refonte 150 €, Audit + roadmap 650 €, Refonte WordPress optimisée, Refonte headless, Web app. La charte newsletter « Quelle techno pour mon site ? » reste le canon du registre informatif (page Veille, blog).
+> Version 1.8 · 28 septembre 2026. Document de travail pour la refonte éditoriale de la vitrine. Il remplace, pour le site, la charte « Offre et site » générique et s'appuie sur l'état du site en production relevé le 27 août 2026 (version anglaise crawlée) et sur le catalogue d'offres déjà en place sur le site en développement : Visio conseil refonte 150 €, Audit + roadmap 650 €, Refonte WordPress optimisée, Refonte headless, Web app. La charte newsletter « Quelle techno pour mon site ? » reste le canon du registre informatif (page Veille, blog).
 >
 > **Amendement du 7 septembre 2026 (v1.2).** Le catalogue passe de cinq à **six lignes** : l'offre récurrente de direction technique, supprimée le 27 août, est réinstaurée sous le nom « CTO externalisé », sur sa propre page `/cto-externalise`. Trois passages de la v1.1 sont amendés en conséquence : le tableau du §1 et la phrase « ces cinq lignes », l'ordre des offres du §5, et la clause de fermeture de la page Conseil au §6. Décision tracée en ADR-007 (`docs/decisions.md`).
 >
@@ -21,6 +21,8 @@
 > **Amendement du 27 septembre 2026 (v1.7, ADR-023).** La **visio conseil refonte payante** (150 € HT, une heure, avis écrit sous 48 h, déduite du devis) **est supprimée**. Elle est remplacée par un **Échange de 15 minutes, gratuit**, sans engagement, réservé en ligne (Calendly). Le bouton chaud « Discutons de votre projet » réserve cet échange partout sur le site. Conséquences : l'avantage « visio déduite du devis » disparaît des packs ; le pack Arbitrage devient gratuit, l'audit + roadmap y reste en option ; les budgets des packs Optimisation et Refonte ne changent pas. Source unique : `ECHANGE_URL`, `ECHANGE_NAME` et `CTA_CHAUD` dans `lib/visio-conseil.ts`. Amendés : §1, §5, §6, §7. Décision tracée en ADR-023 (`docs/decisions.md`).
 >
 > **Précision du 27 septembre 2026 (v1.7, ADR-024).** Le cartouche de résumé citable (TL;DR, ex-« En bref ») se titre **« L'essentiel »** (EN « Key points ») et se place **juste avant la FAQ**, plus sous le héros. Il reste visible, jamais replié ni masqué, et garde sa classe cible du balisage Speakable. Le haut de page porte la preuve ; la phrase citable du haut de page, c'est le chapô du héros.
+
+> **Amendement du 28 septembre 2026 (v1.8, ADR-031).** La **Refonte** se livre en deux variantes **à égalité**, choisies selon la situation : **WordPress sur mesure** (thème écrit pour le site, à partir de 2 250 € HT) ou **WordPress headless** (à partir de 4 000 € HT). Elle s'affiche « à partir de 2 250 € HT », nom technique « WordPress sur mesure ou headless », et garde le badge « recommandée ». L'**Optimisation** devient la remise à niveau du site existant, sans reconstruction ni nouveau thème, à partir de 1 500 € HT. Le headless n'est plus l'option par défaut de la refonte. L'analyse du site (`/scan`) tranche entre les deux variantes. Amendés : §1, §5.
 
 ---
 
@@ -60,8 +62,8 @@ Catalogue de référence (site en dev), le seul que le site mentionne :
 |---|---|---|
 | Diagnostiquer | Échange de 15 minutes : poser la situation, savoir par où commencer (v1.7, ADR-023) | Gratuit |
 | Diagnostiquer | Audit + roadmap : rapport d'audit, préconisations, roadmap | 650 € HT |
-| Évoluer | Optimisation · WordPress optimisé : thème, plugin, optimisation de l'existant | à partir de 2 250 € HT |
-| Évoluer | Refonte · WordPress headless : back-office conservé, front moderne (recommandée) | à partir de 4 000 € HT |
+| Évoluer | Optimisation · WordPress optimisé : le site existant remis à niveau (vitesse, extensions, sécurité, hébergement), sans reconstruction | à partir de 1 500 € HT |
+| Évoluer | Refonte · WordPress sur mesure ou headless, à égalité selon la situation (recommandée) | à partir de 2 250 € HT (sur mesure), 4 000 € HT (headless) |
 | Évoluer | Évolution · web app : plateforme web et/ou mobile, administration sur mesure, sans WordPress | à partir de 6 500 € HT |
 | Gérer | Suivi et maintenance : surveillance, sauvegardes, mises à jour vérifiées, rapport mensuel, veille en continu avec Sentinelle incluse. Deux paliers, Essentiel et Actif, et une grille par type de site (ci-dessous) | à partir de 89 € HT par mois |
 | Gérer | Expert technique externalisé : direction technique à temps partagé, deux paliers (Référent, Direction technique) | à partir de 900 € HT par mois |
@@ -128,7 +130,7 @@ Sentinelle est l'outil de la veille en continu du suivi et maintenance : elle s'
 
 Chaque offre se présente sur une carte au même gabarit : pour vous si (la situation), vous obtenez (le résultat), un prix « à partir de », une action. Les paliers ne s'affichent que sur la page de l'offre et sur `/tarifs`. Ce qui est inclus (Sentinelle dans la maintenance, trois mois de suivi dans chaque forfait, l'espace en ligne) se dit en pastille, jamais comme une offre. La création d'un site n'est pas une ligne à part : mêmes forfaits, point de départ différent.
 
-**Un seul nom par prestation (v1.6).** Optimisation, Refonte, Évolution, à la place de Consolider, Découpler, Refonder (v1.5). Le nom technique (WordPress optimisé, WordPress headless, web app) vient en sous-titre, jamais à la place du nom. Sur une carte de prestation, ce sous-titre s'écrit en caractères lisibles, pas en petites capitales, et il est suivi d'une phrase qui dit en clair ce que c'est (ADR-015). Le nom technique et la phrase se lisent dans `lib/trajectoires.ts` (`technique`, `enClair`). Le mot « refonte » reste un mot courant du site (« refonte de site WordPress ») ; avec une majuscule, il désigne la prestation headless. Les libellés « Vitrine simple », « Site complexe », « Plateforme et app » et le bouton « Choisir cette stack » sont retirés : ils classaient par type de site et détournaient la cible de la trajectoire recommandée.
+**Un seul nom par prestation (v1.6).** Optimisation, Refonte, Évolution, à la place de Consolider, Découpler, Refonder (v1.5). Le nom technique (WordPress optimisé, WordPress headless, web app) vient en sous-titre, jamais à la place du nom. Sur une carte de prestation, ce sous-titre s'écrit en caractères lisibles, pas en petites capitales, et il est suivi d'une phrase qui dit en clair ce que c'est (ADR-015). Le nom technique et la phrase se lisent dans `lib/trajectoires.ts` (`technique`, `enClair`). Le mot « refonte » reste un mot courant du site (« refonte de site WordPress ») ; avec une majuscule, il désigne la prestation Refonte, en WordPress sur mesure ou en headless (v1.8). Les libellés « Vitrine simple », « Site complexe », « Plateforme et app » et le bouton « Choisir cette stack » sont retirés : ils classaient par type de site et détournaient la cible de la trajectoire recommandée.
 
 ## 2. Objectif directeur et lecteur
 
@@ -190,8 +192,8 @@ Les trois prestations, la techno en sous-titre :
 
 | Prestation | Quand | Technique | Prix |
 |---|---|---|---|
-| Optimisation | Le problème, c'est le thème et l'empilement de plugins, pas WordPress | WordPress optimisé | à partir de 2 250 € HT |
-| Refonte · recommandée | Le site est lent, l'équipe éditoriale est installée | WordPress headless | à partir de 4 000 € HT |
+| Optimisation | Le site tient encore : on le garde et on le remet à niveau, sans reconstruire | WordPress optimisé | à partir de 1 500 € HT |
+| Refonte · recommandée | Le site est lent ou daté, l'équipe publie dans WordPress | WordPress sur mesure (à partir de 2 250 € HT) ou headless (à partir de 4 000 € HT), selon la situation | à partir de 2 250 € HT |
 | Évolution | Le site est devenu un outil de travail | Web app, plateforme, PWA | à partir de 6 500 € HT |
 
 En amont : l'Échange de 15 minutes (gratuit) et l'Audit + roadmap (650 € HT). L'échange et le diagnostic 2 minutes sont les portes d'entrée gratuites ; l'audit est la porte d'entrée payante (v1.7, ADR-023).
@@ -221,7 +223,7 @@ Héros (v1.7). Le titre dit en trois ou quatre mots les trois idées du position
 
 Retenu par Agathe (v1.7, ADR-019) :
 
-- Titre : « Pilotage de *projet web* ». En anglais : « Web project *leadership* ».
+- Titre : « Menons *votre projet web* » (amendé le 28 septembre 2026, demande d'Agathe). En anglais : « Let's lead *your web project* ».
 - Sous-titre : « Surveiller, maintenir, réaliser. » En anglais : « Monitor, maintain, deliver. » Les trois verbes disent la veille constante, l'entretien et l'expertise de réalisation ; le titre dit la direction.
 - Description : la phrase de promesse existante, qui porte le mesurable (prix et délai écrits avant de commencer, performance mesurée avant et après, veille à chaque étape).
 
@@ -236,7 +238,7 @@ Variantes proposées et non retenues, gardées pour mémoire :
 - Projet livré, *site veillé*.
 - Votre direction web, *externalisée*.
 
-Boutons : « Analysez votre site en 2 minutes » (froid), « Discutons de votre projet » (chaud).
+Boutons : « Analysez votre site » (froid), « Discutons de votre projet » (chaud).
 
 Les anciennes variantes centrées sur la douleur (« Votre site WordPress vieillit mal… », « De 45 à 98 sur PageSpeed… ») quittent le héros de la home ; elles restent utilisables en h1 des pages d'offre et de pack, et dans la prospection.
 
@@ -299,7 +301,7 @@ Rôle : le second message, orienté DAF / DRH. Titre cible : « 30 % du coût de
 
 ### Diagnostic : l'analyse du site `/scan`
 
-Rôle : le CTA froid unique (v1.4). `/audit-site-web` et `/audit-site-ia` redirigent vers `/scan` (redirection temporaire). Libellé fixe : « Analysez votre site en 2 minutes » (version courte : « Analyser mon site »). L'ancien libellé « Voyez ce qui ralentit votre site » est abandonné : l'analyse liste les composants du site et ceux qui sont à risque, elle ne mesure pas la vitesse. Promesse : une adresse, un rapport, aucun accès demandé. Le rapport est aussi le point de vente de Sentinelle (v1.5). À venir (code Sentinelle, hors vitrine) : le rapport oriente vers un seul moment selon le verdict (bon état vers Gérer, fragile vers la visio, à refaire vers les trajectoires).
+Rôle : le CTA froid unique (v1.4). `/audit-site-web` et `/audit-site-ia` redirigent vers `/scan` (redirection temporaire). Libellé fixe : « Analysez votre site » (28 septembre 2026, « en 2 minutes » retiré du bouton) (version courte : « Analyser mon site »). L'ancien libellé « Voyez ce qui ralentit votre site » est abandonné : l'analyse liste les composants du site et ceux qui sont à risque, elle ne mesure pas la vitesse. Promesse : une adresse, un rapport, aucun accès demandé. Le rapport est aussi le point de vente de Sentinelle (v1.5). À venir (code Sentinelle, hors vitrine) : le rapport oriente vers un seul moment selon le verdict (bon état vers Gérer, fragile vers la visio, à refaire vers les trajectoires).
 
 ### Suivi et maintenance `/maintenance-wordpress` (v1.6)
 
@@ -337,11 +339,11 @@ Hors cible prospect froid. Même voix, argument unique : forfait, délai, une in
 
 ## 7. CTA et navigation
 
-- Navigation principale (v1.6) : Diagnostiquer · Évoluer · Gérer · Études de cas · À propos, puis un lien « Espace client » et le bouton « Analyser mon site » (`/scan`). Chaque moment ouvre un mega menu de trois cases au plus (`lib/mega-menu.ts`). Le panneau porte le besoin en titre ; ses cases sont des situations, chacune mène à la page de son pack, avec le nom de l'offre en description et le budget en badge. « Diagnostiquer » ajoute la veille gratuite. Le rendez-vous reste dans le tiroir mobile, le footer et en fin de chaque page.
+- Navigation principale (v1.6) : Diagnostiquer · Évoluer · Gérer · Études de cas · À propos, puis un lien « Espace client » et le bouton « Échange gratuit », qui réserve l'échange de 15 minutes (`CTA_CHAUD`, nouvel onglet ; amendé le 28 septembre 2026, demande d'Agathe, il remplaçait « Analyser mon site »). Chaque moment ouvre un mega menu de trois cases au plus (`lib/mega-menu.ts`). Le panneau porte le besoin en titre ; ses cases sont des situations, chacune mène à la page de son pack, avec le nom de l'offre en description et le budget en badge. « Diagnostiquer » ajoute la veille gratuite. L'analyse du site (`/scan`) reste dans le tiroir mobile, les héros et les fins de page.
 - Chaque page d'offre se termine par deux CTA : froid (analyse du site) en principal, chaud (rendez-vous) en secondaire. Jamais un seul CTA d'une seule température.
-- Libellés fixes : « Analysez votre site en 2 minutes » (froid), « Discutons de votre projet » (chaud), « Voir l'étude de cas » (preuve).
+- Libellés fixes : « Analysez votre site » (froid), « Discutons de votre projet » (chaud), « Voir l'étude de cas » (preuve).
 - Le bouton chaud « Discutons de votre projet » réserve l'échange de 15 minutes (v1.7, ADR-023) : lien externe `CTA_CHAUD` (`lib/visio-conseil.ts`), ouvert dans un nouvel onglet. `/contact` reste accessible depuis le footer et la navigation.
-- **Héros (27 septembre 2026, ADR-028)** : dans tous les héros, le premier bouton (plein) est l'échange gratuit, libellé « Échange gratuit de 15 min », vers Calendly (`CTA_ECHANGE`, `lib/visio-conseil.ts`), ouvert dans un nouvel onglet. L'analyse du site (`/scan`) passe en bouton secondaire (filet), à côté des autres boutons du héros. Les deux températures restent présentes. Les fins de page gardent la règle ci-dessus.
+- **Héros (27 septembre 2026, ADR-028)** : dans tous les héros, le premier bouton (plein) est l'échange gratuit, libellé « Échange gratuit » (EN « Free call ») depuis le 28 septembre 2026, en `text-sm` semi-gras, vers Calendly (`CTA_ECHANGE`, `lib/visio-conseil.ts`), ouvert dans un nouvel onglet. L'analyse du site (`/scan`) passe en bouton secondaire (filet), à côté des autres boutons du héros. Les deux températures restent présentes. Les fins de page gardent la règle ci-dessus.
 
 ## 8. Éléments de langage prêts à l'emploi
 
@@ -395,7 +397,7 @@ Quick wins (contenu, ordre, typographie) : points 1, 2, 3, 8, 9. Chantiers (prod
 
 ## 11. Contrôle avant mise en ligne d'une page
 
-- [ ] Le h1 nomme une douleur ou un bénéfice, pas une techno ; le bénéfice est en italique. Home : le h1 est « Pilotage de *projet web* », le sous-titre « Surveiller, maintenir, réaliser. » (v1.7), pas la douleur.
+- [ ] Le h1 nomme une douleur ou un bénéfice, pas une techno ; le bénéfice est en italique. Home : le h1 est « Menons *votre projet web* », le sous-titre « Surveiller, maintenir, réaliser. » (v1.7), pas la douleur.
 - [ ] Une preuve chiffrée apparaît avant la première offre.
 - [ ] Les trois prestations portent leurs prix et un seul nom chacune ; Refonte porte le badge « recommandée ».
 - [ ] Un pack est désigné par son seul nom (Arbitrage, Audit + roadmap, Optimisation, Refonte, Évolution, Maintenance, Pilotage), jamais par sa phrase de situation ; le budget du pack est calculé, pas écrit.

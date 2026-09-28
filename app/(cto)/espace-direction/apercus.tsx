@@ -2,8 +2,9 @@ import Link from "next/link";
 import type { ApercuPayload, Deliverable } from "@cto/deliverables";
 import { Acces } from "./acces";
 import { historiquePath, Nouveaute, sortRecentFirst } from "./livrables";
-import { EnPreparation, Espace, type EspaceContext } from "./shell";
-import { buttonClass, formatDay, Panel, Tag } from "./ui";
+import { sectionByKey } from "@cto/espace";
+import { EnPreparation, Espace, sectionHref, type EspaceContext } from "./shell";
+import { buttonClass, formatDay, Label, Panel, Tag } from "./ui";
 import type { Viewer } from "./viewer";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -99,5 +100,59 @@ export async function VueApercus({ viewer, context }: { viewer: Viewer; context:
         </Panel>
       )}
     </Espace>
+  );
+}
+
+/** Combien de versions l'accueil montre ; les autres attendent dans leur section. */
+const APERCUS_ACCUEIL = 3;
+
+/**
+ * Le bloc « Versions de travail » de l'accueil : la maquette ou le site de test
+ * à regarder, ouvrable d'un clic. Les accès (identifiant, mot de passe) restent
+ * dans la section, un clic plus loin : l'accueil ne les étale pas.
+ */
+export function CarteApercus({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
+  const items = sortRecentFirst(context.items.filter((item) => item.kind === "apercu")) as Apercu[];
+  if (items.length === 0) return null;
+  const section = sectionHref(sectionByKey("apercus"), viewer.base);
+
+  return (
+    <section aria-labelledby="apercus-titre" className="mt-10">
+      <h2 id="apercus-titre">
+        <Label>Versions de travail</Label>
+      </h2>
+      <Panel className="mt-3 divide-y divide-dark-gray">
+        {items.slice(0, APERCUS_ACCUEIL).map((item) => {
+          const libelles = item.payload.nature ? NATURES[item.payload.nature] : null;
+          return (
+            <div key={item.id} className="flex flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3">
+              <div className="flex min-w-0 flex-1 flex-wrap items-baseline gap-2">
+                {libelles ? <Tag>{libelles.tag}</Tag> : null}
+                <Nouveaute item={item} since={context.since} />
+                <Link href={section} className="font-inter-tight text-sm underline-offset-4 hover:underline">
+                  {item.title}
+                </Link>
+                {item.occurredAt ? (
+                  <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray">
+                    {formatDay(item.occurredAt)}
+                  </span>
+                ) : null}
+              </div>
+              {item.payload.url ? (
+                <a href={item.payload.url} target="_blank" rel="noreferrer noopener" className={buttonClass.ghost}>
+                  {libelles?.ouvrir ?? "Ouvrir ↗"}
+                </a>
+              ) : null}
+            </div>
+          );
+        })}
+        <Link
+          href={section}
+          className="block px-4 py-3 font-mono text-[10px] uppercase tracking-[0.14em] transition-colors hover:text-foreground"
+        >
+          {items.length > APERCUS_ACCUEIL ? `Les ${items.length} versions et leurs accès →` : "Accès et détails →"}
+        </Link>
+      </Panel>
+    </section>
   );
 }

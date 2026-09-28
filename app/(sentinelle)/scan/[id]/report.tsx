@@ -14,6 +14,7 @@ import {
   ECHANGE_URL,
   PAGE_PRESTATIONS,
   PRESTATIONS,
+  techniqueDe,
 } from "@sentinelle/audit/prestations";
 import { OFFER_PRICE_LABEL } from "@/lib/sentinelle-offer";
 
@@ -718,6 +719,16 @@ function GrilleDiagnostic({
           <p className="mt-2 font-inter-tight text-2xl font-light tracking-tight text-foreground">
             {pack.nom} : {besoin.label.toLowerCase()}
           </p>
+          {/* La Refonte a deux variantes à égalité (ADR-031) : le diagnostic
+              dit laquelle, et pourquoi. */}
+          {conclusion.issue === "refonte" && diagnostic.refonte && (
+            <p className="mt-1 font-inter-tight text-base text-foreground">
+              <span className="text-mid-gray">
+                {techniqueDe("refonte", diagnostic.refonte)} :{" "}
+              </span>
+              {diagnostic.refonte.raison}
+            </p>
+          )}
           <p className="mt-2 font-inter-tight text-base text-foreground">
             <span className="text-mid-gray">Objectif : </span>
             {conclusion.objectif}
@@ -729,13 +740,13 @@ function GrilleDiagnostic({
               href={ECHANGE_URL}
               target="_blank"
               rel="noopener"
-              className="inline-flex items-center justify-center border border-accent-secondary bg-accent-secondary px-6 py-3 font-mono text-xs uppercase tracking-[0.14em] text-obsidian transition-opacity hover:opacity-90"
+              className="inline-flex items-center justify-center border border-accent-secondary bg-accent-secondary px-6 py-3 font-mono text-sm font-semibold uppercase tracking-[0.14em] text-obsidian transition-opacity hover:opacity-90"
             >
               Discutons de votre projet
             </a>
             <a
               href={pack.href}
-              className="inline-flex items-center justify-center border border-dark-gray px-6 py-3 font-mono text-xs uppercase tracking-[0.14em] text-foreground transition-colors hover:border-accent-secondary"
+              className="inline-flex items-center justify-center border border-dark-gray px-6 py-3 font-mono text-sm font-semibold uppercase tracking-[0.14em] text-foreground transition-colors hover:border-accent-secondary"
             >
               Voir l'offre {pack.nom}
             </a>
@@ -774,8 +785,15 @@ function GrilleDiagnostic({
                     </span>
                   </div>
                   <p className="font-inter-tight text-sm text-mid-gray">
-                    {prestation.technique}
+                    {techniqueDe(examen.prestation, diagnostic.refonte)}
                   </p>
+                  {examen.prestation === "refonte" &&
+                    diagnostic.refonte?.raison &&
+                    !retenue && (
+                      <p className="mt-1 font-inter-tight text-sm text-mid-gray">
+                        {diagnostic.refonte.raison}
+                      </p>
+                    )}
                   <dl className="mt-3 space-y-2 font-inter-tight text-sm leading-relaxed text-foreground">
                     <div>
                       <dt className="inline text-mid-gray">Stratégique : </dt>
@@ -1094,7 +1112,7 @@ function InscriptionVeille({
           <button
             type="submit"
             disabled={enCours}
-            className="mt-5 inline-flex items-center justify-center border border-accent-secondary bg-accent-secondary px-6 py-3 font-mono text-xs uppercase tracking-[0.14em] text-obsidian transition-opacity hover:opacity-90 disabled:opacity-60"
+            className="mt-5 inline-flex items-center justify-center border border-accent-secondary bg-accent-secondary px-6 py-3 font-mono text-sm font-semibold uppercase tracking-[0.14em] text-obsidian transition-opacity hover:opacity-90 disabled:opacity-60"
           >
             {enCours ? "Envoi…" : "Demander mon inscription"}
           </button>
@@ -1180,7 +1198,7 @@ function FormulaireAudit({
         <button
           type="submit"
           disabled={enCours}
-          className="inline-flex items-center justify-center border border-accent-secondary bg-accent-secondary px-6 py-3 font-mono text-xs uppercase tracking-[0.14em] text-obsidian transition-opacity hover:opacity-90 disabled:opacity-60"
+          className="inline-flex items-center justify-center border border-accent-secondary bg-accent-secondary px-6 py-3 font-mono text-sm font-semibold uppercase tracking-[0.14em] text-obsidian transition-opacity hover:opacity-90 disabled:opacity-60"
         >
           {enCours ? "Envoi…" : "Recevoir l'audit"}
         </button>
@@ -1334,7 +1352,7 @@ function AuditPret({
           type="button"
           autoFocus
           onClick={() => ref.current?.close()}
-          className="mt-6 inline-flex w-full items-center justify-center border border-dark-gray px-6 py-3 font-mono text-xs uppercase tracking-[0.14em] text-foreground transition-colors hover:border-accent-secondary"
+          className="mt-6 inline-flex w-full items-center justify-center border border-dark-gray px-6 py-3 font-mono text-sm font-semibold uppercase tracking-[0.14em] text-foreground transition-colors hover:border-accent-secondary"
         >
           Voir l'audit
         </button>

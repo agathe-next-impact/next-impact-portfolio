@@ -2,9 +2,7 @@ import { Metadata } from "next";
 import HomeClient from "@/components/home-client";
 import { pageMetadata } from "@/lib/metadata";
 import {
-  WebsiteJsonLd,
   HomepageJsonLd,
-  BreadcrumbJsonLd,
   ServiceJsonLd,
   FAQJsonLd,
 } from "@/components/json-ld";
@@ -44,9 +42,7 @@ export default async function Home({
 
   return (
     <>
-      <WebsiteJsonLd />
       <HomepageJsonLd locale={locale} />
-      <BreadcrumbJsonLd locale={locale} items={[{ name: isEn ? "Home" : "Accueil", url: "/" }]} />
       <ServiceJsonLd
         locale={locale}
         name={

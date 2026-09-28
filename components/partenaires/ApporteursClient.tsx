@@ -37,10 +37,10 @@ const EXEMPLE_MAX = Math.round((EXEMPLE_MONTANT * COMMISSION_MAX) / 100);
    Styles partagés
    ───────────────────────────────────────────────────────────────── */
 const BTN_PRIMARY =
-  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-accent-secondary bg-accent-secondary px-5 font-mono text-xs font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
+  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-accent-secondary bg-accent-secondary px-5 font-mono text-sm font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
 
 const BTN_GHOST =
-  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-dark-gray px-5 font-mono text-xs uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet";
+  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-dark-gray px-5 font-mono text-sm font-semibold uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet";
 
 const FIELD =
   "w-full bg-jet border border-dark-gray px-3.5 py-2.5 font-inter-tight text-base text-foreground placeholder:text-mid-gray outline-none transition-colors focus-visible:ring-1 focus-visible:ring-accent-secondary focus-visible:border-accent-secondary";

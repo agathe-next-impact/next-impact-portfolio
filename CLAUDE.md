@@ -2,7 +2,7 @@
 
 > PRIORITAIRE : pour tout travail éditorial sur la vitrine (contenus, titres,
 > offres, CTA, métadonnées, navigation), lire et suivre
-> ./DIRECTIVES-CHARTE-EDITORIALE.md (charte v1.6, 2026-09-27) — elle prime sur
+> ./DIRECTIVES-CHARTE-EDITORIALE.md (charte v1.8, 2026-09-28) — elle prime sur
 > le présent fichier et fixe le catalogue d'offres de référence (7 lignes en
 > trois moments : Diagnostiquer · Évoluer · Gérer), l'offre par situation
 > (besoin, situation, pack), le lexique, les règles typographiques et les
@@ -12,7 +12,9 @@
 > renommés, Sentinelle hors catalogue ; ADR-014 pour l'offre par situation :
 > sept packs sous `/packs` (Audit ajouté en Diagnostiquer), prestations renommées Optimisation · Refonte ·
 > Évolution, veille technique et stratégique dans chaque offre, prix du suivi
-> validés). Sources uniques : `lib/situations.ts`, `lib/trajectoires.ts`.
+> validés ; ADR-031 pour la Refonte en WordPress sur mesure ou headless,
+> à égalité, et l'Optimisation de l'existant à 1 500 €). Sources uniques :
+> `lib/situations.ts`, `lib/trajectoires.ts`.
 
 > PRIORITAIRE : pour tout travail sur les études de cas, lire et suivre
 > ./DIRECTIVES-ETUDES-DE-CAS.md — il prime sur le présent fichier.
@@ -55,8 +57,10 @@ les canaux de prospection (cold mail, LinkedIn, pré-audit). Il doit donc
 ## Doctrine (résumé — détail dans la skill audit-vitrine)
 
 - Classer l'offre par **bénéfice**, jamais par techno en accroche.
-- **Headless au centre**, WP classique en entrée secondaire, web app en haut de
-  gamme secondaire. Casser la parité des 3 offres ; Headless = recommandé.
+- **Refonte au centre** (recommandée), en deux variantes à égalité selon la
+  situation : WordPress sur mesure ou WordPress headless (ADR-031, 2026-09-28).
+  Optimisation de l'existant en entrée, web app en haut de gamme secondaire.
+  Casser la parité des 3 prestations ; Refonte = recommandée.
 - Entrée par le **gain sans rupture** (« gardez WordPress + un front waouh de
   2026 »), waouh TOUJOURS adossé à du mesurable (perf garantie). Pas le fiscal.
 - **AGEFIPH = 2e message**, jamais le 1er. Raison de préférer, pas d'acheter.

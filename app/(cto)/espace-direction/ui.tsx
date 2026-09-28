@@ -32,7 +32,7 @@ export function Panel({
 }
 
 const BUTTON_BASE =
-  "inline-flex items-center justify-center px-5 py-3 font-mono text-[11px] uppercase tracking-[0.14em] transition-colors disabled:cursor-not-allowed disabled:opacity-40";
+  "cto-bouton inline-flex items-center justify-center px-5 py-3 font-mono text-[11px] uppercase tracking-[0.14em] transition-colors disabled:cursor-not-allowed disabled:opacity-40";
 
 export const buttonClass = {
   primary: `${BUTTON_BASE} border border-accent-secondary bg-accent-secondary text-obsidian hover:opacity-90`,

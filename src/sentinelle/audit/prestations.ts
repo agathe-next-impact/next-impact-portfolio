@@ -1,4 +1,10 @@
-import type { DiagnosticBesoin, DiagnosticIssue, DiagnosticTonalite } from "@sentinelle/types";
+import type {
+  DiagnosticBesoin,
+  DiagnosticIssue,
+  DiagnosticRefonte,
+  DiagnosticTonalite,
+  DiagnosticVariante,
+} from "@sentinelle/types";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Libellés de l'audit, partagés par le rapport en ligne (`/scan/[id]`) et
@@ -21,7 +27,7 @@ export const PRESTATIONS: Record<
   },
   refonte: {
     nom: "Refonte",
-    technique: "WordPress headless",
+    technique: "WordPress sur mesure ou headless",
     href: "/packs/site-wordpress-lent",
   },
   evolution: {
@@ -30,6 +36,24 @@ export const PRESTATIONS: Record<
     href: "/packs/site-outil-de-travail",
   },
 };
+
+/**
+ * Les deux variantes de la Refonte (ADR-031), à égalité. Copie des libellés de
+ * `variantes` dans lib/trajectoires.ts : si l'un change, l'autre aussi.
+ */
+export const VARIANTES_REFONTE: Record<DiagnosticVariante, string> = {
+  sur_mesure: "WordPress sur mesure",
+  headless: "WordPress headless",
+};
+
+/**
+ * Le sous-titre technique d'une prestation dans un audit : pour la Refonte, la
+ * variante que le diagnostic a retenue quand il en a retenu une.
+ */
+export function techniqueDe(issue: DiagnosticIssue, refonte?: DiagnosticRefonte): string {
+  if (issue === "refonte" && refonte) return VARIANTES_REFONTE[refonte.variante];
+  return PRESTATIONS[issue].technique;
+}
 
 /** La page des prestations, présentées par situation. */
 export const PAGE_PRESTATIONS = "/packs";

@@ -160,6 +160,23 @@ describe("missions", () => {
     expect(mission).toMatchObject({ kind: "prestation", phase: "en-cours", progress: 70, overdue: false });
   });
 
+  it("ne montre qu'une mission quand un audit livre une prestation liée", () => {
+    const audit = (id: string, lien?: string) =>
+      item({
+        notionPageId: id,
+        kind: "audit",
+        title: id,
+        occurredAt: new Date("2026-09-25"),
+        payload: { site: null, dateMesures: null, synthese: [], sections: [], annexe: null, fichiers: [], ...(lien ? { prestation: lien } : {}) },
+      });
+    const lie = missionsOf([prestation("commande", "Terminée", "2026-09-25"), audit("audit", "commande")], now);
+    expect(lie.map((m) => [m.kind, m.title])).toEqual([["audit", "audit"]]);
+
+    // Sans relation, rien ne permet de les rapprocher : les deux restent.
+    const libre = missionsOf([prestation("commande", "Terminée", "2026-09-25"), audit("audit")], now);
+    expect(libre.map((m) => m.kind).sort()).toEqual(["audit", "prestation"]);
+  });
+
   it("laisse intacts les livrables qui ne sont pas des prestations", () => {
     const chantier = roadmap("ouvert", "Ouvert", "2026-09-30");
     expect(withoutPrice(chantier)).toBe(chantier);

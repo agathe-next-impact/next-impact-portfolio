@@ -13,6 +13,11 @@ export const RUBRIQUES = ["organisation", "ecosysteme"] as const;
 export const TONALITES = ["solide", "a_renforcer", "fragile", "indetermine"] as const;
 /** Les trois prestations du catalogue, dans son ordre, sous leur seul nom. */
 export const ISSUES = ["optimisation", "refonte", "evolution"] as const;
+/**
+ * Les deux variantes de la Refonte (ADR-031, 2026-09-28), à égalité : le
+ * diagnostic tranche entre elles d'après ce qu'il observe.
+ */
+export const VARIANTES = ["sur_mesure", "headless"] as const;
 /** La réponse à la question du dirigeant : faut-il le faire ? */
 export const BESOINS = ["necessaire", "utile", "pas_prioritaire"] as const;
 /** L'objectif se lit d'un coup d'œil : une phrase courte. */
@@ -140,6 +145,10 @@ export const GrilleSchema = z.object({
       commercial: z.string().min(1),
     }),
   ),
+  refonte: z.object({
+    variante: z.enum(VARIANTES),
+    raison: z.string().min(1),
+  }),
 });
 
 export type Grille = z.infer<typeof GrilleSchema>;
@@ -165,7 +174,7 @@ const caseJson = {
 export const GRILLE_JSON_SCHEMA = {
   type: "object",
   additionalProperties: false,
-  required: ["organisation", "ecosysteme", "dispositif", "conclusion", "examens"],
+  required: ["organisation", "ecosysteme", "dispositif", "conclusion", "examens", "refonte"],
   properties: {
     organisation: caseJson,
     ecosysteme: caseJson,
@@ -196,6 +205,20 @@ export const GRILLE_JSON_SCHEMA = {
           besoin: { type: "string", enum: [...BESOINS] },
           strategique: { type: "string", description: "Objectif stratégique servi, 20 mots au plus." },
           commercial: { type: "string", description: "Objectif commercial servi, 20 mots au plus." },
+        },
+      },
+    },
+    refonte: {
+      type: "object",
+      additionalProperties: false,
+      description:
+        "La variante de Refonte qui conviendrait à ce site, même quand la Refonte n'est pas recommandée.",
+      required: ["variante", "raison"],
+      properties: {
+        variante: { type: "string", enum: [...VARIANTES] },
+        raison: {
+          type: "string",
+          description: "Pourquoi cette variante, d'après les faits observés, 20 mots au plus.",
         },
       },
     },

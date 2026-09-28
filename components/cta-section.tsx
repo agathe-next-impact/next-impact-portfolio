@@ -145,7 +145,7 @@ function CTALeadMagnet() {
           {t("subtitleEnd")}
         </>
       }
-      ctaHref="/audit-site-web"
+      ctaHref="/scan"
       ctaLabel={t("ctaLabel")}
       footer={t("footer")}
     />

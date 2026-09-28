@@ -135,7 +135,7 @@ export function MegaMenuPanel({
             {section.heading[locale]}
           </span>
         </span>
-        <span className="inline-flex min-h-10 items-center gap-2 rounded-sm border border-accent-secondary px-4 font-mono text-xs uppercase tracking-[0.1em] text-accent-secondary transition-colors group-hover:bg-accent-secondary group-hover:text-obsidian">
+        <span className="inline-flex min-h-10 items-center gap-2 rounded-sm border border-accent-secondary px-4 font-mono text-sm font-semibold uppercase tracking-[0.1em] text-accent-secondary transition-colors group-hover:bg-accent-secondary group-hover:text-obsidian">
           {locale === "en" ? `See the ${navLabel} page` : `Voir la page ${navLabel}`}
           <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
         </span>

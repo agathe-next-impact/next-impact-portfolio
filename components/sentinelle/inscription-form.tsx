@@ -156,7 +156,7 @@ export function InscriptionSentinelle() {
       <button
         type="submit"
         disabled={enCours}
-        className="mt-5 inline-flex items-center justify-center border border-accent-secondary bg-accent-secondary px-6 py-3 font-mono text-xs uppercase tracking-[0.14em] text-obsidian transition-opacity hover:opacity-90 disabled:opacity-60"
+        className="mt-5 inline-flex items-center justify-center border border-accent-secondary bg-accent-secondary px-6 py-3 font-mono text-sm font-semibold uppercase tracking-[0.14em] text-obsidian transition-opacity hover:opacity-90 disabled:opacity-60"
       >
         {enCours ? "Envoi…" : "Demander mon inscription"}
       </button>

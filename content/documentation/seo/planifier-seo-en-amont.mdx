@@ -1,27 +1,30 @@
 ---
-title: Planifier le SEO dès le départ
-description: Pourquoi planifier ses actions SEO au démarrage du projet ?
+title: "SEO : pourquoi et comment le planifier dès la conception"
+description: "Mots-clés, architecture, mobile, performance, contenu, liens et suivi : les sept étapes pour intégrer le SEO d'un site WordPress avant son lancement."
 category: seo
 author: Next Impact
 date: "2025-03-15"
+dateModified: "2026-09-28"
 order: 1
 ---
 
-La planification SEO avant le développement d'un site WordPress détermine la vitesse à laquelle le site acquiert du trafic organique après son lancement. Un site dont l'arborescence, les mots-clés et la configuration technique sont définis en amont est indexé plus rapidement et se positionne sur ses requêtes cibles dès les premières semaines. À l'inverse, un site lancé sans planification SEO accumule une dette technique dont la correction retarde l'acquisition de trafic de 6 à 12 mois.
+La planification SEO avant le développement d'un site WordPress détermine la vitesse à laquelle le site acquiert du trafic organique après son lancement. Un site dont l'arborescence, les mots-clés et la configuration technique sont définis en amont est indexé plus rapidement et se positionne sur ses requêtes cibles dès les premières semaines. À l'inverse, un site lancé sans planification SEO accumule une dette technique (structure d'URLs inadaptée, absence de balisage sémantique, maillage interne inexistant) dont la correction retarde l'acquisition de trafic de 6 à 12 mois.
 
-Cet article décrit les sept étapes d'une planification SEO structurée, de la définition de l'audience à la mise en place du suivi post-lancement.
+Cet article explique pourquoi le SEO doit figurer dans le cahier des charges initial, puis décrit les sept étapes d'une planification structurée, de la définition de l'audience au suivi après lancement, avec les outils WordPress qui facilitent le travail.
+
+<Callout variant="decideur" title="Le SEO : un investissement, pas une dépense">
+Intégrer le SEO dès la conception réduit le coût global du projet. La publicité payante (SEA) génère du trafic uniquement pendant la durée de la campagne : le trafic tombe à zéro dès l'arrêt du budget. Le SEO, une fois les optimisations en place, continue de générer du trafic organique pendant des mois, avec un coût d'acquisition par visiteur qui diminue dans le temps. Le ROI du SEO se mesure par le ratio entre le trafic organique acquis et l'investissement initial en optimisation.
+</Callout>
 
 ## Pourquoi le SEO est essentiel pour votre site WordPress
 
 Le référencement naturel remplit trois fonctions pour un site WordPress.
 
-Un bon référencement permet à votre site de :
+- **Gagner en visibilité dans les SERP** : 75 % des utilisateurs ne dépassent pas la première page de résultats Google. Un site positionné en page 2 ou au-delà reçoit un volume de clics négligeable. Selon les données de BrightEdge, le trafic organique représente en moyenne 53 % du trafic total d'un site web : ne pas travailler le référencement revient à renoncer à la source d'acquisition la plus volumineuse et la moins coûteuse à moyen terme.
+- **Acquérir du trafic qualifié** : le trafic organique provient d'utilisateurs ayant formulé une requête explicite liée à votre offre. Ce trafic à intention de recherche (search intent) convertit mieux que le trafic issu du display ou des réseaux sociaux, car l'utilisateur est déjà en démarche de recherche.
+- **Réduire le coût d'acquisition à long terme** : le SEA (Google Ads, Meta Ads) fonctionne au coût par clic (CPC), chaque visiteur a un coût direct et récurrent. Le SEO repose sur un investissement initial (optimisation technique, production de contenu, maillage interne) dont le rendement croît dans le temps : un article bien positionné continue de générer du trafic pendant 12 à 24 mois sans intervention supplémentaire.
 
--  Gagner en visibilité dans les SERP  : 75 % des utilisateurs ne dépassent pas la première page de résultats Google. Un site positionné en page 2 ou au-delà reçoit un volume de clics négligeable.
--  Acquérir du trafic qualifié  : le trafic organique provient d'utilisateurs ayant formulé une requête explicite. Ce trafic à intention de recherche (search intent) convertit mieux que le trafic issu du display ou des réseaux sociaux.
--  Réduire le coût d'acquisition à long terme  : contrairement au SEA (Google Ads) dont le coût est proportionnel au volume de clics, le SEO repose sur un investissement initial dont le rendement croît dans le temps.
-
-WordPress, grâce à son architecture en pages/articles/catégories et son écosystème de plugins SEO (Yoast, Rank Math), est nativement compatible avec les bonnes pratiques de référencement. Mais cette compatibilité ne produit de résultats que si les optimisations sont planifiées avant le développement.
+WordPress, grâce à son architecture en pages, articles et catégories et à son écosystème de plugins SEO (Yoast, Rank Math), est nativement compatible avec les bonnes pratiques de référencement. Mais cette compatibilité ne produit de résultats que si les optimisations sont planifiées avant le développement.
 
 <ComparisonTable
   headers={["Sans planification SEO", "Avec planification SEO"]}
@@ -35,13 +38,25 @@ WordPress, grâce à son architecture en pages/articles/catégories et son écos
   highlight="right"
 />
 
+<FlowDiagram
+  nodes={[
+    { label: "Conception", description: "Intégrer le SEO dès le cahier des charges" },
+    { label: "Structure", description: "Arborescence et maillage interne" },
+    { label: "Contenu", description: "Recherche de mots-clés et rédaction optimisée" },
+    { label: "Technique", description: "Performance, mobile, indexation" },
+    { label: "Lancement", description: "Suivi et optimisation continue" }
+  ]}
+  direction="horizontal"
+  accent="blue"
+/>
+
 ## Étape 1 : Définir votre niche et comprendre votre audience
 
 La première étape consiste à identifier le positionnement thématique du site et le profil de l'audience cible.
 
 ### Identifier votre niche
 
-La niche détermine le périmètre sémantique du site : l'ensemble des sujets et requêtes sur lesquels il se positionnera. Un périmètre trop large (ex. : "cuisine") implique une concurrence élevée sur des mots-clés génériques. Un périmètre ciblé (ex. : "recettes sans gluten pour familles") réduit la concurrence et augmente la pertinence thématique (topical authority) perçue par Google.
+La niche détermine le périmètre sémantique du site : l'ensemble des sujets et requêtes sur lesquels il se positionnera. Un périmètre trop large (ex. : « cuisine ») implique une concurrence élevée sur des mots-clés génériques. Un périmètre ciblé (ex. : « recettes sans gluten pour familles ») réduit la concurrence et augmente la pertinence thématique (topical authority) perçue par Google.
 
 ### Comprendre votre audience
 
@@ -53,12 +68,12 @@ Les trois questions à documenter pour chaque persona :
 - Quelle action doit-elle réaliser sur le site (achat, prise de contact, inscription) ?
 
 <Callout variant="tip" title="Méthode pour définir votre niche">
-Croisez trois dimensions : vos domaines d'expertise (sujets que vous maîtrisez et pouvez traiter en profondeur), le paysage concurrentiel (analysez les sites déjà positionnés avec un outil comme Semrush ou Ahrefs pour identifier les zones de faible concurrence) et la demande de l'audience (volumes de recherche mesurés via Google Keyword Planner). La niche optimale se situe à l'intersection de ces trois dimensions : expertise réelle, concurrence accessible et demande mesurable.
+Croisez trois dimensions : vos domaines d'expertise (sujets que vous maîtrisez et pouvez traiter en profondeur), le paysage concurrentiel (analysez les sites déjà positionnés avec un outil comme Semrush ou Ahrefs pour identifier les zones de faible concurrence) et la demande de l'audience (volumes de recherche mesurés via Google Keyword Planner). La bonne niche se situe à l'intersection des trois : expertise réelle, concurrence accessible et demande mesurable.
 </Callout>
 
 ## Étape 2 : Réaliser une recherche de mots-clés
 
-La recherche de mots-clés (keyword research) identifie les requêtes sur lesquelles le site doit se positionner et détermine la structure de contenu à produire.
+La recherche de mots-clés (keyword research) identifie les requêtes que votre audience saisit dans Google, donc celles sur lesquelles le site doit se positionner. Elle se fait avant la rédaction des contenus, car elle détermine la structure de contenu à produire.
 
 ### Comment sélectionner vos mots-clés
 
@@ -68,74 +83,117 @@ Utilisez un outil de keyword research (Google Keyword Planner, Ubersuggest, Semr
 - La Keyword Difficulty (KD), un score de 0 à 100 indiquant la difficulté de positionnement
 - L'intention de recherche (informationnelle, transactionnelle, navigationnelle)
 
-Priorisez les mots-clés de longue traîne (long tail keywords) : des expressions de 3+ mots avec un volume modéré mais une KD faible et une intention de recherche précise.
+Priorisez les mots-clés de longue traîne (long tail keywords) : des expressions de 3 mots ou plus, avec un volume modéré mais une KD faible et une intention de recherche précise. Attribuez ensuite à chaque page un mot-clé principal et 2 à 3 mots-clés secondaires.
 
- Exemple concret  : Pour un site de jardinage, le mot-clé générique "entretien jardin" (volume élevé, KD haute) est moins prioritaire que "comment tailler une haie de laurier en hiver" (volume modéré, KD faible, intention informationnelle claire).
+**Exemple concret** : pour un site de jardinage, le mot-clé générique « entretien jardin » (volume élevé, KD haute) est moins prioritaire que « comment tailler une haie de laurier en hiver » (volume modéré, KD faible, intention informationnelle claire).
 
-### Analysez les positions concurrentielles
+### Analyser les positions concurrentielles
 
-Identifiez les mots-clés sur lesquels vos concurrents se positionnent via la fonctionnalité "Keyword Gap" (Semrush) ou "Content Gap" (Ahrefs). Les requêtes où vos concurrents sont présents et vous absent représentent des opportunités de contenu à prioriser.
+Identifiez les mots-clés sur lesquels vos concurrents se positionnent via la fonctionnalité « Keyword Gap » (Semrush) ou « Content Gap » (Ahrefs). Les requêtes où vos concurrents sont présents et vous absent représentent des opportunités de contenu à prioriser.
 
-## Étape 3 : Optimisation On-Page
+## Étape 3 : Optimiser chaque page (on-page)
 
 L'optimisation on-page consiste à configurer les éléments HTML et le contenu de chaque page pour maximiser sa pertinence vis-à-vis du mot-clé ciblé.
 
-### Les éléments à optimiser :
+### Les éléments à optimiser
 
-1.  Balise `<title>` et meta description  : la balise title est le signal on-page le plus pondéré par Google. Elle doit contenir le mot-clé principal, idéalement en début de balise, et ne pas dépasser 60 caractères. La meta description (155 caractères max) n'est pas un facteur de classement direct, mais elle influence le CTR (taux de clic) dans les SERP.
-2.  Structure de headings (H1 à H3)  : un seul H1 par page contenant le mot-clé principal. Les H2 structurent les sections principales (mots-clés secondaires). Les H3 détaillent les sous-sections (variations sémantiques, questions associées).
-3.  URLs  : format court, en minuscules, avec le mot-clé principal séparé par des tirets (ex. : `/tailler-haie-laurier-hiver`). Activez la structure de permalien "Nom de l'article" dans WordPress.
-4.  Attributs `alt` des images  : description textuelle de l'image incluant le mot-clé lorsque c'est pertinent. Cet attribut est utilisé par Google Images et contribue à l'accessibilité.
+1. **Balise `<title>` et meta description** : la balise title est le signal on-page le plus pondéré par Google. Elle contient le mot-clé principal, idéalement en début de balise, et ne dépasse pas 60 caractères. La meta description (155 caractères maximum) n'est pas un facteur de classement direct, mais elle influence le CTR (taux de clic) dans les SERP.
+2. **Structure de headings (H1 à H3)** : un seul H1 par page contenant le mot-clé principal. Les H2 structurent les sections principales (mots-clés secondaires). Les H3 détaillent les sous-sections (variations sémantiques, questions associées).
+3. **URLs** : format court, en minuscules, avec le mot-clé principal séparé par des tirets (ex. : `/tailler-haie-laurier-hiver`). Activez la structure de permalien « Nom de l'article » dans WordPress.
+4. **Attributs `alt` des images** : description textuelle précise de l'image, incluant le mot-clé de la page lorsque c'est pertinent. Cet attribut est utilisé par Google Images et contribue à l'accessibilité.
 
-### Configuration WordPress :
+### Configuration WordPress
 
 Installez **Yoast SEO** ou **Rank Math** pour disposer d'une interface de saisie des balises meta (title, description) sur chaque page et d'une analyse on-page en temps réel (présence du mot-clé, lisibilité, maillage interne).
 
-## Étape 4 : Vérifiez votre SEO technique
+## Étape 4 : Configurer le SEO technique
 
-Le SEO technique garantit que Googlebot peut crawler, interpréter et indexer l'ensemble des pages du site sans obstacle.
+Le SEO technique garantit que Googlebot peut explorer, interpréter et indexer l'ensemble des pages du site sans obstacle. Quatre dimensions se décident dès la conception.
 
-### Les éléments techniques à configurer :
+### Mobile-First Indexing
 
--  Core Web Vitals  : les trois métriques de performance web que Google utilise comme facteur de classement depuis la mise à jour Page Experience. LCP (Largest Contentful Paint) < 2,5 s, FID (First Input Delay) < 100 ms, CLS (Cumulative Layout Shift) < 0,1. Mesurez-les via Google PageSpeed Insights ou l'onglet "Core Web Vitals" de Google Search Console.
--  Maillage interne et navigation  : chaque page doit être accessible en 3 clics maximum depuis la page d'accueil. Les liens internes contextuels (dans le corps du texte) transmettent du PageRank et signalent les relations sémantiques entre les pages.
--  Compatibilité mobile  : vérifiez le rendu mobile via le test Mobile-Friendly de Google. Le thème WordPress doit être responsive et les zones cliquables dimensionnées à 48x48 px minimum.
--  Fichiers `robots.txt` et `sitemap.xml`  : le fichier `robots.txt` indique à Googlebot les zones du site à ne pas crawler (ex. : `/wp-admin/`). Le `sitemap.xml` liste toutes les URLs à indexer et doit être soumis via Google Search Console pour accélérer la découverte des pages.
+Google utilise la version mobile d'un site pour l'indexation et le classement (Mobile-First Indexing). Un thème WordPress non responsive entraîne une dégradation du positionnement, indépendamment de la qualité du contenu. Sélectionnez un thème responsive, vérifiez le rendu mobile de chaque template (Lighthouse ou PageSpeed Insights) et dimensionnez les zones cliquables à 48 × 48 px minimum.
 
-## Étape 5 : Créez un contenu de qualité
+### Architecture et maillage interne
+
+L'architecture du site détermine la capacité de Googlebot à explorer et indexer l'ensemble des pages :
+
+- Un menu de navigation structuré en silos thématiques (groupes de pages par sujet), avec une profondeur maximale de 3 niveaux : chaque page est accessible en 3 clics maximum depuis la page d'accueil
+- Des catégories WordPress correspondant aux clusters de mots-clés ciblés
+- Un maillage interne contextuel (liens dans le corps du texte, sur des ancres descriptives) reliant les pages d'un même silo. Ces liens transmettent du PageRank et signalent les relations sémantiques entre les pages
+
+### Performance et Core Web Vitals
+
+Les Core Web Vitals sont les trois mesures de vitesse que Google utilise pour classer votre site : LCP (Largest Contentful Paint, temps d'affichage du plus grand élément visible) inférieur à 2,5 s, INP (Interaction to Next Paint, réactivité aux interactions, qui a remplacé le FID en mars 2024) inférieur à 200 ms, CLS (Cumulative Layout Shift, décalage de mise en page pendant le chargement) inférieur à 0,1. Mesurez-les via Google PageSpeed Insights ou le rapport « Core Web Vitals » de Google Search Console.
+
+Les images non optimisées dégradent en premier le LCP. Pour chaque image :
+
+- Compressez au format WebP ou AVIF (réduction de 25 à 50 % par rapport au JPEG)
+- Définissez les attributs `width` et `height` pour éviter le CLS
+- Complétez par la mise en cache et la réduction du JavaScript bloquant
+
+### Fichiers `robots.txt` et `sitemap.xml`
+
+Le fichier `robots.txt` indique à Googlebot les zones du site à ne pas explorer (ex. : `/wp-admin/`). Le `sitemap.xml` liste toutes les URLs à indexer et doit être soumis via Google Search Console pour accélérer la découverte des pages.
+
+<HighlightBox title="Les 4 dimensions SEO à intégrer dès la conception" accent="blue">
+
+1. **Mots-clés** : effectuez la recherche de mots-clés avant la rédaction des contenus. Attribuez un mot-clé principal et 2 à 3 mots-clés secondaires à chaque page.
+2. **Mobile-First** : sélectionnez un thème responsive et vérifiez le rendu mobile de chaque template.
+3. **Architecture** : concevez l'arborescence en silos thématiques, avec une profondeur maximale de 3 niveaux et un maillage interne cohérent entre les pages d'un même silo.
+4. **Performance** : tenez les Core Web Vitals (LCP < 2,5 s, INP < 200 ms, CLS < 0,1) via la compression des images, la mise en cache et la réduction du JavaScript bloquant.
+
+</HighlightBox>
+
+## Étape 5 : Créer un contenu de qualité
 
 Google évalue la qualité du contenu selon les critères E-E-A-T (Experience, Expertise, Authoritativeness, Trustworthiness). Un contenu de qualité remplit les critères suivants :
 
--  Répondre à l'intention de recherche  : le contenu doit apporter la réponse que l'utilisateur attend pour la requête ciblée. Analysez les pages actuellement classées en top 10 pour comprendre le format et la profondeur attendus.
--  Varier les formats  : articles longs (1 500+ mots) pour les requêtes informationnelles, pages structurées pour les requêtes transactionnelles, contenus visuels (infographies, vidéos) pour augmenter le temps passé sur la page.
--  Maintenir un calendrier éditorial  : la publication régulière de contenu frais (freshness) signale à Google que le site est actif, ce qui peut augmenter la fréquence de crawl de Googlebot.
+- **Répondre à l'intention de recherche** : le contenu apporte la réponse que l'utilisateur attend pour la requête ciblée. Analysez les pages classées dans le top 10 pour comprendre le format et la profondeur attendus.
+- **Varier les formats** : articles longs (1 500 mots et plus) pour les requêtes informationnelles, pages structurées pour les requêtes transactionnelles, contenus visuels (infographies, vidéos) pour augmenter le temps passé sur la page.
+- **Maintenir un calendrier éditorial** : la publication régulière de contenu frais (freshness) signale à Google que le site est actif, ce qui peut augmenter la fréquence d'exploration de Googlebot.
 
-## Étape 6 : Construisez des backlinks
+## Étape 6 : Construire des backlinks
 
-Les backlinks (liens entrants provenant d'autres sites) sont l'un des trois principaux facteurs de classement de Google. Chaque backlink provenant d'un site de qualité transfère du PageRank vers votre page, augmentant son autorité.
+Les backlinks (liens entrants provenant d'autres sites) sont l'un des trois principaux facteurs de classement de Google. Chaque backlink provenant d'un site de qualité transfère du PageRank vers votre page et augmente son autorité.
 
-### Méthodes d'acquisition :
+### Méthodes d'acquisition
 
-1.  Guest blogging  : publication d'articles invités sur des sites à forte autorité de domaine (Domain Authority / Domain Rating) dans votre secteur, avec un lien retour vers votre site.
-2.  Maillage interne  : les liens internes ne sont pas des backlinks, mais ils distribuent le PageRank acquis via les backlinks externes vers les pages stratégiques du site.
-3.  Relations presse digitales (digital PR)  : production de contenus à forte valeur (études, données originales, outils gratuits) susceptibles d'être repris et cités par des médias ou blogs sectoriels.
+1. **Guest blogging** : publication d'articles invités sur des sites à forte autorité de domaine (Domain Authority / Domain Rating) dans votre secteur, avec un lien retour vers votre site.
+2. **Maillage interne** : les liens internes ne sont pas des backlinks, mais ils distribuent le PageRank acquis via les backlinks externes vers les pages stratégiques du site.
+3. **Relations presse digitales (digital PR)** : production de contenus à forte valeur (études, données originales, outils gratuits) susceptibles d'être repris et cités par des médias ou blogs sectoriels.
 
-## Étape 7 : Suivi et optimisation continue
+## Étape 7 : Suivre et optimiser en continu
 
 Le SEO est un processus itératif. Les positions fluctuent en fonction des mises à jour algorithmiques (Google déploie plusieurs core updates par an), des actions de la concurrence et de l'évolution des volumes de recherche.
 
-### Mesure des performances :
+### Mesurer les performances
 
-Configurez un tableau de bord combinant les données de Google Search Console (impressions, clics, position moyenne, taux de clic par requête) et de Google Analytics (sessions organiques, pages de destination, taux de conversion). Suivez les indicateurs suivants :
+Google Search Console et Google Analytics doivent être configurés avant le lancement du site, pour disposer de données dès le premier jour d'indexation. Combinez-les dans un tableau de bord : Search Console pour les impressions, clics, position moyenne et taux de clic par requête, les erreurs d'exploration et les alertes techniques ; Analytics pour les sessions organiques, les pages de destination et les conversions. Suivez les indicateurs suivants :
 
-- Nombre de pages indexées (Search Console > Couverture)
+- Nombre de pages indexées (Search Console > Pages)
 - Position moyenne par requête cible (Search Console > Performances)
 - Trafic organique mensuel (Analytics > Acquisition > Organique)
 - Taux de conversion du trafic organique (Analytics > Conversions)
 
-### Ajustez votre stratégie :
+### Ajuster votre stratégie
 
-Identifiez les pages en déclin de positionnement et actualisez leur contenu (ajout de sections, mise à jour des données, amélioration du maillage interne). Identifiez les nouvelles requêtes générant des impressions (Search Console > Requêtes) pour créer du contenu additionnel.
+Identifiez les pages en déclin de positionnement et actualisez leur contenu (ajout de sections, mise à jour des données, amélioration du maillage interne). Repérez les nouvelles requêtes qui génèrent des impressions (Search Console > Requêtes) pour créer du contenu additionnel.
+
+## Outils et extensions SEO pour WordPress
+
+WordPress dispose d'un écosystème de plugins qui automatisent une partie des optimisations.
+
+- **Yoast SEO** : plugin SEO le plus installé sur WordPress (13 millions d'installations actives et plus). Il gère les balises meta (title, description), génère le sitemap XML, configure les directives d'indexation par type de contenu (noindex sur les archives d'auteur, par exemple) et fournit une analyse on-page en temps réel.
+- **Rank Math** : alternative à Yoast avec des fonctionnalités avancées incluses dans la version gratuite : balisage structuré (Schema.org) via une interface visuelle, redirections 301/302, suivi du classement des mots-clés intégré et support du multilingue.
+- **Smush** : compression d'images qui convertit automatiquement les fichiers en WebP, applique une compression avec ou sans perte et active le lazy loading (chargement différé des images hors écran). Effet direct : un meilleur LCP et un poids de page réduit.
+- **Google Search Console et Google Analytics** : données d'indexation, requêtes et alertes techniques d'un côté, comportement des utilisateurs (pages vues, durée de session, taux de rebond, conversions) de l'autre.
+
+<Callout variant="decideur" title="Coût de la correction SEO post-lancement">
+Corriger les problèmes SEO après le lancement coûte en moyenne 3 à 5 fois plus cher que de les intégrer dès la conception. Les raisons : refonte de l'arborescence impliquant des redirections 301 en masse (risque de perte de PageRank), réécriture des contenus pour cibler les bons mots-clés, et correction technique (URLs, balisage, performance). Un site lancé avec une base SEO correcte commence à acquérir du trafic organique dès l'indexation initiale, alors qu'un site non optimisé peut nécessiter 6 à 12 mois avant de générer un trafic significatif.
+</Callout>
+
+## Les sept étapes en résumé
 
 <StepByStep>
 <Step number={1} title="Définir votre niche et audience">
@@ -143,7 +201,7 @@ Identifiez votre positionnement thématique et construisez des personas basés s
 </Step>
 
 <Step number={2} title="Rechercher vos mots-clés">
-Extrayez les volumes de recherche et la Keyword Difficulty via un outil dédié. Priorisez les requêtes longue traîne à intention de recherche qualifiée et identifiez les gaps concurrentiels.
+Extrayez les volumes de recherche et la Keyword Difficulty via un outil dédié. Priorisez les requêtes longue traîne à intention de recherche qualifiée et identifiez les écarts avec vos concurrents.
 </Step>
 
 <Step number={3} title="Optimiser le on-page">
@@ -151,7 +209,7 @@ Configurez les balises title, meta description, structure de headings H1-H3, URL
 </Step>
 
 <Step number={4} title="Configurer le SEO technique">
-Optimisez les Core Web Vitals (LCP, FID, CLS), vérifiez la compatibilité mobile, configurez le fichier robots.txt et soumettez le sitemap.xml à Google Search Console.
+Choisissez un thème responsive, concevez l'arborescence en silos, tenez les Core Web Vitals (LCP, INP, CLS), configurez le fichier robots.txt et soumettez le sitemap.xml à Google Search Console.
 </Step>
 
 <Step number={5} title="Produire du contenu conforme E-E-A-T">
@@ -159,17 +217,23 @@ Rédigez des contenus répondant à l'intention de recherche de chaque requête 
 </Step>
 
 <Step number={6} title="Acquérir des backlinks">
-Développez le profil de liens entrants via le guest blogging, le digital PR et la production de contenus à forte valeur ajoutée susceptibles d'être cités naturellement.
+Développez le profil de liens entrants via le guest blogging, le digital PR et la production de contenus à forte valeur susceptibles d'être cités naturellement.
 </Step>
 
 <Step number={7} title="Suivre et itérer">
-Mesurez les performances via Google Search Console et Analytics. Actualisez les contenus en déclin et créez de nouvelles pages pour couvrir les requêtes émergentes.
+Configurez Search Console et Analytics avant le lancement. Actualisez les contenus en déclin et créez de nouvelles pages pour couvrir les requêtes émergentes.
 </Step>
 </StepByStep>
 
-## Synthèse
+<HighlightBox title="Ce qu'il faut retenir" accent="orange">
 
-La planification SEO d'un site WordPress suit une séquence logique : définition de l'audience, recherche de mots-clés, optimisation on-page, configuration technique, production de contenu, acquisition de backlinks et suivi continu. Chaque étape conditionne la suivante. Traiter ces étapes avant le lancement du site plutôt qu'après réduit le coût global du projet et accélère l'acquisition des premières positions organiques.
+- Le SEO intégré dès la conception réduit le coût total du projet et accélère l'acquisition de trafic organique : le corriger après le lancement coûte 3 à 5 fois plus cher.
+- Le trafic organique représente en moyenne **53 % du trafic total** d'un site web (source : BrightEdge).
+- Un contenu optimisé continue de générer du trafic pendant **12 à 24 mois** sans coût additionnel.
+- Chaque étape conditionne la suivante : audience, mots-clés, on-page, technique, contenu, liens, suivi.
+- **Google Search Console et Analytics** doivent être configurés avant le lancement pour disposer de données dès le premier jour.
+
+</HighlightBox>
 
 <Quiz
   question="Quelle est la première étape d'une stratégie SEO efficace pour un site WordPress ?"
@@ -180,5 +244,17 @@ La planification SEO d'un site WordPress suit une séquence logique : définitio
     "Optimiser la vitesse de chargement du site"
   ]}
   answer={2}
-  explanation="La définition de la niche et de l'audience cible est le prérequis de toutes les étapes suivantes. Sans cette analyse, la recherche de mots-clés manque de direction, le contenu ne cible pas les bonnes intentions de recherche, et l'arborescence ne reflète pas les besoins réels de l'audience. L'installation de plugins, l'acquisition de backlinks et l'optimisation technique interviennent après cette phase de cadrage stratégique."
+  explanation="La définition de la niche et de l'audience cible est le prérequis de toutes les étapes suivantes. Sans cette analyse, la recherche de mots-clés manque de direction, le contenu ne cible pas les bonnes intentions de recherche, et l'arborescence ne reflète pas les besoins réels de l'audience. L'installation de plugins, l'acquisition de backlinks et l'optimisation technique interviennent après cette phase de cadrage."
+/>
+
+<Quiz
+  question="Quel est l'avantage principal du SEO par rapport à la publicité payante ?"
+  options={[
+    "Le SEO génère plus de clics immédiatement",
+    "Le SEO est gratuit et ne demande aucun effort",
+    "Le SEO génère du trafic de manière durable sans coût récurrent par visiteur",
+    "Le SEO fonctionne uniquement sur Google"
+  ]}
+  answer={2}
+  explanation="Le SEA (publicité payante) fonctionne sur un modèle de coût par clic : le trafic s'arrête dès que le budget est épuisé. Le SEO repose sur un investissement initial (optimisation technique, production de contenu) dont le rendement augmente dans le temps. Un contenu bien positionné continue de générer du trafic organique pendant des mois sans coût additionnel par visiteur, ce qui réduit progressivement le coût d'acquisition."
 />

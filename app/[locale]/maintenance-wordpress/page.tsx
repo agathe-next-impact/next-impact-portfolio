@@ -280,7 +280,7 @@ export default async function MaintenancePage({
               <ArrowRight size={14} />
             </a>
             <a href="/scan" className={HERO_BTN_SECONDARY}>
-              Analysez votre site en 2 minutes
+              Analysez votre site
             </a>
           </>
         }
@@ -448,7 +448,7 @@ export default async function MaintenancePage({
           />
           <div className="flex flex-wrap gap-3 lg:shrink-0">
             <a href="/scan" className={HERO_BTN_PRIMARY}>
-              Analysez votre site en 2 minutes
+              Analysez votre site
               <ArrowRight size={14} />
             </a>
             <a href={CTA_CHAUD.href} target="_blank" rel="noopener noreferrer" className={HERO_BTN_SECONDARY}>

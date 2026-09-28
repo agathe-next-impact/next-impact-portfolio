@@ -1344,3 +1344,15 @@ a[class^="bg-orange"] *,     a[class*=" bg-orange"] * {
     font-weight: 500;
   }
 }
+
+/* ── Espace client : les liens en bleu ─────────────────────────────────────
+   Dans le contenu de l'espace direction (`main.cto-liens`, shell.tsx), tout
+   lien est bleu (accent-2), soulignement au survol. Restent hors de la règle :
+   les boutons (`cto-bouton`, ui.tsx) et les liens encadrés, qui sont des
+   étiquettes ou des repères de frise. La barre latérale n'est pas concernée. */
+.cto-liens a:not(.cto-bouton):not([class*="border"]) {
+  color: hsl(var(--accent-2));
+}
+.cto-liens a:not(.cto-bouton):not([class*="border"]):hover {
+  text-decoration-line: underline;
+}

@@ -20,6 +20,7 @@ import { ARCHIVE_MONTHS, letterForClient, lettersForClient, structureLettre, typ
 import { digestsForClient } from "@cto/digest";
 import { siteReportsFor } from "@cto/site";
 import { Calendrier } from "./calendrier";
+import { CarteApercus } from "./apercus";
 import { CarteContrats } from "./contrats";
 import { CarteProchaineEtape } from "./prochaine-etape";
 import { DigestSemaine } from "./digest";
@@ -115,19 +116,32 @@ const KIND_TITRES: Record<string, string> = {
 const NOUVEAU_VISIBLES = 5;
 
 /**
- * « Nouveau pour vous » : ce qui a bougé depuis la dernière connexion, puis ce
- * que l'atelier a mis à la une (colonne « Affichage »), sans doublon.
+ * Ce que « Nouveau pour vous » montre : ce qui a bougé depuis la dernière
+ * connexion, puis ce que l'atelier a mis à la une (colonne « Affichage »), sans
+ * doublon. Les versions de travail n'y figurent pas : elles ont leur bloc.
+ *
+ * Calculé une fois pour l'accueil, qui retire ensuite ces livrables des blocs
+ * du dessous : ce qui est à la une ne se répète pas plus bas.
+ */
+function aLaUne(context: EspaceContext): Deliverable[] {
+  const since = context.since;
+  const items = context.items.filter((item) => item.kind !== "apercu");
+  const recents = since ? items.filter((item) => nouveaute(item, since) !== null) : [];
+  const vus = new Set(recents.map((item) => item.id));
+  return [...sortRecentFirst(recents), ...items.filter((item) => item.featured && !vus.has(item.id))];
+}
+
+/**
+ * « Nouveau pour vous » : les livrables d'`aLaUne`.
  *
  * Réunit les deux anciens blocs « Depuis votre dernière connexion » et « À la
  * une », qui répondaient à la même question — « que dois-je regarder ? » — à
  * deux endroits de la page. Cinq lignes, le reste replié. Chaque ligne mène à
  * sa section, là où le détail se lit.
  */
-function NouveauPourVous({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
+function NouveauPourVous({ viewer, context, items }: { viewer: Viewer; context: EspaceContext; items: Deliverable[] }) {
   const since = context.since;
-  const recents = since ? context.items.filter((item) => nouveaute(item, since) !== null) : [];
-  const vus = new Set(recents.map((item) => item.id));
-  const items = [...sortRecentFirst(recents), ...context.items.filter((item) => item.featured && !vus.has(item.id))];
+  const recents = since ? items.filter((item) => nouveaute(item, since) !== null) : [];
   if (items.length === 0) return null;
 
   const ligne = (item: Deliverable) => (
@@ -206,12 +220,24 @@ export function CarteVeille({ viewer, lettres, libelle = "Toute la veille" }: { 
 }
 
 /** « Où en sont les missions ? » : ce qui court d'abord, puis ce qui vient, puis ce qui est fait. */
-export function CarteMissions({ viewer, context, libelle = "Tout le pilotage" }: { viewer: Viewer; context: EspaceContext; libelle?: string }) {
-  const lignes = [
+export function CarteMissions({
+  viewer,
+  context,
+  libelle = "Tout le pilotage",
+  exclure,
+}: {
+  viewer: Viewer;
+  context: EspaceContext;
+  libelle?: string;
+  /** Les livrables déjà montrés plus haut (à la une), à ne pas répéter. */
+  exclure?: Set<string>;
+}) {
+  const toutes = [
     ...byPhase(context.missions, "en-cours"),
     ...byPhase(context.missions, "a-venir"),
     ...byPhase(context.missions, "passe"),
-  ].slice(0, 3);
+  ];
+  const lignes = toutes.filter((mission) => !exclure?.has(mission.item.id)).slice(0, 3);
   const lien = href(viewer, context, "missions");
 
   return (
@@ -221,7 +247,11 @@ export function CarteMissions({ viewer, context, libelle = "Tout le pilotage" }:
       pied={lien ? { href: lien, label: libelle } : null}
     >
       {lignes.length === 0 ? (
-        <LigneVide>Les chantiers et décisions apparaîtront ici dès leur première publication.</LigneVide>
+        <LigneVide>
+          {toutes.length > 0
+            ? "Déjà à la une, ci-dessus."
+            : "Les chantiers et décisions apparaîtront ici dès leur première publication."}
+        </LigneVide>
       ) : (
         lignes.map((mission) => (
           <LigneCarte
@@ -298,16 +328,17 @@ export function CarteSite({ viewer, context }: { viewer: Viewer; context: Espace
 }
 
 /** « Que pouvez-vous faire ? » : l'urgent d'abord, puis ce qui attend votre arbitrage. */
-export function CarteActions({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
+export function CarteActions({ viewer, context, exclure }: { viewer: Viewer; context: EspaceContext; exclure?: Set<string> }) {
   // Sans les propositions : elles ont leur bloc à part, Contrats (`CarteContrats`).
   const { aTraiter, aArbitrer } = context.actions;
   const agir = href(viewer, context, "agir");
   const traiter = agir ? `${agir}#a-traiter` : null;
   const arbitrer = agir ? `${agir}#a-arbitrer` : null;
-  const lignes: { action: Action; href: string | null }[] = [
+  const toutes: { action: Action; href: string | null }[] = [
     ...aTraiter.map((action) => ({ action, href: traiter })),
     ...aArbitrer.map((action) => ({ action, href: arbitrer })),
-  ].slice(0, 3);
+  ];
+  const lignes = toutes.filter(({ action }) => !(action.item && exclure?.has(action.item.id))).slice(0, 3);
 
   const pied =
     aTraiter.length > 0 && traiter
@@ -318,7 +349,9 @@ export function CarteActions({ viewer, context }: { viewer: Viewer; context: Esp
 
   return (
     <CarteReponse question="Que pouvez-vous faire ?" verdict={actionsVerdict(context.actions)} pied={pied}>
-      {lignes.length === 0 ? (
+      {lignes.length === 0 && toutes.length > 0 ? (
+        <LigneVide>Déjà à la une, ci-dessus.</LigneVide>
+      ) : lignes.length === 0 ? (
         <LigneVide>
           Rien ne demande votre intervention. Une question, un devis à relire ? Écrivez à Agathe
           depuis le menu.
@@ -349,6 +382,8 @@ export async function VueTableau({
   const missions = sectionOuverte(context, "missions") && !context.sansInformation.has("missions");
   const site = sectionOuverte(context, "site");
   const prenom = viewer.personName?.trim().split(/\s+/)[0];
+  const une = aLaUne(context);
+  const dejaAlaUne = new Set(une.map((item) => item.id));
 
   return (
     <Espace
@@ -365,19 +400,21 @@ export async function VueTableau({
         </div>
       ) : null}
 
-      {/* Trois blocs, pas plus : ce qui est nouveau, l'essentiel en questions,
-          les contrats. La frise vit dans Pilotage, le contact dans la barre
+      {/* Ce qui est nouveau, les versions de travail à regarder, l'essentiel en
+          questions, les contrats. Un livrable à la une n'est pas répété dessous. La frise vit dans Pilotage, le contact dans la barre
           latérale : les répéter ici n'apprenait rien de plus. */}
-      <NouveauPourVous viewer={viewer} context={context} />
+      <NouveauPourVous viewer={viewer} context={context} items={une} />
+
+      <CarteApercus viewer={viewer} context={context} />
 
       <section aria-label="L'essentiel en quelques questions" className="mt-10 grid gap-4 md:grid-cols-2">
-        {missions ? <CarteMissions viewer={viewer} context={context} /> : null}
+        {missions ? <CarteMissions viewer={viewer} context={context} exclure={dejaAlaUne} /> : null}
         {site ? <CarteSite viewer={viewer} context={context} /> : null}
-        <CarteActions viewer={viewer} context={context} />
+        <CarteActions viewer={viewer} context={context} exclure={dejaAlaUne} />
         <CarteVeille viewer={viewer} lettres={lettres} />
       </section>
 
-      <CarteContrats viewer={viewer} context={context} />
+      <CarteContrats viewer={viewer} context={context} exclure={dejaAlaUne} />
 
       <CarteProchaineEtape viewer={viewer} context={context} />
     </Espace>

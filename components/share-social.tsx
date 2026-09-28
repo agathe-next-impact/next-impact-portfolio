@@ -57,7 +57,7 @@ export const ShareSocial: React.FC<ShareSocialProps> = ({
   image,
   className = "",
 }) => {
-  const BASE_URL = "https://next-impact.digital";
+  const BASE_URL = "https://www.next-impact.digital";
   const fullUrl = url.startsWith("/") ? `${BASE_URL}${url}` : url.replace(/https?:\/\/[^/]+/g, BASE_URL).replace(/([^:]\/)\/+/g, "$1");
   const [copied, setCopied] = React.useState(false);
 

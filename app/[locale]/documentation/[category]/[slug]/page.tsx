@@ -6,7 +6,8 @@ import type { Locale } from "@/i18n/routing"
 import { TranslationFallbackBanner } from "@/components/translation-fallback-banner"
 import { MarkdownContent } from "@/components/documentation/markdown-content"
 import { MdxContent } from "@/components/documentation/mdx-content"
-import { getArticleBySlug, getArticlesByCategory, getAllCategories } from "@/lib/markdown"
+import { ArticleFaq, hasFaqSection } from "@/components/documentation/article-faq"
+import { getArticleBySlug, getArticlesByCategory, getAllCategories, hasEnglishArticle } from "@/lib/markdown"
 import { routing } from "@/i18n/routing"
 import TableOfContentsPopup from "@/components/documentation/table-of-content-popup"
 import ShareSocial from "@/components/share-social"
@@ -101,12 +102,17 @@ export async function generateMetadata(props: { params: Promise<{ category: stri
   }
 
   return generatePageMetadata({
-    title: post.title,
+    title: post.seoTitle ?? post.title,
     description: post.description,
     path: `/documentation/${post.category}/${post.slug}`,
     type: "article",
     keywords: ["documentation", post.category, "article", params.locale === "en" ? "learn" : "comprendre"],
     locale: params.locale,
+    // Sans version anglaise, la page EN sert le texte français : on ne
+    // l'annonce pas en hreflang et on ne l'indexe pas (doublon de la page FR).
+    ...(hasEnglishArticle(post.category, post.slug)
+      ? {}
+      : { alternateLocales: ["fr"] as Locale[], noindex: params.locale === "en" }),
   });
 }
 
@@ -219,7 +225,7 @@ export default async function ArticlePage(props: ArticlePageProps) {
           type={article.category === "wordpress-headless" ? "TechArticle" : "Article"}
           proficiencyLevel={article.category === "wordpress-headless" ? "Intermediate" : undefined}
           dependencies={article.category === "wordpress-headless" ? "WordPress, Next.js, Node.js" : undefined}
-          inLanguage={params.locale === "en" ? "en-US" : "fr-FR"}
+          inLanguage={params.locale === "en" && !article.isFallback ? "en-US" : "fr-FR"}
           locale={params.locale}
         />
         {article.faq && article.faq.length > 0 && <FAQJsonLd questions={article.faq} />}
@@ -335,6 +341,11 @@ export default async function ArticlePage(props: ArticlePageProps) {
                     <MdxContent source={article.content} />
                   ) : (
                     <MarkdownContent content={article.content} />
+                  )}
+                  {/* FAQ du front matter, quand le corps n'en a pas : les
+                      questions du JSON-LD FAQPage doivent être visibles. */}
+                  {article.faq && article.faq.length > 0 && !hasFaqSection(article.content) && (
+                    <ArticleFaq entries={article.faq} locale={params.locale} />
                   )}
                 </div>
 

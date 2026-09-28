@@ -45,8 +45,19 @@ export async function generateMetadata(props: {
     };
   }
 
+  // Beaucoup de fiches ont pour titre le seul nom du client (« Sowee ») : un
+  // <title> qui ne dit ni ce qu'est la page ni pour quelle requête elle vaut.
+  // Le titre SEO d'une fiche courte porte donc la mention « étude de cas » ;
+  // le h1 de la page, lui, ne change pas.
+  const isBareTitle = caseStudy.title.length < 40 && !/[:—–]/.test(caseStudy.title);
+  const seoTitle = caseStudy.seoTitle ?? (isBareTitle
+    ? locale === "en"
+      ? `${caseStudy.title}: case study`
+      : `${caseStudy.title} : étude de cas`
+    : caseStudy.title);
+
   return generateArticleMetadata({
-    title: caseStudy.title,
+    title: seoTitle,
     description: caseStudy.description,
     slug: caseStudy.slug,
     image: caseStudy.gallery.url || caseStudy.imageUrl,

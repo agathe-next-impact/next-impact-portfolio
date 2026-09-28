@@ -19,14 +19,14 @@ const SERVICES_OR = `${SERVICES.slice(0, -1).join(", ")} or ${SERVICES.at(-1)}`;
 
 export const HERO_VARIANTS_EN: Record<ProfileId | "default", HeroVariant> = {
   default: {
-    headline: "Leading",
+    headline: "Let's lead",
     subHeadline: "your web project",
     tagline: "Monitor, maintain, deliver.",
     description: `A clear-cut opinion before you commit a budget, then ${SERVICES_OR} at a fixed price: price and timeline in writing before we start, performance measured before and after, a technical and strategic watch at every step.`,
     valueProposition:
       "An independent opinion before you commit a budget, then a fixed-price redesign: price and timeline in writing before we start, performance measured before and after.",
     ctaPrimary: { label: CTA_ECHANGE.label.en, href: CTA_ECHANGE.href },
-    ctaSecondary: { label: "Analyze your site in 2 minutes", href: "/scan" },
+    ctaSecondary: { label: "Analyze your site", href: "/scan" },
     auditTitle: "What is slowing your site down?",
     auditSubtitle: "2-minute diagnostic",
     auditDescription: `One address, one report: see what slows your site down and which of the three services (${SERVICES_LIST}) matches your situation.`,
@@ -110,19 +110,19 @@ export const SERVICES_PAGE_VARIANTS_EN: Record<ProfileId | "default", ServicesPa
           "Yes. With Optimization and Redesign, you keep the WordPress interface you already know to manage your content, images and pages. Evolution replaces WordPress with a bespoke admin built around your business, with training included. No technical skills required.",
       },
       {
-        question: "Is headless more expensive to maintain?",
+        question: "Custom or headless Redesign: which one costs less to maintain?",
         answer:
-          "Slightly, because there are two systems to maintain (WordPress + frontend). But the stronger security and higher performance often offset that with fewer emergency fixes and less lost traffic.",
+          "Custom WordPress: one tool to maintain, care stays light. Headless WordPress: two parts to maintain (WordPress and the visible site), so care costs a little more, offset by speed and security when traffic is decisive. The two Redesign variants are on an equal footing: your situation decides, before the quote.",
       },
       {
         question: "How long does the build take?",
         answer:
-          "Plan for 2-4 weeks for an optimized classic WordPress site, 4-6 weeks for a standard Headless + Next.js architecture, and 6-10 weeks for a complex Headless platform or a custom application, depending on project complexity.",
+          "Plan for 2 to 4 weeks for an Optimization (the existing site brought up to standard), 4 to 6 weeks for a Redesign, as custom or headless WordPress, and 6 to 10 weeks for an Evolution (web app or platform), depending on project complexity.",
       },
       {
         question: "Will my WordPress plugins still work?",
         answer:
-          "Front-end plugins (sliders, public-facing forms) are replaced with faster equivalents. Back-end plugins (SEO, analytics, security) keep working as usual.",
+          "In an Optimization, useful plugins stay and redundant ones are removed. In a Redesign, display plugins (sliders, public-facing forms) are replaced with lighter equivalents; admin plugins (SEO, analytics, security) keep working as usual.",
       },
     ],
   },
@@ -220,7 +220,7 @@ export const SERVICES_PAGE_VARIANTS_EN: Record<ProfileId | "default", ServicesPa
       {
         question: "Will my current content be kept?",
         answer:
-          "Yes, all your content (text, images, media) is migrated automatically. Nothing is lost. Migration is included on the Headless and Web app tiers.",
+          "Yes, all your content (text, images, media) is kept. Nothing is lost. In an Optimization it does not move; in a Redesign or an Evolution, content migration is included.",
       },
     ],
   },

@@ -6,6 +6,8 @@ import type { Locale } from "@/i18n/routing"
 export interface BlogPostMeta {
   slug: string
   title: string
+  /** Titre de référencement (<title>), quand il diffère du h1. Front matter `seoTitle`. */
+  seoTitle?: string
   date: string
   author: string
   excerpt: string
@@ -65,6 +67,15 @@ export async function getBlogPosts(locale?: Locale): Promise<BlogPostMeta[]> {
   )
 }
 
+/**
+ * Vrai quand le billet existe réellement en anglais (content/en/blog). Sans
+ * version anglaise, /en/blog/… sert le texte français (repli) : la page ne doit
+ * alors ni être indexée, ni être annoncée en hreflang, ni figurer au sitemap.
+ */
+export function hasEnglishBlogPost(slug: string): boolean {
+  return fs.existsSync(path.join(blogRootEn, `${slug}.mdx`))
+}
+
 export async function getBlogPost(slug: string, locale?: Locale): Promise<BlogPost> {
   let isFallback = false
   let filePath = ""
@@ -87,6 +98,7 @@ export async function getBlogPost(slug: string, locale?: Locale): Promise<BlogPo
   return {
     slug: data.slug || slug,
     title: data.title || "",
+    seoTitle: data.seoTitle,
     date: data.date || "",
     author: data.author || "",
     excerpt: data.excerpt || "",

@@ -16,13 +16,27 @@ import { ProofStrip } from "@/components/proof-strip";
 import { getAllSlugs } from "@/lib/case-studies-data";
 import type { Locale } from "@/i18n/routing";
 import { CTA_ECHANGE } from "@/lib/visio-conseil";
-import { TRAJECTOIRES, formatEuros, type Lang, type TrajectoireSlug } from "@/lib/trajectoires";
+import {
+  TRAJECTOIRES,
+  formatEuros,
+  type Lang,
+  type TrajectoireSlug,
+  type VarianteSlug,
+} from "@/lib/trajectoires";
 
-// Prix des prestations, lus dans lib/trajectoires.ts : montant seul (« 4 000 € »)
-// ou « à partir de », hors taxes (« 4 000 € HT »).
+// Prix des prestations, lus dans lib/trajectoires.ts : montant seul (« 1 500 € »)
+// ou « à partir de », hors taxes (« 1 500 € HT »).
 const prix = (slug: TrajectoireSlug, lang: Lang) => formatEuros(TRAJECTOIRES[slug].priceValue, lang);
 const prixHT = (slug: TrajectoireSlug, lang: Lang) =>
   `${prix(slug, lang)}${lang === "en" ? " excl. VAT" : " HT"}`;
+
+// Le headless est l'une des deux variantes de la Refonte, à égalité avec
+// WordPress sur mesure (ADR-031) : chacune a son plancher, lu dans la source.
+const REFONTE = TRAJECTOIRES["forfait-headless"];
+const prixVariante = (slug: VarianteSlug, lang: Lang) =>
+  formatEuros(REFONTE.variantes?.find((v) => v.slug === slug)?.priceValue ?? REFONTE.priceValue, lang);
+const prixVarianteHT = (slug: VarianteSlug, lang: Lang) =>
+  `${prixVariante(slug, lang)}${lang === "en" ? " excl. VAT" : " HT"}`;
 
 // Revalidate toutes les 24h — page evergreen.
 export const revalidate = 86400;
@@ -30,13 +44,13 @@ export const revalidate = 86400;
 const PILLAR_PATH = "/wordpress-headless";
 // Date du dernier remaniement éditorial — à mettre à jour quand le contenu change
 // substantiellement. Sert au schema TechArticle et au bloc « mis à jour le ».
-const LAST_UPDATED = "2026-06-24";
+const LAST_UPDATED = "2026-09-28";
 
 const ACCENT = "text-accent-secondary";
 const BTN_PRIMARY =
-  "inline-flex min-h-12 items-center gap-2 py-3 rounded-sm border border-accent-secondary bg-accent-secondary px-6 font-mono text-xs font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
+  "inline-flex min-h-12 items-center gap-2 py-3 rounded-sm border border-accent-secondary bg-accent-secondary px-6 font-mono text-sm font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
 const BTN_SECONDARY =
-  "inline-flex min-h-12 items-center gap-2 py-3 rounded-sm border border-mid-gray/50 bg-transparent px-6 font-mono text-xs font-semibold uppercase tracking-[0.08em] text-foreground transition-colors hover:border-accent-secondary hover:text-accent-secondary";
+  "inline-flex min-h-12 items-center gap-2 py-3 rounded-sm border border-mid-gray/50 bg-transparent px-6 font-mono text-sm font-semibold uppercase tracking-[0.08em] text-foreground transition-colors hover:border-accent-secondary hover:text-accent-secondary";
 
 // ─── Metadata ────────────────────────────────────────────────────────────────
 
@@ -50,10 +64,10 @@ export async function generateMetadata({
   return generatePageMetadata({
     title: isEn
       ? "Headless WordPress with Next.js: when to use it, costs, performance"
-      : "WordPress Headless avec Next.js : quand l'utiliser, coûts, performance",
+      : "WordPress headless et Next.js : quand, combien, pourquoi",
     description: isEn
-      ? "Headless WordPress in plain terms: WordPress keeps content management, Next.js renders the public site. Costs, measured performance, when to migrate."
-      : "Le WordPress headless expliqué clairement : WordPress garde la gestion de contenu, Next.js affiche le site public. Coûts, performances, quand migrer.",
+      ? "Headless WordPress in plain terms: WordPress keeps content management, Next.js renders the public site. Costs, performance, headless or custom WordPress."
+      : "Le WordPress headless expliqué clairement : WordPress garde la gestion de contenu, Next.js affiche le site public. Coûts, performances, headless ou sur mesure.",
     path: PILLAR_PATH,
     eyebrow: isEn ? "Headless WordPress" : "WordPress Headless",
     keywords: isEn
@@ -94,7 +108,7 @@ function getFaq(isEn: boolean): Array<{ q: string; a: string }> {
       },
       {
         q: "How much does a headless WordPress site cost in 2026?",
-        a: `At Next Impact, a standard headless WordPress + Next.js site (the ${TRAJECTOIRES["forfait-headless"].name.en} service) starts at ${prixHT("forfait-headless", "en")} (4–6 weeks). A more complex headless platform with custom integrations or multisite falls under the ${TRAJECTOIRES["forfait-webapp"].name.en} service, from ${prixHT("forfait-webapp", "en")} (6–10 weeks). Optimized WordPress (${TRAJECTOIRES["forfait-classique"].name.en}) remains available from ${prixHT("forfait-classique", "en")} if headless isn't justified.`,
+        a: `At Next Impact, a standard headless WordPress + Next.js site starts at ${prixVarianteHT("headless", "en")} (4 to 6 weeks). It is one of the two variants of the ${REFONTE.name.en} service, on an equal footing with custom WordPress (a theme written for the site), from ${prixVarianteHT("sur-mesure", "en")}: the situation decides. A more complex platform with custom integrations or multisite falls under the ${TRAJECTOIRES["forfait-webapp"].name.en} service, from ${prixHT("forfait-webapp", "en")} (6 to 10 weeks). And if the existing site can be kept, ${TRAJECTOIRES["forfait-classique"].name.en} brings it up to standard from ${prixHT("forfait-classique", "en")}.`,
       },
       {
         q: "Does headless WordPress break my SEO?",
@@ -137,7 +151,7 @@ function getFaq(isEn: boolean): Array<{ q: string; a: string }> {
     },
     {
       q: "Combien coûte un site WordPress headless en 2026 ?",
-      a: `Chez Next Impact, un site WordPress headless + Next.js standard (prestation ${TRAJECTOIRES["forfait-headless"].name.fr}) démarre à ${prixHT("forfait-headless", "fr")} (4 à 6 semaines). Une plateforme headless plus complexe, avec intégrations sur mesure ou multisite, relève de la prestation ${TRAJECTOIRES["forfait-webapp"].name.fr}, à partir de ${prixHT("forfait-webapp", "fr")} (6 à 10 semaines). Le WordPress optimisé (${TRAJECTOIRES["forfait-classique"].name.fr}) reste proposé à partir de ${prixHT("forfait-classique", "fr")} si le headless n'est pas justifié.`,
+      a: `Chez Next Impact, un site WordPress headless + Next.js standard démarre à ${prixVarianteHT("headless", "fr")} (4 à 6 semaines). C'est l'une des deux variantes de la prestation ${REFONTE.name.fr}, à égalité avec WordPress sur mesure (un thème écrit pour le site), à partir de ${prixVarianteHT("sur-mesure", "fr")} : la situation tranche. Une plateforme plus complexe, avec intégrations sur mesure ou multisite, relève de la prestation ${TRAJECTOIRES["forfait-webapp"].name.fr}, à partir de ${prixHT("forfait-webapp", "fr")} (6 à 10 semaines). Et si le site existant peut être gardé, l'${TRAJECTOIRES["forfait-classique"].name.fr} le remet à niveau à partir de ${prixHT("forfait-classique", "fr")}.`,
     },
     {
       q: "Le passage au headless casse-t-il le SEO ?",
@@ -320,8 +334,8 @@ export default async function WordPressHeadlessPillarPage({
                 {isEn ? CTA_ECHANGE.label.en : CTA_ECHANGE.label.fr}
                 <ArrowRight className="h-4 w-4" />
               </a>
-              <Link href="/audit-site-web" className={BTN_SECONDARY}>
-                {isEn ? "Free site audit" : "Audit gratuit du site"}
+              <Link href="/scan" className={BTN_SECONDARY}>
+                {isEn ? "Analyze your site in 2 minutes" : "Analysez votre site en 2 minutes"}
               </Link>
               <Link href="/solutions-web" className={BTN_SECONDARY}>
                 {isEn ? "See offers and pricing" : "Voir les offres et tarifs"}
@@ -355,14 +369,14 @@ export default async function WordPressHeadlessPillarPage({
                   "Next.js renders the public site. Pages are pre-rendered (SSG/ISR) and served from a CDN.",
                   "The two halves talk via an API — usually WPGraphQL, sometimes the REST API.",
                   "Performance: Core Web Vitals consistently in the green, often impossible with a heavy classic theme.",
-                  `Pricing: from ${prixHT("forfait-headless", "en")} for a standard site, 4 to 6 weeks. Migration possible without breaking SEO.`,
+                  `Pricing: from ${prixVarianteHT("headless", "en")} for a standard site, 4 to 6 weeks. At Next Impact, one of the two ${REFONTE.name.en} variants, alongside custom WordPress (from ${prixVarianteHT("sur-mesure", "en")}).`,
                 ]
               : [
                   "WordPress reste le back-end éditorial. Les éditeurs gardent leur admin, leurs articles, leurs plugins.",
                   "Next.js rend le site public. Les pages sont pré-rendues (SSG/ISR) et servies depuis un CDN.",
                   "Les deux moitiés communiquent par API — généralement WPGraphQL, parfois l'API REST.",
                   "Performance : Core Web Vitals au vert de façon stable, souvent impossible avec un thème classique chargé.",
-                  `Tarifs : à partir de ${prixHT("forfait-headless", "fr")} pour un site standard, 4 à 6 semaines. Migration possible sans casser le SEO.`,
+                  `Tarifs : à partir de ${prixVarianteHT("headless", "fr")} pour un site standard, 4 à 6 semaines. Chez Next Impact, l'une des deux variantes de la ${REFONTE.name.fr}, avec WordPress sur mesure (à partir de ${prixVarianteHT("sur-mesure", "fr")}).`,
                 ]
             ).map((point, i) => (
               <li
@@ -488,7 +502,7 @@ export default async function WordPressHeadlessPillarPage({
                       ["Hosting", "1 host (PHP/MySQL)", "2 hosts (WP + JAMstack platform)"],
                       ["Build complexity", "Low", "Medium"],
                       ["Setup time", "2–4 weeks", "4–6 weeks"],
-                      ["Entry price (Next Impact, excl. VAT)", prix("forfait-classique", "en"), prix("forfait-headless", "en")],
+                      [`Entry price of a ${REFONTE.name.en} (Next Impact, excl. VAT)`, `${prixVariante("sur-mesure", "en")} (custom WordPress)`, prixVariante("headless", "en")],
                       ["Best for", "Brochure sites, small editorial teams", "Performance-critical sites, image-conscious brands, multi-channel content"],
                     ]
                   : [
@@ -499,7 +513,7 @@ export default async function WordPressHeadlessPillarPage({
                       ["Hébergement", "1 hébergeur (PHP/MySQL)", "2 hébergeurs (WP + plateforme JAMstack)"],
                       ["Complexité de build", "Faible", "Moyenne"],
                       ["Délai de mise en place", "2 à 4 semaines", "4 à 6 semaines"],
-                      ["Tarif d'entrée (Next Impact, HT)", prix("forfait-classique", "fr"), prix("forfait-headless", "fr")],
+                      [`Tarif d'entrée d'une ${REFONTE.name.fr} (Next Impact, HT)`, `${prixVariante("sur-mesure", "fr")} (WordPress sur mesure)`, prixVariante("headless", "fr")],
                       ["Idéal pour", "Sites vitrines, petites équipes éditoriales", "Sites à forte exigence perf, marques soucieuses d'image, contenu multi-canal"],
                     ]
                 ).map(([crit, classic, headless], i) => (
@@ -528,6 +542,11 @@ export default async function WordPressHeadlessPillarPage({
               isEn
                 ? "When to choose headless, when to stay classic"
                 : "Quand choisir le headless, quand rester sur classique"
+            }
+            description={
+              isEn
+                ? `At Next Impact, headless WordPress and custom WordPress are the two variants of the ${REFONTE.name.en}, on an equal footing: the situation decides, not a default. If the existing site can be kept, ${TRAJECTOIRES["forfait-classique"].name.en} is enough.`
+                : `Chez Next Impact, WordPress headless et WordPress sur mesure sont les deux variantes de la ${REFONTE.name.fr}, à égalité : la situation tranche, pas une option par défaut. Si le site existant peut être gardé, l'${TRAJECTOIRES["forfait-classique"].name.fr} suffit.`
             }
           />
           <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -628,11 +647,11 @@ export default async function WordPressHeadlessPillarPage({
                 icon: Layers,
               },
               {
-                value: prix("forfait-headless", isEn ? "en" : "fr"),
-                label: isEn ? "Entry price, Next Impact" : "Tarif d'entrée, Next Impact",
+                value: prixVariante("headless", isEn ? "en" : "fr"),
+                label: isEn ? "Entry price of a headless build, Next Impact" : "Tarif d'entrée d'un build headless, Next Impact",
                 sub: isEn
-                  ? `Fixed budget agreed up-front, excl. VAT. ${TRAJECTOIRES["forfait-classique"].name.en} from ${prix("forfait-classique", "en")}.`
-                  : `Budget fixé dès le départ, hors taxes. ${TRAJECTOIRES["forfait-classique"].name.fr} à partir de ${prix("forfait-classique", "fr")}.`,
+                  ? `Fixed budget agreed up-front, excl. VAT. Custom WordPress, the other ${REFONTE.name.en} variant, from ${prixVariante("sur-mesure", "en")}.`
+                  : `Budget fixé dès le départ, hors taxes. WordPress sur mesure, l'autre variante de la ${REFONTE.name.fr}, à partir de ${prixVariante("sur-mesure", "fr")}.`,
                 icon: Shield,
               },
             ].map((stat, i) => {
@@ -749,7 +768,7 @@ export default async function WordPressHeadlessPillarPage({
 
         <Separator />
 
-        {/* ── 9. CTA FROIDE — AUDIT GRATUIT ────────────────────────────── */}
+        {/* ── 9. CTA FROIDE · ANALYSE DU SITE ────────────────────────────── */}
         <BlueprintSection tone="obsidian" ticks innerClassName="px-6 py-20 md:px-12 md:py-24">
           <Reveal>
             <div className="flex flex-col items-start gap-6 md:max-w-3xl">
@@ -763,12 +782,12 @@ export default async function WordPressHeadlessPillarPage({
               </h2>
               <p className="max-w-2xl font-inter-tight text-base leading-relaxed text-mid-gray md:text-lg">
                 {isEn
-                  ? "Free Web & AI diagnostic of your existing WordPress, live with Agathe: Core Web Vitals, security exposure, editorial weight, opinion on headless relevance. Free, no commitment."
-                  : "Diagnostic Web & IA de votre WordPress actuel, en direct avec Agathe : Core Web Vitals, exposition sécurité, charge éditoriale, avis sur la pertinence du headless. Gratuit, sans engagement."}
+                  ? "Free analysis of your current site: one address, no access required, the result by email. It compares your site with its competitors, flags what is at risk and names the right service; for a redesign, it also says which variant fits, custom or headless WordPress. Free, no commitment."
+                  : "Analyse gratuite de votre site actuel : une adresse, aucun accès demandé, le résultat par e-mail. Elle compare votre site à ses concurrents, relève ce qui est à risque et indique la prestation adaptée ; pour une refonte, elle dit aussi quelle variante convient, WordPress sur mesure ou headless. Gratuit, sans engagement."}
               </p>
               <div className="flex flex-wrap gap-3">
-                <Link href="/audit-site-web" className={BTN_PRIMARY}>
-                  {isEn ? "Book the free audit" : "Réserver l'audit gratuit"}
+                <Link href="/scan" className={BTN_PRIMARY}>
+                  {isEn ? "Analyze your site in 2 minutes" : "Analysez votre site en 2 minutes"}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link href="/contact" className={BTN_SECONDARY}>

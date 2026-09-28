@@ -85,19 +85,15 @@ export const PROFILES: Record<ProfileId, UserProfile> = {
 // Un article peut appartenir à plusieurs profils.
 
 const ARTICLE_PROFILES: Record<string, ProfileId[]> = {
-  // ── Projet site web (4) ──────────────────────────────────────────────────
+  // ── Projet site web (3) ──────────────────────────────────────────────────
   "projet-site-web/cahier-des-charges":            ["decideur", "utilisateur"],
   "projet-site-web/creer-site-web-6-etapes":       ["decideur", "utilisateur"],
-  "projet-site-web/pourquoi-gerer-projet-web":     ["decideur"],
   "projet-site-web/gestion-projet-web-guide-pratique": ["decideur", "utilisateur"],
 
-  // ── Marketing digital (6) ────────────────────────────────────────────────
-  "marketing-digital/definir-sa-strategie-marketing":      ["decideur", "utilisateur"],
+  // ── Marketing digital (3) ────────────────────────────────────────────────
   "marketing-digital/strategie-marketing":                 ["decideur", "utilisateur"],
   "marketing-digital/strategie-de-marque":                 ["decideur"],
-  "marketing-digital/mettre-en-oeuvre-strategie-de-marque": ["decideur", "utilisateur"],
   "marketing-digital/presence-sur-les-reseaux-sociaux":    ["decideur", "utilisateur"],
-  "marketing-digital/definir-sa-strategie-de-medias-sociaux": ["decideur", "utilisateur"],
 
   // ── Headless CMS (15 — après élagage vague 5) ────────────────────────────
   // Fondations
@@ -129,17 +125,12 @@ const ARTICLE_PROFILES: Record<string, ProfileId[]> = {
   "wordpress/les-plugins":                          ["utilisateur", "developpeur"],
   "wordpress/les-themes":                           ["utilisateur", "developpeur"],
 
-  // ── Design UI/UX (11) ────────────────────────────────────────────────────
+  // ── Design UI/UX (5) ────────────────────────────────────────────────────
   "design-ui-ux/identite-visuelle":                ["decideur", "utilisateur"],
   "design-ui-ux/charte-graphique":                 ["decideur", "utilisateur"],
-  "design-ui-ux/creer-son-identite-visuelle":      ["decideur", "utilisateur"],
-  "design-ui-ux/creer-une-charte-graphique":       ["utilisateur"],
   "design-ui-ux/ux":                               ["utilisateur", "developpeur"],
   "design-ui-ux/ui":                               ["utilisateur", "developpeur"],
-  "design-ui-ux/definir-son-ux":                   ["utilisateur", "developpeur"],
-  "design-ui-ux/definir-son-ui":                   ["utilisateur", "developpeur"],
-  "design-ui-ux/pourquoi-des-maquettes":           ["decideur", "utilisateur"],
-  "design-ui-ux/comment-creer-des-maquettes":      ["utilisateur", "developpeur"],
+  "design-ui-ux/comment-creer-des-maquettes":      ["decideur", "utilisateur", "developpeur"],
 
   // ── Applications web & mobile (17) ───────────────────────────────────────
   // Web app
@@ -164,9 +155,8 @@ const ARTICLE_PROFILES: Record<string, ProfileId[]> = {
   "applications-web-mobile/combien-coute-une-web-app-sur-mesure":          ["decideur"],
   "applications-web-mobile/delai-et-jalons-dune-web-app":                  ["decideur", "utilisateur"],
 
-  // ── SEO (5) ──────────────────────────────────────────────────────────────
-  "seo/penser-seo-en-amont":                       ["decideur", "utilisateur"],
-  "seo/planifier-seo-en-amont":                    ["utilisateur", "developpeur"],
+  // ── SEO (4) ──────────────────────────────────────────────────────────────
+  "seo/planifier-seo-en-amont":                    ["decideur", "utilisateur", "developpeur"],
   "seo/definir-l-arborescence":                    ["utilisateur", "developpeur"],
   "seo/mots-cles-et-cocon-semantique":             ["utilisateur", "developpeur"],
   "seo/outils-seo":                                ["developpeur"],
@@ -233,9 +223,9 @@ export const JOURNEYS: Record<ProfileId, JourneyStep[]> = {
       description: "Un site rapide pour vos visiteurs, médias compris.",
     },
     {
-      slug: "penser-seo-en-amont",
+      slug: "planifier-seo-en-amont",
       category: "seo",
-      title: "Penser SEO en amont",
+      title: "Penser le SEO dès le départ",
       description: "Intégrer le référencement dès la conception.",
     },
   ],
@@ -293,7 +283,7 @@ export const BENTO_CONFIGS: Record<ProfileId, BentoCardConfig[]> = {
       title: "Audit de migration IA",
       description: "Réservez un audit gratuit : performance, SEO et conversion.",
       icon: SearchCheck,
-      href: "/audit-site-web",
+      href: "/scan",
       colSpan: "md:col-span-1",
       rowSpan: "",
       gradient: "bg-darkblue/60 backdrop-blur-xl border-coral/20",
@@ -361,7 +351,7 @@ export const BENTO_CONFIGS: Record<ProfileId, BentoCardConfig[]> = {
       title: "Audit de migration IA",
       description: "Réservez un audit gratuit : performance, SEO et conversion.",
       icon: SearchCheck,
-      href: "/audit-site-web",
+      href: "/scan",
       colSpan: "md:col-span-1",
       rowSpan: "",
       gradient: "bg-darkblue/60 backdrop-blur-xl border-coral/20",
@@ -429,7 +419,7 @@ export const BENTO_CONFIGS: Record<ProfileId, BentoCardConfig[]> = {
       title: "Audit de migration IA",
       description: "Réservez un audit gratuit : performance, SEO et conversion.",
       icon: SearchCheck,
-      href: "/audit-site-web",
+      href: "/scan",
       colSpan: "md:col-span-1",
       rowSpan: "",
       gradient: "bg-darkblue/60 backdrop-blur-xl border-coral/20",

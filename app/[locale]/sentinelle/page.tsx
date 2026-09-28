@@ -66,7 +66,7 @@ export async function generateMetadata({
   return generatePageMetadata({
     title: isEn
       ? `Sentinelle: the tech watch letter for your website, ${OFFER_PRICE_LABEL_EN}`
-      : `Sentinelle : la lettre de veille techno de votre site web, ${OFFER_PRICE_LABEL}`,
+      : `Sentinelle : la veille techno de votre site, ${OFFER_PRICE_LABEL}`,
     description: isEn
       ? `Twice a month, a letter on your site: what changed around it, what it means for you, what to do. Plus an alert when a flaw hits a component you run. Reviewed before sending. ${OFFER_PRICE_LABEL_EN}.`
       : `Deux fois par mois, une lettre sur votre site : ce qui a changé autour de lui, ce que ça change pour vous, quoi faire. Plus une alerte quand une faille touche un composant installé chez vous. Relue avant envoi. ${OFFER_PRICE_LABEL}.`,
@@ -192,7 +192,7 @@ export default async function SentinellePage({
   const ctaFroid = AVANT_LANCEMENT ? "/contact" : "/scan";
   const ctaFroidLibelle = AVANT_LANCEMENT
     ? "Être prévenu du lancement"
-    : "Analysez votre site en 2 minutes";
+    : "Analysez votre site";
 
   return (
     <main>
@@ -213,6 +213,8 @@ export default async function SentinellePage({
         }
         serviceType={isEn ? "Technology watch" : "Veille technologique"}
         url="/sentinelle"
+        // Prix exact affiché sur la page, lu dans lib/sentinelle-offer.ts.
+        offer={{ price: OFFER_AMOUNT_CENTS / 100, billingUnitCode: "MON" }}
       />
 
       {/* ── Héros : ce qu'est la lettre, en deux phrases ─────────────────── */}
@@ -236,19 +238,19 @@ export default async function SentinellePage({
             href={CTA_ECHANGE.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center border border-accent-secondary bg-accent-secondary px-6 py-3 font-mono text-xs uppercase tracking-[0.14em] text-obsidian transition-opacity hover:opacity-90"
+            className="inline-flex items-center justify-center border border-accent-secondary bg-accent-secondary px-6 py-3 font-mono text-sm font-semibold uppercase tracking-[0.14em] text-obsidian transition-opacity hover:opacity-90"
           >
             {CTA_ECHANGE.label.fr}
           </a>
           <Link
             href={ctaFroid}
-            className="inline-flex items-center justify-center border border-dark-gray px-6 py-3 font-mono text-xs uppercase tracking-[0.14em] text-mid-gray transition-colors hover:text-foreground"
+            className="inline-flex items-center justify-center border border-dark-gray px-6 py-3 font-mono text-sm font-semibold uppercase tracking-[0.14em] text-mid-gray transition-colors hover:text-foreground"
           >
             {ctaFroidLibelle}
           </Link>
           <Link
             href="#dans-la-lettre"
-            className="inline-flex items-center justify-center border border-dark-gray px-6 py-3 font-mono text-xs uppercase tracking-[0.14em] text-mid-gray transition-colors hover:text-foreground"
+            className="inline-flex items-center justify-center border border-dark-gray px-6 py-3 font-mono text-sm font-semibold uppercase tracking-[0.14em] text-mid-gray transition-colors hover:text-foreground"
           >
             Voir ce qu'elle contient
           </Link>

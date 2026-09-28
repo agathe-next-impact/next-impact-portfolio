@@ -42,7 +42,7 @@ function OfferSection({
       : "Réserver et payer";
 
   const ctaClass = cn(
-    "group inline-flex min-h-11 items-center justify-center gap-2 rounded-sm px-5 py-2.5 font-mono text-xs uppercase tracking-[0.08em] transition-colors",
+    "group inline-flex min-h-11 items-center justify-center gap-2 rounded-sm px-5 py-2.5 font-mono text-sm font-semibold uppercase tracking-[0.08em] transition-colors",
     featured
       ? "border border-accent-secondary bg-accent-secondary text-obsidian hover:bg-accent-secondary/85"
       : "border border-dark-gray text-foreground hover:bg-jet",

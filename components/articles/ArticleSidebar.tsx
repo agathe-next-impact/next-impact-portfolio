@@ -68,8 +68,8 @@ export function ArticleSidebar({ relatedArticles, relatedDocs }: ArticleSidebarP
         {/* CTA */}
         <div className="border-t border-foreground/80 pt-4">
           <Link
-            href="https://next-impact.digital"
-            className="block bg-accent-secondary px-4 py-2.5 text-center font-mono text-xs uppercase tracking-[0.1em] text-obsidian transition-colors hover:bg-accent-secondary/85"
+            href="https://www.next-impact.digital"
+            className="block bg-accent-secondary px-4 py-2.5 text-center font-mono text-sm font-semibold uppercase tracking-[0.1em] text-obsidian transition-colors hover:bg-accent-secondary/85"
           >
             Diagnostic gratuit →
           </Link>

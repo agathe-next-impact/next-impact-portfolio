@@ -47,7 +47,7 @@ export async function generateMetadata({
   return generatePageMetadata({
     title: isEn
       ? "Client area: your reports, alerts and decisions in one place"
-      : "Espace client : vos rapports, alertes et décisions au même endroit",
+      : "Espace client : rapports, alertes et décisions",
     description: isEn
       ? "Every Next Impact engagement is tracked in an online workspace: audit, site health, monthly reports, decisions, watch letters. Downloadable at any time."
       : "Chaque prestation Next Impact se suit dans un espace en ligne : audit, état du site, rapports mensuels, décisions, lettres de veille. Téléchargeable à tout moment.",
@@ -297,7 +297,7 @@ export default async function EspaceClientPage({
           />
           <div className="flex flex-wrap gap-3 lg:shrink-0">
             <a href="/scan" className={HERO_BTN_PRIMARY}>
-              Analysez votre site en 2 minutes
+              Analysez votre site
               <ArrowRight size={14} />
             </a>
             <a href={CTA_CHAUD.href} target="_blank" rel="noopener noreferrer" className={HERO_BTN_SECONDARY}>

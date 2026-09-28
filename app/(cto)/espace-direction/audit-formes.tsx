@@ -4,11 +4,13 @@ import {
   estColonneGravite,
   estColonneScore,
   estColonneSolution,
+  estMensuel,
   estTableauScenarios,
   etatVersion,
   lireGravite,
   lireNombre,
   lireNomScenario,
+  lirePlanAction,
   lireReference,
   lireSolution,
   lireStatutScenario,
@@ -17,6 +19,7 @@ import {
   statutScore,
   type EtatVersion,
   type Gravite,
+  type PlanAction,
   type Registre,
   type RoleScenario,
   type Statut,
@@ -39,6 +42,8 @@ import { formatAmount, Label } from "./ui";
 //  - scores PageSpeed : jauge aux seuils Lighthouse, libellé toujours écrit ;
 //  - tableaux de scénarios : une carte par scénario, le retenu en tête, les
 //    chiffres en repères et les textes longs (risques, conditions) repliés ;
+//  - plan d'action chiffré : les tâches regroupées par proposition, chaque
+//    groupe sous ses totaux (heures ponctuelles, heures par mois, coût) ;
 //  - cellules longues d'un tableau ordinaire : repliées derrière un extrait.
 //
 // La couleur ne porte jamais seule l'information : chaque teinte a son libellé.
@@ -231,6 +236,9 @@ export function TableauAudit({ bloc }: { bloc: TableBlock }) {
     return <Scenarios bloc={bloc} entetes={entetes} />;
   }
 
+  const plan = bloc.head ? lirePlanAction(entetes, bloc.rows.map((ligne) => ligne.map(texteDe))) : null;
+  if (plan) return <PlanActionGroupe bloc={bloc} entetes={entetes} plan={plan} />;
+
   if (bloc.head && colSolution >= 0 && bloc.rows.length > 0) {
     return <Constats bloc={bloc} entetes={entetes} colGravite={colGravite} colSolution={colSolution} />;
   }
@@ -402,6 +410,112 @@ function Constats({
           );
         })}
       </ol>
+    </section>
+  );
+}
+
+// ── Plan d'action ────────────────────────────────────────────────────────────
+
+const nombreFr = (n: number) => n.toLocaleString("fr-FR", { maximumFractionDigits: 1 });
+
+/** « 6,5 h · 3 h / mois », « 1 200 € · 90 € / mois ». */
+function Totaux({ heures, cout }: { heures: { ponctuel: number; mensuel: number } | null; cout: { ponctuel: number; mensuel: number } | null }) {
+  const parts: string[] = [];
+  if (heures?.ponctuel) parts.push(`${nombreFr(heures.ponctuel)} h`);
+  if (heures?.mensuel) parts.push(`${nombreFr(heures.mensuel)} h / mois`);
+  if (cout?.ponctuel) parts.push(formatAmount(cout.ponctuel)!);
+  if (cout?.mensuel) parts.push(`${formatAmount(cout.mensuel)} / mois`);
+  if (parts.length === 0) return null;
+  return (
+    <span className="font-mono text-[11px] uppercase tracking-[0.1em] tabular-nums text-foreground">{parts.join(" · ")}</span>
+  );
+}
+
+/**
+ * Un plan d'action chiffré, groupé par proposition comme dans la vue Notion :
+ * d'abord une ligne par proposition avec ses totaux, pour comparer d'un coup
+ * d'œil ; puis chaque proposition et ses tâches, triées par axe. La première
+ * est ouverte, les autres se déplient.
+ */
+function PlanActionGroupe({ bloc, entetes, plan }: { bloc: TableBlock; entetes: string[]; plan: PlanAction }) {
+  const pris = new Set([0, plan.colGroupe, plan.colAxe, plan.colHeures, plan.colFrequence, plan.colCout]);
+  const autres = entetes.map((_, i) => i).filter((i) => !pris.has(i));
+
+  return (
+    <section className="mt-6" aria-label={bloc.title || "Plan d'action"}>
+      <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
+        <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-mid-gray">{bloc.title || "Plan d'action"}</p>
+        <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray">
+          {bloc.rows.length} actions · {plan.groupes.length}{" "}
+          {/^propos/i.test(entetes[plan.colGroupe] ?? "") ? "propositions" : "volets"}
+        </p>
+      </div>
+
+      <ul className="grid gap-px border border-dark-gray bg-dark-gray sm:grid-cols-2 xl:grid-cols-3">
+        {plan.groupes.map((groupe) => (
+          <li key={groupe.nom} className="bg-jet/60 px-4 py-3">
+            <p className="font-sans text-[15px] leading-snug text-foreground">{groupe.nom}</p>
+            <p className="mt-1 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+              <Totaux heures={groupe.heures} cout={groupe.cout} />
+              <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray">
+                {groupe.lignes.length} {groupe.lignes.length > 1 ? "actions" : "action"}
+              </span>
+            </p>
+          </li>
+        ))}
+      </ul>
+
+      <div className="mt-3 grid gap-3">
+        {plan.groupes.map((groupe, rang) => (
+          <details key={groupe.nom} open={rang === 0} className="group border border-dark-gray bg-jet/30">
+            <summary className="flex cursor-pointer list-none flex-wrap items-center gap-x-4 gap-y-1 px-5 py-3 transition-colors hover:bg-jet/70 [&::-webkit-details-marker]:hidden">
+              <span className="min-w-0 flex-1 font-sans text-base text-foreground">{groupe.nom}</span>
+              <Totaux heures={groupe.heures} cout={groupe.cout} />
+              <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray">
+                {groupe.lignes.length} {groupe.lignes.length > 1 ? "actions" : "action"}
+              </span>
+              <span aria-hidden className="font-mono text-sm text-mid-gray group-open:text-accent-secondary">
+                <span className="group-open:hidden">+</span>
+                <span className="hidden group-open:inline">−</span>
+              </span>
+            </summary>
+            <ol className="divide-y divide-dark-gray border-t border-dark-gray">
+              {groupe.lignes.map((index) => {
+                const ligne = bloc.rows[index];
+                const cellule = (col: number) => (col >= 0 ? texteDe(ligne[col]).trim() : "");
+                const mensuel = plan.colFrequence >= 0 && estMensuel(cellule(plan.colFrequence));
+                const heures = lireNombre(cellule(plan.colHeures));
+                const cout = lireNombre(cellule(plan.colCout));
+                const suffixe = mensuel ? " / mois" : "";
+                return (
+                  <li key={index} className="flex flex-wrap items-baseline gap-x-3 gap-y-1 px-5 py-2.5">
+                    <span className="min-w-0 flex-1 basis-64 font-inter-tight text-sm leading-relaxed text-foreground/90">
+                      <Texte spans={ligne[0] ?? []} />
+                    </span>
+                    {cellule(plan.colAxe) ? (
+                      <span className="border border-dark-gray px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray">
+                        {cellule(plan.colAxe)}
+                      </span>
+                    ) : null}
+                    {autres.map((col) =>
+                      cellule(col) && cellule(col).length <= 40 ? (
+                        <span key={col} title={entetes[col]} className="font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray">
+                          {cellule(col)}
+                        </span>
+                      ) : null,
+                    )}
+                    <span className="ml-auto whitespace-nowrap text-right font-mono text-[11px] tabular-nums text-foreground">
+                      {heures !== null ? `${nombreFr(heures)} h${suffixe}` : null}
+                      {heures !== null && cout !== null ? " · " : null}
+                      {cout !== null ? `${formatAmount(cout)}${suffixe}` : null}
+                    </span>
+                  </li>
+                );
+              })}
+            </ol>
+          </details>
+        ))}
+      </div>
     </section>
   );
 }

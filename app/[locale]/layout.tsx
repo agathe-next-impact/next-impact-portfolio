@@ -7,13 +7,13 @@ import Header from '@/components/header'
 import '../globals.css'
 import Footer from '@/components/footer'
 import { MetadataDebugger } from '@/components/metadata-debugger'
-import { OrganizationJsonLd } from '@/components/json-ld'
+import { OrganizationJsonLd, WebsiteJsonLd } from '@/components/json-ld'
 import { ConsentManager } from '@/components/consent-manager'
 import { DocumentationModeProvider } from '@/contexts/documentation-mode-context'
 import { FloatingContact } from '@/components/floating-contact'
 import { ThemeProvider } from '@/components/theme-provider'
 import { MotionProvider } from '@/components/motion-provider'
-import { routing } from '@/i18n/routing'
+import { routing, ENGLISH_PUBLISHED } from '@/i18n/routing'
 import { TRAJECTOIRES, TRAJECTOIRE_ORDER, type Lang } from '@/lib/trajectoires'
 
 const SITE_URL = 'https://www.next-impact.digital'
@@ -33,7 +33,7 @@ const LAYOUT_META = {
   fr: {
     title: 'Next Impact · Refonte de site WordPress',
     description:
-      'Votre site WordPress vieillit mal ? Refonte optimisée, headless ou web app, en forfait, en 6 à 10 semaines. Prix affichés, performance mesurée.',
+      'Votre site WordPress vieillit mal ? Remise à niveau, refonte sur mesure ou headless, web app : au forfait, en 6 à 10 semaines. Prix affichés, performance mesurée.',
     ogTitle: 'Next Impact · Refonte de site WordPress',
     ogDescription: `Rapide et moderne, sans tout reconstruire. Trois prestations : ${prestationNames('fr')}. Prix et délai annoncés, performance mesurée avant et après.`,
     ogLocale: 'fr_FR',
@@ -42,7 +42,7 @@ const LAYOUT_META = {
   en: {
     title: 'Next Impact · WordPress site redesign',
     description:
-      'Is your WordPress site aging badly? Optimized, headless or web app redesign, at a fixed price, in 6 to 10 weeks. Displayed prices, measured performance.',
+      'Is your WordPress site aging badly? Upgrade, custom or headless redesign, web app: fixed price, in 6 to 10 weeks. Displayed prices, measured performance.',
     ogTitle: 'Next Impact · WordPress site redesign',
     ogDescription: `Fast and modern, without rebuilding everything. Three services: ${prestationNames('en')}. Price and timeline announced, performance measured before and after.`,
     ogLocale: 'en_US',
@@ -90,14 +90,13 @@ export async function generateMetadata({
     authors: [{ name: 'Agathe Karinthi-Martin', url: SITE_URL }],
     creator: 'Agathe Karinthi-Martin',
     publisher: 'Next Impact',
-    icons: {
-      icon: '/logo-carre-bleu.png',
-      apple: '/logo-carre-bleu.png',
-    },
+    // Icônes : conventions de fichiers d'app/ (favicon.ico, icon.png,
+    // apple-icon.png), monogramme blanc sur fond bleu de la charte (2026-09-28).
+    // L'ancien /logo-carre-bleu.png n'était qu'un aplat bleu, sans marque.
     openGraph: {
       type: 'website',
       locale: m.ogLocale,
-      alternateLocale: [m.altOgLocale],
+      alternateLocale: ENGLISH_PUBLISHED ? [m.altOgLocale] : [],
       siteName: 'Next Impact',
       title: m.ogTitle,
       description: m.ogDescription,
@@ -136,9 +135,10 @@ export async function generateMetadata({
     },
     alternates: {
       canonical,
+      // L'anglais n'est annoncé que s'il est publié (ENGLISH_PUBLISHED).
       languages: {
         'fr-FR': '/',
-        'en-US': '/en',
+        ...(ENGLISH_PUBLISHED ? { 'en-US': '/en' } : {}),
         'x-default': '/',
       },
     },
@@ -177,6 +177,9 @@ export default async function RootLayout({
     >
       <body>
         <OrganizationJsonLd />
+        {/* Nœud WebSite sur toutes les pages : #website est référencé partout
+            (CollectionPage.isPartOf, WebPage) et n'était défini que sur la home. */}
+        <WebsiteJsonLd />
         <NextIntlClientProvider>
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} storageKey="theme-v2" themes={['light', 'dark']} disableTransitionOnChange>
             <DocumentationModeProvider>

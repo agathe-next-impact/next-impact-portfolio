@@ -25,20 +25,20 @@ function getOptions(isEn: boolean): Option[] {
       id: "vitrine",
       label: isEn ? "A brochure or simple site" : "Une vitrine simple",
       recoName: isEn ? "High-performance brochure site" : "Site vitrine performant",
-      recoPrice: isEn ? "From €2,250" : "Depuis 2 250 €",
+      recoPrice: isEn ? "From €1,500" : "À partir de 1 500 €",
       recoLine: isEn
-        ? "Modernized WordPress: fast, secure, controlled cost."
-        : "WordPress modernisé : rapide, sécurisé, à coût maîtrisé.",
+        ? "Your current WordPress brought up to standard: fast, secure, no rebuild."
+        : "Votre WordPress actuel remis à niveau : rapide, sécurisé, sans reconstruction.",
       anchor: "#forfait-classique",
     },
     {
       id: "croissance",
       label: isEn ? "A growth site (SEO, content)" : "Un site haute performance",
       recoName: isEn ? "High-speed website" : "Site haute performance",
-      recoPrice: isEn ? "From €4,000" : "Depuis 4 000 €",
+      recoPrice: isEn ? "From €2,250" : "À partir de 2 250 €",
       recoLine: isEn
-        ? "Headless WordPress + Next.js: front-end performance, critical SEO."
-        : "WordPress Headless + Next.js : performance front, SEO critique.",
+        ? "Site rebuilt, custom or headless WordPress: your team still publishes in WordPress."
+        : "Site reconstruit, WordPress sur mesure ou headless : votre équipe publie toujours dans WordPress.",
       anchor: "#forfait-headless",
       recommended: true,
     },
@@ -46,7 +46,7 @@ function getOptions(isEn: boolean): Option[] {
       id: "plateforme",
       label: isEn ? "A platform or an app" : "Une plateforme ou une application",
       recoName: isEn ? "Custom business platform" : "Plateforme métier sur-mesure",
-      recoPrice: isEn ? "From €6,500" : "Depuis 6 500 €",
+      recoPrice: isEn ? "From €6,500" : "À partir de 6 500 €",
       recoLine: isEn
         ? "Dedicated architecture: business logic, accounts, real-time."
         : "Architecture dédiée : logique métier, comptes, temps réel.",
@@ -143,14 +143,14 @@ export default function MiniDiag({ index = "№ 02" }: { index?: string }) {
             <div className="flex flex-wrap gap-3 md:shrink-0">
               <a
                 href={reco.anchor}
-                className="inline-flex min-h-11 items-center gap-2 py-2.5 border border-accent-secondary bg-accent-secondary px-5 font-mono text-xs font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85"
+                className="inline-flex min-h-11 items-center gap-2 py-2.5 border border-accent-secondary bg-accent-secondary px-5 font-mono text-sm font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85"
               >
                 {isEn ? "See this package" : "Voir ce forfait"}
                 <ArrowRight size={14} />
               </a>
               <Link
                 href="/solutions-web/eligibilite"
-                className="inline-flex min-h-11 items-center gap-2 py-2.5 border border-dark-gray px-5 font-mono text-xs uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet"
+                className="inline-flex min-h-11 items-center gap-2 py-2.5 border border-dark-gray px-5 font-mono text-sm font-semibold uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet"
               >
                 {isEn ? "Full diagnostic" : "Diagnostic complet"}
                 <ArrowUpRight size={13} />

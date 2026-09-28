@@ -14,3 +14,18 @@ export const routing = defineRouting({
 });
 
 export type Locale = (typeof routing.locales)[number];
+
+/**
+ * Version anglaise publiée ou non (décision d'Agathe du 2026-09-28 : fermée).
+ *
+ * À false : toute URL /en… redirige en 301 vers son équivalent français
+ * (next.config.mjs), le sélecteur de langue disparaît, aucune page n'annonce
+ * de hreflang en-US et le sitemap ne liste que les URL françaises. Le code et
+ * les traductions restent en place : repasser à true suffit à rouvrir l'anglais
+ * (penser alors à retirer la redirection de next.config.mjs, qui lit ce
+ * drapeau, et à redéployer).
+ */
+export const ENGLISH_PUBLISHED = false;
+
+/** Les langues réellement publiées. */
+export const PUBLISHED_LOCALES: Locale[] = ENGLISH_PUBLISHED ? [...routing.locales] : ["fr"];

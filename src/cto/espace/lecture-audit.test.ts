@@ -7,6 +7,7 @@ import {
   lireEtiquettesPoint,
   lireNomScenario,
   lireNombre,
+  lirePlanAction,
   lireReference,
   lireSolution,
   registreEncadre,
@@ -157,5 +158,61 @@ describe("lecture d'un audit", () => {
     });
     // Une parenthèse qui n'est pas une mention reste du texte.
     expect(lireEtiquettesPoint("Mobile lent (data/40).").coupe).toBe(0);
+  });
+});
+
+describe("plan d'action chiffré", () => {
+  const entetes = ["Nom", "Axe", "Fréquence", "Heures", "Proposition"];
+  const lignes = [
+    ["Sauvegardes", "Disponibilité", "Mensuel", "1", "Monitoring & maintenance"],
+    ["Thème sur-mesure", "Développement", "Ponctuel", "120", "Proposition 2 - Refonte"],
+    ["Balises de suivi", "Conversion", "Ponctuel", "2", "Proposition 1 - Optimisation"],
+    ["Compression des médias", "Performance", "Ponctuel", "3,5", "Proposition 1 - Optimisation"],
+    ["Robots et sitemap", "SEO", "Ponctuel", "1", "Proposition 1 - Optimisation"],
+    ["Reporting", "Pilotage", "Mensuel", "2", "Monitoring & maintenance"],
+    ["Mise à jour ponctuelle", "Technique", "Ponctuel", "4", "Monitoring & maintenance"],
+  ];
+
+  it("groupe les tâches par proposition, numérotées d'abord", () => {
+    const plan = lirePlanAction(entetes, lignes);
+    expect(plan?.groupes.map((g) => g.nom)).toEqual([
+      "Proposition 1 - Optimisation",
+      "Proposition 2 - Refonte",
+      "Monitoring & maintenance",
+    ]);
+  });
+
+  it("trie par axe dans chaque groupe", () => {
+    const plan = lirePlanAction(entetes, lignes)!;
+    expect(plan.groupes[0].lignes.map((i) => lignes[i][0])).toEqual([
+      "Balises de suivi",
+      "Compression des médias",
+      "Robots et sitemap",
+    ]);
+  });
+
+  it("totalise les heures, ponctuelles et mensuelles à part", () => {
+    const plan = lirePlanAction(entetes, lignes)!;
+    expect(plan.groupes[0].heures).toEqual({ ponctuel: 6.5, mensuel: 0 });
+    expect(plan.groupes[2].heures).toEqual({ ponctuel: 4, mensuel: 3 });
+    expect(plan.groupes[0].cout).toBeNull();
+  });
+
+  it("reconnaît « Scénario ou volet » et une colonne de coût", () => {
+    const plan = lirePlanAction(
+      ["Nom de l'action", "Axe", "Coût estimé (€)", "Fréquence", "Heures", "Scénario ou volet"],
+      [
+        ["Cadrage", "Cadrage", "450", "Ponctuel", "5", "Scénario 1"],
+        ["Suivi", "Reporting", "90", "Mensuel", "1", "Monitoring et maintenance"],
+      ],
+    );
+    expect(plan?.colGroupe).toBe(5);
+    expect(plan?.groupes[1].cout).toEqual({ ponctuel: 0, mensuel: 90 });
+  });
+
+  it("laisse un tableau ordinaire tel quel", () => {
+    expect(lirePlanAction(["Nom", "Heures"], [["a", "1"]])).toBeNull();
+    expect(lirePlanAction(["Nom", "Proposition"], [["a", "P1"], ["b", "P2"]])).toBeNull();
+    expect(lirePlanAction(entetes, lignes.map((l) => [...l.slice(0, 4), "Proposition 1"]))).toBeNull();
   });
 });

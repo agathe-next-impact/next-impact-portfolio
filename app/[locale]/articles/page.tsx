@@ -18,6 +18,11 @@ export async function generateMetadata({
     description: t("metaDescription"),
     path: "/articles",
     locale,
+    // Le moteur de /articles lit content/articles/, qui n'existe plus : la
+    // liste est vide (aucun h1, aucun article). Hors index et hors sitemap tant
+    // qu'elle n'a pas de contenu propre — les deux guides TIH restent indexés
+    // à leur URL.
+    noindex: true,
   })
 }
 

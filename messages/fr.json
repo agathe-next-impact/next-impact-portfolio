@@ -24,6 +24,7 @@
     "surveiller": "Veille",
     "tenir": "Pilotage",
     "analyserSite": "Analyser mon site",
+    "echangeGratuit": "Échange gratuit",
     "espaceClient": "Espace client",
     "prendreRdv": "Prendre rendez-vous",
     "selecteurTechno": "Le Sélecteur techno",
@@ -45,6 +46,7 @@
   },
   "footer": {
     "contactQuestion": "Une question ? Contactez-moi directement.",
+    "contactCta": "Contact",
     "availability": "Disponible · Réponse sous 24h",
     "company": "Next Impact Digital",
     "owner": "EI Agathe Karinthi-Martin",

@@ -10,16 +10,15 @@ import {
   PROJETS,
   SERVICES_A_AJOUTER,
 } from "@cto/offre";
-import Link from "next/link";
 import { veilleOfferte } from "@cto/espace";
-import { CALENDLY_URL, contactHref, Espace, sectionHref, type EspaceContext } from "./shell";
+import { CALENDLY_URL, contactHref, Espace, type EspaceContext } from "./shell";
 import { buttonClass, formatDay, Label, Legende, Panel, Tag } from "./ui";
 import type { Viewer } from "./viewer";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Contrats → Votre accompagnement : ce que l'on a, ce que l'on pourrait avoir.
 //
-// Trois blocs et un seul bouton. Aucun montant (décision du 2026-09-27) : le
+// Trois blocs (d'abord ce qui peut s'ajouter) et un seul bouton. Aucun montant (décision du 2026-09-27) : le
 // tarif se discute en comité, la page dit ce que chaque étape apporte. Les
 // libellés des paliers viennent de la page publique (`@cto/offre`).
 // ─────────────────────────────────────────────────────────────────────────────
@@ -40,6 +39,29 @@ export async function VueAccompagnement({ viewer, context }: { viewer: Viewer; c
       active="accompagnement"
       title="Votre accompagnement"
     >
+      {/* ── À ajouter ────────────────────────────────────────────────── */}
+      <section aria-labelledby="ajouter-titre" className="mt-10">
+        <Legende id="ajouter-titre">À ajouter</Legende>
+        <Panel className="mt-1 divide-y divide-dark-gray">
+          {aAjouter.map((service) => (
+            <Ligne key={service.code} titre={service.nom}>
+              {service.apport}
+            </Ligne>
+          ))}
+          <div className="px-5 py-4">
+            <Label>Projets ponctuels</Label>
+            <ul className="mt-2 space-y-2">
+              {PROJETS.map((projet) => (
+                <li key={projet.nom} className="font-inter-tight text-sm">
+                  <span className="text-foreground">{projet.nom}</span>
+                  <span className="text-mid-gray"> · {projet.apport}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </Panel>
+      </section>
+
       {/* ── Ce que vous avez ─────────────────────────────────────────── */}
       <section aria-labelledby="actuel-titre" className="mt-10">
         <Legende id="actuel-titre">Ce que vous avez</Legende>
@@ -91,28 +113,6 @@ export async function VueAccompagnement({ viewer, context }: { viewer: Viewer; c
             </div>
           ) : null}
 
-          {/* Toutes les sections, y compris celles qui ont quitté la barre
-              latérale faute de contenu : c'est leur porte d'entrée. */}
-          <div className="px-5 py-4">
-            <Label>Dans votre espace</Label>
-            <ul className="mt-2 grid gap-x-6 gap-y-1.5 sm:grid-cols-2">
-              {context.sections
-                .filter((section) => section.key !== "tableau" && section.key !== "accompagnement")
-                .map((section) => (
-                  <li key={section.key} className="font-inter-tight text-sm">
-                    <Link
-                      href={sectionHref(section, viewer.base)}
-                      className="text-foreground underline-offset-4 hover:text-accent-secondary hover:underline"
-                    >
-                      {section.label}
-                    </Link>
-                    {context.sansInformation.has(section.key) ? (
-                      <span className="text-mid-gray"> · en attente d&rsquo;un premier contenu</span>
-                    ) : null}
-                  </li>
-                ))}
-            </ul>
-          </div>
         </Panel>
       </section>
 
@@ -156,29 +156,6 @@ export async function VueAccompagnement({ viewer, context }: { viewer: Viewer; c
           </Panel>
         </section>
       ) : null}
-
-      {/* ── À ajouter ────────────────────────────────────────────────── */}
-      <section aria-labelledby="ajouter-titre" className="mt-10">
-        <Legende id="ajouter-titre">À ajouter</Legende>
-        <Panel className="mt-1 divide-y divide-dark-gray">
-          {aAjouter.map((service) => (
-            <Ligne key={service.code} titre={service.nom}>
-              {service.apport}
-            </Ligne>
-          ))}
-          <div className="px-5 py-4">
-            <Label>Projets ponctuels</Label>
-            <ul className="mt-2 space-y-2">
-              {PROJETS.map((projet) => (
-                <li key={projet.nom} className="font-inter-tight text-sm">
-                  <span className="text-foreground">{projet.nom}</span>
-                  <span className="text-mid-gray"> · {projet.apport}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </Panel>
-      </section>
 
       {/* ── Un seul bouton ───────────────────────────────────────────── */}
       <Panel className="mt-12 border-l-2 border-l-accent-secondary px-5 py-6 sm:px-6">

@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { generatePageMetadata } from "@/lib/metadata";
 import PageLayout from "@/components/page-layout";
+import { BreadcrumbJsonLd } from "@/components/json-ld";
 import EligibilityForm from "@/components/tarifs/EligibilityForm";
 import type { Locale } from "@/i18n/routing";
 
@@ -13,17 +14,17 @@ export async function generateMetadata({
   return generatePageMetadata({
     title:
       locale === "en"
-        ? "Project diagnostic: classic, Headless, web app or custom application"
-        : "Diagnostic de projet : classique, Headless, web app ou application sur-mesure",
+        ? "Which service for your site? 2-minute diagnostic"
+        : "Quelle prestation pour votre site ? Diagnostic en 2 minutes",
     description:
       locale === "en"
-        ? "Identify in 2 minutes the path that fits your project: classic WordPress site, Headless WordPress + Next.js site, custom web app or mobile application."
-        : "Identifiez en 2 minutes la voie adaptée à votre projet : site WordPress classique, site Headless WordPress + Next.js, web app sur-mesure ou application mobile.",
+        ? "Five questions to find the service that fits your project: Optimization, Redesign or Evolution. Price excl. VAT shown with the result."
+        : "Cinq questions pour trouver la prestation adaptée à votre projet : Optimisation, Refonte ou Évolution. Le prix HT s'affiche avec le résultat.",
     path: "/solutions-web/eligibilite",
     keywords:
       locale === "en"
-        ? ["project diagnostic", "classic WordPress", "Headless WordPress Next.js", "custom web app", "mobile PWA"]
-        : ["diagnostic projet", "WordPress classique", "Headless WordPress Next.js", "web app sur-mesure", "PWA mobile"],
+        ? ["website project diagnostic", "WordPress redesign", "headless WordPress", "custom web app"]
+        : ["diagnostic projet site web", "refonte site WordPress", "WordPress headless", "web app sur mesure"],
     locale,
   });
 }
@@ -34,7 +35,17 @@ export default async function EligibilityPage({
   params: Promise<{ locale: Locale }>;
 }) {
   const { locale } = await params;
+  const isEn = locale === "en";
   return (
+    <>
+    <BreadcrumbJsonLd
+      locale={locale}
+      items={[
+        { name: isEn ? "Home" : "Accueil", url: "/" },
+        { name: isEn ? "Services" : "Prestations", url: "/solutions-web" },
+        { name: isEn ? "Project diagnostic" : "Diagnostic de projet", url: "/solutions-web/eligibilite" },
+      ]}
+    />
     <PageLayout
       titre={
         locale === "en"
@@ -43,8 +54,8 @@ export default async function EligibilityPage({
       }
       sousTitre={
         locale === "en"
-          ? "An instant diagnostic to identify the right path for your project: classic WordPress site, Headless site, custom web app or mobile application."
-          : "Un diagnostic immédiat pour identifier la voie adaptée à votre projet : site WordPress classique, site Headless, web app sur-mesure ou application mobile."
+          ? "Five questions to find the service that fits your project: Optimization, Redesign or Evolution, with its price excl. VAT."
+          : "Cinq questions pour trouver la prestation adaptée à votre projet : Optimisation, Refonte ou Évolution, avec son prix HT."
       }
     >
       <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
@@ -53,5 +64,6 @@ export default async function EligibilityPage({
         </div>
       </section>
     </PageLayout>
+    </>
   );
 }

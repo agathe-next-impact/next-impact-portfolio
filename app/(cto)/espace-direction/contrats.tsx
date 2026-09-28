@@ -21,17 +21,29 @@ const LIEN_PIED =
 /** Signées et pas finies : ce que « en cours » veut dire pour le client. */
 const EN_COURS = new Set(["En cours", "À venir"]);
 
-export async function CarteContrats({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
+export async function CarteContrats({
+  viewer,
+  context,
+  exclure,
+}: {
+  viewer: Viewer;
+  context: EspaceContext;
+  /** Les livrables déjà à la une sur l'accueil, à ne pas répéter. */
+  exclure?: Set<string>;
+}) {
   const avecPropositions = sectionOuverte(context, "propositions");
   const avecMissions = sectionOuverte(context, "prestations");
   if (!avecPropositions && !avecMissions) return null;
 
-  const aValider = context.actions.aValider;
-  const missions = avecMissions
+  const toutesAValider = context.actions.aValider;
+  const toutesMissions = avecMissions
     ? (await prestationsForClient(viewer.clientId))
         .filter((item) => EN_COURS.has(item.payload.statut ?? ""))
         .sort((a, b) => (a.occurredAt?.getTime() ?? Infinity) - (b.occurredAt?.getTime() ?? Infinity))
     : [];
+  // Le compteur reste le total ; seules les lignes déjà à la une sont retirées.
+  const aValider = toutesAValider.filter((action) => !(action.item && exclure?.has(action.item.id)));
+  const missions = toutesMissions.filter((item) => !exclure?.has(item.id));
 
   const colonnes = (avecPropositions ? 1 : 0) + (avecMissions ? 1 : 0);
 
@@ -49,11 +61,13 @@ export async function CarteContrats({ viewer, context }: { viewer: Viewer; conte
           <Colonne
             titre="À valider"
             sousTitre="Propositions qui attendent votre accord"
-            nombre={aValider.length}
+            nombre={toutesAValider.length}
             pied={{ href: `${viewer.base}/${sectionByKey("propositions").slug}`, label: "Toutes les propositions" }}
           >
             {aValider.length === 0 ? (
-              <LigneVide>Aucune proposition en attente de votre réponse.</LigneVide>
+              <LigneVide>
+                {toutesAValider.length > 0 ? "Déjà à la une, ci-dessus." : "Aucune proposition en attente de votre réponse."}
+              </LigneVide>
             ) : (
               <Plafond
                 items={aValider}
@@ -75,11 +89,11 @@ export async function CarteContrats({ viewer, context }: { viewer: Viewer; conte
           <Colonne
             titre="En cours"
             sousTitre="Missions signées, en cours ou à venir"
-            nombre={missions.length}
+            nombre={toutesMissions.length}
             pied={{ href: `${viewer.base}/${sectionByKey("prestations").slug}`, label: "Détail et règlements" }}
           >
             {missions.length === 0 ? (
-              <LigneVide>Aucune mission en cours.</LigneVide>
+              <LigneVide>{toutesMissions.length > 0 ? "Déjà à la une, ci-dessus." : "Aucune mission en cours."}</LigneVide>
             ) : (
               <Plafond
                 items={missions}

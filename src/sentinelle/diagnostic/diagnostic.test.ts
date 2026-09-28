@@ -97,6 +97,7 @@ describe("bornerGrille", () => {
       { prestation: "refonte", besoin: "utile", strategique: "S.", commercial: "C." },
       { prestation: "evolution", besoin: "pas_prioritaire", strategique: "S.", commercial: "C." },
     ],
+    refonte: { variante: "sur_mesure", raison: "R." },
   };
 
   it("rend la grille bornée", () => {

@@ -1,5 +1,11 @@
 import type { Locale } from "@/i18n/routing";
-import { TRAJECTOIRES, formatEuros, type Lang, type TrajectoireSlug } from "@/lib/trajectoires";
+import {
+  TRAJECTOIRES,
+  formatEuros,
+  type Lang,
+  type TrajectoireSlug,
+  type VarianteSlug,
+} from "@/lib/trajectoires";
 import { OFFERS as CONSEIL_OFFERS } from "@/lib/visio-conseil";
 
 // Contenu GEO de la home : cartouche « L'essentiel » (TL;DR, format de citation idéal
@@ -21,6 +27,12 @@ const apd = (slug: TrajectoireSlug, lang: Lang) =>
   lang === "en"
     ? `from ${formatEuros(TRAJECTOIRES[slug].priceValue, "en")} excl. VAT`
     : `à partir de ${formatEuros(TRAJECTOIRES[slug].priceValue, "fr")} HT`;
+// Plancher d'une variante de la Refonte (sur mesure ou headless, ADR-031).
+const variante = (slug: VarianteSlug, lang: Lang) => {
+  const v = TRAJECTOIRES["forfait-headless"].variantes?.find((x) => x.slug === slug);
+  const amount = formatEuros(v?.priceValue ?? TRAJECTOIRES["forfait-headless"].priceValue, lang);
+  return lang === "en" ? `from ${amount} excl. VAT` : `à partir de ${amount} HT`;
+};
 // Prix de l'audit + roadmap, lu dans lib/visio-conseil.ts (« 650 € », « €650 »).
 const AUDIT_VALUE = CONSEIL_OFFERS.find((o) => o.id === "architecture-projet-ia")!.tiers[0].value;
 const audit = (lang: Lang) => formatEuros(AUDIT_VALUE, lang);
@@ -39,8 +51,8 @@ const FR: HomeContent = {
   tldr: {
     label: "L'essentiel",
     lines: [
-      "Next Impact refait les sites WordPress qui vieillissent : rapides et modernes, sans tout reconstruire.",
-      `Trois prestations : ${nom("forfait-classique", "fr")} (WordPress optimisé, ${des("forfait-classique", "fr")}), ${nom("forfait-headless", "fr")} (WordPress headless, recommandée, ${des("forfait-headless", "fr")}), ${nom("forfait-webapp", "fr")} (web app, ${des("forfait-webapp", "fr")}).`,
+      "Next Impact refait les sites WordPress qui vieillissent : rapides et modernes, sans changer votre façon de publier.",
+      `Trois prestations : ${nom("forfait-classique", "fr")} (le WordPress existant remis à niveau, ${des("forfait-classique", "fr")}), ${nom("forfait-headless", "fr")} (le site reconstruit, WordPress sur mesure ou headless, recommandée, ${des("forfait-headless", "fr")}), ${nom("forfait-webapp", "fr")} (web app, ${des("forfait-webapp", "fr")}).`,
       "L'offre se lit par situation : trois besoins (décider, faire évoluer son site, agir dans la durée), sept situations, un parcours par situation, avec son budget.",
       "Chaque offre porte une veille technique et stratégique : une première analyse dans l'audit et les prestations, une veille en continu dans le suivi et maintenance et la direction technique.",
       "Prix et délai écrits avant de commencer, 6 à 10 semaines, performance mesurée avant et après.",
@@ -54,12 +66,12 @@ const FR: HomeContent = {
       {
         question: "Mon site WordPress est lent : refonte ou optimisation ?",
         answer:
-          `Cela dépend de la cause. Si le problème vient du thème et de l'empilement de plugins, une refonte WordPress optimisée suffit (${apd("forfait-classique", "fr")}). Si le site est lent parce que tout passe par WordPress à chaque visite, le découplage headless change la donne (${apd("forfait-headless", "fr")}). L'analyse gratuite de votre site liste ses composants et ceux qui sont à risque : c'est une première orientation ; l'échange gratuit de 15 minutes dit par où commencer, et l'audit + roadmap tranche sur pièces.`,
+          `Cela dépend de la cause. Si le problème vient de l'empilement d'extensions et du manque d'entretien, l'${nom("forfait-classique", "fr")} suffit : le site existant est gardé et remis à niveau, sans reconstruction (${apd("forfait-classique", "fr")}). Si le thème lui-même bloque ou que le design a vieilli, c'est une ${nom("forfait-headless", "fr")} : en WordPress sur mesure (${variante("sur-mesure", "fr")}) ou en WordPress headless (${variante("headless", "fr")}) quand la vitesse et le trafic sont décisifs. L'analyse gratuite de votre site liste ses composants et ceux qui sont à risque : c'est une première orientation ; l'échange gratuit de 15 minutes dit par où commencer, et l'audit + roadmap tranche sur pièces.`,
       },
       {
-        question: "Qu'est-ce qu'une refonte headless, concrètement ?",
+        question: "Sur mesure ou headless : qu'est-ce qui change, concrètement ?",
         answer:
-          "Vos rédacteurs continuent de publier dans WordPress, exactement comme avant. Vos visiteurs, eux, voient un site reconstruit avec des technologies modernes : généré à l'avance, affiché en moins de deux secondes. On garde l'outil de publication, on change tout ce qui est visible.",
+          `Dans les deux cas, le site est reconstruit et vos rédacteurs publient toujours dans WordPress. En WordPress sur mesure, un thème est écrit pour votre site, avec le strict nécessaire en extensions : un seul outil à tenir, un suivi léger. En WordPress headless, WordPress ne sert plus qu'à publier et le site affiché est reconstruit avec Next.js : généré à l'avance, affiché en moins de deux secondes. Les deux variantes se valent ; votre situation tranche.`,
       },
       {
         question: "Mon équipe devra-t-elle réapprendre à publier ?",
@@ -84,8 +96,8 @@ const EN: HomeContent = {
   tldr: {
     label: "Key points",
     lines: [
-      "Next Impact redesigns aging WordPress sites: fast and modern, without rebuilding everything.",
-      `Three services: ${nom("forfait-classique", "en")} (optimized WordPress, ${des("forfait-classique", "en")}), ${nom("forfait-headless", "en")} (headless WordPress, recommended, ${des("forfait-headless", "en")}), ${nom("forfait-webapp", "en")} (web app, ${des("forfait-webapp", "en")}).`,
+      "Next Impact redesigns aging WordPress sites: fast and modern, without changing the way you publish.",
+      `Three services: ${nom("forfait-classique", "en")} (the existing WordPress brought up to standard, ${des("forfait-classique", "en")}), ${nom("forfait-headless", "en")} (the site rebuilt, custom or headless WordPress, recommended, ${des("forfait-headless", "en")}), ${nom("forfait-webapp", "en")} (web app, ${des("forfait-webapp", "en")}).`,
       "The offer reads by situation: three needs (decide, evolve your site, act over the long run), seven situations, one path per situation, with its budget.",
       "Every offer carries a technical and strategic watch: a first analysis in the audit and the services, a continuous watch in care and maintenance and in technical direction.",
       "Price and timeline in writing before we start, 6 to 10 weeks, performance measured before and after.",
@@ -99,12 +111,12 @@ const EN: HomeContent = {
       {
         question: "My WordPress site is slow: redesign or optimization?",
         answer:
-          `It depends on the cause. If the problem is the theme and the plugin pile-up, an optimized WordPress redesign is enough (${apd("forfait-classique", "en")}). If the site is slow because everything goes through WordPress on every visit, headless decoupling changes the picture (${apd("forfait-headless", "en")}). The free analysis of your site lists its components and the ones at risk: that is a first direction; the free 15-minute call tells you where to start, and the audit + roadmap settles it on evidence.`,
+          `It depends on the cause. If the problem is plugin pile-up and lack of upkeep, ${nom("forfait-classique", "en")} is enough: the existing site is kept and brought up to standard, no rebuild (${apd("forfait-classique", "en")}). If the theme itself is the blocker or the design has aged, it is a ${nom("forfait-headless", "en")}: as custom WordPress (${variante("sur-mesure", "en")}) or as headless WordPress (${variante("headless", "en")}) when speed and traffic are decisive. The free analysis of your site lists its components and the ones at risk: that is a first direction; the free 15-minute call tells you where to start, and the audit + roadmap settles it on evidence.`,
       },
       {
-        question: "What is a headless redesign, concretely?",
+        question: "Custom or headless: what changes, concretely?",
         answer:
-          "Your editors keep publishing in WordPress, exactly as before. Your visitors see a site rebuilt with modern technology: generated in advance, displayed in under two seconds. You keep the publishing tool and change everything that is visible.",
+          `In both cases the site is rebuilt and your editors still publish in WordPress. With custom WordPress, a theme is written for your site, with only the plugins you need: one tool to maintain, light care. With headless WordPress, WordPress is only used to publish and the visible site is rebuilt with Next.js: generated in advance, displayed in under two seconds. The two variants are equally valid; your situation decides.`,
       },
       {
         question: "Will my team have to relearn publishing?",

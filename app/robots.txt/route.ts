@@ -9,7 +9,16 @@ const baseUrl = "https://www.next-impact.digital";
 // l'indexation d'une page visitée, le Disallow empêche la visite : ni l'espace
 // abonné, ni l'admin, ni les rapports d'analyse — dont l'URL n'est pas secrète,
 // seulement difficile à deviner — n'ont à se retrouver dans un index.
-const PRIVATE_PATHS = ["/scan", "/admin", "/espace"];
+//
+// Les règles robots.txt sont des préfixes : « /espace » bloquait aussi
+// /espace-client, page vitrine indexable et présente au sitemap. On borne donc
+// l'espace abonné Sentinelle (/espace et /espace/…) et on nomme à part l'espace
+// des accompagnements (/espace-direction) et son admin (/admin-cto, déjà
+// couvert par /admin).
+//
+// /scan (page d'atterrissage de l'analyse) est indexée depuis le 2026-09-28 ;
+// seuls les rapports /scan/<id> restent exclus.
+const PRIVATE_PATHS = ["/scan/", "/admin", "/espace$", "/espace/", "/espace-direction"];
 
 // Pages de test internes, historiquement exclues des seuls moteurs de recherche.
 const TEST_PATHS = ["/demo/metadata-test", "/en/demo/metadata-test"];

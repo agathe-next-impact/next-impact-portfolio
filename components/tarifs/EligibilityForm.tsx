@@ -6,9 +6,15 @@ import { useLocale } from "next-intl";
 import { cn } from "@/lib/utils";
 import { MeterBar } from "@/components/visuals/charts";
 import type { Locale } from "@/i18n/routing";
-import { trajectoirePriceHT } from "@/lib/trajectoires";
+import {
+  TRAJECTOIRES,
+  trajectoirePriceHT,
+  variantePriceHT,
+  type TrajectoireSlug,
+  type VarianteSlug,
+} from "@/lib/trajectoires";
+import { CTA_CHAUD } from "@/lib/visio-conseil";
 
-const CALENDAR_LINK = "https://calendar.app.google/RwZqaabSR5aDMnk46";
 
 type ProjectKey =
   | "vitrine"
@@ -118,86 +124,121 @@ type Result = {
   highlight: string;
 };
 
-const RESULTS: Record<"mobileApp" | "webApp" | "headless" | "wpClassic", Record<Locale, Result>> = {
+// Chaque résultat désigne l'une des trois prestations du catalogue (charte
+// v1.6, ADR-014) : nom, technique et plancher lus dans lib/trajectoires.ts.
+// Le besoin mobile n'est pas une quatrième offre : c'est une Évolution (web app
+// installable, PWA), au même prix. La Refonte a deux variantes à égalité
+// (ADR-031) : le résultat désigne celle qui répond au besoin, avec son prix.
+type ResultKey = "mobileApp" | "webApp" | "headless" | "surMesure" | "wpClassic";
+
+const RESULT_TRAJECTOIRE: Record<ResultKey, TrajectoireSlug> = {
+  wpClassic: "forfait-classique",
+  surMesure: "forfait-headless",
+  headless: "forfait-headless",
+  webApp: "forfait-webapp",
+  mobileApp: "forfait-webapp",
+};
+
+/** Variante de la Refonte que désigne le résultat. */
+const RESULT_VARIANTE: Partial<Record<ResultKey, VarianteSlug>> = {
+  surMesure: "sur-mesure",
+  headless: "headless",
+};
+
+const RESULT_TEXT: Record<ResultKey, Record<Locale, { technique?: string; message: string; highlight: string }>> = {
   mobileApp: {
     fr: {
-      title: "Application mobile (Voie D)",
-      amount: trajectoirePriceHT("forfait-webapp", "fr"),
+      technique: "Web app installable (PWA)",
       message:
-        "Votre projet appelle une application mobile PWA : Next.js + service worker, installable sur smartphone sans passer par les stores, fonctionnement hors-ligne et géolocalisation native si besoin.",
-      highlight:
-        "Une vraie app mobile, sans contrainte de store ni dépendance permanente à une connexion.",
+        "Votre projet appelle une web app installable sur smartphone (PWA), construite avec Next.js : sans passer par les stores, utilisable hors connexion, géolocalisation si besoin.",
+      highlight: "Une application mobile, sans contrainte de store ni connexion permanente.",
     },
     en: {
-      title: "Mobile application (Path D)",
-      amount: trajectoirePriceHT("forfait-webapp", "en"),
+      technique: "Installable web app (PWA)",
       message:
-        "Your project calls for a mobile PWA: Next.js + service worker, installable on smartphones without going through app stores, with offline operation and native geolocation if needed.",
-      highlight:
-        "A true mobile app, without app-store constraints or permanent-connection dependency.",
+        "Your project calls for a web app installable on smartphones (PWA), built with Next.js: no app stores, usable offline, geolocation if needed.",
+      highlight: "A mobile application, without app-store constraints or a permanent connection.",
     },
   },
   webApp: {
     fr: {
-      title: "Plateforme sur-mesure (Voie C)",
-      amount: trajectoirePriceHT("forfait-webapp", "fr"),
       message:
-        "Votre projet appelle une web app sur-mesure : Next.js + base PostgreSQL serverless, comptes utilisateurs, logique métier propre et admin autonome conçu pour votre activité.",
-      highlight:
-        "Vous gardez la main sur vos contenus, vos données et vos utilisateurs — sans dépendance technique récurrente.",
+        "Votre projet appelle une web app sur mesure, construite avec Next.js : comptes utilisateurs, logique métier propre, administration autonome conçue pour votre activité.",
+      highlight: "Vous gardez la main sur vos contenus, vos données et vos utilisateurs, sans dépendance technique récurrente.",
     },
     en: {
-      title: "Custom platform (Path C)",
-      amount: trajectoirePriceHT("forfait-webapp", "en"),
       message:
-        "Your project calls for a custom web app: Next.js + serverless PostgreSQL database, user accounts, dedicated business logic and an autonomous admin built for your activity.",
-      highlight:
-        "You stay in control of your content, data and users — without ongoing technical dependency.",
+        "Your project calls for a bespoke web app, built with Next.js: user accounts, dedicated business logic, an autonomous admin built for your activity.",
+      highlight: "You stay in control of your content, data and users, without ongoing technical dependency.",
     },
   },
   headless: {
     fr: {
-      title: "Headless — Site Headless (Voie B)",
-      amount: trajectoirePriceHT("forfait-headless", "fr"),
       message:
-        "Votre projet a tout intérêt à passer en WordPress Headless + Next.js : performance front maximale, hydratation partielle, Core Web Vitals au vert et SEO préservé.",
-      highlight:
-        "Le bon compromis entre performance et coût pour un site à fort enjeu SEO ou éditorial.",
+        "Votre site est reconstruit en WordPress headless : WordPress reste votre outil de publication, le site affiché est refait avec Next.js. Quand la vitesse, le design ou le trafic sont décisifs. Performance mesurée avant et après, référencement préservé.",
+      highlight: "L'autre variante de la Refonte, WordPress sur mesure, reste possible si le budget de suivi doit rester léger : on en parle avant le devis.",
     },
     en: {
-      title: "Headless — Headless site (Path B)",
-      amount: trajectoirePriceHT("forfait-headless", "en"),
       message:
-        "Your project will benefit from Headless WordPress + Next.js: maximum front-end performance, partial hydration, green Core Web Vitals and preserved SEO.",
-      highlight:
-        "The right trade-off between performance and cost for a site with strong SEO or editorial stakes.",
+        "Your site is rebuilt as headless WordPress: WordPress stays your publishing tool, the visible site is rebuilt with Next.js. For when speed, design or traffic are decisive. Performance measured before and after, search rankings preserved.",
+      highlight: "The other Redesign variant, custom WordPress, remains an option if the care budget must stay light: we discuss it before the quote.",
+    },
+  },
+  surMesure: {
+    fr: {
+      message:
+        "Votre site est reconstruit en WordPress sur mesure : un thème écrit pour votre site, léger, avec le strict nécessaire en extensions. Un seul outil à tenir, votre équipe publie toujours dans WordPress.",
+      highlight: "L'autre variante de la Refonte, WordPress headless, se discute si la vitesse ou le trafic deviennent décisifs.",
+    },
+    en: {
+      message:
+        "Your site is rebuilt as custom WordPress: a theme written for your site, lightweight, with only the plugins you need. One tool to maintain, your team still publishes in WordPress.",
+      highlight: "The other Redesign variant, headless WordPress, is worth discussing if speed or traffic become decisive.",
     },
   },
   wpClassic: {
     fr: {
-      title: "Classique — WordPress (Voie A)",
-      amount: trajectoirePriceHT("forfait-classique", "fr"),
       message:
-        "Un WordPress classique optimisé suffit largement à votre projet : thème custom moderne, sécurité durcie, mise en ligne rapide. Coût maîtrisé, autonomie totale via l'admin WordPress.",
-      highlight: "Vous gardez l'admin que vous connaissez, je modernise tout le reste.",
+        "Votre site WordPress actuel est gardé et remis à niveau, sans reconstruction : vitesse, ménage des extensions, sécurité, hébergement. Même thème, mêmes habitudes de publication.",
+      highlight: "Pas encore de site, ou un thème qui bloque tout ? Alors c'est une Refonte, en WordPress sur mesure.",
     },
     en: {
-      title: "Classic — WordPress (Path A)",
-      amount: trajectoirePriceHT("forfait-classique", "en"),
       message:
-        "An optimized classic WordPress is enough for your project: modern custom theme, hardened security, quick to ship. Controlled cost, full autonomy via the WordPress admin.",
-      highlight: "You keep the admin you know, I modernize everything else.",
+        "Your current WordPress site is kept and brought up to standard, no rebuild: speed, plugin clean-up, security, hosting. Same theme, same publishing habits.",
+      highlight: "No site yet, or a theme that blocks everything? Then it is a Redesign, as custom WordPress.",
     },
   },
 };
 
-// Indice de complexité (présentation seule) : positionne la voie recommandée
-// sur l'échelle A→D, matérialisé par la MeterBar du bloc résultat.
-const PATH_METER: Record<"mobileApp" | "webApp" | "headless" | "wpClassic", { value: number; fr: string; en: string }> = {
-  wpClassic: { value: 30, fr: "Voie A · périmètre maîtrisé", en: "Path A · contained scope" },
-  headless: { value: 60, fr: "Voie B · performance & SEO", en: "Path B · performance & SEO" },
-  webApp: { value: 85, fr: "Voie C · sur-mesure", en: "Path C · fully bespoke" },
-  mobileApp: { value: 100, fr: "Voie D · app mobile", en: "Path D · mobile app" },
+function buildResult(key: ResultKey, locale: Locale): Result {
+  const trajectoire = TRAJECTOIRES[RESULT_TRAJECTOIRE[key]];
+  const text = RESULT_TEXT[key][locale] ?? RESULT_TEXT[key].fr;
+  const varianteSlug = RESULT_VARIANTE[key];
+  const variante = varianteSlug ? trajectoire.variantes?.find((v) => v.slug === varianteSlug) : undefined;
+  return {
+    title: `${trajectoire.name[locale]} : ${text.technique ?? variante?.technique[locale] ?? trajectoire.technique[locale]}`,
+    amount: variante ? variantePriceHT(variante, locale) : trajectoirePriceHT(trajectoire.slug, locale),
+    message: text.message,
+    highlight: text.highlight,
+  };
+}
+
+const RESULTS: Record<ResultKey, Record<Locale, Result>> = {
+  mobileApp: { fr: buildResult("mobileApp", "fr"), en: buildResult("mobileApp", "en") },
+  webApp: { fr: buildResult("webApp", "fr"), en: buildResult("webApp", "en") },
+  headless: { fr: buildResult("headless", "fr"), en: buildResult("headless", "en") },
+  surMesure: { fr: buildResult("surMesure", "fr"), en: buildResult("surMesure", "en") },
+  wpClassic: { fr: buildResult("wpClassic", "fr"), en: buildResult("wpClassic", "en") },
+};
+
+// Indice de complexité (présentation seule) : positionne la prestation
+// recommandée, matérialisé par la MeterBar du bloc résultat.
+const PATH_METER: Record<ResultKey, { value: number; fr: string; en: string }> = {
+  wpClassic: { value: 30, fr: "Optimisation · périmètre maîtrisé", en: "Optimization · contained scope" },
+  surMesure: { value: 50, fr: "Refonte · WordPress sur mesure", en: "Redesign · custom WordPress" },
+  headless: { value: 65, fr: "Refonte · WordPress headless", en: "Redesign · headless WordPress" },
+  webApp: { value: 85, fr: "Évolution · sur mesure", en: "Evolution · fully bespoke" },
+  mobileApp: { value: 100, fr: "Évolution · usage mobile", en: "Evolution · mobile use" },
 };
 
 const fieldClass =
@@ -262,20 +303,25 @@ export default function EligibilityForm() {
       return;
     }
 
-    // Voie B — Site Headless WordPress + Next.js : SEO/éditorial, trafic moyen, API
+    // Voie B1, Refonte en WordPress headless : trafic, volume ou API décisifs
     if (
       projectType === "platform" ||
       traffic === "high" ||
       traffic === "medium" ||
-      needsCustomApi ||
-      projectType === "blog" ||
-      projectType === "ecommerce"
+      needsCustomApi
     ) {
       setResult(RESULTS.headless[locale] ?? RESULTS.headless.fr);
       return;
     }
 
-    // Voie A — Classique / WordPress : site vitrine, petit trafic, sans intégration
+    // Voie B2, Refonte en WordPress sur mesure : site éditorial ou boutique
+    // à reconstruire, sans enjeu de trafic
+    if (projectType === "blog" || projectType === "ecommerce") {
+      setResult(RESULTS.surMesure[locale] ?? RESULTS.surMesure.fr);
+      return;
+    }
+
+    // Voie A, Optimisation : site vitrine existant, petit trafic, sans intégration
     setResult(RESULTS.wpClassic[locale] ?? RESULTS.wpClassic.fr);
   };
 
@@ -287,14 +333,14 @@ export default function EligibilityForm() {
 
   const trafficBands: { key: TrafficBand; title: string; subtitle: string }[] = isEn
     ? [
-        { key: "low", title: "Less than 10k visits / month", subtitle: "Likely Classic" },
-        { key: "medium", title: "10k to 100k / month", subtitle: "Likely Headless" },
-        { key: "high", title: "More than 100k / month", subtitle: "Likely Web app" },
+        { key: "low", title: "Less than 10k visits / month", subtitle: "Likely Optimization" },
+        { key: "medium", title: "10k to 100k / month", subtitle: "Likely Redesign" },
+        { key: "high", title: "More than 100k / month", subtitle: "Likely Evolution" },
       ]
     : [
-        { key: "low", title: "Moins de 10k visites / mois", subtitle: "Plutôt Classique" },
-        { key: "medium", title: "10k à 100k / mois", subtitle: "Plutôt Headless" },
-        { key: "high", title: "Plus de 100k / mois", subtitle: "Plutôt Web app" },
+        { key: "low", title: "Moins de 10k visites / mois", subtitle: "Plutôt Optimisation" },
+        { key: "medium", title: "10k à 100k / mois", subtitle: "Plutôt Refonte" },
+        { key: "high", title: "Plus de 100k / mois", subtitle: "Plutôt Évolution" },
       ];
 
   // Classe d'une cellule sélectionnable (radio / checkbox) : liseré accent quand active.
@@ -314,8 +360,8 @@ export default function EligibilityForm() {
           <p className={labelClass}>{isEn ? "Project diagnostic" : "Diagnostic projet"}</p>
           <p className="mt-2 font-inter-tight text-base leading-relaxed text-mid-gray">
             {isEn
-              ? "Identify in 2 minutes the right path for your project: classic WordPress site, Headless WordPress + Next.js site, custom web app or mobile application."
-              : "Identifiez en 2 minutes la voie adaptée à votre projet : site WordPress classique, site Headless WordPress + Next.js, web app sur-mesure ou application mobile."}
+              ? "Identify in 2 minutes the right path for your project: your current WordPress optimized, a Redesign as custom or headless WordPress, a custom web app or a mobile application."
+              : "Identifiez en 2 minutes la voie adaptée à votre projet : votre WordPress actuel optimisé, une Refonte en WordPress sur mesure ou headless, une web app sur mesure ou une application mobile."}
           </p>
         </div>
 
@@ -560,7 +606,7 @@ export default function EligibilityForm() {
               type="submit"
               className="inline-flex items-center gap-2 border border-accent-secondary bg-accent-secondary px-6 py-3 font-mono text-2xs uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85 [&_svg]:transition-transform hover:[&_svg]:translate-x-0.5"
             >
-              {isEn ? "Show my path" : "Voir ma voie"}
+              {isEn ? "Show my service" : "Voir ma prestation"}
               <ArrowRight size={14} />
             </button>
             <div className="flex items-center gap-1.5 font-inter-tight text-xs text-mid-gray">
@@ -580,7 +626,7 @@ export default function EligibilityForm() {
             <div className="mb-3 flex items-center gap-2">
               <CheckCircle2 size={16} className="text-accent-secondary" />
               <p className="font-mono text-2xs uppercase tracking-[0.1em] text-accent-secondary">
-                {isEn ? "Recommended path" : "Voie recommandée"}
+                {isEn ? "Recommended service" : "Prestation recommandée"}
               </p>
             </div>
             <h4 className="mb-3 font-sans text-xl font-light tracking-tight text-foreground md:text-2xl">
@@ -620,13 +666,13 @@ export default function EligibilityForm() {
               </p>
               <div className="flex flex-wrap items-center gap-3">
                 <a
-                  href="https://calendar.app.google/Cw7TGQBzeZ1szKU86"
+                  href={CTA_CHAUD.href}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 border border-accent-secondary bg-accent-secondary px-[18px] py-2.5 font-mono text-2xs uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85"
                 >
                   <Video size={14} />
-                  {isEn ? "Book a 15-min discovery call" : "Planifier un appel découverte (15 min)"}
+                  {CTA_CHAUD.label[isEn ? "en" : "fr"]}
                 </a>
                 <a
                   href="mailto:agathe@next-impact.digital"

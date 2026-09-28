@@ -63,7 +63,7 @@ export default async function OutilsPage({
           { name: "Repair or rebuild?", url: "/outils/reparer-ou-refaire", description: "A health score and a clear decision signal for your site." },
           { name: "AI prototype: throwaway or maintainable?", url: "/outils/prototype-ia", description: "9 checks to know whether your AI prototype can go to production." },
           { name: "No-code, SaaS or custom?", url: "/outils/nocode-saas-surmesure", description: "Build, buy or no-code: the right family for your business tool." },
-          { name: "Project diagnostic", url: "/solutions-web/eligibilite", description: "Identify the right path: classic WordPress, Headless, web app or mobile." },
+          { name: "Project diagnostic", url: "/solutions-web/eligibilite", description: "In 2 minutes, identify the right path: your current WordPress optimized, a Redesign as custom or headless WordPress, a web app or a mobile app." },
           { name: "PWA opportunity diagnostic", url: "/outils/audit-pwa", description: "Should you build an installable PWA? 9 scoping questions." },
           { name: "Project specifications generator", url: "/cahier-des-charges", description: "Build your complete, personalized specifications document." },
         ]
@@ -75,7 +75,7 @@ export default async function OutilsPage({
           { name: "Réparer ou refaire ?", url: "/outils/reparer-ou-refaire", description: "Un score de santé et un signal de décision clair pour votre site." },
           { name: "Prototype IA : jetable ou maintenable ?", url: "/outils/prototype-ia", description: "9 vérifications pour savoir si votre prototype IA peut passer en production." },
           { name: "No-code, SaaS ou sur-mesure ?", url: "/outils/nocode-saas-surmesure", description: "Construire, acheter ou no-code : la bonne famille pour votre outil métier." },
-          { name: "Diagnostic de projet", url: "/solutions-web/eligibilite", description: "Identifiez la voie adaptée : WordPress classique, Headless, web app ou mobile." },
+          { name: "Diagnostic de projet", url: "/solutions-web/eligibilite", description: "Identifiez en 2 minutes la voie adaptée : votre WordPress actuel optimisé, une Refonte en WordPress sur mesure ou headless, une web app ou une app mobile." },
           { name: "Diagnostic d'opportunité PWA", url: "/outils/audit-pwa", description: "Faut-il créer une PWA installable ? 9 questions de cadrage." },
           { name: "Générateur de cahier des charges", url: "/cahier-des-charges", description: "Créez votre cahier des charges complet et personnalisé." },
         ]

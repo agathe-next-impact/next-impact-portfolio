@@ -111,10 +111,10 @@ prouve, elle ne vend pas — c'est sa crédibilité qui la rend citable.
 |---|---|---|
 | `choisir` | Lancer le Sélecteur techno | `/outils/selecteur-techno` |
 | `ia-et-code` | Prototype IA : jetable ou maintenable ? | `/outils/prototype-ia` |
-| `reparer` | Auditer mon site (gratuit, sur rendez-vous) | `/audit-site-web` |
+| `reparer` | Auditer mon site (gratuit, sur rendez-vous) | `/scan` |
 | `avant-signer` | Décrypter mon devis + échange de 15 minutes (gratuit) | `/outils/decrypteur-devis` puis `/conseil` |
 | `outils-metier` | No-code, SaaS ou sur-mesure ? | `/outils/nocode-saas-surmesure` |
-| `presence` | Diagnostic Web & IA (gratuit, sur rendez-vous) | `/audit-site-web` |
+| `presence` | Diagnostic Web & IA (gratuit, sur rendez-vous) | `/scan` |
 | `etre-trouve` | Visible dans les moteurs IA ? | `/outils/visibilite-ia` |
 
 `avant-signer` est la **seule** rubrique autorisée à pousser l'offre payante (audit + roadmap, 650 € HT, après l'échange gratuit de 15 minutes) :

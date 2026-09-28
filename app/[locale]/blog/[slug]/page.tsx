@@ -2,7 +2,7 @@ import { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { compileMDX } from "next-mdx-remote/rsc"
 import remarkGfm from "remark-gfm"
-import { getBlogPost, getBlogPosts } from "@/lib/blog"
+import { getBlogPost, getBlogPosts, hasEnglishBlogPost } from "@/lib/blog"
 import { BlogLayout } from "@/components/blog/BlogLayout"
 import { ArticleCallout } from "@/components/articles/ArticleCallout"
 import { ArticleJsonLd, BreadcrumbJsonLd } from "@/components/json-ld"
@@ -70,7 +70,7 @@ export async function generateMetadata({
     return generatePageMetadata({
       // Pas de suffixe de marque : le template `%s | Next Impact` du layout
       // l'ajoute déjà (sinon la marque apparaît deux fois dans le <title>).
-      title: post.title,
+      title: post.seoTitle ?? post.title,
       description: post.excerpt || post.title,
       path: `/blog/${slug}`,
       type: "article",
@@ -78,6 +78,11 @@ export async function generateMetadata({
       authors: post.author ? [post.author] : undefined,
       keywords: post.tags,
       locale,
+      // Sans version anglaise, la page EN sert le texte français : on ne
+      // l'annonce pas en hreflang et on ne l'indexe pas (doublon de la page FR).
+      ...(hasEnglishBlogPost(slug)
+        ? {}
+        : { alternateLocales: ["fr" as const], noindex: locale === "en" }),
     })
   } catch {
     return {
@@ -125,7 +130,7 @@ export default async function BlogPostPage({
       <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       <ArticleJsonLd
         locale={locale}
-        inLanguage={locale === "en" ? "en-US" : "fr-FR"}
+        inLanguage={locale === "en" && !post.isFallback ? "en-US" : "fr-FR"}
         title={post.title}
         description={post.excerpt || post.title}
         image="/img/desktop-screen-next-impact.png"

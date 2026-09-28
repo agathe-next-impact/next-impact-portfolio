@@ -7,6 +7,8 @@ import { isRubriqueSlug, type RubriqueSlug } from "@/lib/documentation-rubriques
 export interface ArticleMeta {
   slug: string
   title: string
+  /** Titre de référencement (<title>), quand il diffère du h1. Front matter `seoTitle`. */
+  seoTitle?: string
   description: string
   category: string
   author: string
@@ -205,6 +207,16 @@ function checkContentContract(
   return false
 }
 
+/**
+ * Vrai quand l'article existe réellement en anglais (content/en/…). Sans
+ * version anglaise, /en/documentation/… sert le texte français (repli) : la
+ * page ne doit alors ni être indexée, ni être annoncée en hreflang, ni figurer
+ * au sitemap — sinon c'est un doublon exact de la page française.
+ */
+export function hasEnglishArticle(category: string, slug: string): boolean {
+  return !resolveArticlePath(category, slug, "en").isFallback
+}
+
 export function getArticleBySlug(category: string, slug: string, locale?: Locale): Article | null {
   const { filePath, isMdx, isFallback } = resolveArticlePath(category, slug, locale)
   // Garde : un slug inexistant doit produire un 404 propre, pas une erreur runtime.
@@ -226,6 +238,7 @@ export function getArticleBySlug(category: string, slug: string, locale?: Locale
   return {
     slug,
     title: data.title,
+    seoTitle: data.seoTitle,
     description: data.description,
     category: data.category,
     author: data.author,
@@ -272,6 +285,7 @@ function readArticlesIn(rootDir: string, fallback: boolean, locale?: Locale): Ma
         articlesMap.set(key, {
           slug,
           title: data.title,
+          seoTitle: data.seoTitle,
           description: data.description,
           category: data.category,
           author: data.author,
@@ -323,6 +337,7 @@ export function getArticlesByCategory(category: string, locale?: Locale): Articl
         map.set(slug, {
           slug,
           title: data.title,
+          seoTitle: data.seoTitle,
           description: data.description,
           category: data.category,
           author: data.author,

@@ -17,7 +17,7 @@ import {
   maintenancePriceLabel,
 } from "@/lib/maintenance-offer";
 import { BESOINS, situationsDuBesoin } from "@/lib/situations";
-import { TRAJECTOIRES, trajectoirePrice, type TrajectoireSlug } from "@/lib/trajectoires";
+import { TRAJECTOIRES, trajectoirePrice, variantePriceHT, type TrajectoireSlug } from "@/lib/trajectoires";
 import { CTA_CHAUD } from "@/lib/visio-conseil";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -108,18 +108,22 @@ export function TarifsMoments() {
   const prestation = (slug: TrajectoireSlug, detail: string): Row => ({
     offre: TRAJECTOIRES[slug].name.fr,
     detail,
-    prix: [`${trajectoirePrice(slug, "fr")} HT`],
+    // Une prestation à variantes (la Refonte, ADR-031) : une ligne par
+    // variante, à égalité ; sinon le plancher.
+    prix: TRAJECTOIRES[slug].variantes?.map(
+      (v) => `${v.technique.fr} · ${variantePriceHT(v, "fr").replace(/^./, (c) => c.toLowerCase())}`,
+    ) ?? [`${trajectoirePrice(slug, "fr")} HT`],
     href: TRAJECTOIRES[slug].href,
     recommandee: TRAJECTOIRES[slug].recommended,
   });
   const refaire: Row[] = [
     prestation(
       "forfait-classique",
-      "WordPress optimisé : thème sur mesure, extensions réduites, sécurité durcie.",
+      "WordPress optimisé : votre site actuel remis à niveau, sans reconstruction. Vitesse, extensions, sécurité, hébergement.",
     ),
     prestation(
       "forfait-headless",
-      "WordPress headless : vos rédacteurs publient dans WordPress, vos visiteurs voient un site rapide et moderne.",
+      "WordPress sur mesure ou headless : le site est reconstruit, vos rédacteurs publient toujours dans WordPress.",
     ),
     prestation("forfait-webapp", "Web app, plateforme ou application mobile, reliée à vos outils."),
   ];
@@ -230,16 +234,16 @@ export function TarifsMoments() {
           <div className="flex flex-wrap gap-3 lg:shrink-0">
             <a
               href="/scan"
-              className="inline-flex items-center justify-center gap-2 border border-accent-secondary bg-accent-secondary px-6 py-3 font-mono text-xs uppercase tracking-[0.14em] text-obsidian no-underline transition-opacity hover:opacity-90"
+              className="inline-flex items-center justify-center gap-2 border border-accent-secondary bg-accent-secondary px-6 py-3 font-mono text-sm font-semibold uppercase tracking-[0.14em] text-obsidian no-underline transition-opacity hover:opacity-90"
             >
-              Analysez votre site en 2 minutes
+              Analysez votre site
               <ArrowRight size={14} />
             </a>
             <a
               href={CTA_CHAUD.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 border border-dark-gray px-6 py-3 font-mono text-xs uppercase tracking-[0.14em] text-mid-gray no-underline transition-colors hover:text-foreground"
+              className="inline-flex items-center justify-center gap-2 border border-dark-gray px-6 py-3 font-mono text-sm font-semibold uppercase tracking-[0.14em] text-mid-gray no-underline transition-colors hover:text-foreground"
             >
               Discutons de votre projet
             </a>

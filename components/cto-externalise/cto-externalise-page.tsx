@@ -375,7 +375,7 @@ export default function CtoExternalisePage() {
               {isEn ? "Set up a retainer" : "Cadrer un accompagnement"}
               <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
             </Link>
-            <Link href="/audit-site-web" className={HERO_BTN_SECONDARY}>
+            <Link href="/scan" className={HERO_BTN_SECONDARY}>
               {isEn ? "Book my free audit" : "Réserver mon audit gratuit"}
             </Link>
           </div>

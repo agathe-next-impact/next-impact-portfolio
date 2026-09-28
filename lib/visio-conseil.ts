@@ -38,7 +38,7 @@ export const CTA_CHAUD = {
  */
 export const CTA_ECHANGE = {
   href: ECHANGE_URL,
-  label: { fr: "Échange gratuit de 15 min", en: "Free 15-min call" },
+  label: { fr: "Échange gratuit", en: "Free call" },
 } as const;
 
 /**

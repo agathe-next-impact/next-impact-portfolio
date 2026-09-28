@@ -1,4 +1,5 @@
 import type {
+  AuditPayload,
   CartographiePayload,
   Deliverable,
   PrestationPayload,
@@ -111,10 +112,21 @@ function phaseByDate(date: Date | null, today: number): Phase {
  * des faits accomplis, donc du passé. Une opportunité ouverte n'est PAS une
  * mission — elle attend un arbitrage (voir `actionsFor`) ; écartée, elle n'a
  * jamais été une mission.
+ *
+ * Une prestation qu'un audit publié déclare livrer (relation « Prestation » de
+ * la base Audits) s'efface derrière lui : c'est la même mission, vue une fois
+ * comme commande et une fois comme livrable. La commande reste lisible sur
+ * l'écran Contrats, avec son prix et ses règlements.
  */
 export function missionsOf(items: Deliverable[], now: Date = new Date()): Mission[] {
   const today = startOfDay(now).getTime();
   const missions: Mission[] = [];
+  const livreesParUnAudit = new Set(
+    items
+      .filter((item) => item.kind === "audit")
+      .map((item) => (item.payload as AuditPayload).prestation)
+      .filter((id): id is string => typeof id === "string"),
+  );
 
   for (const item of items) {
     const base = { item, title: item.title, date: item.occurredAt, start: null, progress: null };
@@ -126,6 +138,7 @@ export function missionsOf(items: Deliverable[], now: Date = new Date()): Missio
       const phase = (payload.statut && ROADMAP_PHASE[payload.statut]) || phaseByDate(item.occurredAt, today);
       missions.push({ ...base, kind: "chantier", phase, status: payload.statut ?? "Sans statut", overdue: false });
     } else if (item.kind === "prestation") {
+      if (livreesParUnAudit.has(item.notionPageId)) continue;
       const payload = item.payload as PrestationPayload;
       const phase = (payload.statut && PRESTATION_PHASE[payload.statut]) || phaseByDate(item.occurredAt, today);
       missions.push({

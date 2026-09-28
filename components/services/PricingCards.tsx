@@ -6,7 +6,13 @@ import type { Locale } from "@/i18n/routing";
 import { BlueprintSection, SectionHeading } from "@/components/aspect/section";
 import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
 import { cn } from "@/lib/utils";
-import { TRAJECTOIRES, trajectoirePriceHT } from "@/lib/trajectoires";
+import {
+  TRAJECTOIRES,
+  trajectoirePriceHT,
+  variantePriceHT,
+  type Lang,
+  type TrajectoireSlug,
+} from "@/lib/trajectoires";
 
 export type Tier = {
   slug: string;
@@ -33,7 +39,28 @@ export type Tier = {
   /** Lien hors de app/[locale]/ (ex. /scan) : balise <a>, même onglet. */
   ctaPlain?: boolean;
   highlight?: boolean;
+  /** Variantes à égalité (la Refonte : sur mesure ou headless, ADR-031). */
+  variantes?: TierVariante[];
 };
+
+export type TierVariante = {
+  slug: string;
+  technique: string;
+  enClair: string;
+  quand: string;
+  price: string;
+};
+
+/** Les variantes d'une prestation, lues dans lib/trajectoires.ts. */
+function variantesDe(slug: TrajectoireSlug, l: Lang): TierVariante[] {
+  return (TRAJECTOIRES[slug].variantes ?? []).map((v) => ({
+    slug: v.slug,
+    technique: v.technique[l],
+    enClair: v.enClair[l],
+    quand: v.quand[l],
+    price: variantePriceHT(v, l),
+  }));
+}
 
 // Source unique des trois trajectoires : la section d'introduction (aperçu),
 // les sections détaillées par offre (OfferSections), la home et /tarifs en
@@ -57,39 +84,39 @@ export function getTiers(isEn: boolean): Tier[] {
       technique: TRAJECTOIRES["forfait-classique"].technique[l],
       enClair: TRAJECTOIRES["forfait-classique"].enClair[l],
       tech: isEn
-        ? "optimized WordPress · bespoke theme"
-        : "WordPress optimisé · thème sur-mesure",
+        ? "optimized WordPress · your current site, brought up to standard"
+        : "WordPress optimisé · votre site actuel, remis à niveau",
       price: trajectoirePriceHT("forfait-classique", l),
-      priceTagline: isEn ? "Quick to ship, controlled cost" : "Mise en ligne rapide, coût maîtrisé",
+      priceTagline: isEn ? "No rebuild, same theme, controlled cost" : "Sans reconstruction, même thème, coût maîtrisé",
       forProjectLabel: isEn ? "When?" : "Pour quand ?",
       forProject: isEn
-        ? "The problem is the theme and the plugin pile-up, not WordPress. Brochure or institutional site, redesign of an aging WordPress."
-        : "Le problème, c'est le thème et l'empilement de plugins, pas WordPress. Site vitrine ou institutionnel, refonte d'un WordPress vieillissant.",
+        ? "The site still does the job, but it has become slow, cluttered or fragile. The design suits you; you do not need a new site, you need a healthy one."
+        : "Le site fait encore le travail, mais il est devenu lent, encombré ou fragile. Son design vous convient : il ne vous faut pas un nouveau site, il vous faut un site sain.",
       solutionLabel: isEn ? "The solution" : "La solution",
       solution: isEn
-        ? "I start from your existing WordPress, replace the theme and the plugin pile-up with a lightweight bespoke theme, and harden security. You keep your editing habits; the site becomes fast and clean again — without changing tools."
-        : "Je repars de votre WordPress, je remplace le thème et l'empilement de plugins par un thème sur-mesure léger, et je durcis la sécurité. Vous gardez vos habitudes d'édition ; le site redevient rapide et net — sans changer d'outil.",
+        ? "I keep your existing WordPress and its theme, and bring it up to standard: speed, clean-up of redundant plugins, security, hosting. Nothing is rebuilt; your editing habits stay the same, and the site becomes fast and sound again."
+        : "Je garde votre WordPress existant et son thème, et je le remets à niveau : vitesse, ménage des extensions redondantes, sécurité, hébergement. Rien n'est reconstruit ; vos habitudes d'édition restent les mêmes, et le site redevient rapide et sain.",
       stackLabel: isEn ? "Technical stack" : "Stack technique",
       stackHtml: isEn
-        ? <>Monolithic WordPress with <em className="text-foreground not-italic">a modern custom theme</em>, optimized build, hardened security.</>
-        : <>WordPress monolithique avec <em className="text-foreground not-italic">thème custom moderne</em>, build optimisé, sécurité durcie.</>,
+        ? <>Your current WordPress, <em className="text-foreground not-italic">same theme</em>: performance tuning, caching, plugin audit, hardened security, hosting checked or moved.</>
+        : <>Votre WordPress actuel, <em className="text-foreground not-italic">même thème</em> : réglages de performance, cache, audit des extensions, sécurité durcie, hébergement vérifié ou changé.</>,
       includedLabel: isEn ? "What's included" : "Ce qui est inclus",
       included: isEn
         ? [
             { text: "First technical and strategic watch analysis" },
-            { text: "Modern, responsive design" },
-            { text: "5 key pages" },
-            { text: "WordPress admin training" },
-            { text: "Hardened security" },
+            { text: "Speed measured before and after" },
+            { text: "Redundant plugins removed" },
+            { text: "Hardened security and updates" },
+            { text: "Hosting checked or moved" },
           ]
         : [
             { text: "Première analyse de veille technique et stratégique" },
-            { text: "Design moderne et responsive" },
-            { text: "5 pages clés" },
-            { text: "Formation à l'admin WordPress" },
-            { text: "Sécurité durcie" },
+            { text: "Vitesse mesurée avant et après" },
+            { text: "Extensions redondantes retirées" },
+            { text: "Sécurité durcie, mises à jour faites" },
+            { text: "Hébergement vérifié ou changé" },
           ],
-      ctaLabel: isEn ? "Analyze your site in 2 minutes" : "Analysez votre site en 2 minutes",
+      ctaLabel: isEn ? "Analyze your site" : "Analysez votre site",
       // Froid : l'analyse du site, pas le contact direct.
       ctaHref: "/scan",
       ctaPlain: true,
@@ -100,22 +127,23 @@ export function getTiers(isEn: boolean): Tier[] {
       technique: TRAJECTOIRES["forfait-headless"].technique[l],
       enClair: TRAJECTOIRES["forfait-headless"].enClair[l],
       tech: isEn
-        ? "headless WordPress · back office kept, modern front end"
-        : "WordPress headless · back-office conservé, front moderne",
+        ? "custom or headless WordPress · your team still publishes in WordPress"
+        : "WordPress sur mesure ou headless · votre équipe publie toujours dans WordPress",
       price: trajectoirePriceHT("forfait-headless", l),
-      priceTagline: isEn ? "Front-end performance, optimized conversion" : "Performance front, conversion optimisée",
+      priceTagline: isEn ? "Site rebuilt, two variants chosen by situation" : "Site reconstruit, deux variantes selon la situation",
       forProjectLabel: isEn ? "When?" : "Pour quand ?",
       forProject: isEn
-        ? "The site is slow and the editorial team is settled in. Your editors keep publishing in WordPress; your visitors see a fast, modern site."
-        : "Le site est lent, l'équipe éditoriale est installée. Vos rédacteurs continuent de publier dans WordPress ; vos visiteurs voient un site rapide et moderne.",
+        ? "The site is slow or dated, and your team publishes in WordPress. Tuning is no longer enough: the site has to be rebuilt, without changing the publishing tool."
+        : "Le site est lent ou daté, et votre équipe publie dans WordPress. Les réglages ne suffisent plus : il faut reconstruire le site, sans changer d'outil de publication.",
       solutionLabel: isEn ? "The solution" : "La solution",
       solution: isEn
-        ? "I keep your WordPress back office for your editors and plug a Next.js front end on top of it. Publishing doesn't change, but the visible site becomes as fast as a modern app, with SEO reworked from the ground up."
-        : "Je conserve votre back-office WordPress pour vos rédacteurs et je branche dessus un front Next.js. La publication ne change pas, mais le site affiché devient aussi rapide qu'une app moderne, avec un SEO repris de fond en comble.",
+        ? "I rebuild the site and your editors keep publishing in WordPress. Two variants, on an equal footing: custom WordPress, a theme written for your site with only the plugins you need, one tool to maintain; or headless WordPress, WordPress as the back office and the visible site rebuilt with Next.js. We choose together, according to your situation."
+        : "Je reconstruis le site et vos rédacteurs publient toujours dans WordPress. Deux variantes, à égalité : WordPress sur mesure, un thème écrit pour votre site avec le strict nécessaire en extensions, un seul outil à tenir ; ou WordPress headless, WordPress en back-office et le site affiché reconstruit avec Next.js. Le choix se fait ensemble, selon votre situation.",
       stackLabel: isEn ? "Technical stack" : "Stack technique",
       stackHtml: isEn
-        ? <>Headless WordPress as backend + <em className="text-foreground not-italic">Next.js</em> as frontend (SSG, ISR, partial hydration).</>
-        : <>WordPress headless en backend + <em className="text-foreground not-italic">Next.js</em> en frontend (SSG, ISR, hydratation partielle).</>,
+        ? <>Custom WordPress: <em className="text-foreground not-italic">a theme written for the site</em>, minimal plugins. Or headless WordPress as backend + <em className="text-foreground not-italic">Next.js</em> as frontend (SSG, ISR).</>
+        : <>WordPress sur mesure : <em className="text-foreground not-italic">thème écrit pour le site</em>, extensions réduites. Ou WordPress headless en backend + <em className="text-foreground not-italic">Next.js</em> en frontend (SSG, ISR).</>,
+      variantes: variantesDe("forfait-headless", l),
       includedLabel: isEn ? "What's included" : "Ce qui est inclus",
       included: isEn
         ? [
@@ -132,7 +160,7 @@ export function getTiers(isEn: boolean): Tier[] {
             { text: "Migration de données" },
             { text: "Accompagnement stratégique" },
           ],
-      ctaLabel: isEn ? "Analyze your site in 2 minutes" : "Analysez votre site en 2 minutes",
+      ctaLabel: isEn ? "Analyze your site" : "Analysez votre site",
       // Préconisation > popularité : c'est un conseil, pas un effet de foule.
       badge: isEn ? "Recommended" : "Recommandée",
       highlight: true,
@@ -263,6 +291,18 @@ export function PricingCards() {
                   {tier.priceTagline}
                 </div>
               </div>
+
+              {/* Variantes à égalité (Refonte) : même poids visuel, pas d'ordre de préférence. */}
+              {tier.variantes && tier.variantes.length > 0 && (
+                <ul className="mt-4 flex flex-col gap-1.5">
+                  {tier.variantes.map((v) => (
+                    <li key={v.slug} className="flex flex-wrap items-baseline justify-between gap-x-3 font-inter-tight text-base text-foreground/85">
+                      <span>{v.technique}</span>
+                      <span className="font-mono text-2xs tracking-[0.08em] text-mid-gray">{v.price}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
 
               {/* Pour quand + Ce qui est inclus */}
               <div className="mt-6 flex flex-1 flex-col">

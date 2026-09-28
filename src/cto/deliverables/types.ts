@@ -190,6 +190,11 @@ export interface AuditPayload {
    * qui ne sait pas descendre dans des blocs.
    */
   fichiers: string[];
+  /**
+   * La page Notion de la prestation que cet audit livre, si elle est liée.
+   * Absente des audits publiés avant la relation, d'où le `?`.
+   */
+  prestation?: string;
 }
 
 /**

@@ -161,6 +161,106 @@ export function lireNombre(brut: string): number | null {
   return Number(net);
 }
 
+// ── Plan d'action chiffré ────────────────────────────────────────────────────
+
+/** Les heures ou les euros d'un groupe, ponctuels d'un côté, mensuels de l'autre. */
+export interface Somme {
+  ponctuel: number;
+  mensuel: number;
+}
+
+export interface GroupePlan {
+  nom: string;
+  /** Indices des lignes du tableau, triées par axe puis dans l'ordre d'écriture. */
+  lignes: number[];
+  heures: Somme | null;
+  cout: Somme | null;
+}
+
+export interface PlanAction {
+  colGroupe: number;
+  colAxe: number;
+  colHeures: number;
+  colFrequence: number;
+  colCout: number;
+  groupes: GroupePlan[];
+}
+
+/**
+ * Un plan d'action chiffré : une base inline dont chaque tâche est rattachée à
+ * une proposition (« Proposition », « Scénario ou volet », « Lot »…) et porte
+ * des heures ou un coût. Notion la montre groupée par proposition ; mise à plat,
+ * elle mêle les tâches de toutes les propositions. On la regroupe donc ici.
+ *
+ * Null si le tableau n'a pas de colonne de rattachement, pas de chiffre, ou un
+ * seul groupe : il reste alors un tableau ordinaire.
+ */
+export function lirePlanAction(entetes: string[], lignes: string[][]): PlanAction | null {
+  const t = entetes.map(sansAccents);
+  const colGroupe = t.findIndex((e, i) => i > 0 && /^(propositions?|scenarios?|volets?|lots?|phases?|offres?)\b/.test(e));
+  if (colGroupe < 0) return null;
+
+  const colHeures = t.findIndex((e) => /^(heures?|charge|volume|jours?)\b/.test(e));
+  const colCout = t.findIndex((e) => /cout|budget|prix|montant|€/.test(e));
+  if (colHeures < 0 && colCout < 0) return null;
+  const colFrequence = t.findIndex((e) => /^(frequence|recurrence|periodicite)\b/.test(e));
+  const colAxe = t.findIndex((e, i) => i > 0 && i !== colGroupe && /^(axes?|domaines?|categories?|themes?)\b/.test(e));
+
+  const ordre: string[] = [];
+  const parGroupe = new Map<string, number[]>();
+  lignes.forEach((ligne, index) => {
+    const nom = (ligne[colGroupe] ?? "").trim() || "Autres actions";
+    if (!parGroupe.has(nom)) {
+      parGroupe.set(nom, []);
+      ordre.push(nom);
+    }
+    parGroupe.get(nom)!.push(index);
+  });
+  if (ordre.length < 2) return null;
+
+  // « Proposition 1 », « Scénario 2 » dans l'ordre de leur numéro ; le reste
+  // (maintenance, options) ensuite, dans l'ordre où il apparaît.
+  const numero = (nom: string) => Number(nom.match(/^\D*?(\d+)/)?.[1] ?? Number.POSITIVE_INFINITY);
+  ordre.sort((a, b) => numero(a) - numero(b) || ordre.indexOf(a) - ordre.indexOf(b));
+
+  const mensuel = (index: number) => colFrequence >= 0 && estMensuel(lignes[index][colFrequence] ?? "");
+  const somme = (col: number, indices: number[]): Somme | null => {
+    if (col < 0) return null;
+    const s: Somme = { ponctuel: 0, mensuel: 0 };
+    let lu = false;
+    for (const index of indices) {
+      const n = lireNombre(lignes[index][col] ?? "");
+      if (n === null) continue;
+      lu = true;
+      s[mensuel(index) ? "mensuel" : "ponctuel"] += n;
+    }
+    return lu ? s : null;
+  };
+  const axe = (index: number) => (colAxe >= 0 ? sansAccents(lignes[index][colAxe] ?? "") : "");
+
+  return {
+    colGroupe,
+    colAxe,
+    colHeures,
+    colFrequence,
+    colCout,
+    groupes: ordre.map((nom) => {
+      const indices = parGroupe.get(nom)!;
+      return {
+        nom,
+        lignes: [...indices].sort((a, b) => axe(a).localeCompare(axe(b), "fr") || a - b),
+        heures: somme(colHeures, indices),
+        cout: somme(colCout, indices),
+      };
+    }),
+  };
+}
+
+/** Une ligne mensuelle du plan : la fréquence dit « Mensuel ». */
+export function estMensuel(frequence: string): boolean {
+  return /mensuel|par mois|\/\s*mois/.test(sansAccents(frequence));
+}
+
 // ── Domaine d'un point de synthèse ───────────────────────────────────────────
 
 export const DOMAINES = [

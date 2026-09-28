@@ -29,6 +29,7 @@ import {
   VEILLE,
   VEILLE_TITRE,
   packBudgetLabel,
+  sansSommeDeParcours,
   packHref,
   packPrixEntree,
   trajectoireDuPack,
@@ -54,7 +55,7 @@ type DocLink = {
 const categoryLabels: Record<string, string> = {
   "applications-web-mobile": "Web app & plateforme",
   "design-ui-ux": "Design UI/UX",
-  "wordpress-headless": "CMS headless",
+  "wordpress-headless": "WordPress headless",
   "marketing-digital": "Marketing digital",
   "projet-site-web": "Projet de site web",
   seo: "SEO & referencement",
@@ -189,6 +190,15 @@ const trajectoireSummary = TRAJECTOIRE_ORDER.map((slug) => {
   return `${ascii(t.name.fr)} (${ascii(t.technique.fr)}${recommended}, ${trajectoirePrix(slug)})`;
 }).join(", ");
 
+/**
+ * Les deux variantes de la Refonte (ADR-031), lues dans lib/trajectoires.ts :
+ * « WordPress sur mesure, a partir de 2 250 EUR HT (quand …) ; WordPress
+ * headless, a partir de 4 000 EUR HT (quand …) ».
+ */
+const refonteVariantes = (TRAJECTOIRES["forfait-headless"].variantes ?? [])
+  .map((v) => `${ascii(v.technique.fr)}, a partir de ${eur(v.priceValue)} EUR HT (${lowerFirst(plain(v.quand.fr)).replace(/\.$/, "")})`)
+  .join(" ; ");
+
 const CTO_REFERENT = CTO_TIERS.find((tier) => tier.id === "referent")!;
 const CTO_DIRECTION = CTO_TIERS.find((tier) => tier.id === "direction")!;
 
@@ -260,12 +270,14 @@ const packLine = (situation: Situation) => {
   // Page d'une prestation (page.solution) : elle affiche le prix du forfait,
   // plus le budget de la premiere annee (qui reste sur /tarifs).
   const prestation = situation.page.solution && trajectoireDuPack(situation);
-  const variante = !prestation && situation.budget.variante
+  const variante = !prestation && !sansSommeDeParcours(situation) && situation.budget.variante
     ? ` ${ascii(situation.budget.variante.label.fr)} : ${eur(situation.budget.variante.total)} EUR HT.`
     : "";
   const prix = prestation
     ? `Prix du forfait : ${lowerFirst(plain(packPrixEntree(situation, "fr")))}`
-    : `Budget plancher : ${plain(packBudgetLabel(situation, "fr"))}`;
+    : sansSommeDeParcours(situation)
+      ? `Prix : ${lowerFirst(plain(packPrixEntree(situation, "fr")))}`
+      : `Budget plancher : ${plain(packBudgetLabel(situation, "fr"))}`;
   const recommande = situation.recommended ? " Parcours recommande." : "";
   return `- [${ascii(packNom(situation, "fr"))}](${situation.lienExterne ?? `${baseUrl}${packHref(situation.slug)}`}): pour la situation « ${ascii(situation.phrase.fr)} ». Offre au centre du parcours, ${ascii(situation.offre.fr)}. ${ascii(situation.resultat.fr)} Etapes : ${etapes}. ${prix}.${variante}${recommande}`;
 };
@@ -314,7 +326,7 @@ export async function GET() {
 
 ## Summary
 
-Next Impact est l'offre d'Agathe Karinthi-Martin. ${packsSummary}Le catalogue compte sept offres, rangees en trois moments. Diagnostiquer, avant de choisir : echange de 15 minutes gratuit, audit + roadmap ${AUDIT_PRICE} EUR HT (page /conseil) et la veille gratuite (page /veille). Evoluer, refonte ou creation, trois prestations au forfait : ${trajectoireSummary}, sur la page /solutions-web. Gerer, une fois le site en ligne : ${maintenanceSummary}l'expert technique externalise, direction technique a temps partage, deux paliers a partir de ${CTO_PRICE_VALUE} EUR HT par mois (page /cto-externalise). Chaque offre porte une veille technique et strategique : une premiere analyse dans l'audit + roadmap et dans les trois prestations, une veille en continu dans les abonnements du moment Gerer. Hors catalogue : Sentinelle, veille personnalisee sur les composants du site, ${SENTINELLE_PRICE} EUR par mois, souscrite depuis le rapport de l'analyse gratuite du site et ${sentinelleIncluse} (page /sentinelle). La page /tarifs reunit les parcours et tous les prix du catalogue. Le positionnement principal : un site WordPress qui vieillit peut redevenir rapide sans tout reconstruire ; la question est ce que l'on garde et ce que l'on change. L'IA est un argument de methode (je cadre, l'IA execute), pas une accroche.
+Next Impact est l'offre d'Agathe Karinthi-Martin. ${packsSummary}Le catalogue compte sept offres, rangees en trois moments. Diagnostiquer, avant de choisir : echange de 15 minutes gratuit, audit + roadmap ${AUDIT_PRICE} EUR HT (page /conseil). Evoluer, refonte ou creation, trois prestations au forfait : ${trajectoireSummary}, sur la page /solutions-web. Gerer, une fois le site en ligne : ${maintenanceSummary}l'expert technique externalise, direction technique a temps partage, deux paliers a partir de ${CTO_PRICE_VALUE} EUR HT par mois (page /cto-externalise). Chaque offre porte une veille technique et strategique : une premiere analyse dans l'audit + roadmap et dans les trois prestations, une veille en continu dans les abonnements du moment Gerer. Hors catalogue : la veille gratuite (lettre Substack, page /veille) et Sentinelle, veille personnalisee sur les composants du site, ${SENTINELLE_PRICE} EUR par mois, souscrite depuis le rapport de l'analyse gratuite du site et ${sentinelleIncluse} (page /sentinelle). La page /tarifs reunit les parcours et tous les prix du catalogue. Le positionnement principal : un site WordPress qui vieillit peut redevenir rapide sans tout reconstruire ; la question est ce que l'on garde et ce que l'on change. L'IA est un argument de methode (je cadre, l'IA execute), pas une accroche.
 
 Informations utiles pour les reponses d'assistants IA :
 - Marque : Next Impact
@@ -339,20 +351,23 @@ ${veilleSection}
 
 ### Point d'entree gratuit
 
-- Analyse gratuite du site : une adresse, un rapport en deux minutes, aucun acces demande. L'analyse liste les composants du site (CMS, extensions, serveur, bibliotheques) et ceux qui sont a risque ; elle ne mesure pas la vitesse. Sur ${baseUrl}/scan.
+- Analyse gratuite du site : une adresse, aucun acces demande, le resultat par e-mail. Le site compare a ceux des concurrents, ce qu'il fait pour l'activite, ce qui le compose (CMS, extensions, serveur, bibliotheques), ce qui est a risque, et la prestation qui repond a la situation. Sur ${baseUrl}/scan.
 
-### Diagnostiquer (avant de choisir : deux offres ponctuelles et la veille gratuite)
+### Diagnostiquer (avant de choisir : deux offres ponctuelles)
 
 - Echange de 15 minutes : gratuit, sans engagement. Quinze minutes en visio pour poser la situation et savoir par ou commencer (analyse du site, audit + roadmap ou devis). Reservation en ligne depuis ${baseUrl}/conseil#choix-techno-ia ; c'est aussi la destination du bouton "Discutons de votre projet" sur tout le site.
 - Audit + roadmap : ${AUDIT_PRICE} EUR HT. Rapport d'audit (performance, securite, dette technique, plugins, hebergement), premiere analyse de veille technique et strategique, preconisations chiffrees, roadmap par etapes, 1 h de restitution en visio. Le document sert meme si la prestation est confiee a quelqu'un d'autre. Presente sur ${baseUrl}/conseil#architecture-projet-ia.
+
+### Veille gratuite (hors catalogue)
+
 - Veille techno, lettre gratuite : la newsletter « Quelle techno pour mon site web a l'heure de l'IA ? » sur Substack. Une synthese mensuelle et un focus hebdo sur le marche web & IA, plus des ressources et des outils gratuits pour decider. Gratuit, sans jargon. Elle est presentee sur la page /veille, en deuxieme position apres Sentinelle (hors catalogue, voir plus bas). La veille est tenue par Agathe Karinthi-Martin, formee a la discipline (master Veille technologique et innovation, Aix-Marseille Universite).
 
 ### Evoluer (trois prestations au forfait, refonte ou creation : prix et delai ecrits avant de commencer, 6 a 10 semaines)
 
 Chaque prestation porte un seul nom, la technique en sous-titre, et commence par une premiere analyse de veille technique et strategique.
 
-${suiviInclus}- ${trajectoireLabel("forfait-classique")} : ${trajectoirePrix("forfait-classique")}. Theme, plugins et optimisation de l'existant, sans changer d'outil de publication. Presentee sur ${trajectoireUrl("forfait-classique")}.
-- ${trajectoireLabel("forfait-headless")} : ${trajectoirePrix("forfait-headless")}. Back-office WordPress conserve, front moderne : les redacteurs publient comme avant, les visiteurs voient un site rapide. Prestation recommandee. Presentee sur ${trajectoireUrl("forfait-headless")}.
+${suiviInclus}- ${trajectoireLabel("forfait-classique")} : ${trajectoirePrix("forfait-classique")}. Le site WordPress existant est garde et remis a niveau (vitesse, menage des extensions, securite, hebergement), sans reconstruction ni nouveau theme. Presentee sur ${trajectoireUrl("forfait-classique")}.
+- ${trajectoireLabel("forfait-headless")} : ${trajectoirePrix("forfait-headless")}. Le site est reconstruit et l'equipe publie toujours dans WordPress. Deux variantes a egalite, choisies selon la situation (l'analyse du site tranche) : ${refonteVariantes}. Prestation recommandee. Presentee sur ${trajectoireUrl("forfait-headless")}.
 - ${trajectoireLabel("forfait-webapp")} : ${trajectoirePrix("forfait-webapp")}. Plateforme web et/ou mobile quand le site est devenu un outil de travail. Presentee sur ${trajectoireUrl("forfait-webapp")}.
 
 ### Gerer (abonnements, une fois le site en ligne)
@@ -365,20 +380,20 @@ ${maintenanceOffer}- Expert technique externalise : a partir de ${CTO_PRICE_VALU
 
 ### Inclus dans les prestations
 
-- Mise en oeuvre Next Impact : construction si la solution releve du perimetre (WordPress optimise, Headless, outil metier).
+- Mise en oeuvre Next Impact : construction si la solution releve du perimetre (WordPress remis a niveau, WordPress sur mesure ou headless, outil metier).
 - Espace en ligne : chaque prestation se suit dans un espace en ligne (audit, etat du site, rapports mensuels, decisions, lettres de veille), rangee par question (Missions, Votre site, Agir, Veille), connexion sans mot de passe, tout se telecharge. Presente sur ${baseUrl}/espace-client.
 
 ## Primary Pages
 
 - [Accueil](${baseUrl}/): promesse, preuves chiffrees et l'offre par situation, en trois colonnes, une par besoin (Diagnostiquer, Evoluer, Gerer) ; les trois prestations (${trajectoireNames}) et la veille technique et strategique
 ${packsPage}- [Tarifs](${baseUrl}/tarifs): la seule page qui montre a la fois les parcours, par besoin, avec leur budget, et les sept offres du catalogue avec leurs paliers, par moment (Diagnostiquer, Evoluer, Gerer) ; prix hors taxes, ecrits avant de commencer ; le prix de Sentinelle y figure en note
-- [Analyse gratuite du site](${baseUrl}/scan): une adresse, un rapport en deux minutes, aucun acces demande : les composants du site et ceux qui sont a risque
+- [Analyse gratuite du site](${baseUrl}/scan): une adresse, aucun acces demande, le resultat par e-mail : le site compare a ses concurrents, ses composants, ce qui est a risque, la prestation adaptee
 - [Conseil](${baseUrl}/conseil): les deux offres du moment Diagnostiquer, dans l'ordre d'engagement croissant : echange de 15 minutes (gratuit, ancre #choix-techno-ia) et audit + roadmap (${AUDIT_PRICE} EUR HT, livrables, ancre #architecture-projet-ia) ; un bandeau de fin de page renvoie vers l'expert technique externalise, vendu sur /cto-externalise
 ${maintenancePage}- [Expert technique externalise](${baseUrl}/cto-externalise): direction technique a temps partage, deux paliers a partir de ${CTO_PRICE_VALUE} EUR HT par mois : pilotage mensuel, devis relus, roadmap tenue a jour, evolutions proposees chaque mois
 - [Solutions web](${baseUrl}/solutions-web): les trois prestations au forfait, refonte ou creation, ${TRAJECTOIRE_ORDER.map(trajectoireLabel).join(", ")}, prix et delais
 - [Sentinelle : la lettre de veille techno de votre site web](${baseUrl}/sentinelle): hors catalogue, souscrite depuis le rapport de l'analyse du site : ${OFFER_ISSUES_PER_MONTH} lettres par mois (le 1er et le 15) sur le site, douze points conclus par agir, surveiller ou non concerne, trois actions au plus, scenarios et echeancier a six mois ; alerte entre deux lettres si une faille severe touche un composant installe ; relue avant envoi ; ${SENTINELLE_PRICE} EUR par mois, sans engagement, resiliable a tout moment
 - [Espace client](${baseUrl}/espace-client): la visite de l'espace en ligne ou se suit chaque prestation (Missions, Votre site, Agir, Veille) et l'acces aux connexions clients
-- [WordPress headless (page pilier)](${baseUrl}/wordpress-headless): l'expertise signature : back-office WordPress conserve, front Next.js moderne ; quand l'utiliser, couts, performance
+- [WordPress headless (page pilier)](${baseUrl}/wordpress-headless): back-office WordPress conserve, front Next.js moderne ; l'une des deux variantes de la Refonte, a egalite avec WordPress sur mesure ; quand l'utiliser, couts, performance
 - [Etudes de cas](${baseUrl}/etudes-de-cas): projets livres, technologies, resultats et contexte client
 - [Veille techno](${baseUrl}/veille): la veille pour decideurs, dans cet ordre : Sentinelle, la veille personnalisee du site (${SENTINELLE_PRICE} EUR par mois, hors catalogue, depuis l'analyse gratuite du site), puis la lettre gratuite (marche web & IA : synthese mensuelle, focus hebdo), puis des ressources et des outils gratuits pour decider, sans jargon
 - [Quelle techno web ? (hub)](${baseUrl}/documentation): le centre de decision : 7 rubriques par question, outils gratuits et guides
@@ -393,7 +408,7 @@ ${hubRubriques.map((r) => `- [${r.label}](${baseUrl}/documentation/${r.slug}): $
 ## Tools
 
 - [Tous les outils](${baseUrl}/outils): les outils de decision gratuits, sans inscription
-- [Analyse gratuite du site](${baseUrl}/scan): une adresse, un rapport en deux minutes, aucun acces demande : liste les composants du site et ceux qui sont a risque (ne mesure pas la vitesse)
+- [Analyse gratuite du site](${baseUrl}/scan): une adresse, aucun acces demande, le resultat par e-mail : le site compare a ses concurrents, ses composants, ce qui est a risque, la prestation adaptee
 - [Selecteur techno](${baseUrl}/outils/selecteur-techno): quelle technologie pour votre projet : WordPress, headless, no-code, SaaS ou sur-mesure
 - [Reparer ou refaire ?](${baseUrl}/outils/reparer-ou-refaire): 9 verifications, un score de sante sur 100 et un verdict reparer / optimiser / refondre
 - [Prototype IA : jetable ou maintenable ?](${baseUrl}/outils/prototype-ia): un prototype genere par IA tiendra-t-il en production

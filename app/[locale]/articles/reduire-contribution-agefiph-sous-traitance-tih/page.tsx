@@ -20,6 +20,11 @@ const PRESTATIONS = TRAJECTOIRE_ORDER.map((slug) => {
 const EXEMPLE_TH_MANQUANTS = 4;
 const EXEMPLE_CONTRIBUTION_PAR_TH = 4752;
 const EXEMPLE_REFONTE = TRAJECTOIRES["forfait-headless"];
+// La Refonte a deux variantes à égalité (ADR-031) : l'exemple prend celle du
+// plancher, dont le montant est celui de la prestation.
+const EXEMPLE_VARIANTE =
+  EXEMPLE_REFONTE.variantes?.find((v) => v.priceValue === EXEMPLE_REFONTE.priceValue)?.technique.fr ??
+  EXEMPLE_REFONTE.technique.fr;
 const EXEMPLE_MONTANT = EXEMPLE_REFONTE.priceValue;
 const EXEMPLE_DEDUCTION = Math.round(EXEMPLE_MONTANT * 0.3);
 const EXEMPLE_BRUTE = EXEMPLE_TH_MANQUANTS * EXEMPLE_CONTRIBUTION_PAR_TH;
@@ -33,7 +38,7 @@ export async function generateMetadata({
   const { locale } = await params;
   return generatePageMetadata({
     title:
-      "Comment réduire sa contribution AGEFIPH grâce à la sous-traitance TIH dans le numérique",
+      "Réduire sa contribution AGEFIPH par la sous-traitance TIH",
     description:
       "Guide complet pour les RH et DAF : réduisez votre contribution AGEFIPH en sous-traitant vos projets numériques à un prestataire TIH. Barème 2025, calcul et attestation.",
     path: "/articles/reduire-contribution-agefiph-sous-traitance-tih",
@@ -329,7 +334,7 @@ export default function ArticleReduireAgefiph() {
                   Prenons l&apos;exemple d&apos;une PME de 80 salariés qui
                   n&apos;emploie aucun travailleur handicapé et qui confie la
                   refonte de son site web à Next Impact (prestation{" "}
-                  {EXEMPLE_REFONTE.name.fr}, {EXEMPLE_REFONTE.technique.fr}) pour{" "}
+                  {EXEMPLE_REFONTE.name.fr}, en {EXEMPLE_VARIANTE}) pour{" "}
                   {eur(EXEMPLE_MONTANT)} HT.
                 </p>
 

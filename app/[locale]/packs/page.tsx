@@ -110,7 +110,7 @@ export default async function PacksPage({
               <ArrowRight size={14} />
             </a>
             <a href="/scan" className={HERO_BTN_SECONDARY}>
-              Analysez votre site en 2 minutes
+              Analysez votre site
             </a>
           </>
         }

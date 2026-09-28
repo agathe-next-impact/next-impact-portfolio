@@ -21,6 +21,8 @@ import {
   type SiteKind,
   type Trajectoire,
   type TrajectoireSlug,
+  type Variante,
+  type VarianteSlug,
 } from "@/lib/trajectoires";
 import { ECHANGE_NAME, ECHANGE_URL, OFFERS as CONSEIL_OFFERS } from "@/lib/visio-conseil";
 
@@ -539,6 +541,13 @@ const INCLUS_PRESTATION = [
 
 const fr = (value: number) => formatEuros(value, "fr");
 
+/** Une variante de la Refonte (sur mesure ou headless, ADR-031), lue dans lib/trajectoires.ts. */
+function varianteRefonte(slug: VarianteSlug): Variante {
+  const v = TRAJECTOIRES["forfait-headless"].variantes?.find((x) => x.slug === slug);
+  if (!v) throw new Error(`Variante de la Refonte introuvable : ${slug}`);
+  return v;
+}
+
 // ─── Les sept situations ─────────────────────────────────────────────────────
 
 export const SITUATIONS: Situation[] = [
@@ -762,49 +771,49 @@ export const SITUATIONS: Situation[] = [
     besoin: "refaire",
     nom: TRAJECTOIRES["forfait-classique"].name,
     phrase: {
-      fr: "Mon site est devenu ingérable : thème, extensions, mises à jour qui cassent",
-      en: "My site has become unmanageable: theme, plugins, updates that break",
+      fr: "Mon site est devenu ingérable : extensions empilées, mises à jour qui cassent",
+      en: "My site has become unmanageable: piled-up plugins, updates that break",
     },
     offre: TRAJECTOIRES["forfait-classique"].name,
     resultat: {
-      fr: "Un WordPress assaini et plus rapide, moins de mises à jour à surveiller.",
-      en: "A cleaned-up, faster WordPress, fewer updates to watch.",
+      fr: "Votre WordPress actuel, assaini et plus rapide, moins de mises à jour à surveiller.",
+      en: "Your current WordPress, cleaned up and faster, fewer updates to watch.",
     },
     steps: [
       STEP_ECHANGE,
       stepTrajectoire("forfait-classique", {
-        fr: "Thème sur mesure, extensions réduites, sécurité durcie. Vous gardez WordPress et vos habitudes de publication.",
-        en: "Bespoke theme, fewer plugins, hardened security. You keep WordPress and your publishing habits.",
+        fr: "Votre site actuel remis à niveau, sans reconstruction : vitesse, ménage des extensions, sécurité, hébergement. Vous gardez votre thème et vos habitudes de publication.",
+        en: "Your current site brought up to standard, no rebuild: speed, plugin clean-up, security, hosting. You keep your theme and your publishing habits.",
       }),
       stepSuivi("wordpress"),
     ],
     budget: budgetTrajectoire("forfait-classique", "echange"),
     page: {
       metaTitle: "Site WordPress ingérable : l'assainir sans changer d'outil",
-      metaDescription: `Thème vieillissant, extensions empilées, mises à jour qui cassent : un WordPress assaini à partir de ${fr(TRAJECTOIRES["forfait-classique"].priceValue)} HT, ${SUIVI_INCLUS_MOIS} mois de suivi inclus.`,
-      // Requête de SITUATION. La requête d'OFFRE (« refonte WordPress
-      // optimisée », « refonte site WordPress prix ») appartient à
+      metaDescription: `Extensions empilées, mises à jour qui cassent, site qui ralentit : votre WordPress actuel assaini, sans reconstruction, à partir de ${fr(TRAJECTOIRES["forfait-classique"].priceValue)} HT, ${SUIVI_INCLUS_MOIS} mois de suivi inclus.`,
+      // Requête de SITUATION. La requête d'OFFRE (« optimisation site
+      // WordPress », « refonte site WordPress prix ») appartient à
       // /solutions-web.
       keywords: [
         "site WordPress ingérable",
         "trop d'extensions WordPress",
         "mise à jour WordPress qui casse le site",
         "assainir un site WordPress",
-        "thème WordPress vieillissant",
+        "optimiser un site WordPress existant",
       ],
       titre: { avant: "Un WordPress assaini, ", accent: "sans changer d'outil", apres: "." },
       promesse:
-        "Le problème, c'est le thème et l'empilement d'extensions, pas WordPress. Je remplace le thème par un thème sur mesure et je réduis les extensions : moins de mises à jour, moins de failles, moins de pannes. Votre équipe garde ses habitudes de publication.",
+        "Le problème, c'est l'empilement d'extensions et le manque d'entretien, pas WordPress. Je garde votre site et son thème, et je le remets à niveau : moins d'extensions, moins de mises à jour, moins de failles, moins de pannes. Rien n'est reconstruit ; votre équipe garde ses habitudes de publication.",
       solution: {
         detail:
-          "Je repars de votre WordPress existant. Je remplace le thème par un thème sur mesure et léger, je retire les extensions redondantes et je durcis la sécurité. Vos contenus, les adresses de vos pages et vos habitudes de publication restent en place : le site redevient rapide et plus facile à mettre à jour.",
+          "Je repars de votre WordPress existant et je le garde tel qu'il est construit, thème compris. Je règle la vitesse (cache, images, requêtes), je retire les extensions redondantes, je fais les mises à jour en retard, je durcis la sécurité et je vérifie l'hébergement, ou j'en change s'il freine le site. Vos contenus, les adresses de vos pages et vos habitudes de publication restent en place : le site redevient rapide et plus facile à mettre à jour.",
         stack:
-          "WordPress classique (le même outil gère l'administration et l'affichage), thème sur mesure, extensions réduites au nécessaire, sécurité durcie. Vitesse mesurée avant et après la mise en ligne.",
+          "Votre WordPress actuel, même thème : réglages de performance et cache, audit et ménage des extensions, mises à jour, sécurité durcie, hébergement vérifié ou changé. Vitesse mesurée avant et après.",
         situations: [
           "Les mises à jour d'extensions cassent régulièrement une page.",
-          "Le thème acheté n'est plus maintenu, ou il bloque chaque évolution.",
-          "Le site est lent, mais WordPress convient à votre équipe.",
-          "Vous voulez un site net sans changer d'outil ni de façon de travailler.",
+          "Les extensions se sont empilées au fil des années, et personne ne sait plus lesquelles servent.",
+          "Le site est lent, mais son design vous convient encore.",
+          "Vous voulez un site sain sans le reconstruire, ni changer d'outil ou de façon de travailler.",
         ],
       },
       preuve: {
@@ -820,12 +829,12 @@ export const SITUATIONS: Situation[] = [
         {
           question: "Faut-il quitter WordPress ?",
           answer:
-            "Non. Si le problème vient du thème et des extensions, WordPress reste le bon outil : je repars de votre site, je remplace ce qui l'alourdit, et votre équipe continue de publier comme avant.",
+            "Non. Si le problème vient des extensions et du manque d'entretien, WordPress reste le bon outil : je garde votre site, je retire ce qui l'alourdit, et votre équipe continue de publier comme avant.",
         },
         FAQ_REFERENCEMENT,
         {
           question: "Et si l'optimisation ne suffit pas ?",
-          answer: `L'échange de 15 minutes le dit avant que vous engagiez un budget. Si le site reste lent malgré un thème sain, la réponse est le pack ${TRAJECTOIRES["forfait-headless"].name.fr} : votre équipe publie toujours dans WordPress, et ce que voient vos visiteurs est refait.`,
+          answer: `L'échange de 15 minutes le dit avant que vous engagiez un budget. Si le thème lui-même bloque, ou si le site reste lent une fois remis à niveau, la réponse est la ${TRAJECTOIRES["forfait-headless"].name.fr} : le site est reconstruit, en WordPress sur mesure ou en WordPress headless selon votre situation, et votre équipe publie toujours dans WordPress.`,
         },
       ],
       contactHref: "/contact?sujet=mise-en-oeuvre",
@@ -837,27 +846,29 @@ export const SITUATIONS: Situation[] = [
     besoin: "refaire",
     nom: TRAJECTOIRES["forfait-headless"].name,
     phrase: {
-      fr: "Mon site est lent, et mon équipe publie dans WordPress",
-      en: "My site is slow, and my team publishes in WordPress",
+      fr: "Mon site est lent ou daté, et mon équipe publie dans WordPress",
+      en: "My site is slow or dated, and my team publishes in WordPress",
     },
     offre: TRAJECTOIRES["forfait-headless"].name,
     resultat: {
-      fr: "Un site rapide et moderne. Votre équipe publie comme avant.",
-      en: "A fast, modern site. Your team publishes as before.",
+      fr: "Un site reconstruit, rapide et moderne. Votre équipe publie toujours dans WordPress.",
+      en: "A rebuilt, fast, modern site. Your team still publishes in WordPress.",
     },
     recommended: true,
     steps: [
       STEP_ECHANGE,
       stepTrajectoire("forfait-headless", {
-        fr: "Votre WordPress reste le back-office ; tout ce qui est visible est refait. Vos rédacteurs publient comme avant.",
-        en: "Your WordPress stays as the back office; everything visible is rebuilt. Your editors publish as before.",
+        fr: "Le site est reconstruit, en WordPress sur mesure ou en WordPress headless selon votre situation. Vos rédacteurs publient toujours dans WordPress.",
+        en: "The site is rebuilt, as custom WordPress or headless WordPress depending on your situation. Your editors still publish in WordPress.",
       }),
-      stepSuivi("headless"),
+      // Plancher : WordPress sur mesure (ADR-031). Le suivi d'un site headless
+      // est plus cher : la FAQ le dit.
+      stepSuivi("wordpress"),
     ],
     budget: budgetTrajectoire("forfait-headless", "echange"),
     page: {
-      metaTitle: "Site WordPress lent : rapide, sans changer votre façon de publier",
-      metaDescription: `Votre site WordPress est lent et votre équipe y publie tous les jours ? Un site rapide, le même back-office, à partir de ${fr(TRAJECTOIRES["forfait-headless"].priceValue)} HT, ${SUIVI_INCLUS_MOIS} mois de suivi inclus.`,
+      metaTitle: "Site WordPress lent ou daté : le refaire sans tout changer",
+      metaDescription: `Site WordPress lent ou daté, une équipe qui y publie chaque jour ? Reconstruit en WordPress sur mesure ou headless, même outil, à partir de ${fr(TRAJECTOIRES["forfait-headless"].priceValue)} HT, ${SUIVI_INCLUS_MOIS} mois de suivi inclus.`,
       // Requête de SITUATION (le site lent). Les requêtes d'OFFRE et de
       // TECHNIQUE (« refonte WordPress headless », « WordPress headless »,
       // « Core Web Vitals WordPress ») appartiennent à /solutions-web et à la
@@ -867,16 +878,16 @@ export const SITUATIONS: Situation[] = [
         "site WordPress trop lent que faire",
         "accélérer site WordPress",
         "temps de chargement site WordPress",
-        "garder WordPress en back-office",
+        "refaire un site WordPress",
       ],
-      titre: { avant: "Un site rapide. Votre équipe publie ", accent: "comme avant", apres: "." },
+      titre: { avant: "Un site refait. Votre équipe publie ", accent: "comme avant", apres: "." },
       promesse:
-        "Je garde votre WordPress en back-office et je refais tout ce qui est visible. C'est ce qu'on appelle le headless : vos rédacteurs continuent de publier dans WordPress ; vos visiteurs voient un site rapide et moderne.",
+        "Je reconstruis votre site, et vos rédacteurs publient toujours dans WordPress. Deux variantes, à égalité, choisies selon votre situation : WordPress sur mesure, un thème écrit pour votre site ; ou WordPress headless, le site affiché refait avec Next.js.",
       solution: {
         detail:
-          "Je garde votre WordPress comme back-office, l'espace où votre équipe publie, et je reconstruis tout ce que voient vos visiteurs. Les deux parties communiquent par une API (une passerelle de données). La publication ne change pas ; le site affiché devient rapide, et le référencement est repris page par page.",
+          "Je reconstruis tout ce que voient vos visiteurs, et WordPress reste l'espace où votre équipe publie. WordPress sur mesure : un thème écrit pour votre site, léger, avec le strict nécessaire en extensions ; un seul outil à tenir, un suivi qui reste léger. WordPress headless : WordPress ne sert plus qu'à publier, et le site affiché est reconstruit à part, relié par une API (une passerelle de données) ; c'est le choix quand la vitesse, le design ou le trafic sont décisifs. Dans les deux cas, la publication ne change pas et le référencement est repris page par page.",
         stack:
-          "WordPress headless (WordPress sert uniquement à publier) et Next.js (un outil de construction de sites rapides) pour le site affiché : pages calculées à l'avance et servies par un CDN (un réseau de serveurs proches de vos visiteurs), contenus lus par WPGraphQL ou l'API REST de WordPress (les deux passerelles qui livrent vos contenus au site).",
+          "Sur mesure : WordPress classique (le même outil gère l'administration et l'affichage), thème écrit pour le site, extensions réduites au nécessaire. Headless : WordPress pour publier et Next.js (un outil de construction de sites rapides) pour le site affiché, pages calculées à l'avance et servies par un CDN (un réseau de serveurs proches de vos visiteurs), contenus lus par WPGraphQL ou l'API REST de WordPress.",
         situations: [
           "Le site est lent et le score de vitesse Google est dans le rouge.",
           "Votre équipe publie chaque semaine et ne veut pas changer d'outil.",
@@ -888,7 +899,7 @@ export const SITUATIONS: Situation[] = [
         caseStudy: "comme-des-fous",
         titre: "Comme des fous : plus rapide, sans interruption pour les rédacteurs",
         texte:
-          "Un site éditorial passé en headless : le back-office n'a pas changé, le score de vitesse Google a été mesuré avant et après.",
+          "Un site éditorial refait en WordPress headless : le back-office n'a pas changé, le score de vitesse Google a été mesuré avant et après.",
         lien: "Voir l'étude de cas",
         href: "/etudes-de-cas/comme-des-fous",
       },
@@ -897,11 +908,15 @@ export const SITUATIONS: Situation[] = [
         {
           question: "Mon équipe devra-t-elle réapprendre à publier ?",
           answer:
-            "Non. Le back-office WordPress ne change pas : mêmes écrans, mêmes habitudes. Seul ce que voient vos visiteurs est refait.",
+            "Non. Dans les deux variantes, votre équipe publie toujours dans WordPress : mêmes gestes, mêmes habitudes. Ce que voient vos visiteurs est refait.",
         },
         {
-          question: "Pourquoi le suivi coûte-t-il plus qu'en WordPress seul ?",
-          answer: `Un site headless compte deux environnements à tenir, le back-office WordPress et le site affiché, chacun avec ses mises à jour. Le palier Essentiel passe de ${fr(maintenanceMonthly("essentiel", "wordpress"))} à ${fr(maintenanceMonthly("essentiel", "headless"))} HT par mois.`,
+          question: "Sur mesure ou headless : comment choisir ?",
+          answer: `Les deux se valent ; c'est votre situation qui tranche. WordPress sur mesure (à partir de ${fr(varianteRefonte("sur-mesure").priceValue)} HT) quand WordPress convient à votre équipe et que le budget de suivi doit rester léger. WordPress headless (à partir de ${fr(varianteRefonte("headless").priceValue)} HT) quand la vitesse, le design ou le trafic sont décisifs, et que le site doit pouvoir grandir. L'échange de 15 minutes sert à le dire avant le devis.`,
+        },
+        {
+          question: "Pourquoi le suivi d'un site headless coûte-t-il plus ?",
+          answer: `Un site headless compte deux environnements à tenir, le back-office WordPress et le site affiché, chacun avec ses mises à jour. Le palier Essentiel passe de ${fr(maintenanceMonthly("essentiel", "wordpress"))} HT par mois en WordPress sur mesure à ${fr(maintenanceMonthly("essentiel", "headless"))} HT par mois en headless.`,
         },
         FAQ_REFERENCEMENT,
       ],
@@ -1045,7 +1060,7 @@ export const SITUATIONS: Situation[] = [
       // /maintenance-wordpress : ni son titre (« surveillé, à jour et
       // sauvegardé ») ni la liste de ce qui est surveillé ne sont repris ici.
       metaTitle: "Votre site tourne, personne ne le tient : par où commencer",
-      metaDescription: `Votre site fonctionne et personne ne le tient ? Le parcours : analyse gratuite, état des lieux, puis suivi mensuel. Budget de la première année : ${fr(BUDGET_SUIVI.total)} HT.`,
+      metaDescription: `Votre site fonctionne et personne ne le tient ? Le parcours : analyse gratuite, état des lieux, puis suivi mensuel, à partir de ${fr(ESSENTIEL_WP)} HT par mois.`,
       keywords: [
         "site WordPress sans maintenance",
         "site WordPress jamais mis à jour",
@@ -1227,7 +1242,7 @@ export const SITUATIONS: Situation[] = [
       // technique à temps partagé ») appartient à /cto-externalise : aucun de
       // ses mots-clés n'est repris ici.
       metaTitle: "Devis, fin de support, prestataires : qui tranche chez vous ?",
-      metaDescription: `Des décisions techniques chaque mois, et personne pour les trancher ? Un audit, puis un expert qui tranche par écrit. Budget des ${CTO_MIN_MONTHS} premiers mois : ${fr(BUDGET_EXPERT.total)} HT.`,
+      metaDescription: `Des décisions techniques chaque mois, et personne pour les trancher ? Un audit, puis un expert qui tranche par écrit, à partir de ${fr(REFERENT.price)} HT par mois.`,
       keywords: [
         "PME sans directeur technique",
         "décisions techniques sans directeur technique",
@@ -1361,8 +1376,19 @@ export function situationHref(situation: Situation): string {
   return situation.lienExterne ?? packHref(situation.slug);
 }
 
+/**
+ * Pack sans somme de parcours (Maintenance, Pilotage : `page.sansBudget`) :
+ * ses paliers disent le prix. Aucune somme annuelle ou semestrielle n'est
+ * affichée pour eux, nulle part (demande d'Agathe du 2026-09-28) : partout où
+ * un budget de parcours apparaîtrait, c'est le prix d'entrée mensuel.
+ */
+export function sansSommeDeParcours(situation: Situation): boolean {
+  return Boolean(situation.page.sansBudget && situation.mensuel);
+}
+
 /** Budget d'un pack en une ligne : « 5 161 € HT la première année ». */
 export function packBudgetLabel(situation: Situation, lang: Lang): string {
+  if (sansSommeDeParcours(situation)) return packPrixEntree(situation, lang);
   const { total, periode } = situation.budget;
   if (total === 0) return `${GRATUIT[lang]}, ${periode[lang]}`;
   const amount = formatEuros(total, lang);
@@ -1373,6 +1399,7 @@ export function packBudgetLabel(situation: Situation, lang: Lang): string {
 
 /** Version courte, pour les badges du menu : « 5 161 € HT ». */
 export function packBudgetShort(situation: Situation, lang: Lang): string {
+  if (sansSommeDeParcours(situation)) return packPrixEntree(situation, lang);
   if (situation.budget.total === 0) return GRATUIT[lang];
   const amount = formatEuros(situation.budget.total, lang);
   return lang === "en" ? amount : `${amount} HT`;

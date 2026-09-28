@@ -14,7 +14,7 @@ export async function generateMetadata({
   const { locale } = await params;
   return generatePageMetadata({
     title:
-      "Attestation de déductibilité TIH : guide pratique pour les entreprises",
+      "Attestation de déductibilité TIH : le guide pratique",
     description:
       "Tout savoir sur l'attestation de déductibilité TIH : qui la délivre, quelles informations elle contient, comment l'intégrer à votre déclaration OETH auprès de l'URSSAF.",
     path: "/articles/attestation-deductibilite-tih-guide-entreprises",

@@ -20,7 +20,7 @@ export async function generateMetadata({
     title:
       locale === "en"
         ? "GEO checklist - 24 actions to get cited by ChatGPT and Perplexity"
-        : "Checklist GEO - 24 actions pour être cité par ChatGPT et Perplexity",
+        : "Checklist GEO : 24 actions pour être cité par les IA",
     description:
       locale === "en"
         ? "24 concrete actions to get cited by AI engines: crawler access, answer pages, markup, external authority. Checkable online, downloadable PDF, no email."

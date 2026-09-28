@@ -66,7 +66,33 @@ const nextConfig = {
       { source: `/en/outils/${slug}`, destination: '/en', permanent: false },
     ])
 
+    // Version anglaise fermée (décision d'Agathe du 2026-09-28) : toute URL /en…
+    // part en 301 vers son équivalent français, en un seul saut (règle placée
+    // en tête). Doit suivre ENGLISH_PUBLISHED (i18n/routing.ts) : le fichier
+    // .mjs ne peut pas lire ce module TypeScript, d'où la constante recopiée.
+    const ENGLISH_PUBLISHED = false
+    const englishClosedRedirects = ENGLISH_PUBLISHED
+      ? []
+      : [
+          { source: '/en', destination: '/', permanent: true },
+          { source: '/en/:path*', destination: '/:path*', permanent: true },
+        ]
+
+    // agat.dev (ancien domaine) : Vercel envoie agat.dev vers www.agat.dev, que
+    // l'application sert. On consolide ici vers le domaine canonique, chemin
+    // conservé (constat des logs du 2026-08-16, correction du 2026-09-28).
+    const legacyDomainRedirects = [
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: '(?:www\\.)?agat\\.dev' }],
+        destination: 'https://www.next-impact.digital/:path*',
+        permanent: true,
+      },
+    ]
+
     return [
+      ...legacyDomainRedirects,
+      ...englishClosedRedirects,
       // /tarifs redevient une page (charte v1.4, ADR-012) : le récapitulatif de
       // toutes les offres et de leurs paliers, par moment. Seul l'ancien sous-
       // chemin /tarifs/eligibilite reste redirigé.
@@ -76,15 +102,40 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: '/en/tarifs/eligibilite',
+        destination: '/en/solutions-web/eligibilite',
+        permanent: true,
+      },
+      {
         source: '/audit',
         destination: '/outils',
         permanent: true,
       },
+      { source: '/en/audit', destination: '/en/outils', permanent: true },
+      // Ancienne page « Vous êtes… » (personas par secteur, hors charte) :
+      // placée hors de app/[locale], elle répondait 404 depuis l'i18n. Supprimée
+      // le 2026-09-28 ; son intention (trouver l'offre qui me correspond) est
+      // celle de l'offre par situation.
+      { source: '/vous-etes/:path*', destination: '/packs', permanent: true },
+      { source: '/en/vous-etes/:path*', destination: '/packs', permanent: true },
       {
         source: '/articles/wordpress-headless-impact-social-pme-engagees',
         destination: '/solutions-web',
         permanent: true,
       },
+      {
+        source: '/en/articles/wordpress-headless-impact-social-pme-engagees',
+        destination: '/en/solutions-web',
+        permanent: true,
+      },
+      // L'analyse du site (/scan, app/(sentinelle)) n'est pas localisée. Un
+      // Link i18n rendu sur une page anglaise produit /en/scan, qui répondait
+      // 404 (ex. CTA de /en/sentinelle) : on le ramène à l'URL unique.
+      { source: '/en/scan', destination: '/scan', permanent: true },
+      // La carte mentale de la documentation est retirée : la page faisait un
+      // redirect() applicatif (307). Redirection permanente déclarée ici.
+      { source: '/documentation/mind-map', destination: '/documentation', permanent: true },
+      { source: '/en/documentation/mind-map', destination: '/en/documentation', permanent: true },
       // Renommage du slug /services → /solutions-web (+ page /solutions supprimée).
       // 301 pour préserver le SEO et ne casser aucun lien externe existant.
       // next-intl localePrefix "as-needed" : FR sans préfixe, EN préfixé /en.
@@ -138,26 +189,27 @@ const nextConfig = {
       // froid unique du site : tous les CTA internes qui pointent encore vers
       // /audit-site-web (footer, études de cas, doc…) retrouvent un diagnostic
       // gratuit au lieu d'une demande de rendez-vous. /scan est en français
-      // seulement : la variante /en y mène aussi.
+      // seulement : la variante /en y mène aussi. Permanentes depuis le
+      // 2026-09-28 : /scan est indexée, les anciennes adresses lui cèdent leur poids.
       {
         source: '/audit-site-web',
         destination: '/scan',
-        permanent: false,
+        permanent: true,
       },
       {
         source: '/en/audit-site-web',
         destination: '/scan',
-        permanent: false,
+        permanent: true,
       },
       {
         source: '/audit-site-ia',
         destination: '/scan',
-        permanent: false,
+        permanent: true,
       },
       {
         source: '/en/audit-site-ia',
         destination: '/scan',
-        permanent: false,
+        permanent: true,
       },
       // ── Élagage vague 5 : consolidation du stock WordPress headless ──
       // 25 articles doc → 15 ; les 10 slugs fusionnés redirigent vers leur
@@ -177,6 +229,26 @@ const nextConfig = {
         { source: `/documentation/wordpress-headless/${from}`,    destination: `/documentation/wordpress-headless/${to}`,    permanent: true },
         { source: `/en/documentation/wordpress-headless/${from}`, destination: `/en/documentation/wordpress-headless/${to}`, permanent: true },
       ]),
+      // ── Fusion des quasi-doublons de la documentation (2026-09-28) ──
+      // Chaque paire « pourquoi / comment » ne forme plus qu'un article ; le
+      // slug absorbé redirige vers l'absorbant. /en/… est déjà ramené au
+      // français par la règle de tête (ENGLISH_PUBLISHED).
+      ...[
+        ['design-ui-ux', 'creer-une-charte-graphique', 'charte-graphique'],
+        ['design-ui-ux', 'creer-son-identite-visuelle', 'identite-visuelle'],
+        ['design-ui-ux', 'definir-son-ui', 'ui'],
+        ['design-ui-ux', 'definir-son-ux', 'ux'],
+        ['design-ui-ux', 'pourquoi-des-maquettes', 'comment-creer-des-maquettes'],
+        ['marketing-digital', 'definir-sa-strategie-marketing', 'strategie-marketing'],
+        ['marketing-digital', 'mettre-en-oeuvre-strategie-de-marque', 'strategie-de-marque'],
+        ['marketing-digital', 'definir-sa-strategie-de-medias-sociaux', 'presence-sur-les-reseaux-sociaux'],
+        ['seo', 'penser-seo-en-amont', 'planifier-seo-en-amont'],
+        ['projet-site-web', 'pourquoi-gerer-projet-web', 'gestion-projet-web-guide-pratique'],
+      ].map(([category, from, to]) => ({
+        source: `/documentation/${category}/${from}`,
+        destination: `/documentation/${category}/${to}`,
+        permanent: true,
+      })),
       // Orphelin — règle spécifique AVANT le catch-all /documentation/blog.
       { source: '/documentation/blog/passage-wp-headless',    destination: '/documentation/wordpress-headless/dois-je-passer-au-headless', permanent: true },
       { source: '/en/documentation/blog/passage-wp-headless', destination: '/en/documentation/wordpress-headless/dois-je-passer-au-headless', permanent: true },

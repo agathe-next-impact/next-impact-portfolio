@@ -1,8 +1,12 @@
 import { promises as fs } from "fs";
 import path from "path";
 import { NextResponse } from "next/server";
+import matter from "gray-matter";
 import { getAllSlugs } from "@/lib/case-studies-data";
 import { getHubThemeSlugs } from "@/lib/hub-themes";
+import { hasEnglishArticle } from "@/lib/markdown";
+import { hasEnglishBlogPost } from "@/lib/blog";
+import { ENGLISH_PUBLISHED } from "@/i18n/routing";
 import { MAINTENANCE_PATH, MAINTENANCE_PRIX_VALIDES } from "@/lib/maintenance-offer";
 import { PACKS_PATH, getSituationSlugs, packHref } from "@/lib/situations";
 
@@ -28,18 +32,22 @@ function toIsoDate(date: Date): string {
   return date.toISOString().split("T")[0];
 }
 
-async function pathLastmod(relativePath: string): Promise<string | undefined> {
+// Pas de date de modification tirée du système de fichiers : sur Vercel, le
+// mtime des sources est normalisé (constaté le 2026-09-28 : les 132 <lastmod>
+// du sitemap de production valaient 2018-10-20). Une date fausse est pire
+// qu'aucune date — Google ignore les lastmod d'un sitemap qui ment. Seuls les
+// contenus éditoriaux portent un lastmod, lu dans leur front matter
+// (dateModified > updated > date).
+function frontmatterLastmod(filePath: string, raw: string): string | undefined {
   try {
-    const stat = await fs.stat(path.join(process.cwd(), relativePath));
-    return toIsoDate(stat.mtime);
+    const { data } = matter(raw);
+    const value = data.dateModified ?? data.updated ?? data.date;
+    if (value instanceof Date) return toIsoDate(value);
+    if (typeof value === "string" && /^\d{4}-\d{2}-\d{2}/.test(value)) return value.slice(0, 10);
   } catch {
-    return undefined;
+    console.warn(`[sitemap] front matter illisible : ${filePath}`);
   }
-}
-
-async function maxLastmod(paths: string[]): Promise<string | undefined> {
-  const dates = (await Promise.all(paths.map(pathLastmod))).filter(Boolean) as string[];
-  return dates.sort().at(-1);
+  return undefined;
 }
 
 async function readContentFiles(section: "documentation" | "blog") {
@@ -53,7 +61,11 @@ async function readContentFiles(section: "documentation" | "blog") {
         if (section === "blog" && entry.isFile() && entry.name.endsWith(".mdx")) {
           const slug = entry.name.replace(/\.mdx$/, "");
           const previous = entries.get(slug);
-          if (!previous) entries.set(slug, { slug, isMdx: true });
+          if (!previous) {
+            const filePath = path.join(sectionDir, entry.name);
+            const lastmod = frontmatterLastmod(filePath, await fs.readFile(filePath, "utf8"));
+            entries.set(slug, { slug, isMdx: true, lastmod });
+          }
         }
 
         if (section === "documentation" && entry.isDirectory()) {
@@ -63,8 +75,11 @@ async function readContentFiles(section: "documentation" | "blog") {
             if (!file.endsWith(".md") && !file.endsWith(".mdx")) continue;
             const slug = `${entry.name}/${file.replace(/\.mdx?$/, "")}`;
             const previous = entries.get(slug);
-            if (!previous || file.endsWith(".mdx")) {
-              entries.set(slug, { slug, isMdx: file.endsWith(".mdx") });
+            // La version française (premier root lu) fait foi pour la date.
+            if (!previous) {
+              const filePath = path.join(categoryDir, file);
+              const lastmod = frontmatterLastmod(filePath, await fs.readFile(filePath, "utf8"));
+              entries.set(slug, { slug, isMdx: file.endsWith(".mdx"), lastmod });
             }
           }
         }
@@ -92,6 +107,9 @@ async function getDocumentationCategories(): Promise<ContentEntry[]> {
 }
 
 function localizedUrlEntry(pathSegment: string, opts: UrlOptions) {
+  // Anglais fermé (ENGLISH_PUBLISHED) : les URL /en redirigent, elles ne
+  // figurent pas au sitemap ; l'entrée française est émise sans hreflang.
+  if (!ENGLISH_PUBLISHED) return singleUrlEntry(pathSegment, opts);
   const cleaned = pathSegment.replace(/^\/+|\/+$/g, "");
   const frUrl = cleaned ? `${baseUrl}/${cleaned}` : `${baseUrl}/`;
   const enUrl = cleaned ? `${baseUrl}/en/${cleaned}` : `${baseUrl}/en`;
@@ -165,7 +183,7 @@ export async function GET() {
       { path: "a-propos", source: "app/[locale]/a-propos/page.tsx", changefreq: "monthly", priority: 0.6 },
       { path: "contact", source: "app/[locale]/contact/page.tsx", changefreq: "monthly", priority: 0.6 },
       { path: "blog", source: "app/[locale]/blog/page.tsx", changefreq: "weekly", priority: 0.7 },
-      { path: "articles", source: "app/[locale]/articles/page.tsx", changefreq: "monthly", priority: 0.6 },
+      // `articles` retiré : liste vide (content/articles/ absent), en noindex.
     ] as const;
 
     const singlePages = [
@@ -181,6 +199,9 @@ export async function GET() {
       { path: "sentinelle", source: "app/[locale]/sentinelle/page.tsx", changefreq: "monthly", priority: 0.7 },
       // Récapitulatif de toutes les offres, par moment (ADR-012).
       { path: "tarifs", source: "app/[locale]/tarifs/page.tsx", changefreq: "monthly", priority: 0.8 },
+      // Analyse gratuite du site : le CTA froid, indexé depuis le 2026-09-28.
+      // Hors [locale] (groupe (sentinelle)), français seulement.
+      { path: "scan", source: "app/(sentinelle)/scan/page.tsx", changefreq: "monthly", priority: 0.8 },
       // Visite de l'espace en ligne + accès aux deux connexions (ADR-012).
       { path: "espace-client", source: "app/[locale]/espace-client/page.tsx", changefreq: "monthly", priority: 0.5 },
       // Suivi et maintenance, page d'atterrissage du moment « Gérer » : au
@@ -232,7 +253,6 @@ export async function GET() {
         localizedUrlEntry(page.path, {
           changefreq: page.changefreq,
           priority: page.priority,
-          lastmod: await pathLastmod(page.source),
         }),
       ),
     );
@@ -242,41 +262,35 @@ export async function GET() {
         singleUrlEntry(page.path, {
           changefreq: page.changefreq,
           priority: page.priority,
-          lastmod: await pathLastmod(page.source),
         }),
       ),
     );
 
-    const caseStudyLastmod = await maxLastmod([
-      "lib/case-studies-data.ts",
-      "lib/case-studies-profiles.ts",
-      "lib/case-studies-profiles-en.ts",
-    ]);
     const caseStudyUrls = getAllSlugs().map((slug) =>
       localizedUrlEntry(`etudes-de-cas/${slug}`, {
         changefreq: "monthly",
         priority: 0.7,
-        lastmod: caseStudyLastmod,
       }),
     );
 
-    const blogUrls = (await readContentFiles("blog")).map((post) =>
-      localizedUrlEntry(`blog/${post.slug}`, {
+    // Un billet sans version anglaise est servi en français sous /en (repli,
+    // noindex) : il n'entre au sitemap qu'en URL française, sans hreflang.
+    const blogUrls = (await readContentFiles("blog")).map((post) => {
+      const entry = hasEnglishBlogPost(post.slug) ? localizedUrlEntry : singleUrlEntry;
+      return entry(`blog/${post.slug}`, {
         changefreq: "monthly",
         priority: 0.6,
         lastmod: post.lastmod,
-      }),
-    );
+      });
+    });
 
     // Pages rubriques du hub « Quelle techno web ? » (segments statiques,
     // données dans lib/hub-themes.ts) — absentes de la découverte par dossier.
     const hubThemeSlugs = getHubThemeSlugs();
-    const themeLastmod = await pathLastmod("lib/hub-themes.ts");
     const themeUrls = hubThemeSlugs.map((slug) =>
       localizedUrlEntry(`documentation/${slug}`, {
         changefreq: "weekly",
         priority: 0.8,
-        lastmod: themeLastmod,
       }),
     );
 
@@ -295,13 +309,16 @@ export async function GET() {
     // Exclure les fichiers index.mdx : leur URL doublonnerait la page catégorie.
     const documentationUrls = (await readContentFiles("documentation"))
       .filter((doc) => !doc.slug.endsWith("/index"))
-      .map((doc) =>
-        localizedUrlEntry(`documentation/${doc.slug}`, {
+      .map((doc) => {
+        // Même règle que le blog : pas de version anglaise, pas d'URL /en.
+        const [category, slug] = doc.slug.split("/");
+        const entry = hasEnglishArticle(category, slug) ? localizedUrlEntry : singleUrlEntry;
+        return entry(`documentation/${doc.slug}`, {
           changefreq: "monthly",
           priority: 0.6,
           lastmod: doc.lastmod,
-        }),
-      );
+        });
+      });
 
     const allUrls = [
       ...staticUrls,

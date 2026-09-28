@@ -53,7 +53,7 @@ const NAV_PLAIN_BEFORE = [{ key: "caseStudies", href: "/etudes-de-cas" }] as con
 // CTA froid : /scan vit hors de app/[locale]/ (groupe (sentinelle)) — balise
 // <a> et non le Link i18n, qui donnerait /en/scan en anglais.
 const SCAN_HREF = "/scan";
-// CTA chaud (tiroir mobile) : l'échange de 15 minutes, source unique CTA_CHAUD
+// CTA chaud (navbar et tiroir mobile) : l'échange de 15 minutes, source unique CTA_CHAUD
 // (lib/visio-conseil.ts, ADR-023), libellé fixe de la charte §7.
 const CTA_HREF = CTA_CHAUD.href;
 
@@ -198,11 +198,13 @@ export default function Header() {
 
             <ThemeToggle />
 
-            {/* CTA froid unique : l'analyse du site. */}
+            {/* CTA de la navbar : l'analyse du site (CTA froid, demande
+                d'Agathe du 2026-09-28). L'échange gratuit (chaud) passe par
+                le rail de contact et le tiroir mobile. */}
             <a
               href={SCAN_HREF}
               onMouseEnter={closeMenu}
-              className="inline-flex h-9 items-center rounded-sm bg-accent-secondary px-4 font-mono text-2xs font-semibold uppercase tracking-[0.1em] text-obsidian no-underline transition-colors hover:bg-accent-secondary/85"
+              className="inline-flex h-9 items-center rounded-sm bg-accent-secondary px-4 font-mono text-xs font-semibold uppercase tracking-[0.1em] text-obsidian no-underline transition-colors hover:bg-accent-secondary/85"
             >
               {t("analyserSite")}
             </a>
@@ -426,7 +428,7 @@ export default function Header() {
               <a
                 href={SCAN_HREF}
                 onClick={() => setMobileOpen(false)}
-                className="inline-flex min-h-12 items-center justify-center rounded-sm bg-accent-secondary px-3 text-center font-mono text-2xs font-semibold uppercase tracking-[0.1em] text-obsidian no-underline"
+                className="inline-flex min-h-12 items-center justify-center rounded-sm bg-accent-secondary px-3 text-center font-mono text-xs font-semibold uppercase tracking-[0.1em] text-obsidian no-underline"
               >
                 {t("analyserSite")}
               </a>
@@ -437,7 +439,7 @@ export default function Header() {
                 onClick={() => setMobileOpen(false)}
                 className="inline-flex min-h-12 items-center justify-center rounded-sm border border-dark-gray px-3 text-center font-mono text-2xs uppercase tracking-[0.1em] text-foreground no-underline"
               >
-                {t("startWebApp")}
+                {t("echangeGratuit")}
               </a>
             </div>
           </div>

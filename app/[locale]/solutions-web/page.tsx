@@ -103,8 +103,20 @@ export default async function ServicesPage({
           name: isEn ? "The three services" : "Les trois prestations",
           items: prestations.map((p) => ({
             name: `${p.name[lang]}${isEn ? ": " : " : "}${p.technique[lang]}`,
-            // La phrase « en clair » de la carte (ADR-015), lue dans la source.
-            description: p.enClair[lang],
+            // La phrase « en clair » de la carte (ADR-015), lue dans la source,
+            // puis les variantes à égalité quand la prestation en a (la
+            // Refonte : WordPress sur mesure ou headless, ADR-031).
+            description: p.variantes?.length
+              ? `${p.enClair[lang]} ${
+                  isEn
+                    ? `Two variants on an equal footing, chosen according to the situation: ${p.variantes
+                        .map((v) => `${v.technique.en}, from ${formatEuros(v.priceValue, "en")} excl. VAT`)
+                        .join("; ")}.`
+                    : `Deux variantes à égalité, choisies selon la situation : ${p.variantes
+                        .map((v) => `${v.technique.fr}, à partir de ${formatEuros(v.priceValue, "fr")} HT`)
+                        .join(" ; ")}.`
+                }`
+              : p.enClair[lang],
             url: p.href,
             minPrice: p.priceValue,
           })),

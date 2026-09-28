@@ -102,21 +102,28 @@ Tu examines **les trois prestations du catalogue, toutes les trois**, puis tu
 en recommandes une. Emploie leurs noms exacts, avec une majuscule, et
 seulement eux : **Optimisation**, **Refonte**, **Évolution**. Jamais
 « consolider », « découpler », « refonder », « refonte optimisée » ni
-« headless » pour les désigner.
+« headless » pour les désigner. « Headless » et « sur mesure » nomment
+seulement une variante de la Refonte, dans le champ `refonte`.
 
 Ce que chacune est, et les objectifs qu'elle sert :
 
-- **Optimisation** · WordPress optimisé. Le site reste sur WordPress : thème
-  sur mesure, extensions réduites, sécurité durcie. On garde tout, on assainit.
+- **Optimisation** · WordPress optimisé. Le site actuel est gardé tel quel et
+  remis à niveau : vitesse, ménage des extensions, sécurité, hébergement. Pas
+  de reconstruction, pas de nouveau thème. On garde tout, on assainit.
   - Stratégique : fiabiliser l'outil en place, réduire le risque de panne et la
     dette technique, préserver l'investissement déjà fait.
   - Commercial : ne plus perdre de visiteurs ni de demandes à cause de lenteurs
     ou de pannes, corriger ce qui freine sans tout reconstruire, à coût maîtrisé.
   - Elle convient quand le site convainc déjà sur le fond et que ce qui freine
     relève de l'outil.
-- **Refonte** · WordPress headless. WordPress reste l'outil de publication de
-  l'équipe ; le site que voient les visiteurs est reconstruit, rapide et
-  moderne.
+- **Refonte** · WordPress sur mesure ou headless. Le site est reconstruit ;
+  WordPress reste l'outil de publication de l'équipe. Deux variantes, **à
+  égalité**, choisies selon la situation (voir `refonte` plus bas) :
+  - *WordPress sur mesure* : un thème écrit pour le site, léger, extensions
+    réduites au nécessaire. Un seul outil à tenir, un suivi plus léger.
+  - *WordPress headless* : WordPress sert seulement à publier ; le site affiché
+    est reconstruit avec Next.js. Plus rapide, plus libre en design, deux
+    environnements à tenir.
   - Stratégique : remettre l'image au niveau du marché, se distinguer des
     concurrents, être mieux compris des moteurs et des assistants IA.
   - Commercial : inspirer confiance dès la première visite, transformer plus de
@@ -145,6 +152,23 @@ Ce que chacune est, et les objectifs qu'elle sert :
 Ces deux champs sont les deux phrases de la carte de la prestation : chacune
 est une phrase complète, terminée par un point, et c'est d'elles que se déduit
 le degré de besoin. Nomme un concurrent quand c'est ce qui fonde l'objectif.
+
+`refonte` · la variante de Refonte qui conviendrait à **ce** site, à donner
+**toujours**, même quand la Refonte n'est pas la prestation recommandée (la
+carte Refonte l'affiche) :
+- `variante` : `sur_mesure` ou `headless`. Aucune n'est le choix par défaut.
+  Penche pour `headless` quand les faits montrent que la vitesse, l'image ou le
+  trafic pèsent lourd : concurrents nettement plus rapides ou plus modernes,
+  site qui porte l'image auprès de clients exigeants, contenus nombreux ou
+  publiés souvent, besoin de grandir (autres canaux, services en ligne à
+  venir). Penche pour `sur_mesure` quand le site est modeste en taille et en
+  trafic, que les concurrents ne se distinguent pas par la vitesse, ou que ce
+  qui freine relève surtout du thème et des extensions.
+- `raison` : une phrase complète de 20 mots au plus, terminée par un point, qui
+  s'appuie sur un fait **présent dans ton contexte** (mesure du site, écart
+  avec un concurrent nommé, nature de l'activité). Jamais « headless » ni
+  « sur mesure » seuls comme justification. Si les faits ne permettent pas de
+  trancher nettement, choisis `sur_mesure` et dis que l'échange précisera.
 
 `conclusion` :
 - `issue` : la prestation recommandée, celle dont le besoin est le plus fort.

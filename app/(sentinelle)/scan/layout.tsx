@@ -3,6 +3,7 @@ import { setRequestLocale } from "next-intl/server";
 
 import Header from "@/components/header";
 import Footer from "@/components/footer";
+import { FloatingContact } from "@/components/floating-contact";
 import { DocumentationModeProvider } from "@/contexts/documentation-mode-context";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -41,6 +42,7 @@ export default function ScanLayout({
         <Header />
         {children}
         <Footer variant="product" />
+        <FloatingContact />
       </DocumentationModeProvider>
     </NextIntlClientProvider>
   );

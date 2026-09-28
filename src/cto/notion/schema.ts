@@ -179,6 +179,8 @@ export const COLUMNS: Record<SchemaBase, Column[]> = {
     column(PROPS.audit.annex, "files"),
     // Facultative : sans elle, aucun audit n'est validé et aucun scénario ne devient proposition.
     facultative(PROPS.audit.validated, "checkbox"),
+    // Facultative : sans elle, l'audit et sa prestation restent deux missions.
+    facultative(PROPS.audit.prestation, "relation"),
   ],
   proposition: [
     ...CONTENT,

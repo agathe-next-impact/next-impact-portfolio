@@ -10,7 +10,7 @@ import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
 import { cn } from "@/lib/utils";
 
 const BTN_PRIMARY =
-  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-accent-secondary bg-accent-secondary px-5 font-mono text-xs font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
+  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-accent-secondary bg-accent-secondary px-5 font-mono text-sm font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
 
 type VitalKey = "lcp" | "cls" | "ttfb";
 
@@ -259,7 +259,7 @@ export default function HomePerf({ index = "№ 08" }: { index?: string }) {
               : "Mesuré en direct depuis votre appareil — les valeurs dépendent de votre réseau et de votre matériel."}
         </p>
         <div className="flex flex-wrap items-center gap-3">
-          <Link href="/audit-site-web" className={BTN_PRIMARY}>
+          <Link href="/scan" className={BTN_PRIMARY}>
             {isEn ? "And yours? Book a free audit" : "Et le vôtre ? Réservez un audit gratuit"}
             <ArrowRight size={14} />
           </Link>

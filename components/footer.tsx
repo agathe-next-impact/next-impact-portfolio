@@ -2,6 +2,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { CookieSettingsButton } from "@/components/cookie-settings-button";
 import { LocaleSwitcher } from "@/components/locale-switcher";
+import { ENGLISH_PUBLISHED } from "@/i18n/routing";
 
 const KICKER = "font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray";
 const FOOT_LINK =
@@ -146,7 +147,7 @@ export default function Footer({
               href="/contact"
               className="mt-5 inline-flex h-9 items-center rounded-sm bg-accent-secondary px-4 font-mono text-2xs font-semibold uppercase tracking-[0.1em] text-obsidian no-underline transition-colors hover:bg-accent-secondary/85"
             >
-              {t("startWebApp")}
+              {t("contactCta")}
             </Link>
           </div>
         </div>
@@ -172,7 +173,8 @@ export default function Footer({
           >
             {t("clientArea")}
           </a>
-          {!isProduct && <LocaleSwitcher />}
+          {/* Sélecteur masqué tant que l'anglais n'est pas publié. */}
+          {!isProduct && ENGLISH_PUBLISHED && <LocaleSwitcher />}
           {/* `#__next` était un reliquat du Pages Router : l'élément n'existe
               plus, le lien ne remontait nulle part. */}
           <a

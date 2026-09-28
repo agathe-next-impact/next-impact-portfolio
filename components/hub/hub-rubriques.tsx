@@ -80,7 +80,7 @@ const COPY: Record<
         question: "L'IA peut coder vite. Mais faut-il construire ?",
         links: [
           { label: "Prototype IA : jetable ou maintenable ?", href: "/outils/prototype-ia" },
-          { label: "Diagnostic Web & IA", href: "/audit-site-web" },
+          { label: "Diagnostic Web & IA", href: "/scan" },
           { label: "Le blog techno", href: "/blog" },
         ],
         next: { label: "En parler 15 min · gratuit", href: "/conseil#choix-techno-ia" },
@@ -92,7 +92,7 @@ const COPY: Record<
         question: "Mon site est-il en bout de course ?",
         links: [
           { label: "Réparer ou refaire ?", href: "/outils/reparer-ou-refaire" },
-          { label: "Auditer mon site", href: "/audit-site-web" },
+          { label: "Auditer mon site", href: "/scan" },
         ],
         next: { label: "Réparer mon site", href: "/contact" },
       },
@@ -127,7 +127,7 @@ const COPY: Record<
         question: "Site, newsletter, LinkedIn : où investir ?",
         links: [
           { label: "Le Sélecteur techno web & IA", href: "/outils/selecteur-techno" },
-          { label: "Diagnostic Web & IA", href: "/audit-site-web" },
+          { label: "Diagnostic Web & IA", href: "/scan" },
         ],
         next: { label: "En parler 15 min · gratuit", href: "/conseil#choix-techno-ia" },
       },
@@ -139,7 +139,7 @@ const COPY: Record<
         links: [
           { label: "Visible dans les moteurs IA ?", href: "/outils/visibilite-ia" },
           { label: "Les fondamentaux SEO", href: "/documentation/seo" },
-          { label: "Diagnostic Web & IA", href: "/audit-site-web" },
+          { label: "Diagnostic Web & IA", href: "/scan" },
         ],
         next: { label: "En parler 15 min · gratuit", href: "/conseil#choix-techno-ia" },
       },
@@ -185,7 +185,7 @@ const COPY: Record<
         question: "AI can code fast. But should you build?",
         links: [
           { label: "AI prototype: throwaway or maintainable?", href: "/outils/prototype-ia" },
-          { label: "Web & AI diagnostic", href: "/audit-site-web" },
+          { label: "Web & AI diagnostic", href: "/scan" },
           { label: "The tech blog", href: "/blog" },
         ],
         next: { label: "Talk it through · 15 min, free", href: "/conseil#choix-techno-ia" },
@@ -197,7 +197,7 @@ const COPY: Record<
         question: "Is my site reaching the end of the road?",
         links: [
           { label: "Repair or rebuild?", href: "/outils/reparer-ou-refaire" },
-          { label: "Audit my site", href: "/audit-site-web" },
+          { label: "Audit my site", href: "/scan" },
         ],
         next: { label: "Fix my site", href: "/contact" },
       },
@@ -232,7 +232,7 @@ const COPY: Record<
         question: "Site, newsletter, LinkedIn: where to invest?",
         links: [
           { label: "The web & AI tech selector", href: "/outils/selecteur-techno" },
-          { label: "Web & AI diagnostic", href: "/audit-site-web" },
+          { label: "Web & AI diagnostic", href: "/scan" },
         ],
         next: { label: "Talk it through · 15 min, free", href: "/conseil#choix-techno-ia" },
       },
@@ -244,7 +244,7 @@ const COPY: Record<
         links: [
           { label: "Visible in AI engines?", href: "/outils/visibilite-ia" },
           { label: "SEO fundamentals", href: "/documentation/seo" },
-          { label: "Web & AI diagnostic", href: "/audit-site-web" },
+          { label: "Web & AI diagnostic", href: "/scan" },
         ],
         next: { label: "Talk it through · 15 min, free", href: "/conseil#choix-techno-ia" },
       },

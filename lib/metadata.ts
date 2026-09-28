@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { routing, type Locale } from "@/i18n/routing";
+import { routing, PUBLISHED_LOCALES, type Locale } from "@/i18n/routing";
 // Nom et plancher des trois prestations : lus dans lib/trajectoires.ts (charte
 // v1.6, ADR-014), jamais réécrits ici. Module sans dépendance.
 import { TRAJECTOIRES, TRAJECTOIRE_ORDER, formatEuros } from "@/lib/trajectoires";
@@ -17,7 +17,7 @@ function prestationNames(locale: Locale): string {
   return `${names.join(", ")} ${locale === "en" ? "or" : "ou"} ${last}`;
 }
 
-/** « Optimisation dès 2 250 € HT, Refonte dès 4 000 € HT, … » : nom et plancher de chaque prestation. */
+/** « Optimisation dès 1 500 € HT, Refonte dès 2 250 € HT, … » : nom et plancher de chaque prestation. */
 function prestationPrices(locale: Locale): string {
   return TRAJECTOIRE_ORDER.map((slug) => {
     const { name, priceValue } = TRAJECTOIRES[slug];
@@ -77,6 +77,23 @@ function buildLocalizedPaths(
 }
 
 /**
+ * Charte v1.6 (§ typographie) : tiret cadratin interdit partout, méta-
+ * descriptions comprises. Les titres et descriptions de metadata viennent de
+ * sources multiples (front matter, lib/case-studies-data.ts, messages) : on
+ * les normalise ici, à la sortie, sans toucher au texte affiché dans la page.
+ * Titre : « A — B » devient « A : B » (« A · B » s'il y a déjà un deux-points).
+ * Description : l'incise « — … — » devient une incise entre virgules.
+ */
+function stripEmDash(text: string, kind: "title" | "description"): string {
+  if (!text.includes("—")) return text;
+  if (kind === "title") {
+    const separator = text.includes(":") ? " · " : " : ";
+    return text.replace(/\s*—\s*/g, separator);
+  }
+  return text.replace(/\s*—\s*/g, ", ").replace(/,\s*([.;:!?])/g, "$1");
+}
+
+/**
  * Configuration des métadonnées par défaut du site
  */
 export const siteConfig = {
@@ -98,25 +115,15 @@ export const siteConfig = {
     alt: "Next Impact · Refonte de site WordPress",
   },
   creator: "Agathe Karinthi-Martin",
+  // Mots-clés communs à toutes les pages : alignés sur le catalogue (charte
+  // v1.6). Les anciens termes « IA coding », « No-code », « SaaS », « PWA »,
+  // « Application mobile »… décrivaient un positionnement abandonné.
   keywords: [
-    "WordPress",
     "Refonte site WordPress",
-    "Refonte WordPress headless",
-    "Conseil techno web",
-    "IA coding",
-    "No-code",
-    "SaaS",
-    "WordPress Headless",
-    "Choix technologie web",
-    "Architecture web",
-    "Next.js",
-    "React",
-    "Site web",
-    "Application web",
-    "Web app sur-mesure",
-    "Application mobile",
-    "PWA",
-    "CMS Headless",
+    "WordPress headless",
+    "Maintenance WordPress",
+    "Expert technique externalisé",
+    "Next Impact",
   ],
   authors: [{ name: "Agathe Karinthi-Martin", url: "https://www.next-impact.digital" }],
 };
@@ -149,8 +156,8 @@ export interface MetadataOptions {
  */
 export function generatePageMetadata(options: MetadataOptions): Metadata {
   const {
-    title,
-    description,
+    title: rawTitle,
+    description: rawDescription,
     path = "",
     image,
     eyebrow,
@@ -162,8 +169,13 @@ export function generatePageMetadata(options: MetadataOptions): Metadata {
     noindex = false,
     canonical,
     locale = routing.defaultLocale,
-    alternateLocales = [...routing.locales],
+    alternateLocales: requestedLocales = [...routing.locales],
   } = options;
+  // Une langue non publiée (ENGLISH_PUBLISHED) n'est jamais annoncée.
+  const alternateLocales = requestedLocales.filter((l) => PUBLISHED_LOCALES.includes(l));
+
+  const title = stripEmDash(rawTitle, "title");
+  const description = stripEmDash(rawDescription, "description");
 
   // Construction de l'URL complète (avec préfixe de locale si non par défaut)
   const localePrefix = locale === routing.defaultLocale ? "" : `/${locale}`;
@@ -201,9 +213,13 @@ export function generatePageMetadata(options: MetadataOptions): Metadata {
   const allKeywords = [...new Set([...siteConfig.keywords, ...keywords])];
 
   // Construction des métadonnées
+  // Le layout ajoute « | Next Impact » (14 caractères). Au-delà de 50
+  // caractères, le titre dépasserait ~65 caractères et serait tronqué dans les
+  // résultats : on le sert alors tel quel, sans suffixe de marque.
+  const TITLE_SUFFIX_MAX = 50;
   const metadata: Metadata = {
     metadataBase: new URL(siteConfig.url),
-    title,
+    title: title.length > TITLE_SUFFIX_MAX ? { absolute: title } : title,
     description,
     keywords: allKeywords,
     authors: authors
@@ -221,7 +237,8 @@ export function generatePageMetadata(options: MetadataOptions): Metadata {
       siteName: siteConfig.name,
       images: [ogImage],
       locale: OG_LOCALES[locale],
-      alternateLocale: routing.locales
+      // Seules les langues réellement publiées pour cette page.
+      alternateLocale: alternateLocales
         .filter((l) => l !== locale)
         .map((l) => OG_LOCALES[l]),
       type,
@@ -235,10 +252,12 @@ export function generatePageMetadata(options: MetadataOptions): Metadata {
       images: [ogImage.url],
       creator: "@nextimpact",
     },
+    // noindex, follow : une page hors index (ex. article servi en français
+    // sous /en) doit continuer à transmettre ses liens.
     robots: noindex
       ? {
           index: false,
-          follow: false,
+          follow: true,
         }
       : {
           index: true,
@@ -269,13 +288,14 @@ const HOME_BY_LOCALE: Record<Locale, LocalizedMeta> = {
   fr: {
     title: "Refonte de site WordPress : rapide, moderne, sans tout reconstruire · Next Impact",
     description:
-      "Votre site WordPress vieillit mal ? Refonte optimisée, headless ou web app, en forfait, en 6 à 10 semaines. Prix affichés, performance mesurée avant et après.",
+      "Votre site WordPress vieillit mal ? Remise à niveau, refonte sur mesure ou headless, web app : au forfait, en 6 à 10 semaines. Performance mesurée avant et après.",
     // Anti-cannibalisation (ADR-014) : la requête de SITUATION « site
     // WordPress lent » appartient à la page de pack /packs/site-wordpress-lent.
     // La home garde la requête d'ensemble : la refonte d'un site qui vieillit.
     // « second avis devis web » est conservé (exception consignée).
     keywords: [
       "refonte site WordPress",
+      "refonte WordPress sur mesure",
       "refonte WordPress headless",
       "site WordPress qui vieillit",
       "moderniser site WordPress",
@@ -287,9 +307,10 @@ const HOME_BY_LOCALE: Record<Locale, LocalizedMeta> = {
   en: {
     title: "WordPress site redesign: fast, modern, without rebuilding everything · Next Impact",
     description:
-      "Is your WordPress site aging badly? Optimized, headless or web app redesign, fixed price, in 6 to 10 weeks. Performance measured before and after.",
+      "Is your WordPress site aging badly? Upgrade, custom or headless redesign, web app: fixed price, in 6 to 10 weeks. Performance measured before and after.",
     keywords: [
       "WordPress site redesign",
+      "custom WordPress redesign",
       "headless WordPress redesign",
       "aging WordPress site",
       "modernize WordPress site",
@@ -301,7 +322,7 @@ const HOME_BY_LOCALE: Record<Locale, LocalizedMeta> = {
 };
 
 // Page /solutions-web, page d'atterrissage du moment « Évoluer » : la requête
-// d'OFFRE (« refonte WordPress prix », « refonte WordPress headless »). Le nom
+// d'OFFRE (« refonte WordPress prix », « refonte WordPress sur mesure ou headless »). Le nom
 // et le plancher de chaque prestation sont lus dans lib/trajectoires.ts.
 // Source unique de la page : app/[locale]/solutions-web/page.tsx lit
 // `servicesMeta`, plus le namespace `servicesPage` des messages, qui ne peut
@@ -312,10 +333,10 @@ const SERVICES_BY_LOCALE: Record<Locale, LocalizedMeta> = {
     description: `Site WordPress qui vieillit : ${prestationPrices("fr")}. Prix et délai écrits, veille incluse.`,
     keywords: [
       "refonte site WordPress prix",
-      "refonte WordPress optimisée",
+      "optimisation site WordPress",
+      "refonte WordPress sur mesure",
       "refonte WordPress headless",
       "tarifs WordPress headless",
-      "création site WordPress optimisé",
       "web app sur-mesure",
       "outil métier sur-mesure",
     ],
@@ -325,10 +346,10 @@ const SERVICES_BY_LOCALE: Record<Locale, LocalizedMeta> = {
     description: `Aging WordPress site: ${prestationPrices("en")}. Price and timeline in writing, watch analysis included.`,
     keywords: [
       "WordPress redesign price",
-      "optimized WordPress redesign",
+      "WordPress site optimization",
+      "custom WordPress redesign",
       "headless WordPress redesign",
       "headless WordPress pricing",
-      "optimized WordPress build",
       "custom web app",
       "custom business tool",
     ],

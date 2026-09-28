@@ -99,7 +99,7 @@ const AUDIT_GRATUIT = (fr: string, en: string): ThemePresta => ({
   temp: "froid",
   blurb: { fr, en },
   cta: { fr: "Demander l'audit", en: "Request the audit" },
-  href: "/audit-site-web",
+  href: "/scan",
 });
 
 // Palier tiède : l'échange de 15 minutes, gratuit (ADR-023). Nom et prix lus
@@ -146,7 +146,7 @@ const choisir: HubTheme = {
   },
   options: [
     {
-      label: { fr: "WordPress optimisé", en: "Optimized WordPress" },
+      label: { fr: "WordPress", en: "WordPress" },
       detail: {
         fr: "Le terrain le plus polyvalent : autonomie éditoriale, écosystème mûr, coût maîtrisé.",
         en: "The most versatile ground: editorial autonomy, a mature ecosystem, controlled cost.",
@@ -278,7 +278,7 @@ const choisir: HubTheme = {
   ],
   meta: {
     title: {
-      fr: "Quelle techno pour mon site web ? WordPress, Headless, no-code ou sur-mesure",
+      fr: "Quelle techno pour mon site web ? Les critères pour choisir",
       en: "Which tech for my website? WordPress, Headless, no-code or custom",
     },
     description: {
@@ -432,7 +432,7 @@ const iaEtCode: HubTheme = {
         fr: "Un état des lieux de votre site et des opportunités — ou pièges — côté IA.",
         en: "A snapshot of your site and where AI helps — or doesn't.",
       },
-      href: "/audit-site-web",
+      href: "/scan",
     },
     {
       icon: Compass,
@@ -579,7 +579,7 @@ const reparer: HubTheme = {
         fr: "Diagnostic réel de votre site : performance, Core Web Vitals, signaux techniques, sur rendez-vous avec Agathe.",
         en: "A real diagnostic of your site: performance, Core Web Vitals, technical signals, booked with Agathe.",
       },
-      href: "/audit-site-web",
+      href: "/scan",
     },
   ],
   prestas: [
@@ -886,7 +886,7 @@ const outilsMetier: HubTheme = {
   ],
   meta: {
     title: {
-      fr: "Annuaire, carte, espace membre : plugin, SaaS ou plateforme sur mesure ?",
+      fr: "Annuaire, carte, espace membre : quel outil choisir ?",
       en: "Directory, map, member area: plugin, SaaS or custom platform?",
     },
     description: {
@@ -991,7 +991,7 @@ const presence: HubTheme = {
         fr: "Votre site joue-t-il son rôle d'actif central ? Un état des lieux gratuit, sur rendez-vous.",
         en: "Is your site pulling its weight as a core asset? A free stock-take, by appointment.",
       },
-      href: "/audit-site-web",
+      href: "/scan",
     },
   ],
   prestas: [
@@ -1205,7 +1205,7 @@ const etreTrouve: HubTheme = {
         fr: "Un état des lieux de votre site — performance, signaux techniques, visibilité.",
         en: "A snapshot of your site — performance, technical signals, visibility.",
       },
-      href: "/audit-site-web",
+      href: "/scan",
     },
   ],
   prestas: [

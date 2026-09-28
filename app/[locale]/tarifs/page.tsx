@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { setRequestLocale } from "next-intl/server";
 import { generatePageMetadata } from "@/lib/metadata";
-import { BreadcrumbJsonLd } from "@/components/json-ld";
+import { BreadcrumbJsonLd, OfferCatalogJsonLd } from "@/components/json-ld";
 import { PageHero } from "@/components/aspect/page-hero";
 import { Separator } from "@/components/aspect/section";
 import { TarifsMoments } from "@/components/tarifs/tarifs-moments";
@@ -37,8 +37,8 @@ export async function generateMetadata({
       : "Tous les tarifs sur une page : le budget de chaque parcours, par situation, puis le catalogue : conseil, trois prestations, suivi et maintenance, expert technique.",
     path: "/tarifs",
     keywords: isEn
-      ? ["website redesign prices", "WordPress maintenance price"]
-      : ["tarif refonte site WordPress", "prix refonte site internet", "tarif maintenance WordPress", "prix site headless"],
+      ? ["website redesign prices", "WordPress optimization price", "custom WordPress price", "headless site price", "WordPress maintenance price"]
+      : ["tarif refonte site WordPress", "prix refonte site internet", "prix optimisation site WordPress", "prix WordPress sur mesure", "prix site headless", "tarif maintenance WordPress"],
     locale,
     noindex: isEn,
     alternateLocales: ["fr"],
@@ -63,6 +63,8 @@ export default async function TarifsPage({
           { name: isEn ? "Prices" : "Tarifs", url: "/tarifs" },
         ]}
       />
+      {/* Toutes les offres et leurs prix, affichés plus bas (TarifsMoments). */}
+      <OfferCatalogJsonLd locale={locale} />
       <PageHero
         index="№ 01"
         kicker="Tarifs"

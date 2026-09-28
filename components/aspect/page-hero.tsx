@@ -5,9 +5,9 @@ import { BlueprintSection, SectionHeading } from "@/components/aspect/section";
 /* Boutons du héros — mêmes classes que la page /veille, référence de
    l'harmonisation. Primaire = accent-2 plein, secondaire = filet. */
 export const HERO_BTN_PRIMARY =
-  "inline-flex items-center justify-center gap-2 border border-accent-secondary bg-accent-secondary px-6 py-3 font-mono text-xs uppercase tracking-[0.14em] text-obsidian no-underline transition-opacity hover:opacity-90";
+  "inline-flex items-center justify-center gap-2 border border-accent-secondary bg-accent-secondary px-6 py-3 font-mono text-sm font-semibold uppercase tracking-[0.14em] text-obsidian no-underline transition-opacity hover:opacity-90";
 export const HERO_BTN_SECONDARY =
-  "inline-flex items-center justify-center gap-2 border border-dark-gray px-6 py-3 font-mono text-xs uppercase tracking-[0.14em] text-mid-gray no-underline transition-colors hover:text-foreground";
+  "inline-flex items-center justify-center gap-2 border border-dark-gray px-6 py-3 font-mono text-sm font-semibold uppercase tracking-[0.14em] text-mid-gray no-underline transition-colors hover:text-foreground";
 
 /**
  * PageHero — héros de page harmonisé sur celui de /veille : équerres d'angle,

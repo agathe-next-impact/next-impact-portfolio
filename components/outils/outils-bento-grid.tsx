@@ -103,8 +103,8 @@ const buildCards = (isEn: boolean): Record<string, BentoCard> => ({
     id: "determiner-offre",
     title: isEn ? "Project diagnostic" : "Diagnostic projet",
     description: isEn
-      ? "In a few clicks, identify the right path: classic WordPress, Headless + Next.js, web app or mobile."
-      : "Identifiez en quelques clics la voie adaptée : site WordPress classique, Headless + Next.js, web app ou mobile.",
+      ? "In 2 minutes, identify the right path: your current WordPress optimized, a Redesign as custom or headless WordPress, a web app or a mobile app."
+      : "Identifiez en 2 minutes la voie adaptée : votre WordPress actuel optimisé, une Refonte en WordPress sur mesure ou headless, une web app ou une app mobile.",
     icon: BadgePercent,
     href: "/solutions-web/eligibilite",
   },

@@ -5,15 +5,46 @@ import { scans } from "@sentinelle/db/schema";
 import { inngest, scanRequested } from "@sentinelle/inngest";
 import { normalizeSiteUrl, isPubliclyScannable } from "@sentinelle/url";
 import { checkRateLimit, clientIp, hashIp } from "@sentinelle/scanner/rate-limit";
+import { undeliverableReason } from "@sentinelle/emails/send";
 import { requestIp, verifyRecaptcha } from "@/lib/recaptcha";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
+// TEMPORAIRE (2026-09-28, demande d'Agathe) : plafond d'une analyse par heure
+// et par adresse levé. Repasser à `false` pour le rétablir ; reCAPTCHA reste
+// actif. Chaque scan a un coût (API Anthropic) : ne pas l'oublier ouvert.
+const PLAFOND_SUSPENDU = true;
+
+// L'opt-in du premier écran (2026-09-28) : organisation, e-mail et site,
+// avant l'analyse. L'e-mail devient le destinataire de l'audit (`auditEmail`),
+// envoyé dès qu'il est prêt ; ce n'est PAS une inscription à la veille, qui
+// reste le formulaire du rapport (`leadEmail`).
 const Body = z.object({
   url: z.string().min(3).max(2048),
+  organisation: z.string().trim().min(1).max(200),
+  email: z.string().trim().toLowerCase().email().max(320),
+  // Sans case cochée, rien n'est enregistré.
+  consentement: z.literal(true),
+  // Pot de miel : un champ caché qu'un humain laisse vide.
+  site: z.string().max(0).optional(),
   recaptchaToken: z.string().max(4096).optional(),
 });
+
+function messageErreur(champ: PropertyKey | undefined): string {
+  switch (champ) {
+    case "url":
+      return "Adresse de site manquante.";
+    case "email":
+      return "Cette adresse e-mail ne semble pas valide.";
+    case "consentement":
+      return "Cochez la case pour lancer l'analyse.";
+    case "organisation":
+      return "Renseignez le nom de votre organisation.";
+    default:
+      return "Demande illisible.";
+  }
+}
 
 /**
  * Demande d'analyse d'un site.
@@ -31,7 +62,16 @@ export async function POST(req: Request) {
 
   const parsed = Body.safeParse(payload);
   if (!parsed.success) {
-    return Response.json({ error: "adresse manquante" }, { status: 400 });
+    return Response.json(
+      { error: messageErreur(parsed.error.issues[0]?.path[0]) },
+      { status: 400 },
+    );
+  }
+  if (undeliverableReason(parsed.data.email)) {
+    return Response.json(
+      { error: "Cette adresse e-mail ne semble pas valide." },
+      { status: 400 },
+    );
   }
 
   // reCAPTCHA ne bloque plus ce scan : c'est l'outil gratuit qui sert de porte
@@ -69,8 +109,9 @@ export async function POST(req: Request) {
 
   try {
     // En développement, le plafond (1 scan/heure) bloquerait chaque session de
-    // test au premier essai. La production, elle, applique toujours la limite.
-    if (process.env.NODE_ENV !== "development") {
+    // test au premier essai. La production, elle, applique la limite, sauf
+    // quand PLAFOND_SUSPENDU est levé.
+    if (process.env.NODE_ENV !== "development" && !PLAFOND_SUSPENDU) {
       const verdict = await checkRateLimit(ipHash);
       if (!verdict.allowed) {
         return Response.json(
@@ -89,6 +130,8 @@ export async function POST(req: Request) {
       .values({
         url,
         status: "pending",
+        auditEmail: parsed.data.email,
+        leadOrganisation: parsed.data.organisation,
         ipHash,
         userAgent: req.headers.get("user-agent")?.slice(0, 500) ?? null,
       })

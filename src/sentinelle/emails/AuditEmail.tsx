@@ -6,6 +6,7 @@ import {
   ECHANGE_URL,
   PRESTATIONS,
   TONALITE_LABELS,
+  techniqueDe,
 } from "@sentinelle/audit/prestations";
 import { Layout, SITE_URL } from "./Layout";
 import { COLORS, FONTS, styles } from "./theme";
@@ -107,6 +108,14 @@ export function AuditEmail({ diagnostic, siteUrl, nom, genereLe, rapportUrl }: A
           >
             {pack.nom} : {besoin.toLowerCase()}
           </Text>
+          {conclusion.issue === "refonte" && diagnostic.refonte && (
+            <Text style={{ ...styles.paragraph, margin: "0 0 8px" }}>
+              <span style={{ color: COLORS.muted }}>
+                {techniqueDe("refonte", diagnostic.refonte)} :{" "}
+              </span>
+              {diagnostic.refonte.raison}
+            </Text>
+          )}
           <Text style={{ ...styles.paragraph, margin: 0 }}>
             <span style={{ color: COLORS.muted }}>Objectif : </span>
             {conclusion.objectif}

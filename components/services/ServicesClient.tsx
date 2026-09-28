@@ -24,7 +24,13 @@ import { BesoinTitle } from "@/components/aspect/besoin-title";
 import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
 import { BlueprintGrid } from "@/components/visuals/blueprint-grid";
 import { SUIVI_INCLUS_MOIS } from "@/lib/maintenance-offer";
-import { TRAJECTOIRES, trajectoirePrice, type TrajectoireSlug } from "@/lib/trajectoires";
+import {
+  TRAJECTOIRES,
+  trajectoirePrice,
+  variantePriceHT,
+  type TrajectoireSlug,
+  type VarianteSlug,
+} from "@/lib/trajectoires";
 
 export default function ServicesClient() {
   const { profileId } = useDocumentationMode();
@@ -41,6 +47,11 @@ export default function ServicesClient() {
   const nom = (slug: TrajectoireSlug) => TRAJECTOIRES[slug].name[l];
   const aPartirDe = (slug: TrajectoireSlug) =>
     `${trajectoirePrice(slug, l).replace(/^./, (c) => c.toLowerCase())} ${isEn ? "excl. VAT" : "HT"}`;
+  // Les deux variantes de la Refonte (ADR-031), à égalité.
+  const aPartirDeVariante = (v: VarianteSlug) => {
+    const variante = TRAJECTOIRES["forfait-headless"].variantes?.find((x) => x.slug === v);
+    return variante ? variantePriceHT(variante, l).replace(/^./, (c) => c.toLowerCase()) : "";
+  };
 
   // Colonne droite du héros (page mère) : ses pages enfants, et elles seules,
   // les parcours du panneau « Évoluer » du menu.
@@ -77,7 +88,7 @@ export default function ServicesClient() {
               <ArrowRight size={14} />
             </a>
             <a href="/scan" className={HERO_BTN_SECONDARY}>
-              {isEn ? "Analyze your site in 2 minutes" : "Analysez votre site en 2 minutes"}
+              {isEn ? "Analyze your site" : "Analysez votre site"}
             </a>
             <a href="#tarifs" className={HERO_BTN_SECONDARY}>
               {isEn ? "See pricing" : "Voir les tarifs"}
@@ -234,21 +245,21 @@ export default function ServicesClient() {
           (isEn
             ? [
                 `Three services for an aging WordPress site: ${nom("forfait-classique")}, ${nom("forfait-headless")} or ${nom("forfait-webapp")}. The real question is not WordPress or not WordPress, it is what you keep and what you change.`,
-                `${nom("forfait-classique")}: optimized WordPress, bespoke theme and a cleaned-up plugin stack, ${aPartirDe("forfait-classique")}. You keep WordPress, you change what slows it down.`,
-                `${nom("forfait-headless")}, the recommended service: headless WordPress, ${aPartirDe("forfait-headless")}. Your editors publish in the same back office, your visitors see a fast, modern site.`,
+                `${nom("forfait-classique")}: optimized WordPress, ${aPartirDe("forfait-classique")}. Your current site and its theme are kept and brought up to standard: speed, plugins, security, hosting. No rebuild.`,
+                `${nom("forfait-headless")}, the recommended service: the site is rebuilt and your editors still publish in WordPress, ${aPartirDe("forfait-headless")}. Two variants on an equal footing: custom WordPress (${aPartirDeVariante("sur-mesure")}) when the care budget must stay light, headless WordPress (${aPartirDeVariante("headless")}) when speed, design or traffic are decisive.`,
                 `${nom("forfait-webapp")}: web app, platform or mobile application, ${aPartirDe("forfait-webapp")}, when the site has become a working tool.`,
                 "Every service starts with a first technical and strategic watch analysis: what is moving around your site, and what the context makes possible.",
                 "Price and timeline in writing before we start, performance measured before and after, a single point of contact from quote to launch.",
-                `No site yet? Same packages, same timelines: we start from a blank page instead of the existing one. Every package includes ${SUIVI_INCLUS_MOIS} months of care after launch.`,
+                `No site yet? ${nom("forfait-headless")} and ${nom("forfait-webapp")} start from a blank page instead of the existing one, same timelines. Every package includes ${SUIVI_INCLUS_MOIS} months of care after launch.`,
               ]
             : [
                 `Trois prestations pour un site WordPress qui vieillit : ${nom("forfait-classique")}, ${nom("forfait-headless")} ou ${nom("forfait-webapp")}. La vraie question n'est pas WordPress ou pas WordPress, c'est ce que vous gardez et ce que vous changez.`,
-                `${nom("forfait-classique")} : WordPress optimisé, thème sur-mesure et empilement de plugins assaini, ${aPartirDe("forfait-classique")}. Vous gardez WordPress, vous changez ce qui le ralentit.`,
-                `${nom("forfait-headless")}, la prestation recommandée : WordPress headless, ${aPartirDe("forfait-headless")}. Vos rédacteurs publient dans le même back-office, vos visiteurs voient un site rapide et moderne.`,
+                `${nom("forfait-classique")} : WordPress optimisé, ${aPartirDe("forfait-classique")}. Votre site actuel et son thème sont gardés et remis à niveau : vitesse, extensions, sécurité, hébergement. Sans reconstruction.`,
+                `${nom("forfait-headless")}, la prestation recommandée : le site est reconstruit et vos rédacteurs publient toujours dans WordPress, ${aPartirDe("forfait-headless")}. Deux variantes à égalité : WordPress sur mesure (${aPartirDeVariante("sur-mesure")}) quand le budget de suivi doit rester léger, WordPress headless (${aPartirDeVariante("headless")}) quand la vitesse, le design ou le trafic sont décisifs.`,
                 `${nom("forfait-webapp")} : web app, plateforme ou application mobile, ${aPartirDe("forfait-webapp")}, quand le site est devenu un outil de travail.`,
                 "Chaque prestation commence par une première analyse de veille technique et stratégique : ce qui bouge autour de votre site, et ce que le contexte rend possible.",
                 "Prix et délai écrits avant de commencer, performance mesurée avant et après, une interlocutrice unique du devis à la mise en ligne.",
-                `Pas encore de site ? Mêmes forfaits, mêmes délais : on part d'une page blanche au lieu de l'existant. Chaque forfait inclut ${SUIVI_INCLUS_MOIS} mois de suivi après la mise en ligne.`,
+                `Pas encore de site ? La ${nom("forfait-headless")} et l'${nom("forfait-webapp")} partent d'une page blanche au lieu de l'existant, mêmes délais. Chaque forfait inclut ${SUIVI_INCLUS_MOIS} mois de suivi après la mise en ligne.`,
               ]
           )
         }

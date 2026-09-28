@@ -16,7 +16,7 @@ const SECTION_INDEX = ["№ 03", "№ 04", "№ 05"];
 
 function OfferSection({ tier, index }: { tier: Tier; index: string }) {
   const ctaClass = cn(
-    "group inline-flex min-h-11 items-center justify-center gap-2 rounded-sm px-5 py-2.5 font-mono text-xs uppercase tracking-[0.08em] no-underline transition-colors",
+    "group inline-flex min-h-11 items-center justify-center gap-2 rounded-sm px-5 py-2.5 font-mono text-sm font-semibold uppercase tracking-[0.08em] no-underline transition-colors",
     tier.highlight
       ? "border border-accent-secondary bg-accent-secondary text-obsidian hover:bg-accent-secondary/85"
       : "border border-dark-gray text-foreground hover:bg-jet",
@@ -97,6 +97,26 @@ function OfferSection({ tier, index }: { tier: Tier; index: string }) {
           </p>
         </div>
       </Reveal>
+
+      {/* Variantes à égalité (Refonte, ADR-031) : deux colonnes de même poids,
+          le choix se fait selon la situation, jamais par défaut. */}
+      {tier.variantes && tier.variantes.length > 0 && (
+        <Reveal className="grid border-t border-dark-gray md:grid-cols-2">
+          {tier.variantes.map((v) => (
+            <div
+              key={v.slug}
+              className="flex flex-col gap-3 border-b border-dark-gray px-6 py-8 last:border-b-0 md:border-b-0 md:border-r md:last:border-r-0 lg:px-8"
+            >
+              <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                <h3 className="text-xl font-light tracking-tight text-foreground md:text-2xl">{v.technique}</h3>
+                <span className="font-mono text-xs tracking-[0.08em] text-accent-secondary">{v.price}</span>
+              </div>
+              <p className="font-inter-tight text-base leading-relaxed text-foreground/85">{v.enClair}</p>
+              <p className="font-inter-tight text-base leading-relaxed text-mid-gray">{v.quand}</p>
+            </div>
+          ))}
+        </Reveal>
+      )}
 
       {/* CTA de l'offre */}
       <div className="border-t border-dark-gray px-6 py-8 lg:px-8">

@@ -20,7 +20,7 @@ export async function generateMetadata({
     title:
       locale === "en"
         ? "AI visibility diagnostic - Is your site visible to ChatGPT and Perplexity?"
-        : "Diagnostic visibilité IA - Votre site est-il visible dans ChatGPT et Perplexity ?",
+        : "Votre site est-il visible dans ChatGPT ? Diagnostic IA",
     description:
       locale === "en"
         ? "10 questions to score your site's visibility in ChatGPT, Perplexity and AI Overviews: crawler access, citability, structure, authority. Free verdict."

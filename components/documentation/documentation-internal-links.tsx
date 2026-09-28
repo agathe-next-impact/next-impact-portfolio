@@ -31,7 +31,7 @@ interface ToolLink {
 
 const TOOL_LINKS_FR: ToolLink[] = [
   {
-    href: "/audit-site-web",
+    href: "/scan",
     title: "Diagnostic Web & IA",
     description: "Obtenez une première orientation avant de construire.",
     icon: SearchCheck,
@@ -48,7 +48,7 @@ const TOOL_LINKS_FR: ToolLink[] = [
 
 const TOOL_LINKS_EN: ToolLink[] = [
   {
-    href: "/audit-site-web",
+    href: "/scan",
     title: "Web & AI diagnostic",
     description: "Get a first direction before building.",
     icon: SearchCheck,
@@ -475,7 +475,7 @@ function getCategoryRelevantLinks(
       return [
         { href: "/wordpress-headless", title: t("Headless WordPress", "WordPress Headless") },
         ...base,
-        { href: "/audit-site-web", title: t("AI audit", "Audit IA") },
+        { href: "/scan", title: t("AI audit", "Audit IA") },
         { href: "/etudes-de-cas", title: t("Case studies", "Études de cas") },
         { href: "/solutions-web", title: t("Our offerings", "Nos offres") },
       ];
@@ -483,13 +483,13 @@ function getCategoryRelevantLinks(
       return [
         ...base,
         { href: "/wordpress-headless", title: t("Headless WordPress", "WordPress Headless") },
-        { href: "/audit-site-web", title: t("AI audit", "Audit IA") },
+        { href: "/scan", title: t("AI audit", "Audit IA") },
         { href: "/etudes-de-cas", title: t("Case studies", "Études de cas") },
       ];
     case "seo":
       return [
         ...base,
-        { href: "/audit-site-web", title: t("AI audit", "Audit IA") },
+        { href: "/scan", title: t("AI audit", "Audit IA") },
         { href: "/documentation/marketing-digital", title: t("Digital marketing", "Marketing Digital") },
         { href: "/solutions-web", title: t("Our SEO offerings", "Nos offres SEO") },
       ];
@@ -505,7 +505,7 @@ function getCategoryRelevantLinks(
       return [
         ...base,
         { href: "/documentation/seo", title: t("SEO guide", "Guide SEO") },
-        { href: "/audit-site-web", title: t("AI audit", "Audit IA") },
+        { href: "/scan", title: t("AI audit", "Audit IA") },
         { href: "/contact", title: t("Start a project", "Démarrer un projet") },
       ];
     case "applications-web-mobile":
@@ -520,14 +520,14 @@ function getCategoryRelevantLinks(
       return [
         ...base,
         { href: "/cahier-des-charges", title: t("Specifications", "Cahier des charges") },
-        { href: "/audit-site-web", title: t("AI audit", "Audit IA") },
+        { href: "/scan", title: t("AI audit", "Audit IA") },
         { href: "/wordpress-headless", title: t("Headless WordPress", "WordPress Headless") },
         { href: "/contact", title: t("Start a project", "Démarrer un projet") },
       ];
     default:
       return [
         ...base,
-        { href: "/audit-site-web", title: t("AI audit", "Audit IA") },
+        { href: "/scan", title: t("AI audit", "Audit IA") },
         { href: "/etudes-de-cas", title: t("Case studies", "Études de cas") },
         { href: "/solutions-web", title: t("Our offerings", "Nos offres") },
         { href: "/contact", title: t("Start a project", "Démarrer un projet") },

@@ -373,7 +373,7 @@ const formSectionsFr: FormSection[] = [
           {
             id: "site-classique",
             label: "Site WordPress classique",
-            description: "Vitrine, institutionnel ou refonte WordPress optimisée",
+            description: "Vitrine ou institutionnel : WordPress existant optimisé, ou refonte en WordPress sur mesure",
           },
           {
             id: "site-headless",
@@ -829,7 +829,7 @@ const formSectionsEn: FormSection[] = [
           {
             id: "site-classique",
             label: "Classic WordPress site",
-            description: "Brochure, institutional or optimized WordPress rebuild",
+            description: "Brochure or institutional: existing WordPress optimized, or a custom WordPress redesign",
           },
           {
             id: "site-headless",

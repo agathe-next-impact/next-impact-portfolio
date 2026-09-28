@@ -23,9 +23,9 @@ const FADE = {
 };
 
 const CTA_PRIMARY =
-  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-accent-secondary bg-accent-secondary px-5 font-mono text-xs font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
+  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-accent-secondary bg-accent-secondary px-5 font-mono text-sm font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
 const CTA_GHOST =
-  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-dark-gray px-5 font-mono text-xs uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet";
+  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-dark-gray px-5 font-mono text-sm font-semibold uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet";
 
 export default function CaseStudiesClient({ cards }: { cards: CaseStudyCard[] }) {
   const { profileId } = useDocumentationMode();
@@ -108,7 +108,7 @@ export default function CaseStudiesClient({ cards }: { cards: CaseStudyCard[] })
               <div className="flex flex-wrap gap-3">
                 {/* Froid en primaire : un prospect qui vérifie n'est pas prêt pour
                     un RDV — on lui donne d'abord de quoi se situer. */}
-                <Link href="/audit-site-web" className={CTA_PRIMARY}>
+                <Link href="/scan" className={CTA_PRIMARY}>
                   {isEn ? "Book my free audit" : "Réserver mon audit gratuit"}
                   <ArrowRight size={14} />
                 </Link>

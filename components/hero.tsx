@@ -27,9 +27,9 @@ import { AuroraGlow } from "@/components/visuals/aurora-glow";
 // ─────────────────────────────────────────────────────────────────────────────
 
 const BTN_PRIMARY =
-  "inline-flex min-h-11 items-center gap-2 border border-accent-secondary bg-accent-secondary px-5 py-2.5 font-mono text-xs uppercase tracking-[0.08em] text-obsidian no-underline transition-colors hover:bg-accent-secondary/85";
+  "inline-flex min-h-11 items-center gap-2 border border-accent-secondary bg-accent-secondary px-5 py-2.5 font-mono text-sm font-semibold uppercase tracking-[0.08em] text-obsidian no-underline transition-colors hover:bg-accent-secondary/85";
 const BTN_SECONDARY =
-  "inline-flex min-h-11 items-center gap-2 border border-dark-gray px-5 py-2.5 font-mono text-xs uppercase tracking-[0.08em] text-foreground no-underline transition-colors hover:bg-jet";
+  "inline-flex min-h-11 items-center gap-2 border border-dark-gray px-5 py-2.5 font-mono text-sm font-semibold uppercase tracking-[0.08em] text-foreground no-underline transition-colors hover:bg-jet";
 
 const LOGOS = [
   { src: "/img/logo-sowee_1.webp", alt: "Sowee" },
