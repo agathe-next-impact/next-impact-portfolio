@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useTheme } from "next-themes";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import {
@@ -29,14 +28,12 @@ import {
   LogOut,
   Mail,
   Menu,
-  Moon,
   PanelLeftClose,
   PanelLeftOpen,
   Receipt,
   Award,
   Search,
   ShieldCheck,
-  Sun,
   X,
   type LucideIcon,
 } from "lucide-react";
@@ -496,21 +493,6 @@ function Outil({
   return collapsed ? <Bulle texte={label}>{element}</Bulle> : element;
 }
 
-function Theme({ collapsed }: { collapsed: boolean }) {
-  const { resolvedTheme, setTheme } = useTheme();
-  const [pret, setPret] = useState(false);
-  useEffect(() => setPret(true), []);
-  const sombre = !pret || resolvedTheme !== "light";
-  return (
-    <Outil
-      collapsed={collapsed}
-      icon={sombre ? Sun : Moon}
-      label={sombre ? "Passer en clair" : "Passer en sombre"}
-      onClick={() => setTheme(sombre ? "light" : "dark")}
-    />
-  );
-}
-
 const TONE_TEXTE: Record<SituationTone, string> = {
   neutre: "text-foreground",
   attention: "text-[#f2c94c]",
@@ -714,7 +696,6 @@ function Contenu({
             <Outil collapsed={collapsed} icon={KeyRound} label="Mes appareils" href={props.appareilsHref} />
           ) : null}
           <Outil collapsed={collapsed} icon={Download} label={props.restitution.label} href={props.restitution.href} />
-          <Theme collapsed={collapsed} />
           {props.admin ? null : (
             <form action={deconnexion} onSubmit={() => void viderPagesHorsLigne()}>
               <Outil collapsed={collapsed} icon={LogOut} label="Se déconnecter" type="submit" />

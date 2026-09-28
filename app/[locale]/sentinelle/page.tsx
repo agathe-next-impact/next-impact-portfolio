@@ -7,7 +7,6 @@ import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { InscriptionSentinelle } from "@/components/sentinelle/inscription-form";
 import { OFFER_AMOUNT_CENTS, OFFER_PRICE_LABEL } from "@/lib/sentinelle-offer";
-import { CTA_ECHANGE } from "@/lib/visio-conseil";
 
 // Prix lu dans sa source pour la métadonnée et le JSON-LD anglais : le libellé
 // OFFER_PRICE_LABEL n'existe qu'en français.
@@ -31,13 +30,13 @@ const OFFER_PRICE_LABEL_EN = `€${OFFER_AMOUNT_CENTS / 100}/month`;
 // d'isolation, docs/sentinelle/CLAUDE.md). Si AXES change, changer POINTS.
 //
 // ⚠️ AVANT_LANCEMENT : le produit n'est pas encore livré (scanner en phase 2,
-// paiement en phase 5). Tant que ce drapeau est à true, la page est en noindex
-// et le CTA principal renvoie vers /contact plutôt que vers un parcours qui
-// n'aboutit pas.
+// paiement en phase 5). Tant que ce drapeau est à true, la page est en noindex.
+// Le héros n'a plus qu'un bouton, vers /contact, quel que soit ce drapeau
+// (2026-09-28).
 //
 // Le jour du lancement, trois gestes solidaires — les faire ensemble, sinon la
 // page devient indexable sans être atteignable, ou l'inverse :
-//   1. passer AVANT_LANCEMENT à false (rétablit /scan comme CTA froid) ;
+//   1. passer AVANT_LANCEMENT à false ;
 //   2. l'entrée sitemap — FAIT (2026-08-15, `singlePages` dans
 //      app/sitemap.xml/route.ts, avec la page d'offre /veille) ;
 //   3. navigation — la veille entre dans le header via /veille (2026-08-15),
@@ -187,13 +186,6 @@ export default async function SentinellePage({
     { name: "Sentinelle", url: "/sentinelle" },
   ];
 
-  // TODO lancement : repointer le CTA froid sur /scan quand le scanner existe
-  // (phase 2). D'ici là, /contact est le seul parcours qui aboutit.
-  const ctaFroid = AVANT_LANCEMENT ? "/contact" : "/scan";
-  const ctaFroidLibelle = AVANT_LANCEMENT
-    ? "Être prévenu du lancement"
-    : "Analysez votre site";
-
   return (
     <main>
       <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
@@ -232,27 +224,14 @@ export default async function SentinellePage({
           description="Deux fois par mois, une lettre sur votre site : ce qui a changé autour de lui, ce que ça change pour vous, et quoi faire. Entre deux lettres, une alerte si une faille touche un composant installé chez vous."
         />
 
-        <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
-          {/* Premier bouton de chaque héros : l'échange gratuit (Calendly). */}
-          <a
-            href={CTA_ECHANGE.href}
-            target="_blank"
-            rel="noopener noreferrer"
+        {/* Un seul bouton dans le héros (demande d'Agathe, 2026-09-28) : le
+            contact. */}
+        <div className="mt-10">
+          <Link
+            href="/contact"
             className="inline-flex items-center justify-center border border-accent-secondary bg-accent-secondary px-6 py-3 font-mono text-sm font-semibold uppercase tracking-[0.14em] text-obsidian transition-opacity hover:opacity-90"
           >
-            {CTA_ECHANGE.label.fr}
-          </a>
-          <Link
-            href={ctaFroid}
-            className="inline-flex items-center justify-center border border-dark-gray px-6 py-3 font-mono text-sm font-semibold uppercase tracking-[0.14em] text-mid-gray transition-colors hover:text-foreground"
-          >
-            {ctaFroidLibelle}
-          </Link>
-          <Link
-            href="#dans-la-lettre"
-            className="inline-flex items-center justify-center border border-dark-gray px-6 py-3 font-mono text-sm font-semibold uppercase tracking-[0.14em] text-mid-gray transition-colors hover:text-foreground"
-          >
-            Voir ce qu'elle contient
+            Contact
           </Link>
         </div>
 
@@ -391,7 +370,7 @@ export default async function SentinellePage({
           facture, et un e-mail vous ouvre votre espace. Une question avant de
           vous lancer ?{" "}
           <Link href="/contact" className="underline underline-offset-4 hover:text-foreground">
-            Écrivez-moi
+            Contact
           </Link>
           .
         </p>

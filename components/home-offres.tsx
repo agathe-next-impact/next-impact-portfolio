@@ -116,7 +116,9 @@ function PackCartouche({ situation, lang }: { situation: Situation; lang: Lang }
           {packPrixEntree(situation, lang)}
         </span>
         <span className="inline-flex items-center gap-1 font-mono text-2xs uppercase tracking-[0.08em] text-accent-secondary transition-colors group-hover:text-foreground">
-          {isEn ? "See the offer" : "Voir l'offre"}
+          {situation.lienExterne
+            ? isEn ? "Free call" : "Échange gratuit"
+            : isEn ? "See the offer" : "Voir l'offre"}
           <ArrowRight size={12} className="transition-transform group-hover:translate-x-0.5" />
         </span>
       </span>

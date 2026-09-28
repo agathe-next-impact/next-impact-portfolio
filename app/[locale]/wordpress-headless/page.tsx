@@ -791,7 +791,7 @@ export default async function WordPressHeadlessPillarPage({
                   <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link href="/contact" className={BTN_SECONDARY}>
-                  {isEn ? "Or talk to me" : "Ou m'écrire"}
+                  Contact
                 </Link>
               </div>
             </div>

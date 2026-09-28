@@ -91,8 +91,8 @@ export async function generateMetadata({
     creator: 'Agathe Karinthi-Martin',
     publisher: 'Next Impact',
     // Icônes : conventions de fichiers d'app/ (favicon.ico, icon.png,
-    // apple-icon.png), monogramme blanc sur fond bleu de la charte (2026-09-28).
-    // L'ancien /logo-carre-bleu.png n'était qu'un aplat bleu, sans marque.
+    // apple-icon.png), le carré bleu uni de /logo-carre-bleu.png (#12196e),
+    // choix d'Agathe du 2026-09-28 qui remplace le monogramme « n.d ».
     openGraph: {
       type: 'website',
       locale: m.ogLocale,

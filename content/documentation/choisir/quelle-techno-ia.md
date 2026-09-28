@@ -137,4 +137,4 @@ Vérifiez la réversibilité avant tout : contenus exportables, domaine à votre
 
 ---
 
-*Agathe Karinthi-Martin est développeuse web et fondatrice de Next Impact Digital, studio indépendant spécialisé dans les sites WordPress modernisés (front Next.js) et le conseil en choix de technologie web. Elle conçoit des sites mesurés sur leurs performances réelles (Core Web Vitals) et accompagne des PME et structures de l'ESS dans leurs décisions techniques. [Prendre contact](/contact).*
+*Agathe Karinthi-Martin est développeuse web et fondatrice de Next Impact Digital, studio indépendant spécialisé dans les sites WordPress modernisés (front Next.js) et le conseil en choix de technologie web. Elle conçoit des sites mesurés sur leurs performances réelles (Core Web Vitals) et accompagne des PME et structures de l'ESS dans leurs décisions techniques. [Contact](/contact).*

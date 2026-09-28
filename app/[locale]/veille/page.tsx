@@ -12,7 +12,6 @@ import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { OFFER_PRICE_LABEL } from "@/lib/sentinelle-offer";
 import { NEWSLETTER_SUBSCRIBE_URL } from "@/lib/newsletter";
-import { CTA_ECHANGE } from "@/lib/visio-conseil";
 import { DerniereLettre } from "@/components/veille/derniere-lettre";
 import { HeroNavCards, type HeroNavCard } from "@/components/aspect/hero-nav-cards";
 import { Sonar } from "@/components/visuals/sonar";
@@ -305,24 +304,12 @@ export default async function VeillePage({
             sans devenir développeur.
           </>
         }
+        // Un seul bouton dans le héros (demande d'Agathe, 2026-09-28) : le
+        // contact, comme sur /sentinelle.
         actions={
-          <>
-            {/* Premier bouton de chaque héros : l'échange gratuit (Calendly). */}
-            <a href={CTA_ECHANGE.href} target="_blank" rel="noopener noreferrer" className={BTN_PRIMARY}>
-              {CTA_ECHANGE.label.fr}
-            </a>
-            <a href="#sentinelle" className={BTN_SECONDARY}>
-              La veille personnalisée
-            </a>
-            <a
-              href={NEWSLETTER_SUBSCRIBE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={BTN_SECONDARY}
-            >
-              La lettre gratuite — Substack
-            </a>
-          </>
+          <Link href="/contact" className={BTN_PRIMARY}>
+            Contact
+          </Link>
         }
         note={`Sentinelle ${OFFER_PRICE_LABEL}, sans engagement · lettre gratuite`}
         // Cartes à leur hauteur naturelle (sans `fill`) : colonne de droite

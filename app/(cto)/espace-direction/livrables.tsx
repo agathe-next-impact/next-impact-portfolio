@@ -940,45 +940,59 @@ export function propositionTone(statut: string | null): Tone {
   return "attention";
 }
 
-/** Les propositions remises : de quoi choisir laquelle ouvrir. */
-export function Propositions({
+/**
+ * Les propositions remises, en onglets au-dessus de celle qu'on lit.
+ *
+ * Des liens, pas un `tablist` : chaque onglet est une adresse
+ * (`/propositions/<id>`), rendue côté serveur, que le client peut garder ou
+ * partager. L'onglet courant porte `aria-current`. Sur un téléphone, la barre
+ * défile horizontalement plutôt que de passer à la ligne.
+ */
+export function OngletsPropositions({
   base = ESPACE_PATH,
   items,
+  courante,
   since = null,
 }: {
   base?: string;
   items: Deliverable[];
+  /** L'identifiant Notion de la proposition affichée. */
+  courante: string;
   since?: Date | null;
 }) {
   return (
-    <Panel className="mt-5 divide-y divide-dark-gray">
-      {items.map((item) => {
-        const payload = item.payload as PropositionPayload;
-        return (
-          <article key={item.id} className="px-5 py-5">
-            <header className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-              <h3 className="font-inter-tight text-base leading-snug text-foreground">
-                <Link
-                  href={propositionPath(item.notionPageId, base)}
-                  className="underline-offset-4 hover:text-accent-secondary hover:underline"
-                >
-                  {item.title}
-                </Link>
-              </h3>
-              <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray">
-                {item.occurredAt ? formatDay(item.occurredAt) : "sans date"}
-              </p>
-            </header>
-            <div className="mt-2.5 flex flex-wrap gap-1.5">
-              <Nouveaute item={item} since={since} />
-              <Tag tone={propositionTone(payload.statut)}>{payload.statut ?? "En attente de réponse"}</Tag>
-              {payload.sections.length > 0 ? <Tag>{`${payload.sections.length} parties`}</Tag> : null}
-            </div>
-            <Correction item={item} base={base} />
-          </article>
-        );
-      })}
-    </Panel>
+    <nav aria-label="Propositions" className="mt-8 border-b border-dark-gray">
+      <ul className="-mb-px flex gap-1 overflow-x-auto">
+        {items.map((item) => {
+          const payload = item.payload as PropositionPayload;
+          const active = item.notionPageId === courante;
+          const etat = nouveaute(item, since);
+          return (
+            <li key={item.id} className="shrink-0">
+              <Link
+                href={propositionPath(item.notionPageId, base)}
+                aria-current={active ? "page" : undefined}
+                className={`block max-w-[18rem] border-b-2 px-4 py-3 transition-colors ${
+                  active
+                    ? "border-accent-secondary text-foreground"
+                    : "border-transparent text-mid-gray hover:border-dark-gray hover:text-foreground"
+                }`}
+              >
+                <span className="block truncate font-inter-tight text-sm">{item.title}</span>
+                <span className="mt-1 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray">
+                  <span>{payload.statut ?? "En attente"}</span>
+                  {item.occurredAt ? <span aria-hidden>·</span> : null}
+                  {item.occurredAt ? <span>{formatDay(item.occurredAt)}</span> : null}
+                  {etat ? (
+                    <span className="text-accent-secondary">{etat === "nouveau" ? "Nouveau" : "Corrigé"}</span>
+                  ) : null}
+                </span>
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
   );
 }
 

@@ -33,6 +33,7 @@ import { digestsForClient } from "@cto/digest";
 import { lettersForClient } from "@cto/letters";
 import { sentinelleStateFor } from "@cto/sentinelle";
 import { siteStateFor, type SiteState } from "@cto/site";
+import { BasculeTheme } from "./bascule-theme";
 import { auditPath, nouveaute, sortRecentFirst } from "./livrables";
 import { NAV_COOKIE } from "./nav";
 import { BanniereInstallation, EtatReseau } from "./pwa";
@@ -505,7 +506,7 @@ export async function Espace({
             </div>
           ) : null}
 
-          <PageHeader company={viewer.company} title={title} />
+          <PageHeader company={viewer.company} title={title} aside={<BasculeTheme />} />
 
           {horsServices ? (
             <div className="mt-8">

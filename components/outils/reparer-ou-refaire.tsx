@@ -225,12 +225,12 @@ type Tier = "reparer" | "optimiser" | "refondre";
 function getCtas(tier: Tier) {
   if (tier === "reparer")
     return {
-      primary: { fr: "Réparer mon site", en: "Fix my site", href: "/contact" },
+      primary: { fr: "Contact", en: "Contact", href: "/contact" },
       secondary: { fr: "Auditer mon site", en: "Audit my site", href: "/scan" },
     };
   if (tier === "optimiser")
     return {
-      primary: { fr: "Optimiser mon site", en: "Optimize my site", href: "/contact" },
+      primary: { fr: "Contact", en: "Contact", href: "/contact" },
       secondary: { fr: "Décider · 15 min, gratuit", en: "Decide · 15 min, free", href: "/conseil#choix-techno-ia" },
     };
   return {

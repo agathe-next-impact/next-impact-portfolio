@@ -89,13 +89,25 @@ export function BackLink({ href, children }: { href: string; children: ReactNode
  * L'ordre compte. Trois personnes de trois entreprises peuvent ouvrir cet
  * espace ; la première chose à confirmer est « je suis bien chez moi ».
  */
-export function PageHeader({ company, title }: { company: string; title: string }) {
+export function PageHeader({
+  company,
+  title,
+  aside,
+}: {
+  company: string;
+  title: string;
+  /** En haut à droite : la bascule de thème. */
+  aside?: ReactNode;
+}) {
   return (
-    <header className="border-b border-dark-gray pb-6">
-      <Label>{company}</Label>
-      <h1 className="mt-2 font-sans text-2xl font-light text-foreground sm:text-3xl">
-        {title}
-      </h1>
+    <header className="flex items-start justify-between gap-4 border-b border-dark-gray pb-6">
+      <div className="min-w-0">
+        <Label>{company}</Label>
+        <h1 className="mt-2 font-sans text-2xl font-light text-foreground sm:text-3xl">
+          {title}
+        </h1>
+      </div>
+      {aside ? <div className="shrink-0">{aside}</div> : null}
     </header>
   );
 }

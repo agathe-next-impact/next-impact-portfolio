@@ -62,7 +62,7 @@ export const HERO_VARIANTS: Record<ProfileId | "default", HeroVariant> = {
     valueProposition:
       "Performance, SEO, conversion et autonomie de gestion : des résultats mesurables, quelle que soit la voie choisie.",
     ctaPrimary: { label: "Diagnostic projet gratuit", href: "#audit" },
-    ctaSecondary: { label: "Me contacter", href: "/contact" },
+    ctaSecondary: { label: "Contact", href: "/contact" },
     auditTitle: "Quelle techno pour votre projet ?",
     auditSubtitle: "Diagnostic projet",
     auditDescription:
@@ -76,7 +76,7 @@ export const HERO_VARIANTS: Record<ProfileId | "default", HeroVariant> = {
     valueProposition:
       "Une interface d'administration pensée pour votre logique métier : zéro friction au quotidien.",
     ctaPrimary: { label: "Diagnostic projet gratuit", href: "#audit" },
-    ctaSecondary: { label: "Me contacter", href: "/contact" },
+    ctaSecondary: { label: "Contact", href: "/contact" },
     auditTitle: "Quelle voie pour votre projet ?",
     auditSubtitle: "Diagnostic projet",
     auditDescription:
@@ -90,7 +90,7 @@ export const HERO_VARIANTS: Record<ProfileId | "default", HeroVariant> = {
     valueProposition:
       "Sites WordPress (classiques ou Headless + Next.js) et applications sur-mesure : le bon outil pour chaque projet, sans surenchère technique.",
     ctaPrimary: { label: "Diagnostic gratuit", href: "#audit" },
-    ctaSecondary: { label: "Me contacter", href: "/contact" },
+    ctaSecondary: { label: "Contact", href: "/contact" },
     auditTitle: "Quelle voie pour votre projet ?",
     auditSubtitle: "Diagnostic technique",
     auditDescription:

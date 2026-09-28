@@ -301,7 +301,7 @@ export default async function EspaceClientPage({
               <ArrowRight size={14} />
             </a>
             <a href={CTA_CHAUD.href} target="_blank" rel="noopener noreferrer" className={HERO_BTN_SECONDARY}>
-              Discutons de votre projet
+              {CTA_CHAUD.label.fr}
             </a>
           </div>
         </div>

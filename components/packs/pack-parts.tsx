@@ -207,7 +207,7 @@ export function CtaPaire({
             <ArrowRight size={14} />
           </a>
           <a href={CTA_CHAUD.href} target="_blank" rel="noopener noreferrer" className={HERO_BTN_SECONDARY}>
-            {isEn ? "Let's talk about your project" : "Discutons de votre projet"}
+            {CTA_CHAUD.label[isEn ? "en" : "fr"]}
           </a>
         </div>
       </div>

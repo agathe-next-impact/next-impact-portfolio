@@ -39,16 +39,14 @@ type NavHref = Parameters<typeof Link>[0]["href"];
 // porte d'entrée froide. Les clés `decider`, `refaire`, `tenir` sont des
 // identifiants techniques : seuls les libellés affichés ont changé.
 //
-// Bouton du header = le CTA froid unique du site : l'analyse du site (/scan),
-// libellé court. La prise de rendez-vous (CTA chaud) reste dans le tiroir
-// mobile et en fin de chaque page.
+// Bouton du header = l'échange gratuit sur Calendly, « Discutons-en »
+// (2026-09-28, remplace le lien vers /contact). L'analyse du site (CTA froid) et la prise de
+// rendez-vous (CTA chaud) restent dans le tiroir mobile et en fin de page.
 
 // Les entrées à mega menu (clé = clé de traduction `nav`) : les trois moments,
-// puis « La veille ».
-const MEGA_KEYS = ["decider", "refaire", "tenir", "surveiller"] as const;
-
-// Les entrées de nav simples (sans panneau).
-const NAV_PLAIN_BEFORE = [{ key: "caseStudies", href: "/etudes-de-cas" }] as const;
+// « La veille », puis « À propos » (études de cas et page À propos, demande
+// d'Agathe du 2026-09-28 ; « Études de cas » n'est plus une entrée à part).
+const MEGA_KEYS = ["decider", "refaire", "tenir", "surveiller", "about"] as const;
 
 // CTA froid : /scan vit hors de app/[locale]/ (groupe (sentinelle)) — balise
 // <a> et non le Link i18n, qui donnerait /en/scan en anglais.
@@ -119,11 +117,45 @@ export default function Header() {
             NEXT IMPACT
           </Link>
 
-          {/* Desktop nav : Audit · Prestations · Pilotage · Veille (mega) · Études de cas */}
+          {/* Desktop nav : Audit · Prestations · Pilotage · Veille · À propos (mega) */}
           <nav className="hidden flex-1 items-center justify-center gap-1 lg:flex">
             {MEGA_KEYS.map((key) => {
               const section = MEGA_SECTIONS[key];
               const open = activeMenu === key;
+              const inner = (
+                <>
+                  {t(key as Parameters<typeof t>[0])}
+                  <ChevronDown
+                    size={13}
+                    aria-hidden
+                    className={`transition-transform ${open ? "rotate-180" : ""}`}
+                  />
+                </>
+              );
+              const cls = `inline-flex items-center gap-1 px-3 py-2 text-sm no-underline transition-colors hover:text-foreground ${
+                open ? "text-foreground" : "text-mid-gray"
+              }`;
+              // Sans page mère (« À propos ») : un bouton qui ouvre et ferme
+              // le panneau, sans navigation.
+              if (!section.href) {
+                return (
+                  <button
+                    key={key}
+                    type="button"
+                    aria-haspopup="true"
+                    aria-expanded={open}
+                    aria-controls={`mega-${key}`}
+                    onMouseEnter={() => setActiveMenu(key)}
+                    onFocus={() => setActiveMenu(key)}
+                    // Pas de bascule : le survol ou le focus l'a déjà ouvert,
+                    // un clic le refermerait aussitôt. Échap et la sortie ferment.
+                    onClick={() => setActiveMenu(key)}
+                    className={cls}
+                  >
+                    {inner}
+                  </button>
+                );
+              }
               return (
                 // L'entrée mène à sa page mère (demande d'Agathe du
                 // 2026-09-27, revient sur l'ADR-022 §13) ; le survol et le
@@ -137,31 +169,13 @@ export default function Header() {
                   onMouseEnter={() => setActiveMenu(key)}
                   onFocus={() => setActiveMenu(key)}
                   onClick={closeMenu}
-                  className={`inline-flex items-center gap-1 px-3 py-2 text-sm no-underline transition-colors hover:text-foreground ${
-                    open ? "text-foreground" : "text-mid-gray"
-                  }`}
+                  className={cls}
                 >
-                  {t(key as Parameters<typeof t>[0])}
-                  <ChevronDown
-                    size={13}
-                    aria-hidden
-                    className={`transition-transform ${open ? "rotate-180" : ""}`}
-                  />
+                  {inner}
                 </Link>
               );
             })}
 
-            {NAV_PLAIN_BEFORE.map((item) => (
-              <Link
-                key={item.key}
-                href={item.href as NavHref}
-                onMouseEnter={closeMenu}
-                onFocus={closeMenu}
-                className="px-3 py-2 text-sm text-mid-gray no-underline transition-colors hover:text-foreground"
-              >
-                {t(item.key as Parameters<typeof t>[0])}
-              </Link>
-            ))}
           </nav>
 
           {/* Desktop right */}
@@ -198,15 +212,16 @@ export default function Header() {
 
             <ThemeToggle />
 
-            {/* CTA de la navbar : l'analyse du site (CTA froid, demande
-                d'Agathe du 2026-09-28). L'échange gratuit (chaud) passe par
-                le rail de contact et le tiroir mobile. */}
+            {/* CTA de la navbar : l'échange gratuit sur Calendly, nouvel
+                onglet (demande d'Agathe du 2026-09-28, remplace /contact). */}
             <a
-              href={SCAN_HREF}
+              href={CTA_HREF}
+              target="_blank"
+              rel="noopener noreferrer"
               onMouseEnter={closeMenu}
               className="inline-flex h-9 items-center rounded-sm bg-accent-secondary px-4 font-mono text-xs font-semibold uppercase tracking-[0.1em] text-obsidian no-underline transition-colors hover:bg-accent-secondary/85"
             >
-              {t("analyserSite")}
+              {t("discutonsEn")}
             </a>
           </div>
 
@@ -346,11 +361,12 @@ export default function Header() {
                           }`;
                           return (
                             <li key={`${item.label.fr}-${item.href}`}>
-                              {item.external ? (
+                              {item.external || item.horsLocale ? (
                                 <a
                                   href={item.href}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
+                                  {...(item.external
+                                    ? { target: "_blank", rel: "noopener noreferrer" }
+                                    : {})}
                                   onClick={() => setMobileOpen(false)}
                                   className={cls}
                                 >
@@ -371,7 +387,8 @@ export default function Header() {
                             </li>
                           );
                         })}
-                        {/* La page mère, en fin de liste (ADR-022). */}
+                        {/* La page mère, en fin de liste (ADR-022), quand il y en a une. */}
+                        {section.href && (
                         <li>
                           <Link
                             href={section.href as NavHref}
@@ -382,22 +399,13 @@ export default function Header() {
                             <ArrowRight size={14} />
                           </Link>
                         </li>
+                        )}
                       </ul>
                     )}
                   </div>
                 );
               })}
 
-              {NAV_PLAIN_BEFORE.map((item) => (
-                <Link
-                  key={item.key}
-                  href={item.href as NavHref}
-                  onClick={() => setMobileOpen(false)}
-                  className="flex min-h-16 items-center border-b border-dark-gray px-5 text-xl font-light tracking-tight text-foreground no-underline"
-                >
-                  {t(item.key as Parameters<typeof t>[0])}
-                </Link>
-              ))}
 
               {profileId && (
                 <button

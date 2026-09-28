@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { figtree, interTight, geistMono } from "../fonts";
-import { ThemeProvider } from "@/components/theme-provider";
 import "../globals.css";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -19,6 +18,9 @@ import "../globals.css";
 //     espace privé n'apprendrait rien et obligerait à repasser par la bannière
 //     de consentement. Le journal d'accès, lui, est une fonctionnalité assumée
 //     et annoncée, pas du traçage.
+//   - ThemeProvider : chaque espace pose le sien (next-themes ignore un
+//     fournisseur imbriqué). L'espace client est clair par défaut, l'admin
+//     suit le système : voir leurs layouts.
 // ─────────────────────────────────────────────────────────────────────────────
 
 // noindex sur tout le groupe, sans exception possible : aucune page de cet
@@ -37,16 +39,7 @@ export default function CtoRootLayout({
       className={`scroll-smooth ${figtree.variable} ${interTight.variable} ${geistMono.variable}`}
     >
       <body>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          storageKey="theme-v2"
-          themes={["light", "dark"]}
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
+        {children}
       </body>
     </html>
   );

@@ -415,7 +415,7 @@ export default function AuditPwa() {
           {/* CTAs */}
           <div className="flex flex-wrap gap-3">
             <Link href="/contact" className={BTN_PRIMARY}>
-              {isEn ? "Scope my PWA opportunity" : "Cadrer mon opportunité PWA"}
+              Contact
               <ArrowRight size={14} />
             </Link>
             <Link

@@ -238,7 +238,7 @@ Variantes proposées et non retenues, gardées pour mémoire :
 - Projet livré, *site veillé*.
 - Votre direction web, *externalisée*.
 
-Boutons : « Analysez votre site » (froid), « Discutons de votre projet » (chaud).
+Boutons : « Analysez votre site » (froid), « Échange gratuit » (chaud).
 
 Les anciennes variantes centrées sur la douleur (« Votre site WordPress vieillit mal… », « De 45 à 98 sur PageSpeed… ») quittent le héros de la home ; elles restent utilisables en h1 des pages d'offre et de pack, et dans la prospection.
 
@@ -339,10 +339,10 @@ Hors cible prospect froid. Même voix, argument unique : forfait, délai, une in
 
 ## 7. CTA et navigation
 
-- Navigation principale (v1.6) : Diagnostiquer · Évoluer · Gérer · Études de cas · À propos, puis un lien « Espace client » et le bouton « Échange gratuit », qui réserve l'échange de 15 minutes (`CTA_CHAUD`, nouvel onglet ; amendé le 28 septembre 2026, demande d'Agathe, il remplaçait « Analyser mon site »). Chaque moment ouvre un mega menu de trois cases au plus (`lib/mega-menu.ts`). Le panneau porte le besoin en titre ; ses cases sont des situations, chacune mène à la page de son pack, avec le nom de l'offre en description et le budget en badge. « Diagnostiquer » ajoute la veille gratuite. L'analyse du site (`/scan`) reste dans le tiroir mobile, les héros et les fins de page.
+- Navigation principale (v1.6) : Diagnostiquer · Évoluer · Gérer · Études de cas · À propos, puis un lien « Espace client » et le bouton « Contact », qui mène à `/contact` (amendé le 28 septembre 2026, demande d'Agathe) : la page présente chaque mode de contact dans un onglet (message, visio, téléphone, e-mail, newsletter) et le rail de contact n'y apparaît pas. Chaque moment ouvre un mega menu de trois cases au plus (`lib/mega-menu.ts`). Le panneau porte le besoin en titre ; ses cases sont des situations, chacune mène à la page de son pack, avec le nom de l'offre en description et le budget en badge. « Diagnostiquer » ajoute la veille gratuite. L'analyse du site (`/scan`) reste dans le tiroir mobile, les héros et les fins de page.
 - Chaque page d'offre se termine par deux CTA : froid (analyse du site) en principal, chaud (rendez-vous) en secondaire. Jamais un seul CTA d'une seule température.
-- Libellés fixes : « Analysez votre site » (froid), « Discutons de votre projet » (chaud), « Voir l'étude de cas » (preuve).
-- Le bouton chaud « Discutons de votre projet » réserve l'échange de 15 minutes (v1.7, ADR-023) : lien externe `CTA_CHAUD` (`lib/visio-conseil.ts`), ouvert dans un nouvel onglet. `/contact` reste accessible depuis le footer et la navigation.
+- Libellés fixes : « Analysez votre site » (froid), « Échange gratuit » (EN « Free call », chaud), « Voir l'étude de cas » (preuve). Depuis le 28 septembre 2026 (demande d'Agathe), tout CTA vers le Calendly de l'échange gratuit porte « Échange gratuit » ; « Discutons de votre projet » n'est plus employé. De même, tout lien vers `/contact` (boutons, liens de texte, contenus MDX) se nomme « Contact ».
+- Le bouton chaud « Échange gratuit » réserve l'échange de 15 minutes (v1.7, ADR-023) : lien externe `CTA_CHAUD` (`lib/visio-conseil.ts`), ouvert dans un nouvel onglet. `/contact` est le bouton de la navigation et reste accessible depuis le footer.
 - **Héros (27 septembre 2026, ADR-028)** : dans tous les héros, le premier bouton (plein) est l'échange gratuit, libellé « Échange gratuit » (EN « Free call ») depuis le 28 septembre 2026, en `text-sm` semi-gras, vers Calendly (`CTA_ECHANGE`, `lib/visio-conseil.ts`), ouvert dans un nouvel onglet. L'analyse du site (`/scan`) passe en bouton secondaire (filet), à côté des autres boutons du héros. Les deux températures restent présentes. Les fins de page gardent la règle ci-dessus.
 
 ## 8. Éléments de langage prêts à l'emploi

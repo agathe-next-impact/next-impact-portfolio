@@ -2,10 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Phone, Video, Mail, Newspaper, ArrowRight } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { NEWSLETTER_SUBSCRIBE_URL } from "@/lib/newsletter";
-import { ECHANGE_URL } from "@/lib/visio-conseil";
+import { CTA_ECHANGE, ECHANGE_URL } from "@/lib/visio-conseil";
 
 const PHONE = "0673981638";
 const PHONE_DISPLAY = "06 73 98 16 38";
@@ -23,6 +24,8 @@ export function FloatingContact() {
   const railRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const t = useTranslations("floatingContact");
+  const pathname = usePathname();
+  const locale = useLocale();
 
   type Option = {
     key: OptionKey;
@@ -31,6 +34,8 @@ export function FloatingContact() {
     sub: string;
     href: string;
     external?: boolean;
+    /** Libellé du bouton, s'il diffère du nom du canal. */
+    cta?: string;
   };
 
   const options: Option[] = [
@@ -48,6 +53,8 @@ export function FloatingContact() {
       sub: t("videoDescription"),
       href: VISIO_URL,
       external: true,
+      // Tout CTA vers l'échange gratuit porte ce libellé (2026-09-28).
+      cta: CTA_ECHANGE.label[locale === "en" ? "en" : "fr"],
     },
     {
       key: "email",
@@ -109,6 +116,9 @@ export function FloatingContact() {
 
   const activeOption = options.find((o) => o.key === activeKey);
 
+  // Pas de rail sur la page contact : elle présente déjà chaque mode en onglet.
+  if (/^(\/en)?\/contact\/?$/.test(pathname ?? "")) return null;
+
   return (
     <>
       {/* Panel — slides in from the right, anchored to rail */}
@@ -143,7 +153,7 @@ export function FloatingContact() {
               className="inline-flex items-center gap-1.5 border border-accent-secondary bg-accent-secondary px-3 py-1.5 font-mono text-2xs font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85"
               onClick={close}
             >
-              {activeOption?.label}
+              {activeOption?.cta ?? activeOption?.label}
               <ArrowRight size={10} />
             </a>
           </div>

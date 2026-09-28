@@ -3,7 +3,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { pageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd, ContactPageJsonLd } from "@/components/json-ld";
 import MultiSubjectContactForm from "@/components/contact/multi-subject-form";
-import { ContactDirectInfo } from "@/components/contact/contact-direct-info";
+import { ContactTabs } from "@/components/contact/contact-tabs";
 import { BlueprintSection } from "@/components/aspect/section";
 import { PageHero } from "@/components/aspect/page-hero";
 import { VisioConseilBanner } from "@/components/visio-conseil/visio-conseil-banner";
@@ -47,6 +47,7 @@ export default async function ContactPage({
       {/* Hero (harmonisé /veille) */}
       <PageHero
         index="№ 01"
+        compact
         kicker={t("breadcrumbContact")}
         title={t("title")}
         description={t("subtitle")}
@@ -57,16 +58,12 @@ export default async function ContactPage({
         }
       />
 
-      {/* Form + direct info */}
+      {/* Un onglet par mode de contact (message, visio, téléphone, e-mail,
+          newsletter), le contenu du mode dessous. */}
       <BlueprintSection tone="obsidian">
-        <div className="grid border-t border-dark-gray lg:grid-cols-[1.4fr_1fr]">
-          <Reveal>
-            <MultiSubjectContactForm />
-          </Reveal>
-          <Reveal delay={0.08} className="border-t border-dark-gray lg:border-l lg:border-t-0">
-            <ContactDirectInfo />
-          </Reveal>
-        </div>
+        <Reveal>
+          <ContactTabs form={<MultiSubjectContactForm />} />
+        </Reveal>
         {/* Réassurance au moment de l'engagement : un verbatim client court,
             orienté conseil (source : recommandation LinkedIn, Senza Nature). */}
         <div className="border-t border-dark-gray px-6 py-6 lg:px-8">

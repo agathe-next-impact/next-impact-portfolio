@@ -12,7 +12,7 @@ import type {
 } from "@sentinelle/types";
 import {
   ECHANGE_URL,
-  PAGE_PRESTATIONS,
+  AUDIT_ROADMAP,
   PRESTATIONS,
   techniqueDe,
 } from "@sentinelle/audit/prestations";
@@ -742,7 +742,7 @@ function GrilleDiagnostic({
               rel="noopener"
               className="inline-flex items-center justify-center border border-accent-secondary bg-accent-secondary px-6 py-3 font-mono text-sm font-semibold uppercase tracking-[0.14em] text-obsidian transition-opacity hover:opacity-90"
             >
-              Discutons de votre projet
+              Échange gratuit
             </a>
             <a
               href={pack.href}
@@ -1132,7 +1132,7 @@ function InscriptionVeille({
 }
 
 // ── Attente de l'audit ─────────────────────────────────────────────────────
-// Une à deux minutes : de quoi lire les prestations (bannière) ou partir en
+// Une à deux minutes : de quoi découvrir l'audit + roadmap (bannière) ou partir en
 // laissant son adresse (l'audit arrive par e-mail).
 
 /** Le champ e-mail, partagé par la page d'attente et le popup de fin. */
@@ -1233,22 +1233,24 @@ function AttenteAudit({
 }) {
   return (
     <div className="mt-8 grid gap-4 md:grid-cols-2">
-      {/* Bannière : les prestations, pour occuper l'attente utilement. */}
+      {/* Bannière : l'audit + roadmap, l'étape au-dessus de l'analyse gratuite
+          (demande d'Agathe du 2026-09-28). */}
       <a
-        href={PAGE_PRESTATIONS}
+        href={AUDIT_ROADMAP.href}
         target="_blank"
         rel="noopener"
         className="group flex flex-col justify-between border border-dark-gray border-l-4 border-l-accent-secondary p-5 no-underline transition-colors hover:border-accent-secondary"
       >
         <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
-          En attendant
+          En attendant · {AUDIT_ROADMAP.nom}
         </span>
         <span className="mt-3 block font-inter-tight text-lg font-light tracking-tight text-foreground">
-          Mes prestations, présentées par situation : site lent, site
-          ingérable, site devenu outil de travail.
+          Pour aller plus loin que cette analyse : un état des lieux complet,
+          des préconisations chiffrées et une roadmap par étapes.{" "}
+          {AUDIT_ROADMAP.prix}.
         </span>
         <span className="mt-4 font-mono text-xs uppercase tracking-[0.14em] text-foreground group-hover:text-accent-secondary">
-          Voir les prestations{" "}
+          Voir l'audit + roadmap{" "}
           <span aria-hidden="true">→</span>
           <span className="sr-only"> (nouvel onglet)</span>
         </span>

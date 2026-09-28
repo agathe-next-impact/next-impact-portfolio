@@ -80,7 +80,7 @@ const SERVICE_LINKS_FR: ToolLink[] = [
   },
   {
     href: "/contact",
-    title: "Démarrer un projet",
+    title: "Contact",
     description: "Déterminez l'offre adaptée avec notre questionnaire interactif.",
     icon: ClipboardCheck,
     color: "text-coral",
@@ -104,7 +104,7 @@ const SERVICE_LINKS_EN: ToolLink[] = [
   },
   {
     href: "/contact",
-    title: "Start a project",
+    title: "Contact",
     description: "Find the right offering with our interactive questionnaire.",
     icon: ClipboardCheck,
     color: "text-coral",
@@ -131,7 +131,7 @@ const PROFILE_TOOLS_FR: Record<ProfileId | "default", ToolLink[]> = {
     },
     {
       href: "/contact",
-      title: "Démarrer un projet",
+      title: "Contact",
       description: "Déterminez l'offre adaptée à votre structure.",
       icon: ClipboardCheck,
       color: "text-regularblue",
@@ -154,7 +154,7 @@ const PROFILE_TOOLS_FR: Record<ProfileId | "default", ToolLink[]> = {
     },
     {
       href: "/contact",
-      title: "Démarrer un projet",
+      title: "Contact",
       description: "Échangeons sur vos objectifs business.",
       icon: ClipboardCheck,
       color: "text-orange",
@@ -177,7 +177,7 @@ const PROFILE_TOOLS_FR: Record<ProfileId | "default", ToolLink[]> = {
     },
     {
       href: "/contact",
-      title: "Démarrer un projet",
+      title: "Contact",
       description: "Trouvez l'offre adaptée à votre organisation.",
       icon: ClipboardCheck,
       color: "text-regularblue",
@@ -219,7 +219,7 @@ const PROFILE_TOOLS_EN: Record<ProfileId | "default", ToolLink[]> = {
     },
     {
       href: "/contact",
-      title: "Start a project",
+      title: "Contact",
       description: "Find the offering that fits your organization.",
       icon: ClipboardCheck,
       color: "text-regularblue",
@@ -242,7 +242,7 @@ const PROFILE_TOOLS_EN: Record<ProfileId | "default", ToolLink[]> = {
     },
     {
       href: "/contact",
-      title: "Start a project",
+      title: "Contact",
       description: "Let's discuss your business goals.",
       icon: ClipboardCheck,
       color: "text-orange",
@@ -265,7 +265,7 @@ const PROFILE_TOOLS_EN: Record<ProfileId | "default", ToolLink[]> = {
     },
     {
       href: "/contact",
-      title: "Start a project",
+      title: "Contact",
       description: "Find the offering that fits your organization.",
       icon: ClipboardCheck,
       color: "text-regularblue",
@@ -499,14 +499,14 @@ function getCategoryRelevantLinks(
         { href: "/cahier-des-charges", title: t("Specifications", "Cahier des charges") },
         { href: "/documentation/projet-site-web", title: t("Web project", "Projet site web") },
         { href: "/etudes-de-cas", title: t("Case studies", "Études de cas") },
-        { href: "/contact", title: t("Start a project", "Démarrer un projet") },
+        { href: "/contact", title: "Contact" },
       ];
     case "marketing-digital":
       return [
         ...base,
         { href: "/documentation/seo", title: t("SEO guide", "Guide SEO") },
         { href: "/scan", title: t("AI audit", "Audit IA") },
-        { href: "/contact", title: t("Start a project", "Démarrer un projet") },
+        { href: "/contact", title: "Contact" },
       ];
     case "applications-web-mobile":
       return [
@@ -522,7 +522,7 @@ function getCategoryRelevantLinks(
         { href: "/cahier-des-charges", title: t("Specifications", "Cahier des charges") },
         { href: "/scan", title: t("AI audit", "Audit IA") },
         { href: "/wordpress-headless", title: t("Headless WordPress", "WordPress Headless") },
-        { href: "/contact", title: t("Start a project", "Démarrer un projet") },
+        { href: "/contact", title: "Contact" },
       ];
     default:
       return [
@@ -530,7 +530,7 @@ function getCategoryRelevantLinks(
         { href: "/scan", title: t("AI audit", "Audit IA") },
         { href: "/etudes-de-cas", title: t("Case studies", "Études de cas") },
         { href: "/solutions-web", title: t("Our offerings", "Nos offres") },
-        { href: "/contact", title: t("Start a project", "Démarrer un projet") },
+        { href: "/contact", title: "Contact" },
       ];
   }
 }

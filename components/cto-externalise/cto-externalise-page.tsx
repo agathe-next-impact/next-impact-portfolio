@@ -86,7 +86,7 @@ export default function CtoExternalisePage() {
               <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
             </a>
             <Link href={CTO_CONTACT_HREF} className={HERO_BTN_SECONDARY}>
-              {isEn ? "Set up a retainer" : "Cadrer un accompagnement"}
+              Contact
             </Link>
             <a href="#paliers" className={HERO_BTN_SECONDARY}>
               {isEn ? "See the two tiers" : "Voir les deux paliers"}
@@ -226,7 +226,7 @@ export default function CtoExternalisePage() {
                     : "border border-dark-gray text-foreground hover:border-mid-gray")
                 }
               >
-                {isEn ? "Set up a retainer" : "Cadrer un accompagnement"}
+                Contact
                 <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
               </Link>
             </div>
@@ -372,7 +372,7 @@ export default function CtoExternalisePage() {
           </div>
           <div className="flex flex-wrap items-center gap-3 lg:flex-shrink-0">
             <Link href={CTO_CONTACT_HREF} className={"group " + HERO_BTN_PRIMARY}>
-              {isEn ? "Set up a retainer" : "Cadrer un accompagnement"}
+              Contact
               <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
             </Link>
             <Link href="/scan" className={HERO_BTN_SECONDARY}>

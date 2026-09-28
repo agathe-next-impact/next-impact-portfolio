@@ -245,7 +245,7 @@ export function TarifsMoments() {
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 border border-dark-gray px-6 py-3 font-mono text-sm font-semibold uppercase tracking-[0.14em] text-mid-gray no-underline transition-colors hover:text-foreground"
             >
-              Discutons de votre projet
+              {CTA_CHAUD.label.fr}
             </a>
           </div>
         </div>

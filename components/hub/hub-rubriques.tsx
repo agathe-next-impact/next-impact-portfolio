@@ -94,7 +94,7 @@ const COPY: Record<
           { label: "Réparer ou refaire ?", href: "/outils/reparer-ou-refaire" },
           { label: "Auditer mon site", href: "/scan" },
         ],
-        next: { label: "Réparer mon site", href: "/contact" },
+        next: { label: "Contact", href: "/contact" },
       },
       {
         id: "avant-signer",
@@ -199,7 +199,7 @@ const COPY: Record<
           { label: "Repair or rebuild?", href: "/outils/reparer-ou-refaire" },
           { label: "Audit my site", href: "/scan" },
         ],
-        next: { label: "Fix my site", href: "/contact" },
+        next: { label: "Contact", href: "/contact" },
       },
       {
         id: "avant-signer",

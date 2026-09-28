@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { ThemeProvider } from "@/components/theme-provider";
 
 // `/admin-cto` est déjà couvert par le Disallow générique `/admin` de
 // robots.txt (correspondance par préfixe). On le redit ici quand même : une
@@ -16,5 +17,16 @@ export const metadata: Metadata = {
  * bas, dans `pilotage/layout.tsx`.
  */
 export default function AdminCtoLayout({ children }: { children: ReactNode }) {
-  return <div className="min-h-screen bg-obsidian text-foreground">{children}</div>;
+  return (
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="system"
+      enableSystem
+      storageKey="theme-v2"
+      themes={["light", "dark"]}
+      disableTransitionOnChange
+    >
+      <div className="min-h-screen bg-obsidian text-foreground">{children}</div>
+    </ThemeProvider>
+  );
 }

@@ -355,7 +355,7 @@ ${veilleSection}
 
 ### Diagnostiquer (avant de choisir : deux offres ponctuelles)
 
-- Echange de 15 minutes : gratuit, sans engagement. Quinze minutes en visio pour poser la situation et savoir par ou commencer (analyse du site, audit + roadmap ou devis). Reservation en ligne depuis ${baseUrl}/conseil#choix-techno-ia ; c'est aussi la destination du bouton "Discutons de votre projet" sur tout le site.
+- Echange de 15 minutes : gratuit, sans engagement. Quinze minutes en visio pour poser la situation et savoir par ou commencer (analyse du site, audit + roadmap ou devis). Reservation en ligne depuis ${baseUrl}/conseil#choix-techno-ia ; c'est aussi la destination du bouton "Echange gratuit" sur tout le site.
 - Audit + roadmap : ${AUDIT_PRICE} EUR HT. Rapport d'audit (performance, securite, dette technique, plugins, hebergement), premiere analyse de veille technique et strategique, preconisations chiffrees, roadmap par etapes, 1 h de restitution en visio. Le document sert meme si la prestation est confiee a quelqu'un d'autre. Presente sur ${baseUrl}/conseil#architecture-projet-ia.
 
 ### Veille gratuite (hors catalogue)

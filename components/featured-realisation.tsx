@@ -19,7 +19,6 @@ type Copy = {
   description: string;
   stats: { value: string; label: string }[];
   ctaPrimary: string;
-  ctaSecondary: string;
   imageAlt: string;
 };
 
@@ -35,7 +34,6 @@ const COPY: Record<Locale, Copy> = {
       { value: "Freemium",     label: "Abonnement en ligne via Stripe" },
     ],
     ctaPrimary: "Voir l'étude de cas",
-    ctaSecondary: "Discuter d'un projet similaire",
     imageAlt: "Réseauteurs — la plateforme nationale du networking : annuaire, agenda et carte interactive",
   },
   en: {
@@ -49,7 +47,6 @@ const COPY: Record<Locale, Copy> = {
       { value: "Freemium",   label: "Online subscription via Stripe" },
     ],
     ctaPrimary: "View the case study",
-    ctaSecondary: "Discuss a similar project",
     imageAlt: "Réseauteurs — France's national networking platform: directory, agenda and interactive map",
   },
 };
@@ -130,7 +127,7 @@ export default function FeaturedRealisation() {
             {copy.ctaPrimary}
           </Link>
           <Link href="/contact" className={BTN_GHOST}>
-            {copy.ctaSecondary}
+            Contact
           </Link>
         </div>
 

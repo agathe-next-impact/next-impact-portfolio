@@ -239,7 +239,7 @@ export default async function EspacePage({
         </p>
         <div className="mt-5 flex flex-wrap gap-3">
           <a href="/contact" className={buttonClass.ghost}>
-            M&apos;écrire
+            Contact
           </a>
           <form action={seDeconnecter}>
             <button type="submit" className={buttonClass.quiet}>

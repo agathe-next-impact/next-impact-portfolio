@@ -55,11 +55,23 @@ export function techniqueDe(issue: DiagnosticIssue, refonte?: DiagnosticRefonte)
   return PRESTATIONS[issue].technique;
 }
 
+/**
+ * L'audit + roadmap, proposé par la bannière de la page d'attente du rapport
+ * (demande d'Agathe du 2026-09-28). Copie en dur du prix de lib/visio-conseil.ts
+ * et de la page du parcours (lib/situations.ts) : Sentinelle n'importe pas la
+ * vitrine. Si l'un change, l'autre aussi.
+ */
+export const AUDIT_ROADMAP = {
+  nom: "Audit + roadmap",
+  prix: "650 € HT",
+  href: "/packs/etat-des-lieux",
+} as const;
+
 /** La page des prestations, présentées par situation. */
 export const PAGE_PRESTATIONS = "/packs";
 
 /**
- * Le bouton chaud « Discutons de votre projet » réserve l'échange de 15 minutes
+ * Le bouton chaud « Échange gratuit » réserve l'échange de 15 minutes
  * (ADR-022). Copie en dur de CTA_CHAUD / ECHANGE_URL de lib/visio-conseil.ts :
  * Sentinelle n'importe pas la vitrine (docs/sentinelle/CLAUDE.md, règle 2) :
  * si le lien change là-bas, il change ici aussi.

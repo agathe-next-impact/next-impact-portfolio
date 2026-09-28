@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
+import { ThemeProvider } from "@/components/theme-provider";
 import { MANIFEST_URL } from "./pwa-config";
 import { CAPTURE_INVITE, EnregistrementPwa } from "./pwa";
 
@@ -13,6 +14,11 @@ import { CAPTURE_INVITE, EnregistrementPwa } from "./pwa";
 // Uniquement sous `/espace-direction` : la vue de supervision de l'admin
 // (`/admin-cto/…/espace`) réutilise les mêmes écrans mais n'a pas à être
 // installée ni mise en cache.
+//
+// Thème clair par défaut, sans suivre le système ; la bascule est en haut à
+// droite de chaque page (`bascule-theme.tsx`). Clé de stockage propre à
+// l'espace : la vitrine, sur le même domaine, est sombre par défaut et ne doit
+// pas imposer son choix ici.
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const metadata: Metadata = {
@@ -39,10 +45,17 @@ export const viewport: Viewport = {
 
 export default function EspaceLayout({ children }: { children: ReactNode }) {
   return (
-    <>
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="light"
+      enableSystem={false}
+      storageKey="theme-espace"
+      themes={["light", "dark"]}
+      disableTransitionOnChange
+    >
       <script dangerouslySetInnerHTML={{ __html: CAPTURE_INVITE }} />
       {children}
       <EnregistrementPwa />
-    </>
+    </ThemeProvider>
   );
 }

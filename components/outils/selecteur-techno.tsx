@@ -55,7 +55,7 @@ const FAMILIES: Record<Family, FamilyInfo> = {
     links: [
       { labelFr: "Auditer mon site", labelEn: "Audit my site", href: "/scan" },
     ],
-    next: { labelFr: "Réparer mon site", labelEn: "Fix my site", href: "/contact" },
+    next: { labelFr: "Contact", labelEn: "Contact", href: "/contact" },
   },
   wordpress: {
     labelFr: "WordPress bien construit",

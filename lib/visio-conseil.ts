@@ -15,7 +15,7 @@ export const CALENDLY_BASE = "https://calendly.com/agathe-next-impact";
 /**
  * L'échange de 15 minutes, gratuit (ADR-023) : première offre du moment
  * « Diagnostiquer », à la place de la visio conseil refonte payante. C'est
- * aussi la destination du bouton chaud « Discutons de votre projet », partout
+ * aussi la destination du bouton chaud « Échange gratuit », partout
  * sur le site (voir CTA_CHAUD). Lien Calendly fourni par Agathe le 2026-09-27 :
  * c'est la seule occurrence dans le code de la vitrine.
  */
@@ -28,7 +28,8 @@ export const ECHANGE_NAME = { fr: "Échange de 15 minutes", en: "15-minute call"
  */
 export const CTA_CHAUD = {
   href: ECHANGE_URL,
-  label: { fr: "Discutons de votre projet", en: "Let's talk about your project" },
+  // Libellé unique de tout CTA vers l'échange gratuit (demande du 2026-09-28).
+  label: { fr: "Échange gratuit", en: "Free call" },
 } as const;
 
 /**
@@ -112,7 +113,7 @@ export const OFFERS: ConseilOffer[] = [
     // Identifiant conservé : ancre en circulation (menu, llms, e-mails).
     id: "choix-techno-ia",
     featured: true,
-    cta: { fr: "Réserver l'échange", en: "Book the call" },
+    cta: { fr: "Échange gratuit", en: "Free call" },
     tiers: [
       {
         duration: { fr: "15 min", en: "15 min" },

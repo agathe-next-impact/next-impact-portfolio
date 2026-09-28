@@ -549,7 +549,7 @@ export default function ArticleReduireAgefiph() {
                   </Link>
                   <Link href="/contact">
                     <button className="btn" style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
-                      Discuter de mon projet
+                      Contact
                       <ArrowRight size={15} strokeWidth={1.5} />
                     </button>
                   </Link>

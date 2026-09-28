@@ -15,7 +15,6 @@ import { BlueprintSection, SectionHeading, Separator } from "@/components/aspect
 import {
   PageHero,
   HERO_BTN_PRIMARY,
-  HERO_BTN_SECONDARY,
 } from "@/components/aspect/page-hero";
 import { HeroNavCards, heroCardsEnfants } from "@/components/aspect/hero-nav-cards";
 import { MEGA_SECTIONS } from "@/lib/mega-menu";
@@ -78,22 +77,13 @@ export default function ServicesClient() {
              solutions web bâties sur mesure. */
           <BlueprintGrid />
         }
+        // Un seul lien dans le héros : l'échange gratuit (Calendly, nouvel
+        // onglet ; demande du 2026-09-28).
         actions={
-          <>
-            {/* Premier bouton de chaque héros : l'échange gratuit (Calendly, nouvel
-                onglet). Puis le bouton froid, l'analyse (/scan), libellé fixe :
-                /scan vit hors de app/[locale]/, balise <a>, pas le Link i18n. */}
-            <a href={CTA_ECHANGE.href} target="_blank" rel="noopener noreferrer" className={HERO_BTN_PRIMARY}>
-              {isEn ? CTA_ECHANGE.label.en : CTA_ECHANGE.label.fr}
-              <ArrowRight size={14} />
-            </a>
-            <a href="/scan" className={HERO_BTN_SECONDARY}>
-              {isEn ? "Analyze your site" : "Analysez votre site"}
-            </a>
-            <a href="#tarifs" className={HERO_BTN_SECONDARY}>
-              {isEn ? "See pricing" : "Voir les tarifs"}
-            </a>
-          </>
+          <a href={CTA_ECHANGE.href} target="_blank" rel="noopener noreferrer" className={HERO_BTN_PRIMARY}>
+            {isEn ? CTA_ECHANGE.label.en : CTA_ECHANGE.label.fr}
+            <ArrowRight size={14} />
+          </a>
         }
         aside={
           <HeroNavCards

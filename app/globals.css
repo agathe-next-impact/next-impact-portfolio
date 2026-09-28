@@ -656,6 +656,11 @@ body {
   a {
     @apply text-regularblue no-underline;
   }
+  /* Mode sombre : #2a2a26 est illisible sur obsidian. `:where` garde la
+     spécificité d'un simple `a` — les classes utilitaires gardent la main. */
+  :where(.dark) a {
+    color: #ffffff;
+  }
   .container {
     @apply mx-auto px-4;
   }
@@ -1355,4 +1360,55 @@ a[class^="bg-orange"] *,     a[class*=" bg-orange"] * {
 }
 .cto-liens a:not(.cto-bouton):not([class*="border"]):hover {
   text-decoration-line: underline;
+}
+
+/* ── Mode sombre : liens textuels en blanc souligné ─────────────────────────
+   Demande d'Agathe du 2026-09-28 : aucun lien textuel ne doit être sombre en
+   mode sombre. Le `a` de base (text-regularblue #2a2a26) et le bleu de marque
+   (`vermilion`, 231 96% 23%) sont quasi invisibles sur fond obsidian.
+   Visés : les liens dans le texte courant (paragraphes, contenus éditoriaux)
+   et tout lien porteur d'une couleur sombre, au repos comme au survol.
+   Épargnés : les boutons (`.btn`, liens à fond `bg-*`) et l'espace client
+   (`.cto-liens`, liens en bleu clair). Le mode clair n'est pas touché. */
+.dark :is(
+  p a,
+  .article-text a,
+  .doc-prose a,
+  .article-prose a,
+  .article-page a,
+  a.text-vermilion,
+  a.text-regularblue,
+  a.text-darkblue,
+  a.text-mediumblue,
+  a.text-lightblue,
+  a.text-accent-primary,
+  a.text-accent-deep
+):not(.btn):not([class*="bg-"]):not(.cto-liens a) {
+  color: #ffffff;
+  text-decoration-line: underline;
+  text-decoration-color: rgb(255 255 255 / 0.45);
+  text-underline-offset: 4px;
+}
+.dark :is(
+  p a,
+  .article-text a,
+  .doc-prose a,
+  .article-prose a,
+  .article-page a,
+  a.text-vermilion,
+  a.text-regularblue,
+  a.text-darkblue,
+  a.text-mediumblue,
+  a.text-lightblue,
+  a.text-accent-primary,
+  a.text-accent-deep
+):not(.btn):not([class*="bg-"]):not(.cto-liens a):hover {
+  color: #ffffff;
+  text-decoration-color: #ffffff;
+}
+/* Survol qui assombrissait les liens (hover:text-vermilion) : blanc souligné. */
+.dark a[class*="hover:text-vermilion"]:hover {
+  color: #ffffff;
+  text-decoration-line: underline;
+  text-underline-offset: 4px;
 }

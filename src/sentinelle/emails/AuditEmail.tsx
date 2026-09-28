@@ -123,7 +123,7 @@ export function AuditEmail({ diagnostic, siteUrl, nom, genereLe, rapportUrl }: A
         </Section>
         <Section style={{ margin: "20px 0 0" }}>
           <Link href={ECHANGE_URL} style={styles.button}>
-            Discutons de votre projet
+            Échange gratuit
           </Link>
         </Section>
         <Text style={{ ...styles.muted, margin: "14px 0 0" }}>

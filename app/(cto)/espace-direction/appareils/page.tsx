@@ -12,6 +12,7 @@ import {
   EVENT_LABELS,
 } from "@cto/access";
 import { PasskeyEnrollButton } from "../passkey";
+import { BasculeTheme } from "../bascule-theme";
 import { BackLink, buttonClass, formatDate, inputClass, Label, PageHeader, Panel } from "../ui";
 import { currentSession, ESPACE_PATH, requireSession, sessionToken } from "../session";
 
@@ -103,7 +104,7 @@ export default async function AppareilsPage() {
       <BackLink href={ESPACE_PATH}>Votre espace</BackLink>
 
       <div className="mt-6">
-        <PageHeader company={session.person.company} title="Vos appareils" />
+        <PageHeader company={session.person.company} title="Vos appareils" aside={<BasculeTheme />} />
       </div>
 
       {/* ─── Passkeys ─────────────────────────────────────────────────── */}

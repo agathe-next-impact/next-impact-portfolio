@@ -29,7 +29,6 @@ import {
 import {
   PageHero,
   HERO_BTN_PRIMARY,
-  HERO_BTN_SECONDARY,
 } from "@/components/aspect/page-hero";
 import { HeroNavCards, heroCardsEnfants } from "@/components/aspect/hero-nav-cards";
 import { MEGA_SECTIONS } from "@/lib/mega-menu";
@@ -37,7 +36,7 @@ import { BesoinTitle } from "@/components/aspect/besoin-title";
 import { ConstellationTechno } from "@/components/visuals/constellation-techno";
 import { ConseilOfferSections } from "@/components/visio-conseil/conseil-offer-sections";
 import { CtoExternaliseBanner } from "@/components/cto-externalise/cto-externalise-banner";
-import { CONSEIL_TLDR, ECHANGE_URL, FAQ, OFFERS } from "@/lib/visio-conseil";
+import { CONSEIL_TLDR, CTA_ECHANGE, FAQ, OFFERS } from "@/lib/visio-conseil";
 import { EnBref } from "@/components/en-bref";
 
 export default function VisioConseilPage() {
@@ -81,24 +80,20 @@ export default function VisioConseilPage() {
             ? "Your site is aging and the direction is still open: keep, evolve or rebuild. A free 15-minute call, then an audit if the decision commits a budget, before any quote and any line of code."
             : "Votre site vieillit et la direction reste à trancher : garder, faire évoluer ou refaire. Un échange gratuit de 15 minutes, puis un audit si la décision engage un budget, avant tout devis et toute ligne de code."
         }
+        // Un seul lien dans le héros : l'échange gratuit (demande du 2026-09-28).
         actions={
-          <>
-            <a
-              href={ECHANGE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={"group " + HERO_BTN_PRIMARY}
-            >
-              {isEn ? "Book the 15-minute call" : "Réserver l'échange de 15 minutes"}
-              <ArrowRight
-                size={14}
-                className="transition-transform group-hover:translate-x-0.5"
-              />
-            </a>
-            <a href="#comment" className={HERO_BTN_SECONDARY}>
-              {isEn ? "How it works" : "Comment ça marche"}
-            </a>
-          </>
+          <a
+            href={CTA_ECHANGE.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={"group " + HERO_BTN_PRIMARY}
+          >
+            {CTA_ECHANGE.label[isEn ? "en" : "fr"]}
+            <ArrowRight
+              size={14}
+              className="transition-transform group-hover:translate-x-0.5"
+            />
+          </a>
         }
         note={
           isEn

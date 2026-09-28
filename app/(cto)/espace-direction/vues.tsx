@@ -38,7 +38,7 @@ import {
   Documents,
   Nouveaute,
   nouveaute,
-  Propositions,
+  OngletsPropositions,
   Roadmap,
   propositionTone,
   sortCartographie,
@@ -878,7 +878,10 @@ export async function VueAgir({ viewer, context }: { viewer: Viewer; context: Es
  */
 export async function VuePropositions({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
   const items = sortRecentFirst(context.items.filter((item) => item.kind === "proposition"));
-  if (items.length === 1) return VueLectureProposition({ viewer, context, id: items[0].notionPageId });
+  // Les propositions s'affichent en onglets : l'adresse de la liste ouvre
+  // celle qui attend une réponse, à défaut la plus récente.
+  const premiere = items.find(isPendingProposition) ?? items[0];
+  if (premiere) return VueLectureProposition({ viewer, context, id: premiere.notionPageId });
 
   return (
     <Espace
@@ -887,13 +890,7 @@ export async function VuePropositions({ viewer, context }: { viewer: Viewer; con
       active="propositions"
       title="Propositions"
     >
-      {items.length === 0 ? (
-        <EnPreparation>Aucune proposition remise pour l&rsquo;instant.</EnPreparation>
-      ) : (
-        <div className="mt-10">
-          <Propositions items={items} since={context.since} base={viewer.base} />
-        </div>
-      )}
+      <EnPreparation>Aucune proposition remise pour l&rsquo;instant.</EnPreparation>
     </Espace>
   );
 }
@@ -917,7 +914,7 @@ export async function VueLectureProposition({
   const proposition = context.items.find((item) => item.kind === "proposition" && item.notionPageId === id);
   if (!proposition) return null;
   const payload = proposition.payload as PropositionPayload;
-  const plusieurs = context.items.filter((item) => item.kind === "proposition").length > 1;
+  const propositions = sortRecentFirst(context.items.filter((item) => item.kind === "proposition"));
   const enAttente = isPendingProposition(proposition);
   // Le corps découpé à chaque grand titre. Ce qui résume (synthèse,
   // recommandation) passe en tête, ouvert ; le détail chiffré suit, replié.
@@ -937,10 +934,13 @@ export async function VueLectureProposition({
       active={sectionOuverte(context, "propositions") ? "propositions" : null}
       title={proposition.title}
     >
-      {plusieurs ? (
-        <div className="mt-8">
-          <BackLink href={`${viewer.base}/propositions`}>Toutes les propositions</BackLink>
-        </div>
+      {propositions.length > 1 ? (
+        <OngletsPropositions
+          items={propositions}
+          courante={proposition.notionPageId}
+          since={context.since}
+          base={viewer.base}
+        />
       ) : null}
 
       <Panel className="mt-8 px-5 py-5">

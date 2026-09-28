@@ -392,7 +392,7 @@ export default function ArticleAttestationTIH() {
                     <ArrowRight style={{ width: 16, height: 16 }} />
                   </Link>
                   <Link href="/contact" className="btn" style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
-                    Demander un devis
+                    Contact
                     <ArrowRight style={{ width: 16, height: 16 }} />
                   </Link>
                 </div>

@@ -314,7 +314,7 @@ export default function AgencesClient() {
                 agathe@next-impact.digital
               </a>
               <Link href="/contact" className={BTN_GHOST}>
-                Ou via le formulaire de contact
+                Contact
                 <ArrowRight size={14} aria-hidden="true" />
               </Link>
             </div>

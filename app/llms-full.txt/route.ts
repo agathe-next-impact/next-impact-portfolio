@@ -323,7 +323,7 @@ ${watchSection}
 
 ### Diagnose (before choosing: two one-off offers)
 
-- 15-minute call: free, no commitment. Fifteen minutes on a video call to lay out the situation and know where to start (site analysis, audit + roadmap or a quote). Booked online from ${baseUrl}/conseil#choix-techno-ia; it is also where the "Let's talk about your project" button leads across the site.
+- 15-minute call: free, no commitment. Fifteen minutes on a video call to lay out the situation and know where to start (site analysis, audit + roadmap or a quote). Booked online from ${baseUrl}/conseil#choix-techno-ia; it is also where the "Free call" button leads across the site.
 - Audit + roadmap (${AUDIT_PRICE}): audit report (performance, security, technical debt, plugins, hosting), a first technical and strategic watch analysis, costed recommendations, a step-by-step roadmap and a 1-hour debrief by video call. The document serves even if the work goes to someone else. Presented on ${baseUrl}/conseil#architecture-projet-ia.
 
 ### Free newsletter (outside the catalogue)

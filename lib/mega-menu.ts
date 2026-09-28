@@ -24,10 +24,10 @@ import { formatEuros, trajectoireDuNom, type Lang } from "@/lib/trajectoires";
 // technique (Évoluer) ou la situation en sous-titre, le prix en bas, le statut
 // (gratuit, recommandé) en pastille. Trois cases
 // au plus par panneau :
-//   – « Je veux pouvoir décider »            : deux offres (Arbitrage,
-//                                              gratuit, puis Audit), sans le
-//                                              mot « pack » ; la gratuite est
-//                                              mise en avant (featured).
+//   – « Je veux pouvoir décider »            : l'analyse du site (gratuite,
+//                                              mise en avant), puis Audit.
+//                                              Arbitrage est retiré du menu
+//                                              (2026-09-28).
 //   – « Je veux faire évoluer mon site web » : trois situations, une par
 //                                              prestation. Refonte ou création.
 //   – « Je veux agir dans la durée »         : deux situations, entretenir puis
@@ -52,6 +52,11 @@ export interface MegaItem {
   desc: { fr: string; en: string };
   href: string;
   external?: boolean;
+  /**
+   * Route hors de app/[locale]/ (ex. /scan) : balise <a> dans le même onglet,
+   * pas le Link i18n, qui la préfixerait en /en/… .
+   */
+  horsLocale?: boolean;
   /** Prix et statut en une ligne : accordéon mobile. */
   badge?: { fr: string; en: string };
   /** Prix seul, en bas de case (desktop). */
@@ -65,8 +70,11 @@ export interface MegaItem {
 export interface MegaSection {
   /** Clé de traduction `nav` : sert aussi de clé d'état côté header. */
   key: string;
-  /** Page mère : l'entrée de nav et la ligne supérieure du panneau y mènent (ADR-022). */
-  href: string;
+  /**
+   * Page mère : l'entrée de nav et la ligne supérieure du panneau y mènent
+   * (ADR-022). Absente pour « À propos » : l'entrée ouvre seulement le panneau.
+   */
+  href?: string;
   /** Le besoin, dit par le visiteur : titre du panneau. */
   heading: { fr: string; en: string };
   /** Deux ou trois cases, une par situation. */
@@ -75,6 +83,18 @@ export interface MegaSection {
 
 /** Parcours mis en avant dans le menu, en plus des offres gratuites et recommandées (demande d'Agathe du 2026-09-27). */
 const MIS_EN_AVANT: Situation["slug"][] = ["decisions-techniques"];
+
+/**
+ * Libellés propres au menu (demande d'Agathe du 2026-09-28) : la case du
+ * parcours Pilotage porte le nom de l'offre et une promesse en sous-titre. Le
+ * parcours garde son nom ailleurs (/packs, /tarifs).
+ */
+const LIBELLES_MENU: Partial<Record<Situation["slug"], Pick<MegaItem, "label" | "desc">>> = {
+  "decisions-techniques": {
+    label: { fr: "Expert technique externalisé", en: "Outsourced technical expert" },
+    desc: { fr: "Direction technique sans embaucher", en: "Technical leadership without hiring" },
+  },
+};
 
 function situationItem(s: Situation): MegaItem {
   const gratuit = estGratuit(s);
@@ -103,18 +123,46 @@ function situationItem(s: Situation): MegaItem {
     price,
     tag,
     featured: gratuit || s.recommended || MIS_EN_AVANT.includes(s.slug),
+    ...LIBELLES_MENU[s.slug],
   };
 }
 
-function section(key: BesoinKey, extra: MegaItem[] = []): MegaSection {
+/**
+ * Parcours retirés du menu (demande d'Agathe du 2026-09-28) : Arbitrage, dont
+ * la case doublait l'échange gratuit du bouton de la navbar. Le parcours reste
+ * sur /packs et /tarifs.
+ */
+const HORS_MENU: Situation["slug"][] = ["devis-a-juger"];
+
+function section(key: BesoinKey, avant: MegaItem[] = []): MegaSection {
   const besoin = getBesoin(key);
   return {
     key,
     href: besoin.href,
     heading: besoin.phrase,
-    items: [...situationsDuBesoin(key).map(situationItem), ...extra],
+    items: [
+      ...avant,
+      ...situationsDuBesoin(key)
+        .filter((s) => !HORS_MENU.includes(s.slug))
+        .map(situationItem),
+    ],
   };
 }
+
+// L'analyse du site, première case du panneau « Audit » (demande d'Agathe du
+// 2026-09-28) : le CTA froid, gratuit, avant l'échange et l'audit payant.
+const SCAN_ITEM: MegaItem = {
+  label: { fr: "Analyse du site", en: "Site analysis" },
+  desc: {
+    fr: "Votre site comparé à vos concurrents, en deux minutes. Résultat par mail.",
+    en: "Your site compared with your competitors, in two minutes. Results by email.",
+  },
+  href: "/scan",
+  horsLocale: true,
+  badge: { fr: "Gratuit", en: "Free" },
+  tag: { fr: "Gratuit", en: "Free" },
+  featured: true,
+};
 
 // « La veille » (clé technique `surveiller`) : hors moments, donc hors
 // lib/situations.ts. Deux cases, demandées par Agathe : la lettre gratuite puis
@@ -152,9 +200,40 @@ const VEILLE_SECTION: MegaSection = {
   ],
 };
 
+// « À propos » (demande d'Agathe du 2026-09-28) : la preuve et la personne,
+// regroupées en un panneau. Hors moments, donc hors lib/situations.ts. Pas de
+// compte d'études de cas ici : lib/case-studies-data.ts alourdirait le bundle
+// du header.
+// Pas de page mère (demande d'Agathe du 2026-09-28) : l'entrée ne fait
+// qu'ouvrir le panneau, dont les deux cases sont les seules destinations.
+const A_PROPOS_SECTION: MegaSection = {
+  key: "about",
+  heading: { fr: "Je veux savoir à qui je m'adresse", en: "I want to know who I'm dealing with" },
+  items: [
+    {
+      label: { fr: "Études de cas", en: "Case studies" },
+      desc: {
+        fr: "Des projets livrés, avec leurs résultats mesurés avant et après.",
+        en: "Delivered projects, with results measured before and after.",
+      },
+      href: "/etudes-de-cas",
+      featured: true,
+    },
+    {
+      label: { fr: "À propos", en: "About" },
+      desc: {
+        fr: "Agathe Karinthi-Martin : 20 ans d'expérience, dont 15 ans de WordPress.",
+        en: "Agathe Karinthi-Martin: 20 years of experience, 15 of them with WordPress.",
+      },
+      href: "/a-propos",
+    },
+  ],
+};
+
 export const MEGA_SECTIONS: Record<string, MegaSection> = {
-  decider: section("decider"),
+  decider: section("decider", [SCAN_ITEM]),
   refaire: section("refaire"),
   tenir: section("tenir"),
   surveiller: VEILLE_SECTION,
+  about: A_PROPOS_SECTION,
 };

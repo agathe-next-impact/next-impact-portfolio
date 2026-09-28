@@ -98,6 +98,14 @@ function Card({
     );
   }
 
+  if (item.horsLocale) {
+    return (
+      <a href={item.href} onClick={onNavigate} className={className}>
+        {inner}
+      </a>
+    );
+  }
+
   return (
     <Link href={item.href as NavHref} onClick={handleClick} className={className}>
       {inner}
@@ -122,6 +130,17 @@ export function MegaMenuPanel({
       {/* Ligne supérieure : mène à la page mère, comme l'entrée de nav qui
           ouvre le panneau. À gauche le besoin, à droite un bouton qui dit où
           l'on va (« Voir la page Prestations »), toute la ligne cliquable. */}
+      {/* Sans page mère (« À propos ») : le besoin seul, sans lien. */}
+      {!section.href ? (
+        <div className="flex flex-col gap-0.5 border-b border-dark-gray bg-obsidian px-6 py-4 lg:px-8">
+          <span className="font-mono text-2xs uppercase tracking-[0.14em] text-mid-gray">
+            {locale === "en" ? "Your need" : "Votre besoin"}
+          </span>
+          <span className="text-xl font-light tracking-tight text-foreground">
+            {section.heading[locale]}
+          </span>
+        </div>
+      ) : (
       <Link
         href={section.href as NavHref}
         onClick={onNavigate}
@@ -140,6 +159,7 @@ export function MegaMenuPanel({
           <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
         </span>
       </Link>
+      )}
 
       {/* Une case par offre : deux ou trois colonnes selon le moment. */}
       <div
