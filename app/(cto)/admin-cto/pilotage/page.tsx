@@ -5,6 +5,7 @@ import { EVENT_LABELS } from "@cto/access";
 import { lastSyncRun, listAdminCredentials, listClients, recentAccessLog } from "@cto/admin";
 import { Dot, formatDate, Label, Panel, Stat, Tag, type Tone } from "../../espace-direction/ui";
 import { AdminPasskeyEnrollButton } from "../passkey";
+import { InstallationAdmin } from "../pwa";
 import { DernierBalayage } from "./dernier-balayage";
 import { PILOTAGE_LARGEUR } from "./largeur";
 import { OutilsExploitation } from "./outils";
@@ -81,6 +82,8 @@ export default async function PilotagePage() {
           Digests de la semaine →
         </Link>
       </div>
+
+      <InstallationAdmin />
 
       <Panel className="mt-8 grid grid-cols-2 sm:grid-cols-4">
         <Stat label="Actifs" value={String(actifs)} tone="fait" />

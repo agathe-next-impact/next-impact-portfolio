@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { Download, Share, X } from "lucide-react";
 import { PAGES_CACHE, PWA_SCOPE, SW_URL } from "./pwa-config";
+import { appareilApple, dejaInstallee, type BeforeInstallPromptEvent } from "../pwa-commun";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // L'application installable, côté navigateur.
@@ -20,25 +21,6 @@ import { PAGES_CACHE, PWA_SCOPE, SW_URL } from "./pwa-config";
 //    la déconnexion et sur l'écran de connexion — des données de client
 //    n'ont rien à faire sur un appareil dont la session est close.
 // ─────────────────────────────────────────────────────────────────────────────
-
-/** L'événement d'installation de Chromium, absent des types du DOM. */
-interface BeforeInstallPromptEvent extends Event {
-  prompt(): Promise<void>;
-  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
-}
-
-declare global {
-  interface Window {
-    /** Posé par le script de `layout.tsx` si l'invite arrive avant l'hydratation. */
-    __espaceInvite?: BeforeInstallPromptEvent | null;
-  }
-}
-
-/**
- * Capte l'invite d'installation dès l'analyse du HTML : Chrome peut l'émettre
- * avant que React ait monté la bannière, et elle ne revient pas.
- */
-export const CAPTURE_INVITE = `window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();window.__espaceInvite=e;});`;
 
 export async function viderPagesHorsLigne(): Promise<void> {
   try {
@@ -117,13 +99,6 @@ const REFUS_JOURS = 30;
 /** Mobile ou tablette : écran étroit, ou pointeur tactile (iPad en paysage). */
 const APPAREIL_CIBLE = "(max-width: 1023px), (pointer: coarse)";
 
-function dejaInstallee(): boolean {
-  return (
-    window.matchMedia("(display-mode: standalone)").matches ||
-    (navigator as Navigator & { standalone?: boolean }).standalone === true
-  );
-}
-
 function refuseeRecemment(): boolean {
   try {
     const valeur = Number(localStorage.getItem(CLE_REFUS));
@@ -139,12 +114,6 @@ function memoriserRefus() {
   } catch {
     // Sans stockage, la bannière reviendra à la prochaine visite : tant pis.
   }
-}
-
-/** iPhone, iPod, et iPad — qui se déclare « Macintosh » mais a un écran tactile. */
-function appareilApple(): boolean {
-  const ua = navigator.userAgent;
-  return /iPad|iPhone|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
 }
 
 type Mode = "native" | "apple";

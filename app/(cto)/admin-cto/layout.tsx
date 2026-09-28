@@ -1,6 +1,9 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { ThemeProvider } from "@/components/theme-provider";
+import { CAPTURE_INVITE } from "../pwa-commun";
+import { ADMIN_MANIFEST_URL } from "./pwa-config";
+import { EnregistrementPwaAdmin } from "./pwa";
 
 // `/admin-cto` est déjà couvert par le Disallow générique `/admin` de
 // robots.txt (correspondance par préfixe). On le redit ici quand même : une
@@ -8,6 +11,26 @@ import { ThemeProvider } from "@/components/theme-provider";
 export const metadata: Metadata = {
   title: "Espace direction technique — supervision",
   robots: { index: false, follow: false, nocache: true },
+  // Application installable, mobile et ordinateur (`pwa.tsx`, `sw.js`).
+  manifest: ADMIN_MANIFEST_URL,
+  applicationName: "Supervision",
+  appleWebApp: {
+    capable: true,
+    title: "Supervision",
+    statusBarStyle: "black-translucent",
+  },
+  icons: {
+    apple: [{ url: "/pwa/admin-apple-180.png", sizes: "180x180" }],
+  },
+  formatDetection: { telephone: false },
+};
+
+export const viewport: Viewport = {
+  viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)", color: "#050505" },
+    { media: "(prefers-color-scheme: light)", color: "#fafafa" },
+  ],
 };
 
 /**
@@ -26,7 +49,9 @@ export default function AdminCtoLayout({ children }: { children: ReactNode }) {
       themes={["light", "dark"]}
       disableTransitionOnChange
     >
+      <script dangerouslySetInnerHTML={{ __html: CAPTURE_INVITE }} />
       <div className="min-h-screen bg-obsidian text-foreground">{children}</div>
+      <EnregistrementPwaAdmin />
     </ThemeProvider>
   );
 }

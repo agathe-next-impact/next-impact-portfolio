@@ -2,7 +2,8 @@ import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { ThemeProvider } from "@/components/theme-provider";
 import { MANIFEST_URL } from "./pwa-config";
-import { CAPTURE_INVITE, EnregistrementPwa } from "./pwa";
+import { CAPTURE_INVITE } from "../pwa-commun";
+import { EnregistrementPwa } from "./pwa";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // L'espace client en application installable.
@@ -12,8 +13,9 @@ import { CAPTURE_INVITE, EnregistrementPwa } from "./pwa";
 // du bas compense par `env(safe-area-inset-*)`), puis installe le worker.
 //
 // Uniquement sous `/espace-direction` : la vue de supervision de l'admin
-// (`/admin-cto/…/espace`) réutilise les mêmes écrans mais n'a pas à être
-// installée ni mise en cache.
+// (`/admin-cto/…/espace`) réutilise les mêmes écrans mais relève de
+// l'application de l'admin (`admin-cto/pwa.tsx`), qui ne met aucune page en
+// cache.
 //
 // Thème clair par défaut, sans suivre le système ; la bascule est en haut à
 // droite de chaque page (`bascule-theme.tsx`). Clé de stockage propre à
