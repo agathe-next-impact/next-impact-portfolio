@@ -293,10 +293,21 @@ const SIGNE = (
   </span>
 );
 
-/** Le détail d'une ligne (motif, risque, alternative…), ouvert à la demande. */
-export function Repli({ resume = "Détail", children }: { resume?: string; children: ReactNode }) {
+/**
+ * Le détail d'une ligne (motif, risque, alternative…), ouvert à la demande —
+ * ou d'emblée avec `ouvert`, quand c'est ce qu'on vient lire.
+ */
+export function Repli({
+  resume = "Détail",
+  ouvert = false,
+  children,
+}: {
+  resume?: string;
+  ouvert?: boolean;
+  children: ReactNode;
+}) {
   return (
-    <details className="group mt-2">
+    <details className="group mt-2" open={ouvert}>
       <summary className="inline-flex cursor-pointer list-none items-center gap-2 font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray transition-colors hover:text-foreground [&::-webkit-details-marker]:hidden">
         {SIGNE}
         <span className="group-open:hidden">{resume}</span>

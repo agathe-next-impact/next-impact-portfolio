@@ -219,7 +219,7 @@ function LignePrestation({
       ) : null}
 
       {payload.detail ? (
-        <Repli resume="Détail de la mission">{payload.detail}</Repli>
+        <Repli resume="Détail de la mission" ouvert>{payload.detail}</Repli>
       ) : null}
 
       {/* Le lien « Devis » ne sert plus qu'à défaut de PDF déposé. */}
@@ -251,7 +251,8 @@ function Echeancier({ item }: { item: Prestation }) {
           {`${montantOuZero(recu)} réglé${reste !== null ? ` · reste ${montantOuZero(reste)}` : ""}`}
         </span>
       </div>
-      <Repli resume={`Détail des ${paiements.length} règlement${paiements.length > 1 ? "s" : ""}`}>
+      {/* Déplié d'emblée : l'échéancier est ce qu'on vient lire ici. */}
+      <Repli resume={`Détail des ${paiements.length} règlement${paiements.length > 1 ? "s" : ""}`} ouvert>
       <ul className="mt-1.5 divide-y divide-dark-gray border border-dark-gray">
         {paiements.map((paiement, index) => {
           const estRecu = paiement.statut === "Reçu";
