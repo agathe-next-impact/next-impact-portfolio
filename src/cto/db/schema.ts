@@ -272,6 +272,13 @@ export const ctoPersons = pgTable(
      */
     revokedAt: timestamp("revoked_at"),
     /**
+     * Quand l'e-mail de bienvenue (ou une invitation manuelle depuis
+     * `/admin-cto`) est parti. Durable, contrairement aux liens de connexion,
+     * purgés dès qu'ils sont consommés ou échus : c'est ce qui empêche
+     * « Prévenir » de réinviter la même personne à chaque passage.
+     */
+    invitedAt: timestamp("invited_at"),
+    /**
      * Les suggestions que cette personne a masquées (« Pas maintenant ») :
      * identifiant de suggestion → ISO. Par personne et non par accompagnement :
      * le dirigeant qui écarte une suggestion ne l'écarte pas pour son DSI.

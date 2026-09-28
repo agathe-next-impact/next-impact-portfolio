@@ -28,7 +28,9 @@ export {
   findPersonById,
   issueMagicLink,
   listSessions,
+  markInvited,
   openSession,
+  personsToWelcome,
   purgeExpiredAccess,
   resolveSession,
   revokeAllSessions,
@@ -68,6 +70,7 @@ export {
   sendEnrollmentNotice,
   sendLoginLink,
   sendPublicationNotice,
+  sendWelcome,
   type PublicationSummary,
 } from "./notify";
 

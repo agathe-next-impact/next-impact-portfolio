@@ -1,7 +1,8 @@
 /**
  * Notification des accompagnements CTO — séparée de la synchro.
  *
- *   npm run cto:notify               # envoie, avance la date de chaque client notifié
+ *   npm run cto:notify               # envoie, avance la date de chaque client notifié,
+ *                                    # et accueille les personnes jamais invitées
  *   npm run cto:notify -- --a-blanc  # dit qui serait notifié, n'envoie rien, n'avance rien
  *
  * À lancer quand le contenu déjà synchronisé (`npm run cto:sync`) est prêt à

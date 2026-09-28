@@ -82,6 +82,13 @@ export function summarizeNotify(report: NotifyReport, dryRun: boolean): ReportSu
     `${plural(report.notified, "accompagnement", "accompagnements")} ${verbe}, ` +
       `${report.upToDate} déjà à jour.`,
   ];
+  if (report.welcomed > 0) {
+    lines.push(
+      `${plural(report.welcomed, "bienvenue", "bienvenues")} ${
+        dryRun ? (report.welcomed > 1 ? "partiraient" : "partirait") : report.welcomed > 1 ? "envoyées" : "envoyée"
+      } à ${report.welcomed > 1 ? "des personnes jamais invitées" : "une personne jamais invitée"}.`,
+    );
+  }
   if (dryRun) lines.unshift("À blanc : aucun e-mail n'est parti.");
   return { lines, warnings: report.warnings, alerts: [] };
 }

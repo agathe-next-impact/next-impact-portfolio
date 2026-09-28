@@ -11,7 +11,7 @@ import {
 import { MAGIC_LINK_TTL_MS } from "./token";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Les deux e-mails de la couche d'accès.
+// Les e-mails de la couche d'accès.
 //
 // Ils passent par `lib/email-template.ts` (kit Blueprint) et `lib/sendMail.ts`,
 // comme tout le reste du site : un gabarit d'e-mail ad hoc de plus finirait par
@@ -64,6 +64,43 @@ export async function sendLoginLink(to: Recipient, url: string): Promise<void> {
   await sendMail({
     to: to.email,
     subject: "Votre lien de connexion — espace direction technique",
+    html,
+  });
+}
+
+/**
+ * La bienvenue : le premier message d'une personne, quand son espace ouvre.
+ *
+ * Part même si l'espace est encore vide : l'accès existe, la personne doit le
+ * savoir. Le lien est un lien de connexion ordinaire, donc court ; s'il a
+ * expiré, l'écran de connexion en renvoie un, et le message le dit pour que
+ * personne ne conclue que « le site est cassé ».
+ */
+export async function sendWelcome(to: Recipient, company: string, url: string): Promise<void> {
+  const html = emailLayout({
+    preheader: `Votre espace direction technique ${company} est ouvert.`,
+    contentHtml: [
+      emailKicker("01", "Espace direction technique"),
+      emailH1("Bienvenue dans votre espace"),
+      emailLead(`Bonjour ${escapeHtml(to.name)},`),
+      emailParagraph(
+        `L'espace direction technique de <strong>${escapeHtml(company)}</strong> est ouvert. Vous y retrouverez, au fil de l'accompagnement, les décisions, la roadmap, les audits, l'état de votre site et la veille qui vous concerne.`,
+      ),
+      emailButton(url, "Ouvrir mon espace"),
+      emailCard(
+        emailParagraph(
+          `Ce lien vous connecte directement pendant <strong>${MINUTES} minutes</strong>. Passé ce délai, l'écran de connexion vous en envoie un nouveau en un clic. Une fois connecté, enregistrez une passkey depuis « Mes appareils » pour vous connecter ensuite d'un geste.`,
+        ),
+      ),
+      emailParagraph(
+        "Une question, un devis à relire, une décision à prendre ? Répondez simplement à ce message.",
+      ),
+    ].join(""),
+  });
+
+  await sendMail({
+    to: to.email,
+    subject: `Bienvenue dans votre espace — direction technique ${company}`,
     html,
   });
 }

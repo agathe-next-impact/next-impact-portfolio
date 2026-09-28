@@ -62,9 +62,16 @@ describe("alertes nouvelles", () => {
 
 describe("résumé de notification", () => {
   it("distingue l'envoi du passage à blanc", () => {
-    expect(summarizeNotify({ notified: 1, upToDate: 2, warnings: [] }, false).lines).toEqual([
+    expect(summarizeNotify({ notified: 1, welcomed: 0, upToDate: 2, warnings: [] }, false).lines).toEqual([
       "1 accompagnement prévenu, 2 déjà à jour.",
     ]);
-    expect(summarizeNotify({ notified: 2, upToDate: 0, warnings: [] }, true).lines[0]).toMatch(/À blanc/);
+    expect(summarizeNotify({ notified: 2, welcomed: 0, upToDate: 0, warnings: [] }, true).lines[0]).toMatch(/À blanc/);
+  });
+
+  it("compte les bienvenues à part", () => {
+    expect(summarizeNotify({ notified: 0, welcomed: 1, upToDate: 3, warnings: [] }, false).lines).toEqual([
+      "0 accompagnement prévenu, 3 déjà à jour.",
+      "1 bienvenue envoyée à une personne jamais invitée.",
+    ]);
   });
 });

@@ -520,7 +520,9 @@ export async function Espace({
                   <span className="hidden sm:inline">Écrire à Agathe</span>
                   <span className="sm:hidden">Contact</span>
                 </a>
-                <BasculeTheme />
+                {/* En supervision, la bascule vit dans l'en-tête de l'admin,
+                    à côté de « Fermer la session ». */}
+                {viewer.admin ? null : <BasculeTheme />}
               </div>
             }
           />

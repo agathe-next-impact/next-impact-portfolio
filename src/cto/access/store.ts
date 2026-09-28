@@ -2,6 +2,7 @@ import { and, desc, eq, gte, isNull, lt, or, sql } from "drizzle-orm";
 import { db } from "../db/client";
 import {
   ctoClients,
+  ctoCredentials,
   ctoMagicLinks,
   ctoPersons,
   ctoSessions,
@@ -261,6 +262,33 @@ export async function activePersons(
     .select({ id: ctoPersons.id, email: ctoPersons.email, name: ctoPersons.name })
     .from(ctoPersons)
     .where(and(eq(ctoPersons.clientId, clientId), isNull(ctoPersons.revokedAt)));
+}
+
+/**
+ * Les personnes d'un accompagnement à accueillir : actives, jamais invitées,
+ * sans session ni passkey. Les deux dernières conditions protègent une
+ * personne entrée par l'écran de connexion sans être passée par l'invitation.
+ */
+export async function personsToWelcome(
+  clientId: string,
+): Promise<{ id: string; email: string; name: string }[]> {
+  return db()
+    .select({ id: ctoPersons.id, email: ctoPersons.email, name: ctoPersons.name })
+    .from(ctoPersons)
+    .where(
+      and(
+        eq(ctoPersons.clientId, clientId),
+        isNull(ctoPersons.revokedAt),
+        isNull(ctoPersons.invitedAt),
+        sql`not exists (select 1 from ${ctoSessions} where ${ctoSessions.personId} = ${ctoPersons.id})`,
+        sql`not exists (select 1 from ${ctoCredentials} where ${ctoCredentials.personId} = ${ctoPersons.id})`,
+      ),
+    );
+}
+
+/** Marque une personne comme invitée : bienvenue ou invitation manuelle. */
+export async function markInvited(personId: string, now: Date = new Date()): Promise<void> {
+  await db().update(ctoPersons).set({ invitedAt: now }).where(eq(ctoPersons.id, personId));
 }
 
 export interface ResolvedSession {

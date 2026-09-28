@@ -1,7 +1,15 @@
 import { eq } from "drizzle-orm";
 import { db } from "../db/client";
 import { ctoClients } from "../db/schema";
-import { activePersons, sendPublicationNotice, type PublicationSummary } from "../access";
+import {
+  activePersons,
+  issueMagicLink,
+  markInvited,
+  personsToWelcome,
+  sendPublicationNotice,
+  sendWelcome,
+  type PublicationSummary,
+} from "../access";
 import { listForClient, type DeliverableKind } from "../deliverables";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -16,6 +24,11 @@ import { listForClient, type DeliverableKind } from "../deliverables";
 // Conséquence voulue : synchroniser dix fois dans l'après-midi pendant qu'on
 // relit un audit ne prévient personne. La notification est un geste séparé,
 // lancé quand le contenu est prêt à être vu — `npm run cto:notify`.
+//
+// Le même geste accueille les nouveaux venus : toute personne active jamais
+// invitée reçoit la bienvenue, espace vide ou non, et une seule fois
+// (`cto_persons.invited_at`). Elle ne reçoit pas l'avis de publication en
+// plus : la bienvenue l'amène déjà dans l'espace.
 // ─────────────────────────────────────────────────────────────────────────────
 
 /** Intitulés lisibles pour l'e-mail. Jamais de titres de livrables. */
@@ -34,6 +47,8 @@ const KIND_LABELS: Record<DeliverableKind, string> = {
 export interface NotifyReport {
   /** Accompagnements pour lesquels un e-mail est parti (ou serait parti, à blanc). */
   notified: number;
+  /** Personnes accueillies : e-mail de bienvenue parti (ou qui partirait, à blanc). */
+  welcomed: number;
   /** Accompagnements actifs sans rien de neuf depuis leur dernière notification. */
   upToDate: number;
   warnings: string[];
@@ -57,17 +72,46 @@ export async function notifyPendingPublications(
   const dryRun = options.dryRun === true;
   const warnings: string[] = [];
   let notified = 0;
+  let welcomed = 0;
   let upToDate = 0;
 
   const base = process.env.CTO_ORIGIN?.split(",")[0]?.trim() || "https://next-impact.digital";
   const url = `${base}/espace-direction`;
 
   const clients = await db()
-    .select({ id: ctoClients.id, lastNotifiedAt: ctoClients.lastNotifiedAt })
+    .select({ id: ctoClients.id, company: ctoClients.company, lastNotifiedAt: ctoClients.lastNotifiedAt })
     .from(ctoClients)
     .where(eq(ctoClients.status, "actif"));
 
   for (const client of clients) {
+    // La bienvenue d'abord : elle ne dépend pas du contenu de l'espace.
+    const accueillis = new Set<string>();
+    for (const person of await personsToWelcome(client.id)) {
+      if (dryRun) {
+        accueillis.add(person.id);
+        welcomed += 1;
+        continue;
+      }
+      const issued = await issueMagicLink(person.id);
+      if (!issued.ok) {
+        warnings.push(`Bienvenue non envoyée à ${person.email} : trop de liens demandés récemment, réessayer plus tard.`);
+        continue;
+      }
+      try {
+        await sendWelcome(
+          { email: person.email, name: person.name },
+          client.company,
+          `${url}/connexion?jeton=${encodeURIComponent(issued.token)}`,
+        );
+        await markInvited(person.id, now);
+        accueillis.add(person.id);
+        welcomed += 1;
+      } catch (error) {
+        console.error("[cto] bienvenue impossible", error);
+        warnings.push(`Bienvenue non envoyée à ${person.email} : l'envoi a échoué.`);
+      }
+    }
+
     const since = client.lastNotifiedAt;
     const items = (await listForClient(client.id)).filter(
       (item) => !since || item.recordedAt.getTime() > since.getTime(),
@@ -103,6 +147,7 @@ export async function notifyPendingPublications(
 
     if (!dryRun) {
       for (const person of persons) {
+        if (accueillis.has(person.id)) continue;
         try {
           await sendPublicationNotice({ email: person.email, name: person.name }, summary, url);
         } catch (error) {
@@ -117,5 +162,5 @@ export async function notifyPendingPublications(
     notified += 1;
   }
 
-  return { notified, upToDate, warnings };
+  return { notified, welcomed, upToDate, warnings };
 }

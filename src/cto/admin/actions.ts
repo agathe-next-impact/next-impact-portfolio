@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { db } from "../db/client";
 import { ctoClients, ctoPersons } from "../db/schema";
-import { issueMagicLink, sendLoginLink } from "../access";
+import { issueMagicLink, markInvited, sendLoginLink } from "../access";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Les écritures de l'admin de supervision.
@@ -74,5 +74,7 @@ export async function sendAccessLink(personId: string, origin: string): Promise<
 
   const url = `${origin}/espace-direction/connexion?jeton=${encodeURIComponent(issued.token)}`;
   await sendLoginLink({ email: person.email, name: person.name }, url);
+  // Invitée à la main : « Prévenir » ne lui enverra pas de bienvenue en plus.
+  await markInvited(person.id);
   return { ok: true, email: person.email };
 }

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ADMIN_EMAIL } from "@cto/admin";
 import { buttonClass } from "../../espace-direction/ui";
+import { BasculeTheme } from "../../espace-direction/bascule-theme";
 import { closeSession, LOGIN_PATH, requireSession } from "../session";
 
 export const dynamic = "force-dynamic";
@@ -39,11 +40,16 @@ export default async function PilotageLayout({ children }: { children: ReactNode
           <p className="mt-1 font-inter-tight text-xs text-mid-gray">{ADMIN_EMAIL}</p>
         </div>
 
-        <form action={deconnexion}>
-          <button type="submit" className={buttonClass.ghost}>
-            Fermer la session
-          </button>
-        </form>
+        {/* La bascule clair / sombre à côté de « Fermer la session »
+            (demande d'Agathe du 2026-09-28). */}
+        <div className="flex items-center gap-2">
+          <BasculeTheme />
+          <form action={deconnexion}>
+            <button type="submit" className={buttonClass.ghost}>
+              Fermer la session
+            </button>
+          </form>
+        </div>
       </header>
 
       {children}
