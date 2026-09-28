@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { poserFlash } from "../../../flash";
 import { assembleWeek, parseWeek, validateAndSend } from "@cto/digest";
 import { syncSentinelle } from "@cto/sentinelle";
 import { requireSession } from "../../session";
@@ -32,9 +33,8 @@ export async function reassembler(formData: FormData): Promise<void> {
   await syncSentinelle();
   const report = await assembleWeek(week);
   revalidatePath(PAGE);
-  redirect(`${PAGE}?semaine=${week}&message=${encodeURIComponent(
-    `${report.created + report.refreshed} brouillon(s) assemblé(s), ${report.frozen} déjà validé(s).`,
-  )}`);
+  await poserFlash(`${report.created + report.refreshed} brouillon(s) assemblé(s), ${report.frozen} déjà validé(s).`);
+  redirect(`${PAGE}?semaine=${week}`);
 }
 
 /** Valide et envoie : un digest (champ `id`) ou tous les brouillons de la semaine. */
@@ -48,7 +48,6 @@ export async function validerEtEnvoyer(formData: FormData): Promise<void> {
   });
   revalidatePath(PAGE);
   const suite = report.warnings.length > 0 ? ` ${report.warnings.join(" ")}` : "";
-  redirect(`${PAGE}?semaine=${week}&message=${encodeURIComponent(
-    `${report.sent} digest(s) envoyé(s), ${report.validated} validé(s).${suite}`,
-  )}`);
+  await poserFlash(`${report.sent} digest(s) envoyé(s), ${report.validated} validé(s).${suite}`, report.warnings.length > 0 ? "erreur" : "succes");
+  redirect(`${PAGE}?semaine=${week}`);
 }

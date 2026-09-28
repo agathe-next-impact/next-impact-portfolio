@@ -3,9 +3,10 @@ import Link from "next/link";
 import { digestsOfWeek, parseWeek, previousWeek, weekLabel } from "@cto/digest";
 import { DigestSemaine } from "../../../espace-direction/digest";
 import { adminEspacePath } from "../../../espace-direction/viewer";
-import { buttonClass, formatDate, Label, Notice, Panel, Tag, type Tone } from "../../../espace-direction/ui";
+import { buttonClass, formatDate, Label, Panel, Tag, type Tone } from "../../../espace-direction/ui";
 import { PILOTAGE_LARGEUR } from "../largeur";
 import { reassembler, validerEtEnvoyer } from "./actions";
+import { BoutonEnvoi } from "../../../bouton-envoi";
 
 export const metadata: Metadata = { title: "Digests de la semaine" };
 export const dynamic = "force-dynamic";
@@ -27,9 +28,9 @@ const STATUT: Record<string, { label: string; tone: Tone }> = {
 export default async function DigestsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ semaine?: string; message?: string }>;
+  searchParams: Promise<{ semaine?: string }>;
 }) {
-  const { semaine, message } = await searchParams;
+  const { semaine } = await searchParams;
   const week = semaine && parseWeek(semaine) ? semaine : previousWeek(new Date());
   const digests = await digestsOfWeek(week);
   const brouillons = digests.filter((d) => d.status !== "sent").length;
@@ -45,24 +46,18 @@ export default async function DigestsPage({
       <Label>Digest hebdomadaire</Label>
       <h1 className="mt-2 font-sans text-2xl font-light text-foreground sm:text-3xl">{weekLabel(week)}</h1>
 
-      {message ? (
-        <div className="mt-6">
-          <Notice tone="succes">{message}</Notice>
-        </div>
-      ) : null}
-
       <div className="mt-8 flex flex-wrap gap-3">
         <form action={validerEtEnvoyer}>
           <input type="hidden" name="week" value={week} />
-          <button type="submit" className={buttonClass.primary} disabled={brouillons === 0}>
+          <BoutonEnvoi className={buttonClass.primary} disabled={brouillons === 0} enCours="Envoi des digests…">
             Valider et envoyer les {brouillons} digest{brouillons > 1 ? "s" : ""} en attente
-          </button>
+          </BoutonEnvoi>
         </form>
         <form action={reassembler}>
           <input type="hidden" name="week" value={week} />
-          <button type="submit" className={buttonClass.ghost}>
+          <BoutonEnvoi className={buttonClass.ghost} enCours="Réassemblage…">
             Relire les sources et réassembler
-          </button>
+          </BoutonEnvoi>
         </form>
       </div>
 
@@ -91,9 +86,9 @@ export default async function DigestsPage({
                 <form action={validerEtEnvoyer}>
                   <input type="hidden" name="week" value={week} />
                   <input type="hidden" name="id" value={digest.id} />
-                  <button type="submit" className={buttonClass.ghost}>
+                  <BoutonEnvoi className={buttonClass.ghost} enCours="Envoi…">
                     Envoyer celui-ci
-                  </button>
+                  </BoutonEnvoi>
                 </form>
               ) : null}
             </div>

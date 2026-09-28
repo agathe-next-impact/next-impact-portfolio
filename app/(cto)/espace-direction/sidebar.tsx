@@ -35,6 +35,8 @@ import {
   X,
   type LucideIcon,
 } from "lucide-react";
+import { useFormStatus } from "react-dom";
+import { Spinner } from "../bouton-envoi";
 import { deconnexion } from "./actions";
 import { NAV_COOKIE } from "./nav";
 import { viderPagesHorsLigne } from "./pwa";
@@ -482,12 +484,41 @@ function Outil({
     <a href={href} aria-label={collapsed ? label : undefined} className={className}>
       {contenu}
     </a>
+  ) : type === "submit" ? (
+    <OutilEnvoi icon={Icon} label={label} collapsed={collapsed} className={className} />
   ) : (
     <button type={type ?? "button"} onClick={onClick} aria-label={collapsed ? label : undefined} className={className}>
       {contenu}
     </button>
   );
   return collapsed ? <Bulle texte={label}>{element}</Bulle> : element;
+}
+
+/** Un outil qui envoie son formulaire : spinner à la place de l'icône, désactivé pendant le traitement. */
+function OutilEnvoi({
+  icon: Icon,
+  label,
+  collapsed,
+  className,
+}: {
+  icon: LucideIcon;
+  label: string;
+  collapsed: boolean;
+  className: string;
+}) {
+  const { pending } = useFormStatus();
+  return (
+    <button
+      type="submit"
+      disabled={pending}
+      aria-busy={pending || undefined}
+      aria-label={collapsed ? label : undefined}
+      className={`${className} ${pending ? "cursor-wait" : ""}`}
+    >
+      {pending ? <Spinner className="h-4 w-4" /> : <Icon aria-hidden className="h-4 w-4 shrink-0" strokeWidth={1.7} />}
+      {collapsed ? null : <span className="truncate">{label}</span>}
+    </button>
+  );
 }
 
 const TONE_TEXTE: Record<SituationTone, string> = {

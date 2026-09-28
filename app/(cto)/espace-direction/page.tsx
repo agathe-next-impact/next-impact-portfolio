@@ -14,6 +14,7 @@ import { loadEspace } from "./shell";
 import { buttonClass, inputClass, Label, Notice } from "./ui";
 import { configurationIssue, currentSession, ESPACE_PATH } from "./session";
 import { viewerFromSession } from "./viewer";
+import { BoutonEnvoi } from "../bouton-envoi";
 import { VueTableau } from "./vues";
 
 export const metadata: Metadata = {
@@ -174,9 +175,9 @@ async function Connexion({
                 aria-label="Votre adresse e-mail"
                 className={inputClass}
               />
-              <button type="submit" className={buttonClass.ghost}>
+              <BoutonEnvoi className={buttonClass.ghost} enCours="Envoi du lien…">
                 Recevoir un lien
-              </button>
+              </BoutonEnvoi>
             </form>
           </div>
         </>

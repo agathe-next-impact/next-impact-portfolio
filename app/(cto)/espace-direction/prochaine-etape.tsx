@@ -6,6 +6,7 @@ import { livrableHref } from "./pilotage";
 import { contactHref, type EspaceContext } from "./shell";
 import { buttonClass, Label, Panel } from "./ui";
 import type { Viewer } from "./viewer";
+import { BoutonEnvoi } from "../bouton-envoi";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // La carte « Prochaine étape » de l'accueil : une suggestion, adossée au fait
@@ -87,9 +88,9 @@ export async function CarteProchaineEtape({ viewer, context }: { viewer: Viewer;
           {suggestion.masquable && viewer.personId ? (
             <form action={masquerLaSuggestion}>
               <input type="hidden" name="id" value={suggestion.id} />
-              <button type="submit" className={buttonClass.quiet}>
+              <BoutonEnvoi className={buttonClass.quiet} enCours="Un instant…">
                 Pas maintenant
-              </button>
+              </BoutonEnvoi>
             </form>
           ) : null}
         </div>

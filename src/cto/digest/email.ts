@@ -1,16 +1,5 @@
 import { sendMail } from "@/lib/sendMail";
-import {
-  EMAIL,
-  emailButton,
-  emailCard,
-  emailDivider,
-  emailH1,
-  emailH2,
-  emailKicker,
-  emailLayout,
-  emailLead,
-  emailParagraph,
-} from "@/lib/email-template";
+import { EMAIL_LIGHT as EMAIL, lightEmail } from "@/lib/email-template";
 import type { DigestContent, DigestLine, DigestTone } from "./types";
 import { weekLabel } from "./week";
 
@@ -25,10 +14,14 @@ import { weekLabel } from "./week";
 // un lien.
 // ─────────────────────────────────────────────────────────────────────────────
 
+// Variante claire (fond blanc) : c'est un e-mail client.
+const { emailButton, emailCard, emailDivider, emailH1, emailH2, emailKicker, emailLayout, emailLead, emailParagraph } =
+  lightEmail;
+
 const TONE_COLOR: Record<DigestTone, string> = {
-  critique: "#ff8a7a",
-  attention: "#f2c94c",
-  ok: "#7fd8a4",
+  critique: "#d6412c",
+  attention: "#c9950a",
+  ok: "#2f9a5c",
   info: EMAIL.accent2,
 };
 

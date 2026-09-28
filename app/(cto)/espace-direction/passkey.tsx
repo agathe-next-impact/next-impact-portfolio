@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Spinner } from "../bouton-envoi";
 import { useRouter } from "next/navigation";
 import {
   browserSupportsWebAuthn,
@@ -99,8 +100,9 @@ export function PasskeyLoginButton() {
 
   return (
     <div>
-      <button type="button" onClick={connect} disabled={busy} className={buttonClass.primary}>
-        {busy ? "Connexion…" : "Se connecter avec une passkey"}
+      <button type="button" onClick={connect} disabled={busy} aria-busy={busy || undefined} className={`${buttonClass.primary} gap-2`}>
+        {busy ? <Spinner /> : null}
+        <span>{busy ? "Connexion…" : "Se connecter avec une passkey"}</span>
       </button>
       {error ? (
         <p className="mt-3 font-inter-tight text-sm text-[#ff8a7a]">{error}</p>
@@ -114,10 +116,12 @@ export function PasskeyEnrollButton() {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [ok, setOk] = useState(false);
 
   async function enroll() {
     setBusy(true);
     setError(null);
+    setOk(false);
 
     try {
       const start = await postJson<{ challengeId: string; options: never }>(
@@ -129,6 +133,7 @@ export function PasskeyEnrollButton() {
         response,
       });
 
+      setOk(true);
       router.refresh();
     } catch (err) {
       setError(humanError(err));
@@ -148,9 +153,15 @@ export function PasskeyEnrollButton() {
 
   return (
     <div>
-      <button type="button" onClick={enroll} disabled={busy} className={buttonClass.primary}>
-        {busy ? "En cours…" : "Enregistrer cet appareil"}
+      <button type="button" onClick={enroll} disabled={busy} aria-busy={busy || undefined} className={`${buttonClass.primary} gap-2`}>
+        {busy ? <Spinner /> : null}
+        <span>{busy ? "En cours…" : "Enregistrer cet appareil"}</span>
       </button>
+      {ok ? (
+        <p role="status" className="mt-3 font-inter-tight text-sm text-[#7fd8a4]">
+          Appareil enregistré : vous pourrez vous connecter d'un geste depuis cet appareil.
+        </p>
+      ) : null}
       {error ? (
         <p className="mt-3 font-inter-tight text-sm text-[#ff8a7a]">{error}</p>
       ) : null}

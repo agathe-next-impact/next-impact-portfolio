@@ -5,6 +5,8 @@ import { ADMIN_EMAIL } from "@cto/admin";
 import { buttonClass } from "../../espace-direction/ui";
 import { BasculeTheme } from "../../espace-direction/bascule-theme";
 import { closeSession, LOGIN_PATH, requireSession } from "../session";
+import { BoutonEnvoi } from "../../bouton-envoi";
+import { poserFlash } from "../../flash";
 
 export const dynamic = "force-dynamic";
 
@@ -21,6 +23,7 @@ export default async function PilotageLayout({ children }: { children: ReactNode
   async function deconnexion() {
     "use server";
     await closeSession();
+    await poserFlash("Session fermée.");
     redirect(LOGIN_PATH);
   }
 
@@ -45,9 +48,9 @@ export default async function PilotageLayout({ children }: { children: ReactNode
         <div className="flex items-center gap-2">
           <BasculeTheme />
           <form action={deconnexion}>
-            <button type="submit" className={buttonClass.ghost}>
+            <BoutonEnvoi className={buttonClass.ghost} enCours="Fermeture…">
               Fermer la session
-            </button>
+            </BoutonEnvoi>
           </form>
         </div>
       </header>

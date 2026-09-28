@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { record } from "@cto/access";
 import { masquerSuggestion } from "@cto/espace";
 import { currentSession, endSession, ESPACE_PATH } from "./session";
+import { poserFlash } from "../flash";
 
 /**
  * Déconnexion, partagée par toutes les pages de l'espace.
@@ -21,6 +22,7 @@ export async function deconnexion(): Promise<void> {
     });
   }
   await endSession();
+  await poserFlash("Vous êtes déconnecté de votre espace.");
   redirect(ESPACE_PATH);
 }
 
@@ -39,6 +41,7 @@ export async function masquerLaSuggestion(formData: FormData): Promise<void> {
       clientId: courante.person.clientId,
       detail: id,
     });
+    await poserFlash("Suggestion masquée. Elle reviendra plus tard si elle reste pertinente.");
   }
   redirect(ESPACE_PATH);
 }

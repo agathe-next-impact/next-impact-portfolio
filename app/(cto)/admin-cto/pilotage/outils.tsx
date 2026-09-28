@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import { buttonClass, Label, Notice, Panel } from "../../espace-direction/ui";
+import { BoutonEnvoi } from "../../bouton-envoi";
 import { prevenir, synchroniser, type RapportState } from "./actions";
 import { Points } from "./points";
 
@@ -46,19 +47,19 @@ function Outil({
   libelle: string;
   enCours: string;
 }) {
-  const [state, formAction, pending] = useActionState(action, INITIAL);
+  const [state, formAction] = useActionState(action, INITIAL);
 
   return (
     <Panel className="p-5">
       <Label>{titre}</Label>
       <p className="mt-2 max-w-prose font-inter-tight text-sm text-mid-gray">{texte}</p>
       <form action={formAction} className="mt-4 flex flex-wrap gap-3">
-        <button type="submit" name="mode" value="a-blanc" className={buttonClass.ghost} disabled={pending}>
+        <BoutonEnvoi name="mode" value="a-blanc" className={buttonClass.ghost} enCours="Lecture à blanc…">
           À blanc
-        </button>
-        <button type="submit" name="mode" value="appliquer" className={buttonClass.primary} disabled={pending}>
-          {pending ? enCours : libelle}
-        </button>
+        </BoutonEnvoi>
+        <BoutonEnvoi name="mode" value="appliquer" className={buttonClass.primary} enCours={enCours}>
+          {libelle}
+        </BoutonEnvoi>
       </form>
       <Rapport state={state} />
     </Panel>

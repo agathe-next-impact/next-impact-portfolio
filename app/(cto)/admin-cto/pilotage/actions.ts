@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { recordSyncRun, sendAccessLink, setSyncEnabled, summarizeNotify, summarizeSync } from "@cto/admin";
 import { configurationIssue, syncFromNotion } from "@cto/notion";
 import { notifyPendingPublications } from "@cto/notify";
+import { poserFlash } from "../../flash";
 import { requireSession } from "../session";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -27,6 +28,7 @@ export async function basculerSynchro(formData: FormData): Promise<void> {
   const enabled = formData.get("next") === "actif";
 
   await setSyncEnabled(clientId, enabled);
+  await poserFlash(enabled ? "Synchro Notion réactivée pour cet accompagnement." : "Synchro Notion mise en pause pour cet accompagnement.");
 
   revalidatePath(`/admin-cto/pilotage/clients/${clientId}`);
   revalidatePath("/admin-cto/pilotage");
@@ -44,11 +46,9 @@ export async function envoyerLien(formData: FormData): Promise<void> {
   const clientId = String(formData.get("clientId"));
   const personId = String(formData.get("personId"));
   const outcome = await sendAccessLink(personId, origine());
-  const message = outcome.ok ? `Lien de connexion envoyé à ${outcome.email}.` : outcome.reason;
+  await poserFlash(outcome.ok ? `Lien de connexion envoyé à ${outcome.email}.` : outcome.reason, outcome.ok ? "succes" : "erreur");
 
-  redirect(
-    `/admin-cto/pilotage/clients/${clientId}?${outcome.ok ? "message" : "erreur"}=${encodeURIComponent(message)}`,
-  );
+  redirect(`/admin-cto/pilotage/clients/${clientId}`);
 }
 
 /** Ce que les deux panneaux de l'écran de pilotage affichent après un clic. */

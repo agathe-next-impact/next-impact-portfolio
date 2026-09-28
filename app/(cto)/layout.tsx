@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { figtree, interTight, geistMono } from "../fonts";
 import "../globals.css";
+import { lireFlash } from "./flash";
+import { FlashToast } from "./flash-toast";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Root layout de l'espace « CTO externalisé ».
@@ -29,9 +31,11 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function CtoRootLayout({
+export default async function CtoRootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  // La confirmation de la dernière action (`flash.ts`), admin comme client.
+  const flash = await lireFlash();
   return (
     <html
       lang="fr"
@@ -40,6 +44,7 @@ export default function CtoRootLayout({
     >
       <body>
         {children}
+        {flash ? <FlashToast key={flash.id} id={flash.id} message={flash.message} tone={flash.tone} /> : null}
       </body>
     </html>
   );

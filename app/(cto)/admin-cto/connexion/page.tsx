@@ -4,6 +4,7 @@ import { MAGIC_LINK_TTL_MS } from "@cto/access";
 import { buttonClass, Label, Notice, Panel } from "../../espace-direction/ui";
 import { AdminPasskeyLoginButton } from "../passkey";
 import { configurationIssue, hasSession, HOME_PATH, LOGIN_PATH } from "../session";
+import { BoutonEnvoi } from "../../bouton-envoi";
 
 export const dynamic = "force-dynamic";
 
@@ -91,9 +92,9 @@ export default async function AdminCtoLoginPage({
 
           <div className="mt-8 border-t border-dark-gray pt-6">
             <form action={demanderLien}>
-              <button type="submit" className={buttonClass.ghost}>
+              <BoutonEnvoi className={buttonClass.ghost} enCours="Envoi du lien…">
                 Recevoir un lien de connexion
-              </button>
+              </BoutonEnvoi>
             </form>
             <p className="mt-3 font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray">
               {MAX_LINKS_PER_WINDOW} demandes maximum par quart d&rsquo;heure

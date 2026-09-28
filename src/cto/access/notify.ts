@@ -1,19 +1,12 @@
 import { sendMail } from "@/lib/sendMail";
-import {
-  emailButton,
-  emailCard,
-  emailH1,
-  emailKicker,
-  emailLayout,
-  emailLead,
-  emailParagraph,
-} from "@/lib/email-template";
+import { lightEmail } from "@/lib/email-template";
 import { MAGIC_LINK_TTL_MS } from "./token";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Les e-mails de la couche d'accès.
 //
-// Ils passent par `lib/email-template.ts` (kit Blueprint) et `lib/sendMail.ts`,
+// Ils passent par `lib/email-template.ts` (kit Blueprint, variante claire à
+// fond blanc : ce sont des e-mails clients) et `lib/sendMail.ts`,
 // comme tout le reste du site : un gabarit d'e-mail ad hoc de plus finirait par
 // diverger de la charte, et personne ne s'en apercevrait avant qu'un client le
 // reçoive.
@@ -24,6 +17,8 @@ import { MAGIC_LINK_TTL_MS } from "./token";
 // Sinon la boîte du client devient l'archive, hors de tout contrôle : ni
 // révocable, ni journalisée, ni effaçable.
 // ─────────────────────────────────────────────────────────────────────────────
+
+const { emailButton, emailCard, emailH1, emailKicker, emailLayout, emailLead, emailParagraph } = lightEmail;
 
 const MINUTES = Math.round(MAGIC_LINK_TTL_MS / 60000);
 

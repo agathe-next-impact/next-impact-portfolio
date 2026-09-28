@@ -15,6 +15,8 @@ import { PasskeyEnrollButton } from "../passkey";
 import { BasculeTheme } from "../bascule-theme";
 import { BackLink, buttonClass, formatDate, inputClass, Label, PageHeader, Panel } from "../ui";
 import { currentSession, ESPACE_PATH, requireSession, sessionToken } from "../session";
+import { BoutonEnvoi } from "../../bouton-envoi";
+import { poserFlash } from "../../flash";
 
 export const metadata: Metadata = {
   title: "Vos appareils",
@@ -54,6 +56,7 @@ export default async function AppareilsPage() {
     const id = String(formData.get("id") ?? "");
     const label = String(formData.get("label") ?? "");
     await renameCredential(id, courante.person.id, label);
+    await poserFlash("Appareil renommé.");
 
     redirect(APPAREILS_PATH);
   }
@@ -74,6 +77,9 @@ export default async function AppareilsPage() {
         clientId: courante.person.clientId,
         detail: outcome.label,
       });
+      await poserFlash("Appareil supprimé : sa passkey ne permet plus d'entrer.");
+    } else {
+      await poserFlash("Cet appareil n'a pas pu être supprimé.", "erreur");
     }
 
     redirect(APPAREILS_PATH);
@@ -94,6 +100,9 @@ export default async function AppareilsPage() {
         personId: courante.person.id,
         clientId: courante.person.clientId,
       });
+      await poserFlash("Appareil déconnecté : il n'a plus accès à votre espace.");
+    } else {
+      await poserFlash("Cet appareil n'a pas pu être déconnecté.", "erreur");
     }
 
     redirect(APPAREILS_PATH);
@@ -144,9 +153,9 @@ export default async function AppareilsPage() {
                         className={`${inputClass} mt-1 py-2`}
                       />
                     </div>
-                    <button type="submit" className={buttonClass.ghost}>
+                    <BoutonEnvoi className={buttonClass.ghost} enCours="Enregistrement…">
                       Renommer
-                    </button>
+                    </BoutonEnvoi>
                   </form>
 
                   <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-dark-gray pt-3">
@@ -158,9 +167,9 @@ export default async function AppareilsPage() {
                     </p>
                     <form action={supprimer}>
                       <input type="hidden" name="id" value={credential.id} />
-                      <button type="submit" className={buttonClass.quiet}>
+                      <BoutonEnvoi className={buttonClass.quiet} enCours="Suppression…">
                         Supprimer
-                      </button>
+                      </BoutonEnvoi>
                     </form>
                   </div>
                 </Panel>
@@ -202,9 +211,9 @@ export default async function AppareilsPage() {
                 {row.current ? null : (
                   <form action={deconnecter}>
                     <input type="hidden" name="id" value={row.id} />
-                    <button type="submit" className={buttonClass.quiet}>
+                    <BoutonEnvoi className={buttonClass.quiet} enCours="Déconnexion…">
                       Déconnecter
-                    </button>
+                    </BoutonEnvoi>
                   </form>
                 )}
               </Panel>
