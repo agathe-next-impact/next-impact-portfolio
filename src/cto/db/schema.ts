@@ -144,6 +144,14 @@ export const ctoClients = pgTable(
      */
     statusChangedAt: timestamp("status_changed_at").notNull().defaultNow(),
     /**
+     * Date à laquelle la synchro a constaté que la fiche Notion avait disparu
+     * de la base Clients (supprimée, mise à la corbeille). L'accompagnement est
+     * clos au même moment ; ce champ distingue ce cas d'une clôture voulue
+     * (« État » = clos, fiche conservée), pour que l'admin cesse de le lister.
+     * Remis à `null` si la fiche revient de la corbeille.
+     */
+    notionDeletedAt: timestamp("notion_deleted_at"),
+    /**
      * Le **pack sectoriel** de la fiche organisation (ex. `pack-industrie-btp.md`),
      * recopié à chaque balayage. Sert uniquement à distribuer les lettres
      * sectorielles ; un client sans pack reçoit la générale et la sienne, ce

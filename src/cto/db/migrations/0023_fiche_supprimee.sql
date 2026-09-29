@@ -1,0 +1,1 @@
+ALTER TABLE "cto_clients" ADD COLUMN "notion_deleted_at" timestamp;

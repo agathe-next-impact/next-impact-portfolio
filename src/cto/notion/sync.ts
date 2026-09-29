@@ -216,6 +216,7 @@ async function resolveClients(dryRun: boolean, force = false): Promise<ClientRes
       company: ctoClients.company,
       status: ctoClients.status,
       createdAt: ctoClients.createdAt,
+      notionDeletedAt: ctoClients.notionDeletedAt,
     })
     .from(ctoClients);
   const ouvertureParClient = new Map(rows.map((row) => [row.id, row.createdAt]));
@@ -360,8 +361,12 @@ async function resolveClients(dryRun: boolean, force = false): Promise<ClientRes
   //
   // Garde-fou : une base Clients qui ne rend plus RIEN ressemble à une panne
   // (partage retiré, identifiant faux) ; on ne ferme rien en masse sans --forcer.
+  //
+  // La disparition est datée (`notion_deleted_at`) : c'est ce qui retire
+  // l'accompagnement de l'admin, où une clôture voulue reste listée. Un
+  // accompagnement déjà clos dont la fiche disparaît est seulement marqué.
   const fiches = new Set(pagesClients.map((fiche) => fiche.id));
-  const orphelins = rows.filter((row) => row.notionPageId && !fiches.has(row.notionPageId) && row.status !== "clos");
+  const orphelins = rows.filter((row) => row.notionPageId && !fiches.has(row.notionPageId) && !row.notionDeletedAt);
   if (orphelins.length > 0 && fichesLues === 0 && orphelins.length > MASS_WITHDRAWAL_THRESHOLD && !force) {
     alert(
       findings,
@@ -370,16 +375,20 @@ async function resolveClients(dryRun: boolean, force = false): Promise<ClientRes
     );
   } else {
     for (const row of orphelins) {
+      const dejaClos = row.status === "clos";
       alert(
         findings,
-        dryRun
-          ? `« ${row.company} » : fiche disparue de la base Clients — serait clos, accès fermé.`
-          : `« ${row.company} » : fiche disparue de la base Clients — accompagnement clos, accès fermé.`,
+        dejaClos
+          ? `« ${row.company} » : fiche disparue de la base Clients — accompagnement déjà clos, ${dryRun ? "serait retiré" : "retiré"} de l'admin.`
+          : dryRun
+            ? `« ${row.company} » : fiche disparue de la base Clients — serait clos, accès fermé.`
+            : `« ${row.company} » : fiche disparue de la base Clients — accompagnement clos, accès fermé.`,
       );
       if (dryRun) continue;
+      const maintenant = new Date();
       await db()
         .update(ctoClients)
-        .set({ status: "clos", statusChangedAt: new Date() })
+        .set(dejaClos ? { notionDeletedAt: maintenant } : { status: "clos", statusChangedAt: maintenant, notionDeletedAt: maintenant })
         .where(eq(ctoClients.id, row.id));
     }
   }
@@ -443,6 +452,7 @@ async function alignerFiche(
       suiviInclusJusquau: ctoClients.suiviInclusJusquau,
       suggestionsCoupees: ctoClients.suggestionsCoupees,
       servicesOuverts: ctoClients.servicesOuverts,
+      notionDeletedAt: ctoClients.notionDeletedAt,
     })
     .from(ctoClients)
     .where(eq(ctoClients.id, clientId))
@@ -450,6 +460,7 @@ async function alignerFiche(
   if (!actuel) return;
 
   const patch: {
+    notionDeletedAt?: null;
     status?: typeof actuel.status;
     tier?: string;
     wpUmbrellaProjectId?: number;
@@ -490,6 +501,8 @@ async function alignerFiche(
   if (sentinelle.id && sentinelle.id !== actuel.sentinelleClientId) {
     patch.sentinelleClientId = sentinelle.id;
   }
+  // Fiche revenue de la corbeille : l'accompagnement reparaît dans l'admin.
+  if (actuel.notionDeletedAt) patch.notionDeletedAt = null;
   if (Object.keys(patch).length === 0) return;
 
   if (dryRun) {
@@ -507,6 +520,7 @@ async function alignerFiche(
       "suiviFormule" in patch ? `formule suivi → ${patch.suiviFormule ?? "aucune"}` : null,
       "suiviInclusJusquau" in patch ? "fin du suivi inclus" : null,
       "suggestionsCoupees" in patch ? `suggestions → ${patch.suggestionsCoupees ? "coupées" : "actives"}` : null,
+      "notionDeletedAt" in patch ? "fiche revenue de la corbeille" : null,
     ].filter(Boolean);
     // Les dates d'ouverture des services suivent la colonne Services, déjà
     // annoncée : les taire évite une ligne de bruit par balayage.

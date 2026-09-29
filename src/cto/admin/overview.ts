@@ -38,7 +38,10 @@ export interface ClientOverviewRow {
 }
 
 /**
- * L'état de tous les accompagnements, trié par urgence puis par nom.
+ * L'état de tous les accompagnements, trié par urgence puis par nom — hors
+ * ceux dont la fiche a été supprimée dans Notion (`notion_deleted_at`) : clos
+ * par la synchro, ils n'ont plus rien à piloter. Leur page de détail reste
+ * accessible par son adresse.
  *
  * Quatre requêtes indépendantes plutôt qu'une seule jointure tentaculaire :
  * chacune se lit seule, et le driver HTTP de Neon n'a de toute façon pas de
@@ -46,7 +49,7 @@ export interface ClientOverviewRow {
  */
 export async function listClients(now: Date = new Date()): Promise<ClientOverviewRow[]> {
   const [clients, personCounts, sessionCounts, lastAccess] = await Promise.all([
-    db().select().from(ctoClients),
+    db().select().from(ctoClients).where(isNull(ctoClients.notionDeletedAt)),
 
     db()
       .select({

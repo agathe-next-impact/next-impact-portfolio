@@ -3,7 +3,7 @@ import type { ApercuPayload, Deliverable } from "@cto/deliverables";
 import { Acces } from "./acces";
 import { historiquePath, Nouveaute, sortRecentFirst } from "./livrables";
 import { sectionByKey } from "@cto/espace";
-import { EnPreparation, Espace, sectionHref, type EspaceContext } from "./shell";
+import { EnPreparation, Espace, sectionHref, sectionOuverte, type EspaceContext } from "./shell";
 import { buttonClass, formatDay, Label, Panel, Tag } from "./ui";
 import type { Viewer } from "./viewer";
 
@@ -28,7 +28,18 @@ function adresse(url: string): string {
   return url.replace(/^https?:\/\//, "").replace(/\/$/, "");
 }
 
-function CarteApercu({ item, since, base }: { item: Apercu; since: Date | null; base: string }) {
+function CarteApercu({
+  item,
+  since,
+  base,
+  propositions,
+}: {
+  item: Apercu;
+  since: Date | null;
+  base: string;
+  /** La section Propositions, quand elle est ouverte : une maquette se lit avec ce qu'elle chiffre. */
+  propositions: string | null;
+}) {
   const { nature, url, identifiant, motDePasse, note } = item.payload;
   const libelles = nature ? NATURES[nature] : null;
 
@@ -73,6 +84,14 @@ function CarteApercu({ item, since, base }: { item: Apercu; since: Date | null; 
         )}
       </div>
 
+      {nature === "maquette" && propositions ? (
+        <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray">
+          <Link href={propositions} className="underline underline-offset-4 transition-colors hover:text-accent-secondary">
+            Voir les propositions →
+          </Link>
+        </p>
+      ) : null}
+
       {item.version > 1 ? (
         <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray">
           <Link
@@ -89,6 +108,10 @@ function CarteApercu({ item, since, base }: { item: Apercu; since: Date | null; 
 
 export async function VueApercus({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
   const items = sortRecentFirst(context.items.filter((item) => item.kind === "apercu")) as Apercu[];
+  const propositions =
+    sectionOuverte(context, "propositions") && context.items.some((item) => item.kind === "proposition")
+      ? sectionHref(sectionByKey("propositions"), viewer.base)
+      : null;
 
   return (
     <Espace viewer={viewer} context={context} active="apercus" title="Versions de travail">
@@ -100,7 +123,13 @@ export async function VueApercus({ viewer, context }: { viewer: Viewer; context:
       ) : (
         <Panel className="mt-10 divide-y divide-dark-gray">
           {items.map((item) => (
-            <CarteApercu key={item.id} item={item} since={context.since} base={viewer.base} />
+            <CarteApercu
+              key={item.id}
+              item={item}
+              since={context.since}
+              base={viewer.base}
+              propositions={propositions}
+            />
           ))}
         </Panel>
       )}

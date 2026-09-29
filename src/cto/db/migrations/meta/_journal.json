@@ -162,6 +162,13 @@
       "when": 1790673824389,
       "tag": "0022_adresse_partagee",
       "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1790675206947,
+      "tag": "0023_fiche_supprimee",
+      "breakpoints": true
     }
   ]
 }

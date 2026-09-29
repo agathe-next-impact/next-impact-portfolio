@@ -988,7 +988,8 @@ export async function VueLectureProposition({
   const propositions = sortRecentFirst(context.items.filter((item) => item.kind === "proposition"));
   const enAttente = isPendingProposition(proposition);
   // Le corps découpé à chaque grand titre. Ce qui résume (synthèse,
-  // recommandation) passe en tête, ouvert ; le détail chiffré suit, replié.
+  // recommandation) passe en tête, le détail chiffré suit ; tout est replié
+  // au chargement, le sommaire sert de porte d'entrée.
   const { preambule, ouverts: enTete, replies: detail } = ordreDeLecture(payload.corps);
   const sommaire = [
     ...[...enTete, ...detail].map((chapitre) => ({ href: `#${chapitre.id}`, texte: chapitre.titre })),
@@ -1069,7 +1070,7 @@ export async function VueLectureProposition({
         ) : null}
 
         {enTete.map((chapitre) => (
-          <Chapitre key={chapitre.id} id={chapitre.id} titre={chapitre.titre} ouvert>
+          <Chapitre key={chapitre.id} id={chapitre.id} titre={chapitre.titre}>
             <CorpsLettre body={chapitre.blocs} large base={viewer.base} />
           </Chapitre>
         ))}
