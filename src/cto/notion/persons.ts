@@ -19,25 +19,25 @@ import { checkColumns, COLUMNS, schemaWarning } from "./schema";
 // `npm run cto:invite`) ou dont la ligne a disparu, et seulement au sein du
 // même accompagnement : jamais d'un client à l'autre.
 //
-// Trois prudences, dont deux asymétriques et volontaires :
+// Trois règles :
 //
-//  1. **La révocation est pilotée par Notion, la réassignation ne l'est pas.**
-//     Cocher « Révoquée » NARROWS l'accès : c'est sûr par défaut, donc
-//     appliqué directement, comme un aller-retour normal (décocher restaure —
-//     voir schema.ts). Changer la relation « Client » d'une personne déjà
-//     créée pourrait au contraire lui OUVRIR les données d'une autre
-//     entreprise par un simple glisser-déposer de relation ; ce cas-là est
-//     seulement signalé, jamais appliqué.
-//  2. **Une personne disparue de Notion est révoquée** (décision du
-//     2026-09-27) : supprimer sa ligne coupe l'accès comme la case, sessions
-//     comprises. Même règle pour un accompagnement dont la fiche disparaît
-//     (clos, cf. `resolveClients`). Restaurer la ligne depuis la corbeille
-//     Notion rouvre l'accès au balayage suivant (même page, case décochée).
-//     Garde-fou : si la base ne rend plus AUCUNE ligne, rien n'est révoqué
-//     en masse sans `--forcer` — une base vide ressemble à une panne.
-//  3. **Une ligne, un accès.** Deux lignes pour la même adresse sont deux
-//     personnes, dans le même accompagnement ou dans deux ; la connexion par
-//     e-mail envoie alors un lien par espace (`findPersonsByEmail`).
+//  1. **Un accès par client de la ligne** (décision du 2026-09-29). Une ligne
+//     rattachée à deux clients porte deux accès, un par espace, qui partagent
+//     la page. Ajouter un client à la relation ouvre son espace, l'en retirer
+//     le ferme. Un accès n'est jamais DÉPLACÉ d'un client à l'autre : c'est un
+//     accès fermé et un autre ouvert, chacun signalé et journalisé.
+//  2. **Un accès que Notion ne porte plus est révoqué** (décision du
+//     2026-09-27) : ligne supprimée ou client retiré de la relation, l'accès
+//     tombe comme avec la case, sessions comprises. Même règle pour un
+//     accompagnement dont la fiche disparaît (clos, cf. `resolveClients`).
+//     Restaurer la ligne ou le client rouvre l'accès au balayage suivant.
+//     Garde-fous : un client pas encore résoluble sur la ligne suspend toute
+//     révocation pour elle (on ne sait pas lequel manque), et si la base ne
+//     rend plus AUCUNE ligne, rien n'est révoqué en masse sans `--forcer` —
+//     une base vide ressemble à une panne.
+//  3. **Une adresse n'est pas une identité.** Deux lignes pour la même
+//     adresse sont deux personnes ; la connexion par e-mail envoie alors un
+//     lien par espace (`findPersonsByEmail`).
 //
 // Aucun e-mail ne part d'ici : le lien de connexion reste un geste séparé
 // (`cto:invite --client <uuid> --email …`, ou la personne se présente
@@ -63,24 +63,71 @@ interface ExistingPerson {
   revokedAt: Date | null;
 }
 
+/** Ce que chaque ligne de la base réclame : ses clients résolus, et si tous l'ont été. */
+export type Attendus = Map<string, { clients: Set<string>; complet: boolean }>;
+
+/**
+ * Pur : les clients qu'une ligne réclame, d'après sa relation « Client ».
+ * `complet` est faux dès qu'une fiche liée n'est pas encore résoluble : on ne
+ * sait alors pas quels accès elle vise, donc on n'en ferme aucun. Une relation
+ * VIDE non plus : c'est une erreur de saisie signalée, pas un ordre de couper.
+ */
+export function attendusDe(
+  links: string[],
+  byNotionPage: Map<string, string>,
+): { clients: Set<string>; complet: boolean } {
+  const clients = new Set<string>();
+  let complet = links.length > 0;
+  for (const link of links) {
+    const clientId = byNotionPage.get(link);
+    if (clientId) clients.add(clientId);
+    else complet = false;
+  }
+  return { clients, complet };
+}
+
+/**
+ * Pur : les accès que Notion porte encore — leur ligne est là et réclame
+ * toujours leur client (ou ne peut pas encore dire lesquels elle réclame).
+ * Un accès avec page absent de cet ensemble est à révoquer.
+ */
+export function accesPortes(
+  rows: Pick<ExistingPerson, "id" | "clientId" | "notionPageId">[],
+  attendus: Attendus,
+): Set<string> {
+  const portes = new Set<string>();
+  for (const row of rows) {
+    if (row.notionPageId === null) continue;
+    const ligne = attendus.get(row.notionPageId);
+    if (ligne && (!ligne.complet || ligne.clients.has(row.clientId))) portes.add(row.id);
+  }
+  return portes;
+}
+
 /**
  * Pur : les accès qu'une ligne sans accès peut adopter, par accompagnement et
- * adresse — ceux sans page (`cto:invite`) ou dont la page a disparu de la
- * base. Les accès encore ouverts d'abord : entre un accès révoqué et un accès
- * vivant pour la même adresse, c'est le vivant qu'on rattache.
+ * adresse — ceux sans page (`cto:invite`) ou que leur ligne ne porte plus
+ * (`accesPortes`). Les accès encore ouverts d'abord : entre un accès révoqué
+ * et un accès vivant pour la même adresse, c'est le vivant qu'on rattache.
  */
 export function adoptables(
   rows: Pick<ExistingPerson, "id" | "clientId" | "notionPageId" | "email" | "revokedAt">[],
-  presentes: Set<string>,
+  portes: Set<string>,
 ): Map<string, string[]> {
   const candidates = new Map<string, string[]>();
   const ordered = [...rows].sort((a, b) => Number(a.revokedAt !== null) - Number(b.revokedAt !== null));
   for (const row of ordered) {
-    if (row.notionPageId !== null && presentes.has(row.notionPageId)) continue;
+    if (portes.has(row.id)) continue;
     const key = adoptionKey(row.clientId, row.email);
     candidates.set(key, [...(candidates.get(key) ?? []), row.id]);
   }
   return candidates;
+}
+
+/** La clé d'un accès né d'une ligne : la page ET le client, une ligne pouvant en porter plusieurs. */
+export function accessKey(pageId: string, clientId: string): string {
+  return `${pageId}
+${clientId}`;
 }
 
 export function adoptionKey(clientId: string, email: string): string {
@@ -91,6 +138,7 @@ ${email.trim().toLowerCase()}`;
 /** Ce que le balayage d'une ligne a besoin de savoir des autres. */
 interface Context {
   byNotionPage: Map<string, string>;
+  /** Par `accessKey` : page et client. */
   byPage: Map<string, ExistingPerson>;
   byId: Map<string, ExistingPerson>;
   /** `adoptables` : consommé au fil du balayage, un accès n'est adopté qu'une fois. */
@@ -145,15 +193,17 @@ export async function syncPersons(
     })
     .from(ctoPersons);
 
-  const presentes = new Set(pages.map((page) => page.id));
+  const attendus: Attendus = new Map(
+    pages.map((page) => [page.id, attendusDe(clientPageIds(page), byNotionPage)]),
+  );
   const context: Context = {
     byNotionPage,
     byPage: new Map(
       rows.filter((row): row is ExistingPerson & { notionPageId: string } => row.notionPageId !== null)
-        .map((row) => [row.notionPageId, row]),
+        .map((row) => [accessKey(row.notionPageId, row.clientId), row]),
     ),
     byId: new Map(rows.map((row) => [row.id, row])),
-    adoption: adoptables(rows, presentes),
+    adoption: adoptables(rows, accesPortes(rows, attendus)),
   };
 
   for (const page of pages) {
@@ -161,7 +211,9 @@ export async function syncPersons(
     await syncOne(page, context, options.dryRun, report, findings);
   }
 
-  await revokeMissing(pages, rows, options, report, findings);
+  // `accesPortes` est recalculé après le balayage : un accès adopté par une
+  // ligne en porte désormais la page, il ne doit pas tomber comme orphelin.
+  await revokeMissing(pages, rows, attendus, options, report, findings);
 
   return { report, ...findings };
 }
@@ -170,21 +222,23 @@ export async function syncPersons(
 const SEUIL_RETRAIT_MASSIF = 3;
 
 /**
- * Une personne dont la ligne a disparu de la base (supprimée, mise à la
- * corbeille) perd son accès, comme si « Révoquée » était cochée : sessions
- * fermées, événement journalisé. Les accès créés hors Notion (`cto:invite`,
- * sans page) ne sont pas concernés : la base ne les a jamais portés.
+ * Un accès que Notion ne porte plus (ligne supprimée ou mise à la corbeille,
+ * client retiré de sa relation) tombe comme si « Révoquée » était cochée :
+ * sessions fermées, événement journalisé. Les accès créés hors Notion
+ * (`cto:invite`, sans page) ne sont pas concernés : la base ne les a jamais
+ * portés.
  */
 async function revokeMissing(
   pages: NotionPage[],
   rows: ExistingPerson[],
+  attendus: Attendus,
   options: { dryRun: boolean; force?: boolean },
   report: PersonsReport,
   findings: Findings,
 ): Promise<void> {
-  const presentes = new Set(pages.map((page) => page.id));
+  const portes = accesPortes(rows, attendus);
   const disparues = rows.filter(
-    (row) => row.notionPageId !== null && !presentes.has(row.notionPageId) && row.revokedAt === null,
+    (row) => row.notionPageId !== null && !portes.has(row.id) && row.revokedAt === null,
   );
   if (disparues.length === 0) return;
 
@@ -198,12 +252,10 @@ async function revokeMissing(
   }
 
   for (const row of disparues) {
-    alert(
-      findings,
-      options.dryRun
-        ? `« ${row.name} » : ligne disparue de la base Personnes — accès serait révoqué.`
-        : `« ${row.name} » : ligne disparue de la base Personnes — accès révoqué.`,
-    );
+    const cause = attendus.has(row.notionPageId!)
+      ? "client retiré de sa ligne dans la base Personnes"
+      : "ligne disparue de la base Personnes";
+    alert(findings, `« ${row.name} » : ${cause} — accès ${options.dryRun ? "serait révoqué" : "révoqué"}.`);
     report.revoked += 1;
     if (options.dryRun) continue;
     await db().update(ctoPersons).set({ revokedAt: new Date() }).where(eq(ctoPersons.id, row.id));
@@ -212,7 +264,7 @@ async function revokeMissing(
       event: "session_revoquee",
       personId: row.id,
       clientId: row.clientId,
-      detail: "ligne supprimée de la base Personnes",
+      detail: cause,
     });
   }
 }
@@ -234,26 +286,35 @@ async function syncOne(
   }
 
   const links = clientPageIds(page);
-  const clientId = links.length === 1 ? context.byNotionPage.get(links[0]) : undefined;
-  if (!clientId) {
-    // Un client pas encore résoluble est l'ordinaire d'une fiche en
-    // préparation ; une relation vide ou double est une erreur de saisie.
-    if (links.length === 1) {
-      findings.warnings.push(`Personne « ${label} » : son client n'est pas encore résoluble, elle attend.`);
-    } else {
-      alert(
-        findings,
-        links.length === 0
-          ? `Personne « ${label} » sans client : elle n'a accès à rien.`
-          : `Personne « ${label} » rattachée à plusieurs clients : à trancher, elle est ignorée.`,
-      );
-    }
+  if (links.length === 0) {
+    alert(findings, `Personne « ${label} » sans client : elle n'a accès à rien.`);
     return;
   }
 
+  for (const link of links) {
+    const clientId = context.byNotionPage.get(link);
+    if (!clientId) {
+      // L'ordinaire d'une fiche Clients en préparation : cet accès attend.
+      findings.warnings.push(`Personne « ${label} » : un de ses clients n'est pas encore résoluble, cet accès attend.`);
+      continue;
+    }
+    await syncAccess(page, clientId, { name, email, label }, context, dryRun, report, findings);
+  }
+}
+
+/** L'accès d'une ligne à UN de ses clients : créé, adopté ou mis à jour. */
+async function syncAccess(
+  page: NotionPage,
+  clientId: string,
+  { name, email, label }: { name: string; email: string; label: string },
+  context: Context,
+  dryRun: boolean,
+  report: PersonsReport,
+  findings: Findings,
+): Promise<void> {
   const role = personRole(page);
   const revoked = personRevoked(page);
-  const existing = context.byPage.get(page.id) ?? adopt(context, clientId, email);
+  const existing = context.byPage.get(accessKey(page.id, clientId)) ?? adopt(context, clientId, email);
 
   if (!existing) {
     if (!dryRun) {
@@ -280,13 +341,6 @@ async function syncOne(
           : `« ${label} » : rattachée à son accès existant, créé via cto:invite.`,
     );
     patch.notionPageId = page.id;
-  }
-
-  if (existing.clientId !== clientId) {
-    alert(
-      findings,
-      `« ${label} » a changé de client dans Notion : ignoré. Un transfert entre accompagnements reste un geste SQL délibéré.`,
-    );
   }
 
   if (email !== existing.email) {

@@ -254,6 +254,8 @@ export const ctoPersons = pgTable(
      * Page Notion de la base Personnes dont cette personne est née — même
      * mécanique que `ctoClients.notionPageId` : la synchro reconnaît une
      * personne déjà créée par son `page.id`, jamais en réécrivant Notion.
+     * Une ligne rattachée à deux clients donne deux accès, un par client, qui
+     * partagent cette page.
      *
      * `null` sur une personne créée avant ce mécanisme (via `cto:invite`). La
      * synchro l'ADOPTE au premier passage qui la recroise, par adresse ET
@@ -301,7 +303,9 @@ export const ctoPersons = pgTable(
     // boîte partagée. L'identité est la ligne, jamais l'adresse ; la connexion
     // par e-mail envoie un lien par espace (`findPersonsByEmail`).
     index("cto_person_email").on(sql`lower(${t.email})`),
-    uniqueIndex("cto_person_notion_page").on(t.notionPageId),
+    // Une ligne Notion rattachée à plusieurs clients porte un accès par
+    // client (décision du 2026-09-29) : l'unicité est la paire, pas la page.
+    uniqueIndex("cto_person_notion_page").on(t.notionPageId, t.clientId),
     index("cto_person_client").on(t.clientId),
   ],
 );

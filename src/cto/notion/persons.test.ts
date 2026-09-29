@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { adoptables, adoptionKey } from "./persons";
+import { accesPortes, adoptables, adoptionKey, attendusDe, type Attendus } from "./persons";
 
 // Ce que ces tests protègent : une même adresse peut porter plusieurs
 // personnes (décision du 2026-09-29), et l'adoption par adresse d'un accès sans
@@ -16,7 +16,7 @@ const acces = (
 
 describe("accès adoptables par adresse", () => {
   it("n'adopte pas un accès dont la ligne est toujours là", () => {
-    const reserve = adoptables([acces("a", "c1", "x@exemple.fr", "page-a")], new Set(["page-a"]));
+    const reserve = adoptables([acces("a", "c1", "x@exemple.fr", "page-a")], new Set(["a"]));
     expect(reserve.get(adoptionKey("c1", "x@exemple.fr"))).toBeUndefined();
   });
 
@@ -49,5 +49,58 @@ describe("accès adoptables par adresse", () => {
       new Set(),
     );
     expect(reserve.get(adoptionKey("c1", "x@exemple.fr"))).toEqual(["vivant", "revoque"]);
+  });
+});
+
+// Une ligne rattachée à plusieurs clients porte un accès par client (décision
+// du 2026-09-29) ; retirer un client de la relation ferme SON accès seulement.
+describe("accès portés par une ligne à plusieurs clients", () => {
+  const byNotionPage = new Map([
+    ["fiche-heritech", "heritech"],
+    ["fiche-suneido", "suneido"],
+  ]);
+
+  it("résout chaque client de la relation", () => {
+    const ligne = attendusDe(["fiche-heritech", "fiche-suneido"], byNotionPage);
+    expect([...ligne.clients]).toEqual(["heritech", "suneido"]);
+    expect(ligne.complet).toBe(true);
+  });
+
+  it("porte les deux accès d'une ligne à deux clients", () => {
+    const attendus: Attendus = new Map([["page-s", attendusDe(["fiche-heritech", "fiche-suneido"], byNotionPage)]]);
+    const portes = accesPortes(
+      [acces("s-h", "heritech", "s@exemple.fr", "page-s"), acces("s-s", "suneido", "s@exemple.fr", "page-s")],
+      attendus,
+    );
+    expect(portes).toEqual(new Set(["s-h", "s-s"]));
+  });
+
+  it("ne porte plus l'accès d'un client retiré de la relation", () => {
+    const attendus: Attendus = new Map([["page-s", attendusDe(["fiche-heritech"], byNotionPage)]]);
+    const portes = accesPortes(
+      [acces("s-h", "heritech", "s@exemple.fr", "page-s"), acces("s-s", "suneido", "s@exemple.fr", "page-s")],
+      attendus,
+    );
+    expect(portes).toEqual(new Set(["s-h"]));
+  });
+
+  it("ne ferme rien tant qu'un client de la ligne n'est pas résoluble", () => {
+    const attendus: Attendus = new Map([["page-s", attendusDe(["fiche-heritech", "fiche-en-preparation"], byNotionPage)]]);
+    const portes = accesPortes([acces("s-s", "suneido", "s@exemple.fr", "page-s")], attendus);
+    expect(portes).toEqual(new Set(["s-s"]));
+  });
+
+  it("ne ferme rien sur une relation vide, erreur de saisie signalée", () => {
+    const attendus: Attendus = new Map([["page-s", attendusDe([], byNotionPage)]]);
+    const portes = accesPortes([acces("s-h", "heritech", "s@exemple.fr", "page-s")], attendus);
+    expect(portes).toEqual(new Set(["s-h"]));
+  });
+
+  it("ne porte plus l'accès d'une ligne disparue, ni celui créé sans page", () => {
+    const portes = accesPortes(
+      [acces("orphelin", "heritech", "s@exemple.fr", "supprimee"), acces("invite", "heritech", "s@exemple.fr")],
+      new Map(),
+    );
+    expect(portes.size).toBe(0);
   });
 });

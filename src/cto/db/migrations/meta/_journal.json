@@ -169,6 +169,13 @@
       "when": 1790675206947,
       "tag": "0023_fiche_supprimee",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1790683830814,
+      "tag": "0024_personne_multi_clients",
+      "breakpoints": true
     }
   ]
 }
