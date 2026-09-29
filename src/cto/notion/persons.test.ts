@@ -1,52 +1,53 @@
 import { describe, expect, it } from "vitest";
-import { onePerEmail, type PersonLine } from "./persons";
+import { adoptables, adoptionKey } from "./persons";
 
-// Ce que ces tests protègent : deux lignes pour la même adresse ne doivent plus
-// faire tomber le balayage sur l'index unique `cto_person_email`. Une seule est
-// retenue, et c'est toujours la même d'un balayage à l'autre.
+// Ce que ces tests protègent : une même adresse peut porter plusieurs
+// personnes (décision du 2026-09-29), et l'adoption par adresse d'un accès sans
+// page ne franchit JAMAIS la frontière d'un accompagnement — sans quoi une
+// ligne Notion ouvrirait les données d'une autre entreprise.
 
-const ligne = (id: string, email: string | null, name: string | null = id): PersonLine => ({ id, email, name });
+const acces = (
+  id: string,
+  clientId: string,
+  email: string,
+  notionPageId: string | null = null,
+  revokedAt: Date | null = null,
+) => ({ id, clientId, email, notionPageId, revokedAt });
 
-describe("une adresse, une ligne", () => {
-  it("ne signale rien quand chaque adresse est seule", () => {
-    expect(onePerEmail([ligne("a", "camille@exemple.fr"), ligne("b", "louis@exemple.fr")], new Map())).toEqual([]);
+describe("accès adoptables par adresse", () => {
+  it("n'adopte pas un accès dont la ligne est toujours là", () => {
+    const reserve = adoptables([acces("a", "c1", "x@exemple.fr", "page-a")], new Set(["page-a"]));
+    expect(reserve.get(adoptionKey("c1", "x@exemple.fr"))).toBeUndefined();
   });
 
-  it("retient la plus ancienne de deux lignes nouvelles", () => {
-    const [doublon] = onePerEmail(
-      [ligne("ancienne", "camille@exemple.fr"), ligne("recente", "camille@exemple.fr")],
-      new Map(),
+  it("propose un accès sans page, et un accès dont la ligne a disparu", () => {
+    const reserve = adoptables(
+      [acces("invite", "c1", "x@exemple.fr"), acces("orphelin", "c1", "y@exemple.fr", "supprimee")],
+      new Set(),
     );
-    expect(doublon.kept.id).toBe("ancienne");
-    expect(doublon.ignored.map((line) => line.id)).toEqual(["recente"]);
+    expect(reserve.get(adoptionKey("c1", "x@exemple.fr"))).toEqual(["invite"]);
+    expect(reserve.get(adoptionKey("c1", "y@exemple.fr"))).toEqual(["orphelin"]);
   });
 
-  it("retient la ligne que l'accès existant désigne déjà, même plus récente", () => {
-    const [doublon] = onePerEmail(
-      [ligne("ancienne", "camille@exemple.fr"), ligne("recente", "camille@exemple.fr")],
-      new Map([["camille@exemple.fr", "recente"]]),
+  it("sépare la même adresse chez deux clients", () => {
+    const reserve = adoptables(
+      [acces("chez-1", "c1", "x@exemple.fr"), acces("chez-2", "c2", "x@exemple.fr")],
+      new Set(),
     );
-    expect(doublon.kept.id).toBe("recente");
-    expect(doublon.ignored.map((line) => line.id)).toEqual(["ancienne"]);
+    expect(reserve.get(adoptionKey("c1", "x@exemple.fr"))).toEqual(["chez-1"]);
+    expect(reserve.get(adoptionKey("c2", "x@exemple.fr"))).toEqual(["chez-2"]);
   });
 
-  it("revient à la plus ancienne quand l'accès désigne une ligne disparue", () => {
-    const [doublon] = onePerEmail(
-      [ligne("b", "camille@exemple.fr"), ligne("c", "camille@exemple.fr")],
-      new Map([["camille@exemple.fr", "supprimee"]]),
+  it("ignore la casse et les espaces de l'adresse", () => {
+    const reserve = adoptables([acces("a", "c1", "X@Exemple.fr")], new Set());
+    expect(reserve.get(adoptionKey("c1", " x@exemple.fr "))).toEqual(["a"]);
+  });
+
+  it("propose l'accès encore ouvert avant l'accès révoqué", () => {
+    const reserve = adoptables(
+      [acces("revoque", "c1", "x@exemple.fr", null, new Date()), acces("vivant", "c1", "x@exemple.fr")],
+      new Set(),
     );
-    expect(doublon.kept.id).toBe("b");
-  });
-
-  it("ignore toutes les lignes en trop, pas seulement la deuxième", () => {
-    const [doublon] = onePerEmail(
-      [ligne("a", "x@exemple.fr"), ligne("b", "x@exemple.fr"), ligne("c", "x@exemple.fr")],
-      new Map(),
-    );
-    expect(doublon.ignored).toHaveLength(2);
-  });
-
-  it("ne prend pas deux lignes sans adresse pour des doublons", () => {
-    expect(onePerEmail([ligne("a", null), ligne("b", null)], new Map())).toEqual([]);
+    expect(reserve.get(adoptionKey("c1", "x@exemple.fr"))).toEqual(["vivant", "revoque"]);
   });
 });

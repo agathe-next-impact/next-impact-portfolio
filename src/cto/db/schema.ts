@@ -10,6 +10,7 @@ import {
   uniqueIndex,
   index,
 } from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Schéma de l'espace « CTO externalisé » — accès et livrables.
@@ -247,9 +248,9 @@ export const ctoPersons = pgTable(
      * personne déjà créée par son `page.id`, jamais en réécrivant Notion.
      *
      * `null` sur une personne créée avant ce mécanisme (via `cto:invite`). La
-     * synchro l'ADOPTE par adresse e-mail au premier passage qui la recroise
-     * (`src/cto/notion/persons.ts`) plutôt que d'échouer sur l'index unique
-     * `cto_person_email` en tentant d'en créer une seconde.
+     * synchro l'ADOPTE au premier passage qui la recroise, par adresse ET
+     * accompagnement (`src/cto/notion/persons.ts`), plutôt que d'en créer une
+     * seconde.
      */
     notionPageId: text("notion_page_id"),
     email: text("email").notNull(),
@@ -287,9 +288,11 @@ export const ctoPersons = pgTable(
     createdAt: timestamp("created_at").notNull().defaultNow(),
   },
   (t) => [
-    // Unicité sur l'adresse normalisée : c'est la clé d'entrée du lien magique,
-    // et deux fiches pour la même adresse rendraient l'envoi ambigu.
-    uniqueIndex("cto_person_email").on(t.email),
+    // PAS d'unicité sur l'adresse (décision du 2026-09-29) : une même adresse
+    // peut porter plusieurs personnes — un consultant chez deux clients, une
+    // boîte partagée. L'identité est la ligne, jamais l'adresse ; la connexion
+    // par e-mail envoie un lien par espace (`findPersonsByEmail`).
+    index("cto_person_email").on(sql`lower(${t.email})`),
     uniqueIndex("cto_person_notion_page").on(t.notionPageId),
     index("cto_person_client").on(t.clientId),
   ],

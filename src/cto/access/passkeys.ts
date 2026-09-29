@@ -11,7 +11,7 @@ import type {
 } from "@simplewebauthn/server";
 import { and, desc, eq } from "drizzle-orm";
 import { db } from "../db/client";
-import { ctoChallenges, ctoCredentials, ctoPersons } from "../db/schema";
+import { ctoChallenges, ctoClients, ctoCredentials, ctoPersons } from "../db/schema";
 import { CHALLENGE_TTL_MS } from "./token";
 import { expectedOrigins, rpId, suggestLabel, RP_NAME } from "./webauthn";
 
@@ -135,8 +135,9 @@ export async function startRegistration(
   now: Date = new Date(),
 ): Promise<RegistrationStart> {
   const [person] = await db()
-    .select({ id: ctoPersons.id, email: ctoPersons.email, name: ctoPersons.name })
+    .select({ id: ctoPersons.id, email: ctoPersons.email, name: ctoPersons.name, company: ctoClients.company })
     .from(ctoPersons)
+    .innerJoin(ctoClients, eq(ctoPersons.clientId, ctoClients.id))
     .where(eq(ctoPersons.id, personId))
     .limit(1);
 
@@ -153,8 +154,11 @@ export async function startRegistration(
   const options = await generateRegistrationOptions({
     rpName: RP_NAME,
     rpID: rpId(),
-    userName: person.email,
-    userDisplayName: person.name,
+    // L'entreprise accolée à l'adresse : une même adresse peut porter deux
+    // personnes (deux clients), et le sélecteur de passkeys du téléphone
+    // afficherait sinon deux entrées identiques.
+    userName: `${person.email} · ${person.company}`,
+    userDisplayName: `${person.name} · ${person.company}`,
     // L'identifiant transmis à l'authentificateur est celui de la PERSONNE, pas
     // du client : c'est ce qui permet à trois personnes d'une même entreprise
     // d'enrôler chacune sa passkey sans écraser celle des autres.

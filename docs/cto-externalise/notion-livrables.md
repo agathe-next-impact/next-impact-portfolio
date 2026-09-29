@@ -467,21 +467,23 @@ envoyer le tout premier lien de connexion — la synchro n'envoie jamais
 d'e-mail, § 4 — et créer un accès en local sans toucher l'atelier de
 production.
 
-**La reconnaissance se fait par adresse, pas par une colonne collée à la
-main.** Une personne créée avant ce mécanisme (`cto:invite`, sans fiche
-Notion) est **adoptée** dès qu'une fiche portant la même adresse apparaît, au
-lieu d'être dupliquée — l'index unique sur l'adresse (`cto_person_email`) n'y
-survivrait pas sinon. C'est le même geste que l'adoption des accompagnements
-par `ID espace`, appliqué à l'adresse plutôt qu'à un identifiant collé.
+**Une ligne, un accès ; une adresse peut en porter plusieurs** (décision du
+2026-09-29, migration `0022_adresse_partagee`). Une personne se reconnaît par
+sa page Notion. La même adresse peut figurer sur plusieurs lignes : un
+consultant suivi chez deux clients (une ligne par client), ou une boîte
+partagée par deux personnes d'une même entreprise. Chaque ligne est un accès
+distinct, avec ses passkeys et ses sessions. Depuis l'écran de connexion,
+l'adresse reçoit un seul e-mail avec un lien et un code par espace ; les
+passkeys portent le nom de l'entreprise pour rester distinguables sur le
+téléphone. Une personne ne se relie toujours qu'à UN client par ligne : pour
+deux clients, deux lignes.
 
-**Une adresse, une ligne.** Notion laisse saisir deux lignes pour la même
-adresse ; la base, non (`cto_person_email`), et l'écriture de la seconde faisait
-échouer tout le balayage. Désormais une seule est retenue — celle que l'accès
-désigne déjà, à défaut la plus ancienne —, les autres sont ignorées et
-signalées « à traiter » jusqu'à leur suppression. Même prudence pour une
-adresse modifiée qui serait déjà celle d'un autre accès : le changement n'est
-pas appliqué. Si la ligne d'un accès est supprimée et qu'une autre porte son
-adresse, l'accès passe sur la nouvelle ligne au lieu d'être révoqué.
+**L'adresse ne sert plus qu'à adopter, et jamais d'un client à l'autre.** Une
+personne créée avant ce mécanisme (`cto:invite`, sans fiche Notion), ou dont la
+ligne a disparu, est **adoptée** par une ligne portant la même adresse ET le
+même client, au lieu d'être dupliquée. C'est le même geste que l'adoption des
+accompagnements par `ID espace`. Un changement d'adresse dans Notion est
+appliqué et signalé.
 
 **`Révoquée` va dans les deux sens.** Cocher coupe l'accès au balayage
 suivant : sessions fermées, passkeys refusées, comme la révocation manuelle

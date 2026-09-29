@@ -4,10 +4,11 @@ import { redirect } from "next/navigation";
 import {
   accessDecision,
   consumeLoginCode,
-  findPersonByEmail,
+  findPersonsByEmail,
   issueMagicLink,
   record,
-  sendLoginLink,
+  sendLoginLinks,
+  type SpaceLink,
   MAGIC_LINK_TTL_MS,
 } from "@cto/access";
 import { PasskeyLoginButton } from "./passkey";
@@ -93,12 +94,16 @@ async function Connexion({
     "use server";
 
     const email = String(formData.get("email") ?? "");
-    const person = await findPersonByEmail(email);
+    const persons = await findPersonsByEmail(email);
+    const base = process.env.CTO_ORIGIN?.split(",")[0]?.trim() || "https://next-impact.digital";
 
-    // Réponse volontairement identique que l'adresse existe ou non : cet écran
-    // ne doit jamais servir à savoir qui est client. Le cas « inconnue » sort
-    // donc par le même chemin que le cas nominal.
-    if (person) {
+    // Une adresse peut porter plusieurs personnes (un consultant chez deux
+    // clients, une boîte partagée) : un lien par espace ouvert, dans un seul
+    // message. Réponse volontairement identique que l'adresse existe ou non :
+    // cet écran ne doit jamais servir à savoir qui est client. Le cas
+    // « inconnue » sort donc par le même chemin que le cas nominal.
+    const links: SpaceLink[] = [];
+    for (const person of persons) {
       const decision = accessDecision(person.status);
 
       if (!decision.allowed) {
@@ -108,27 +113,32 @@ async function Connexion({
           clientId: person.clientId,
           detail: `espace ${person.status}`,
         });
-      } else {
-        const issued = await issueMagicLink(person.id);
+        continue;
+      }
 
-        if (issued.ok) {
-          const base =
-            process.env.CTO_ORIGIN?.split(",")[0]?.trim() || "https://next-impact.digital";
-          const url = `${base}${ESPACE_PATH}/connexion?jeton=${encodeURIComponent(issued.token)}`;
+      // `issued.ok === false` (trop de demandes) sort aussi par le message
+      // neutre : dire « vous en avez déjà demandé trois » à quelqu'un qui n'a
+      // rien demandé lui apprendrait qu'un tiers essaie d'entrer sur son
+      // compte, sans lui donner le moyen d'agir.
+      const issued = await issueMagicLink(person.id);
+      if (!issued.ok) continue;
 
-          try {
-            await sendLoginLink({ email: person.email, name: person.name }, url);
-          } catch (error) {
-            console.error("[cto] envoi du lien impossible", error);
-            redirect(
-              `${ESPACE_PATH}?erreur=1&message=${encodeURIComponent("L'envoi a échoué. Réessayez dans un instant.")}`,
-            );
-          }
-        }
-        // `issued.ok === false` (trop de demandes) sort aussi par le message
-        // neutre : dire « vous en avez déjà demandé trois » à quelqu'un qui n'a
-        // rien demandé lui apprendrait qu'un tiers essaie d'entrer sur son
-        // compte, sans lui donner le moyen d'agir.
+      links.push({
+        name: person.name,
+        company: person.company,
+        url: `${base}${ESPACE_PATH}/connexion?jeton=${encodeURIComponent(issued.token)}`,
+        code: issued.code,
+      });
+    }
+
+    if (links.length > 0) {
+      try {
+        await sendLoginLinks(persons[0].email, links);
+      } catch (error) {
+        console.error("[cto] envoi du lien impossible", error);
+        redirect(
+          `${ESPACE_PATH}?erreur=1&message=${encodeURIComponent("L'envoi a échoué. Réessayez dans un instant.")}`,
+        );
       }
     }
 
@@ -152,14 +162,20 @@ async function Connexion({
     "use server";
 
     const refus = `${ESPACE_PATH}?envoye=1&erreur=1&message=${encodeURIComponent("Code incorrect ou expiré. Vérifiez l'adresse et le dernier e-mail reçu.")}`;
-    const person = await findPersonByEmail(String(formData.get("email") ?? ""));
-    if (!person) redirect(refus);
+    const persons = await findPersonsByEmail(String(formData.get("email") ?? ""));
+    if (persons.length === 0) redirect(refus);
 
-    const outcome = await consumeLoginCode(person.id, String(formData.get("code") ?? ""));
+    // C'est le code qui désigne l'espace : chaque lien envoyé porte le sien.
+    const outcome = await consumeLoginCode(persons.map((p) => p.id), String(formData.get("code") ?? ""));
     if (!outcome.ok) {
-      await record({ event: "acces_refuse", personId: person.id, clientId: person.clientId, detail: "code invalide" });
+      for (const p of persons) {
+        await record({ event: "acces_refuse", personId: p.id, clientId: p.clientId, detail: "code invalide" });
+      }
       redirect(refus);
     }
+
+    const person = persons.find((p) => p.id === outcome.personId);
+    if (!person) redirect(refus);
 
     const decision = accessDecision(person.status);
     if (!decision.allowed) {

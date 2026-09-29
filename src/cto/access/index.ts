@@ -30,7 +30,7 @@ export {
   closeSession,
   consumeLoginCode,
   consumeMagicLink,
-  findPersonByEmail,
+  findPersonsByEmail,
   findPersonById,
   issueMagicLink,
   listSessions,
@@ -76,9 +76,11 @@ export {
 export {
   sendEnrollmentNotice,
   sendLoginLink,
+  sendLoginLinks,
   sendPublicationNotice,
   sendWelcome,
   type PublicationSummary,
+  type SpaceLink,
 } from "./notify";
 
 export { describeDevice, expectedOrigins, rpId, suggestLabel, RP_NAME } from "./webauthn";

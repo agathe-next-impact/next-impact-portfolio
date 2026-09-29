@@ -1,4 +1,4 @@
-import { and, desc, eq, gte, isNull, lt, or, sql } from "drizzle-orm";
+import { and, asc, desc, eq, gte, inArray, isNull, lt, or, sql } from "drizzle-orm";
 import { db } from "../db/client";
 import {
   ctoClients,
@@ -114,7 +114,13 @@ function personSelection() {
 }
 
 /**
- * Retrouve une personne active par son adresse.
+ * Les personnes actives qui portent une adresse — zéro, une ou plusieurs.
+ *
+ * Plusieurs, parce qu'une adresse n'est pas une identité (décision du
+ * 2026-09-29) : un consultant suivi chez deux clients, une boîte partagée par
+ * deux personnes d'une même entreprise. Chacune est une ligne à part, avec ses
+ * passkeys et ses sessions ; l'écran de connexion envoie un lien par ligne.
+ * Ordre stable (entreprise, nom) : c'est celui de l'e-mail qui les liste.
  *
  * Les personnes révoquées ne sont PAS renvoyées : contrairement à Sentinelle,
  * qui laisse volontairement un abonné résilié consulter son espace pendant la
@@ -124,22 +130,20 @@ function personSelection() {
  * L'état du client n'est pas filtré ici : un espace `clos` doit produire un
  * refus explicite et journalisé, pas une adresse « inconnue ».
  */
-export async function findPersonByEmail(email: string): Promise<Person | null> {
+export async function findPersonsByEmail(email: string): Promise<Person[]> {
   const normalized = email.trim().toLowerCase();
-  if (!normalized) return null;
+  if (!normalized) return [];
 
-  const [row] = await db()
+  const rows = await db()
     .select(personSelection())
     .from(ctoPersons)
     .innerJoin(ctoClients, eq(ctoPersons.clientId, ctoClients.id))
     .where(
       and(eq(sql`lower(${ctoPersons.email})`, normalized), isNull(ctoPersons.revokedAt)),
     )
-    .limit(1);
+    .orderBy(asc(ctoClients.company), asc(ctoPersons.name));
 
-  if (!row) return null;
-  const { revokedAt: _revoked, ...person } = row;
-  return person as Person;
+  return rows.map(({ revokedAt: _revoked, ...person }) => person as Person);
 }
 
 export async function findPersonById(personId: string): Promise<Person | null> {
@@ -239,17 +243,22 @@ export type CodeOutcome =
  * Même règle d'usage unique que le lien (suppression conditionnée, arbitrée par
  * la base) : le code et le lien sont deux clés de la même ligne, la première
  * qui sert brûle l'autre. Un code faux compte un essai sur CHACUN des liens
- * vivants de la personne, et un lien qui atteint `MAX_CODE_ATTEMPTS` disparaît :
- * au pire trois liens × cinq essais par quart d'heure, contre un million de
- * codes possibles.
+ * vivants des personnes visées, et un lien qui atteint `MAX_CODE_ATTEMPTS`
+ * disparaît : au pire trois liens × cinq essais par quart d'heure et par
+ * personne, contre un million de codes possibles.
+ *
+ * `personIds` : toutes les personnes de l'adresse saisie. C'est le code qui
+ * désigne l'espace — chaque lien envoyé porte le sien — et la personne rendue
+ * est celle du lien qu'il ouvre.
  */
 export async function consumeLoginCode(
-  personId: string,
+  personIds: string[],
   input: string | null | undefined,
   now: Date = new Date(),
 ): Promise<CodeOutcome> {
   const code = normalizeLoginCode(input);
   if (!code) return { ok: false, reason: "malformé" };
+  if (personIds.length === 0) return { ok: false, reason: "invalide" };
 
   const secret = accessSecret();
   const vivants = await db()
@@ -257,7 +266,7 @@ export async function consumeLoginCode(
     .from(ctoMagicLinks)
     .where(
       and(
-        eq(ctoMagicLinks.personId, personId),
+        inArray(ctoMagicLinks.personId, personIds),
         isNull(ctoMagicLinks.usedAt),
         gte(ctoMagicLinks.expiresAt, now),
         lt(ctoMagicLinks.codeAttempts, MAX_CODE_ATTEMPTS),
@@ -281,10 +290,10 @@ export async function consumeLoginCode(
     await db()
       .update(ctoMagicLinks)
       .set({ codeAttempts: sql`${ctoMagicLinks.codeAttempts} + 1` })
-      .where(eq(ctoMagicLinks.personId, personId));
+      .where(inArray(ctoMagicLinks.personId, personIds));
     await db()
       .delete(ctoMagicLinks)
-      .where(and(eq(ctoMagicLinks.personId, personId), gte(ctoMagicLinks.codeAttempts, MAX_CODE_ATTEMPTS)));
+      .where(and(inArray(ctoMagicLinks.personId, personIds), gte(ctoMagicLinks.codeAttempts, MAX_CODE_ATTEMPTS)));
   }
 
   return { ok: false, reason: "invalide" };

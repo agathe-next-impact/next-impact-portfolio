@@ -66,6 +66,60 @@ export async function sendLoginLink(to: Recipient, url: string, code?: string): 
   });
 }
 
+export interface SpaceLink {
+  /** La personne à laquelle ce lien ouvre l'accès — son nom, pour s'y retrouver. */
+  name: string;
+  company: string;
+  url: string;
+  code: string;
+}
+
+/**
+ * Le lien de secours d'une adresse qui porte plusieurs personnes : un
+ * consultant suivi chez deux clients, une boîte partagée.
+ *
+ * UN seul message, un bloc par espace, chacun avec son lien et son code :
+ * trois e-mails identiques à la même minute ressembleraient à une erreur, et
+ * la personne ne saurait pas lequel ouvre quoi. Une seule entrée retombe sur
+ * le message ordinaire.
+ */
+export async function sendLoginLinks(to: string, links: SpaceLink[]): Promise<void> {
+  if (links.length === 0) return;
+  if (links.length === 1) {
+    await sendLoginLink({ email: to, name: links[0].name }, links[0].url, links[0].code);
+    return;
+  }
+
+  const html = emailLayout({
+    preheader: `Vos liens de connexion, valables ${MINUTES} minutes.`,
+    contentHtml: [
+      emailKicker("01", "Espace direction technique"),
+      emailH1("Vos liens de connexion"),
+      emailLead("Bonjour,"),
+      emailParagraph(
+        `Cette adresse donne accès à <strong>${links.length} espaces</strong>. Chaque lien, et le code qui l'accompagne, ouvre l'espace indiqué au-dessus de lui : valables <strong>${MINUTES} minutes</strong>, ils ne fonctionnent qu'une fois.`,
+      ),
+      ...links.map((link) =>
+        emailCard(
+          emailParagraph(`<strong>${escapeHtml(link.company)}</strong> · ${escapeHtml(link.name)}`) +
+            emailButton(link.url, "Ouvrir cet espace") +
+            `<div style="height:16px;font-size:0;line-height:0;">&nbsp;</div>` +
+            emailCode(link.code, "Ou saisissez ce code dans l'application"),
+        ),
+      ),
+      emailParagraph(
+        "Si vous n'êtes pas à l'origine de cette demande, ignorez ce message : sans le lien, personne n'entre.",
+      ),
+    ].join(""),
+  });
+
+  await sendMail({
+    to,
+    subject: "Vos liens de connexion — espace direction technique",
+    html,
+  });
+}
+
 /**
  * La bienvenue : le premier message d'une personne, quand son espace ouvre.
  *

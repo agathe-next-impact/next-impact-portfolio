@@ -498,8 +498,8 @@ function Totaux({ heures, cout }: { heures: { ponctuel: number; mensuel: number 
 /**
  * Un plan d'action chiffré, groupé par proposition comme dans la vue Notion :
  * d'abord une ligne par proposition avec ses totaux, pour comparer d'un coup
- * d'œil ; puis chaque proposition et ses tâches, triées par axe. La première
- * est ouverte, les autres se déplient.
+ * d'œil ; puis chaque proposition et ses tâches, triées par axe. Toutes sont
+ * repliées : les totaux ci-dessus suffisent à comparer.
  */
 function PlanActionGroupe({
   bloc,
@@ -544,8 +544,8 @@ function PlanActionGroupe({
       </ul>
 
       <div className="mt-3 grid gap-3">
-        {plan.groupes.map((groupe, rang) => (
-          <details key={groupe.nom} open={rang === 0} className="group border border-dark-gray bg-jet/30">
+        {plan.groupes.map((groupe) => (
+          <details key={groupe.nom} className="group border border-dark-gray bg-jet/30">
             {/* Mobile : l'intitulé (et son +), puis les totaux, puis le nombre d'actions, empilés. */}
             <summary className="flex cursor-pointer list-none flex-col items-start gap-1.5 px-5 py-3 transition-colors hover:bg-jet/70 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-4 sm:gap-y-1 [&::-webkit-details-marker]:hidden">
               <span className="flex w-full min-w-0 items-start justify-between gap-3 sm:w-auto sm:flex-1">
