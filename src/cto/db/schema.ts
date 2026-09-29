@@ -386,6 +386,15 @@ export const ctoMagicLinks = pgTable(
       .notNull()
       .references(() => ctoPersons.id, { onDelete: "cascade" }),
     tokenHash: text("token_hash").notNull(),
+    /**
+     * Le code à six chiffres envoyé avec le lien, à saisir dans l'application
+     * installée : un lien d'e-mail s'ouvre dans le navigateur, dont la PWA ne
+     * partage pas les cookies (iPhone). Condensat lié au jeton (`hashLoginCode`),
+     * jamais le code lui-même ; null pour les lignes émises avant son ajout.
+     */
+    codeHash: text("code_hash"),
+    /** Codes faux tentés sur ce lien : au-delà du plafond, la ligne est brûlée. */
+    codeAttempts: integer("code_attempts").notNull().default(0),
     expiresAt: timestamp("expires_at").notNull(),
     usedAt: timestamp("used_at"),
     createdAt: timestamp("created_at").notNull().defaultNow(),
@@ -483,6 +492,9 @@ export const ctoAdminMagicLinks = pgTable(
   {
     id: uuid("id").primaryKey().defaultRandom(),
     tokenHash: text("token_hash").notNull(),
+    /** Voir `ctoMagicLinks.codeHash`. */
+    codeHash: text("code_hash"),
+    codeAttempts: integer("code_attempts").notNull().default(0),
     expiresAt: timestamp("expires_at").notNull(),
     createdAt: timestamp("created_at").notNull().defaultNow(),
   },
@@ -861,8 +873,10 @@ export const ctoSentinelleSnapshots = pgTable("cto_sentinelle_snapshots", {
  * `draft → validated → sent`, comme les alertes Sentinelle : rien ne part
  * sans un geste humain. Un digest ne contient que des lignes déjà relues à
  * leur source ; la validation porte sur l'assemblage, pas sur les faits.
+ * `dismissed` : refusé dans l'admin, il n'est plus réassemblé ni affiché — la
+ * ligne reste, c'est elle qui empêche le balayage de le recréer.
  */
-export const ctoDigestStatusEnum = pgEnum("cto_digest_status", ["draft", "validated", "sent"]);
+export const ctoDigestStatusEnum = pgEnum("cto_digest_status", ["draft", "validated", "sent", "dismissed"]);
 
 /**
  * Le digest d'une semaine pour un accompagnement : 15 lignes de veille

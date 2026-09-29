@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import {
   accessDecision,
+  consumeLoginCode,
   findPersonByEmail,
   issueMagicLink,
   record,
@@ -12,7 +14,7 @@ import { PasskeyLoginButton } from "./passkey";
 import { PurgeHorsLigne } from "./pwa";
 import { loadEspace } from "./shell";
 import { buttonClass, inputClass, Label, Notice } from "./ui";
-import { configurationIssue, currentSession, ESPACE_PATH } from "./session";
+import { configurationIssue, currentSession, ESPACE_PATH, startSession } from "./session";
 import { viewerFromSession } from "./viewer";
 import { BoutonEnvoi } from "../bouton-envoi";
 import { VueTableau } from "./vues";
@@ -25,6 +27,13 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 const MINUTES = Math.round(MAGIC_LINK_TTL_MS / 60000);
+
+/**
+ * L'adresse qui vient de demander un lien, gardée le temps du lien pour
+ * préremplir le champ du code. Cookie httpOnly limité à l'espace : l'adresse
+ * ne passe pas par l'URL (historique, journaux).
+ */
+const EMAIL_COOKIE = "cto_espace_code_email";
 
 /**
  * Une seule URL pour deux états, connecté ou non.
@@ -78,6 +87,7 @@ async function Connexion({
   erreur: boolean;
 }) {
   const probleme = configurationIssue();
+  const emailCode = (await cookies()).get(EMAIL_COOKIE)?.value ?? "";
 
   async function demanderLien(formData: FormData) {
     "use server";
@@ -122,7 +132,50 @@ async function Connexion({
       }
     }
 
+    (await cookies()).set(EMAIL_COOKIE, email.trim().slice(0, 200), {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      path: ESPACE_PATH,
+      maxAge: Math.round(MAGIC_LINK_TTL_MS / 1000),
+    });
     redirect(`${ESPACE_PATH}?envoye=1`);
+  }
+
+  /**
+   * Le code du même e-mail, saisi dans l'application installée : le lien, lui,
+   * s'ouvrirait dans le navigateur, qui ne partage pas sa session avec elle
+   * (iPhone). Même réponse neutre pour une adresse inconnue que pour un code
+   * faux : cet écran ne dit pas qui est client.
+   */
+  async function validerCode(formData: FormData) {
+    "use server";
+
+    const refus = `${ESPACE_PATH}?envoye=1&erreur=1&message=${encodeURIComponent("Code incorrect ou expiré. Vérifiez l'adresse et le dernier e-mail reçu.")}`;
+    const person = await findPersonByEmail(String(formData.get("email") ?? ""));
+    if (!person) redirect(refus);
+
+    const outcome = await consumeLoginCode(person.id, String(formData.get("code") ?? ""));
+    if (!outcome.ok) {
+      await record({ event: "acces_refuse", personId: person.id, clientId: person.clientId, detail: "code invalide" });
+      redirect(refus);
+    }
+
+    const decision = accessDecision(person.status);
+    if (!decision.allowed) {
+      await record({
+        event: "acces_refuse",
+        personId: person.id,
+        clientId: person.clientId,
+        detail: `espace ${person.status}`,
+      });
+      redirect(`${ESPACE_PATH}?erreur=1&message=${encodeURIComponent("Cet espace est clos.")}`);
+    }
+
+    await startSession(person.id);
+    await record({ event: "connexion_lien", personId: person.id, clientId: person.clientId, detail: "code" });
+    (await cookies()).delete({ name: EMAIL_COOKIE, path: ESPACE_PATH });
+    redirect(ESPACE_PATH);
   }
 
   return (
@@ -143,8 +196,8 @@ async function Connexion({
           {envoye ? (
             <div className="mt-8">
               <Notice tone="succes">
-                Si cette adresse est enregistrée, un lien de connexion vient de partir.
-                Il est valable {MINUTES} minutes et ne fonctionne qu'une fois.
+                Si cette adresse est enregistrée, un lien et un code de connexion viennent
+                de partir. Valables {MINUTES} minutes, ils ne servent qu'une fois.
               </Notice>
             </div>
           ) : null}
@@ -179,6 +232,42 @@ async function Connexion({
                 Recevoir un lien
               </BoutonEnvoi>
             </form>
+
+            <details open={envoye} className="mt-8">
+              <summary className="cursor-pointer font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray hover:text-foreground">
+                Saisir le code reçu
+              </summary>
+              <p className="mt-3 font-inter-tight text-sm text-mid-gray">
+                L&rsquo;e-mail contient aussi un code à six chiffres : dans l&rsquo;application
+                installée, saisissez-le ici plutôt que d&rsquo;ouvrir le lien.
+              </p>
+              <form action={validerCode} className="mt-5 space-y-4">
+                <input
+                  type="email"
+                  name="email"
+                  required
+                  autoComplete="email"
+                  defaultValue={emailCode}
+                  placeholder="votre adresse professionnelle"
+                  aria-label="Votre adresse e-mail"
+                  className={inputClass}
+                />
+                <input
+                  type="text"
+                  name="code"
+                  required
+                  inputMode="numeric"
+                  autoComplete="one-time-code"
+                  maxLength={8}
+                  placeholder="123 456"
+                  aria-label="Code à six chiffres reçu par e-mail"
+                  className={`${inputClass} font-mono tracking-[0.3em]`}
+                />
+                <BoutonEnvoi className={buttonClass.primary} enCours="Vérification…">
+                  Se connecter
+                </BoutonEnvoi>
+              </form>
+            </details>
           </div>
         </>
       )}

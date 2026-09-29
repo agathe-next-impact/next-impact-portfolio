@@ -1,5 +1,5 @@
 import { sendMail } from "@/lib/sendMail";
-import { emailButton, emailCard, emailH1, emailKicker, emailLayout, emailLead, emailParagraph } from "@/lib/email-template";
+import { emailButton, emailCard, emailCode, emailH1, emailKicker, emailLayout, emailLead, emailParagraph } from "@/lib/email-template";
 import { MAGIC_LINK_TTL_MS } from "@cto/access";
 import { ADMIN_EMAIL, ADMIN_NAME } from "./identity";
 
@@ -14,9 +14,9 @@ import { ADMIN_EMAIL, ADMIN_NAME } from "./identity";
 const MINUTES = Math.round(MAGIC_LINK_TTL_MS / 60000);
 
 /** Le lien de secours vers `/admin-cto`. */
-export async function sendAdminLoginLink(url: string): Promise<void> {
+export async function sendAdminLoginLink(url: string, code: string): Promise<void> {
   const html = emailLayout({
-    preheader: `Votre lien de connexion à la supervision, valable ${MINUTES} minutes.`,
+    preheader: `Code de connexion à la supervision : ${code}. Valable ${MINUTES} minutes.`,
     contentHtml: [
       emailKicker("01", "Supervision — direction technique"),
       emailH1("Votre lien de connexion"),
@@ -25,6 +25,7 @@ export async function sendAdminLoginLink(url: string): Promise<void> {
         `Voici votre accès à la vue d'ensemble des accompagnements. Ce lien est valable <strong>${MINUTES} minutes</strong> et ne fonctionne qu'une fois.`,
       ),
       emailButton(url, "Ouvrir la supervision"),
+      emailCode(code, "Ou saisissez ce code dans l'application"),
       emailCard(
         emailParagraph(
           "Enregistrez une passkey depuis l'écran de supervision : vous vous connecterez ensuite d'un geste, sans repasser par votre boîte mail.",

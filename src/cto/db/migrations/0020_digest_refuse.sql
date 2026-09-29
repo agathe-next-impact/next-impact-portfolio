@@ -1,0 +1,1 @@
+ALTER TYPE "public"."cto_digest_status" ADD VALUE 'dismissed';

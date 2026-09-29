@@ -1,9 +1,13 @@
 import { describe, expect, it } from "vitest";
 import {
   accessSecret,
+  createLoginCode,
   createMagicToken,
   createSessionToken,
+  hashLoginCode,
   hashToken,
+  normalizeLoginCode,
+  sameHash,
   shouldSlide,
   verifyMagicToken,
   MAGIC_LINK_TTL_MS,
@@ -116,5 +120,29 @@ describe("session glissante", () => {
   it("repousse une échéance vieille de plusieurs heures", () => {
     const stale = new Date(now.getTime() + SESSION_TTL_MS - 5 * 60 * 60 * 1000);
     expect(shouldSlide(stale, now)).toBe(true);
+  });
+});
+
+describe("code de connexion", () => {
+  it("tire six chiffres, zéros de tête compris", () => {
+    for (let i = 0; i < 200; i++) expect(createLoginCode()).toMatch(/^\d{6}$/);
+  });
+
+  it("accepte les espaces et tirets d'une saisie, refuse le reste", () => {
+    expect(normalizeLoginCode(" 012 345 ")).toBe("012345");
+    expect(normalizeLoginCode("012-345")).toBe("012345");
+    expect(normalizeLoginCode("12345")).toBeNull();
+    expect(normalizeLoginCode("1234567")).toBeNull();
+    expect(normalizeLoginCode(undefined)).toBeNull();
+  });
+
+  it("lie le condensat au jeton et au secret", () => {
+    const a = createMagicToken(PERSON, SECRET).tokenHash;
+    const b = createMagicToken(PERSON, SECRET).tokenHash;
+    const code = "123456";
+    expect(sameHash(hashLoginCode(a, code, SECRET), hashLoginCode(a, code, SECRET))).toBe(true);
+    expect(sameHash(hashLoginCode(a, code, SECRET), hashLoginCode(b, code, SECRET))).toBe(false);
+    expect(sameHash(hashLoginCode(a, code, SECRET), hashLoginCode(a, "123457", SECRET))).toBe(false);
+    expect(sameHash(hashLoginCode(a, code, SECRET), hashLoginCode(a, code, `${SECRET}x`))).toBe(false);
   });
 });

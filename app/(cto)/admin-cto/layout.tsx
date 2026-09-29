@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { CAPTURE_INVITE } from "../pwa-commun";
 import { ADMIN_MANIFEST_URL } from "./pwa-config";
 import { EnregistrementPwaAdmin } from "./pwa";
+import { LecteurPdf } from "../lecteur-pdf";
 
 // `/admin-cto` est déjà couvert par le Disallow générique `/admin` de
 // robots.txt (correspondance par préfixe). On le redit ici quand même : une
@@ -52,6 +53,7 @@ export default function AdminCtoLayout({ children }: { children: ReactNode }) {
       <script dangerouslySetInnerHTML={{ __html: CAPTURE_INVITE }} />
       <div className="min-h-screen bg-obsidian text-foreground">{children}</div>
       <EnregistrementPwaAdmin />
+      <LecteurPdf />
     </ThemeProvider>
   );
 }

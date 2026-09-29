@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { Download, Share, X } from "lucide-react";
 import { PAGES_CACHE, PWA_SCOPE, SW_URL } from "./pwa-config";
 import { appareilApple, dejaInstallee, type BeforeInstallPromptEvent } from "../pwa-commun";
+import { oublierPrechargement } from "../prechargement";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // L'application installable, côté navigateur.
@@ -16,13 +17,15 @@ import { appareilApple, dejaInstallee, type BeforeInstallPromptEvent } from "../
 //    navigateur). Deux voies : l'invite native de Chrome/Edge/Samsung
 //    (`beforeinstallprompt`), et, sur iPhone/iPad qui n'en ont pas, la marche à
 //    suivre via le bouton Partager.
-//  - `EtatReseau` : dit qu'on lit une copie quand on est hors ligne.
+//  - `EtatReseau` : dit qu'on lit une copie quand on est hors ligne (espace
+//    client et admin).
 //  - `PurgeHorsLigne` / `viderPagesHorsLigne` : vident les pages en cache à
 //    la déconnexion et sur l'écran de connexion — des données de client
 //    n'ont rien à faire sur un appareil dont la session est close.
 // ─────────────────────────────────────────────────────────────────────────────
 
 export async function viderPagesHorsLigne(): Promise<void> {
+  oublierPrechargement();
   try {
     if ("caches" in window) await caches.delete(PAGES_CACHE);
   } catch {
@@ -69,7 +72,7 @@ function abonnerReseau(rappel: () => void) {
   };
 }
 
-export function EtatReseau() {
+export function EtatReseau({ className = "mb-8" }: { className?: string }) {
   const enLigne = useSyncExternalStore(
     abonnerReseau,
     () => navigator.onLine,
@@ -79,7 +82,7 @@ export function EtatReseau() {
   return (
     <div role="status" aria-live="polite">
       {enLigne ? null : (
-        <div className="mb-8 border border-[#f2c94c]/45 bg-jet/40 px-4 py-3">
+        <div className={`${className} border border-[#f2c94c]/45 bg-jet/40 px-4 py-3`}>
           <p className="font-inter-tight text-sm text-foreground">
             <span className="text-[#f2c94c]">Hors ligne.</span> Vous lisez la dernière version
             enregistrée de cette page. Répondre, arbitrer ou télécharger redeviendra possible au

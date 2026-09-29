@@ -1,4 +1,4 @@
-import { createHash, createHmac, randomBytes, timingSafeEqual } from "node:crypto";
+import { createHash, createHmac, randomBytes, randomInt, timingSafeEqual } from "node:crypto";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Jetons d'accès à l'espace CTO — module PUR (ni base, ni cookie, ni requête).
@@ -185,6 +185,48 @@ export function verifyMagicToken(
     tokenHash: hashToken(token),
     expiresAt: new Date(expiresAt),
   };
+}
+
+// ─── Code de connexion ────────────────────────────────────────────────────
+//
+// Le lien d'un e-mail s'ouvre dans le navigateur, pas dans l'application
+// installée — et sur iPhone, la PWA ne partage pas les cookies de Safari : le
+// lien connecterait Safari et laisserait l'application dehors. Le même e-mail
+// porte donc un code à six chiffres, à saisir dans l'application.
+//
+// Six chiffres, c'est un million de possibilités : ce n'est un secret que
+// parce que les essais sont comptés (`MAX_CODE_ATTEMPTS` par lien, au plus
+// `MAX_LINKS_PER_WINDOW` liens vivants) et que le code meurt avec son lien,
+// en quinze minutes.
+
+/** Codes faux tolérés par lien avant de le brûler. */
+export const MAX_CODE_ATTEMPTS = 5;
+
+const CODE_DOMAIN = "cto-login-code-v1";
+
+/** Six chiffres, zéros de tête compris, tirés sans biais. */
+export function createLoginCode(): string {
+  return String(randomInt(0, 1_000_000)).padStart(6, "0");
+}
+
+/**
+ * Condensat stocké du code, LIÉ au jeton qu'il accompagne : le même code tiré
+ * pour deux liens donne deux condensats, et un condensat volé ne se rejoue pas
+ * sans le secret.
+ */
+export function hashLoginCode(tokenHash: string, code: string, secret: string): string {
+  return createHmac("sha256", secret).update(`${CODE_DOMAIN}:${tokenHash}:${code}`).digest("hex");
+}
+
+/** Garde les chiffres d'une saisie (« 123 456 », « 123-456 ») ; null si ce n'est pas un code. */
+export function normalizeLoginCode(input: string | null | undefined): string | null {
+  const digits = (input ?? "").replace(/\D/g, "");
+  return digits.length === 6 ? digits : null;
+}
+
+/** Comparaison à temps constant de deux condensats hexadécimaux. */
+export function sameHash(a: string, b: string): boolean {
+  return safeEqual(a, b);
 }
 
 export interface IssuedSession {

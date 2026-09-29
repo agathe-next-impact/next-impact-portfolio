@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { MANIFEST_URL } from "./pwa-config";
 import { CAPTURE_INVITE } from "../pwa-commun";
 import { EnregistrementPwa } from "./pwa";
+import { LecteurPdf } from "../lecteur-pdf";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // L'espace client en application installable.
@@ -14,8 +15,10 @@ import { EnregistrementPwa } from "./pwa";
 //
 // Uniquement sous `/espace-direction` : la vue de supervision de l'admin
 // (`/admin-cto/…/espace`) réutilise les mêmes écrans mais relève de
-// l'application de l'admin (`admin-cto/pwa.tsx`), qui ne met aucune page en
-// cache.
+// l'application de l'admin (`admin-cto/pwa.tsx`), avec ses propres caches.
+//
+// `LecteurPdf` : dans l'application installée, les pièces et le dossier de
+// restitution s'ouvrent dans l'application, pas dans le navigateur.
 //
 // Thème clair par défaut, sans suivre le système ; la bascule est en haut à
 // droite de chaque page (`bascule-theme.tsx`). Clé de stockage propre à
@@ -58,6 +61,7 @@ export default function EspaceLayout({ children }: { children: ReactNode }) {
       <script dangerouslySetInnerHTML={{ __html: CAPTURE_INVITE }} />
       {children}
       <EnregistrementPwa />
+      <LecteurPdf />
     </ThemeProvider>
   );
 }

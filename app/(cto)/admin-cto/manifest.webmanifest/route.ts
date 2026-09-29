@@ -1,4 +1,4 @@
-import { ADMIN_PWA_SCOPE } from "../pwa-config";
+import { ADMIN_HOME, ADMIN_PWA_SCOPE } from "../pwa-config";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Le manifeste de l'admin installable « Supervision ».
@@ -6,8 +6,9 @@ import { ADMIN_PWA_SCOPE } from "../pwa-config";
 // Distinct de celui de l'espace client (`espace-direction/manifest.webmanifest`)
 // : autre `id`, autre portée, autre icône (fond bleu de la charte au lieu du
 // noir), pour que les deux applications, installées sur le même appareil, ne
-// se confondent pas. `start_url` = `/admin-cto`, qui renvoie vers le pilotage
-// ou la connexion selon la session.
+// se confondent pas. `start_url` = le pilotage lui-même, et non `/admin-cto`
+// (qui redirige) : hors ligne, le worker le sert depuis son cache. Sans
+// session, la garde du pilotage renvoie vers la connexion.
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const dynamic = "force-static";
@@ -19,7 +20,7 @@ const MANIFEST = {
   description: "Pilotage des accompagnements de direction technique externalisée.",
   lang: "fr",
   dir: "ltr",
-  start_url: ADMIN_PWA_SCOPE,
+  start_url: ADMIN_HOME,
   scope: ADMIN_PWA_SCOPE,
   display: "standalone",
   background_color: "#12196e",

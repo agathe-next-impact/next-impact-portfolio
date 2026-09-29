@@ -1,4 +1,4 @@
-import { and, desc, eq, gte, inArray, isNull, lt } from "drizzle-orm";
+import { and, desc, eq, gte, inArray, isNull, lt, ne } from "drizzle-orm";
 import { db } from "../db/client";
 import { ctoClients, ctoDigests, ctoLetters } from "../db/schema";
 import { activePersons } from "../access";
@@ -21,6 +21,8 @@ import { weekRange } from "./week";
 //    réassemblé ;
 //  - l'ENVOI est un second geste, un digest à la fois, et seulement validé.
 //    Rien ne part en lot, rien ne part tout seul.
+// Un digest non envoyé peut aussi être REFUSÉ : il sort de l'admin et le
+// balayage ne le recrée pas (la ligne refusée tient la place de la semaine).
 // ─────────────────────────────────────────────────────────────────────────────
 
 const ARCHIVE_MONTHS = 6;
@@ -30,7 +32,7 @@ export interface DigestAssembleReport {
   clients: number;
   created: number;
   refreshed: number;
-  /** Déjà validés ou envoyés : on n'y touche plus. */
+  /** Déjà validés, envoyés ou refusés : on n'y touche plus. */
   frozen: number;
   /** Rien à dire pour cet accompagnement cette semaine. */
   empty: number;
@@ -111,7 +113,7 @@ export async function assembleWeek(
       .from(ctoDigests)
       .where(and(eq(ctoDigests.clientId, client.id), eq(ctoDigests.week, week)))
       .limit(1);
-    // Validé, envoyé, ou retouché à la main : on n'y touche plus.
+    // Validé, envoyé, refusé, ou retouché à la main : on n'y touche plus.
     if (existing && (existing.status !== "draft" || asContent(existing.content)?.modifieLe)) {
       report.frozen += 1;
       continue;
@@ -162,7 +164,7 @@ export interface AdminDigest {
   clientId: string;
   company: string;
   week: string;
-  status: "draft" | "validated" | "sent";
+  status: "draft" | "validated" | "sent" | "dismissed";
   content: DigestContent;
   updatedAt: Date;
   sentAt: Date | null;
@@ -174,7 +176,7 @@ function asContent(value: unknown): DigestContent | null {
   return content.version === DIGEST_VERSION ? content : null;
 }
 
-/** Les digests d'une semaine, pour la relecture dans l'admin. */
+/** Les digests d'une semaine, pour la relecture dans l'admin. Les refusés n'y figurent plus. */
 export async function digestsOfWeek(week: string): Promise<AdminDigest[]> {
   const rows = await db()
     .select({
@@ -189,7 +191,7 @@ export async function digestsOfWeek(week: string): Promise<AdminDigest[]> {
     })
     .from(ctoDigests)
     .innerJoin(ctoClients, eq(ctoDigests.clientId, ctoClients.id))
-    .where(eq(ctoDigests.week, week))
+    .where(and(eq(ctoDigests.week, week), ne(ctoDigests.status, "dismissed")))
     .orderBy(ctoClients.company);
 
   return rows.flatMap((row) => {
@@ -253,6 +255,19 @@ export async function reopenDigest(id: string): Promise<void> {
     .where(and(eq(ctoDigests.id, id), eq(ctoDigests.status, "validated")))
     .returning({ id: ctoDigests.id });
   if (!row) throw new Error("Seul un digest validé et non envoyé repasse en brouillon.");
+}
+
+/**
+ * Refuse un digest pas encore envoyé : il disparaît de l'admin et le balayage
+ * ne le réassemble plus pour cette semaine.
+ */
+export async function dismissDigest(id: string): Promise<void> {
+  const [row] = await db()
+    .update(ctoDigests)
+    .set({ status: "dismissed", validatedAt: null, updatedAt: new Date() })
+    .where(and(eq(ctoDigests.id, id), inArray(ctoDigests.status, ["draft", "validated"])))
+    .returning({ id: ctoDigests.id });
+  if (!row) throw new Error("Seul un digest non envoyé se refuse.");
 }
 
 /**

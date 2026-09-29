@@ -38,6 +38,7 @@ import { BasculeTheme } from "./bascule-theme";
 import { auditPath, nouveaute, sortRecentFirst } from "./livrables";
 import { NAV_COOKIE } from "./nav";
 import { BanniereInstallation, EtatReseau } from "./pwa";
+import { PrechargementHorsLigne } from "../prechargement";
 import { OuvrirAncre } from "./ouvrir-ancre";
 import { RetourHaut } from "./retour-haut";
 import { Sidebar, type NavBadge, type NavGroup, type Situation, type SituationLigne } from "./sidebar";
@@ -496,7 +497,8 @@ export async function Espace({
             d'ensemble (cartes, frise, colonnes) ont besoin de toute la place. Le
             texte long garde sa propre mesure, dans ses composants. */}
         <div className="w-full px-5 pb-[calc(7rem+env(safe-area-inset-bottom))] pt-8 sm:px-8 lg:px-10 lg:pb-20 lg:pt-12 2xl:px-14">
-          <EtatReseau />
+          {/* Vue de supervision : le bandeau est déjà dans la coquille de l'admin. */}
+          {viewer.admin ? null : <EtatReseau />}
 
           {viewer.admin ? (
             <div className="mb-8">
@@ -549,6 +551,8 @@ export async function Espace({
       <OuvrirAncre />
       <RetourHaut />
       {viewer.admin ? null : <BanniereInstallation />}
+      {/* L'admin précharge depuis sa propre coquille (`pilotage/layout.tsx`). */}
+      {viewer.admin ? null : <PrechargementHorsLigne portee={ESPACE_PATH} />}
     </div>
   );
 }

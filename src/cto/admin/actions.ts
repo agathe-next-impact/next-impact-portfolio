@@ -73,7 +73,7 @@ export async function sendAccessLink(personId: string, origin: string): Promise<
   }
 
   const url = `${origin}/espace-direction/connexion?jeton=${encodeURIComponent(issued.token)}`;
-  await sendLoginLink({ email: person.email, name: person.name }, url);
+  await sendLoginLink({ email: person.email, name: person.name }, url, issued.code);
   // Invitée à la main : « Prévenir » ne lui enverra pas de bienvenue en plus.
   await markInvited(person.id);
   return { ok: true, email: person.email };

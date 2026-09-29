@@ -133,7 +133,7 @@ async function main() {
     return;
   }
 
-  await sendLoginLink({ email: person.email, name }, url);
+  await sendLoginLink({ email: person.email, name }, url, issued.code);
   console.log(`Lien de connexion envoyé à ${person.email}.`);
 }
 

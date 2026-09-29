@@ -102,6 +102,7 @@ export async function notifyPendingPublications(
           { email: person.email, name: person.name },
           client.company,
           `${url}/connexion?jeton=${encodeURIComponent(issued.token)}`,
+          issued.code,
         );
         await markInvited(person.id, now);
         accueillis.add(person.id);

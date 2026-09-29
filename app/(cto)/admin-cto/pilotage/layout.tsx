@@ -6,6 +6,9 @@ import { buttonClass } from "../../espace-direction/ui";
 import { BasculeTheme } from "../../espace-direction/bascule-theme";
 import { closeSession, LOGIN_PATH, requireSession } from "../session";
 import { BoutonEnvoi } from "../../bouton-envoi";
+import { EtatReseau } from "../../espace-direction/pwa";
+import { PrechargementHorsLigne } from "../../prechargement";
+import { ADMIN_PWA_SCOPE } from "../pwa-config";
 import { poserFlash } from "../../flash";
 
 export const dynamic = "force-dynamic";
@@ -54,6 +57,12 @@ export default async function PilotageLayout({ children }: { children: ReactNode
           </form>
         </div>
       </header>
+
+      {/* Hors ligne : on lit la copie gardée par le worker (`sw-commun.ts`). */}
+      <div className="px-6 lg:px-10">
+        <EtatReseau className="mt-4" />
+      </div>
+      <PrechargementHorsLigne portee={ADMIN_PWA_SCOPE} />
 
       {children}
     </div>

@@ -18,7 +18,7 @@ import { MAGIC_LINK_TTL_MS } from "./token";
 // révocable, ni journalisée, ni effaçable.
 // ─────────────────────────────────────────────────────────────────────────────
 
-const { emailButton, emailCard, emailH1, emailKicker, emailLayout, emailLead, emailParagraph } = lightEmail;
+const { emailButton, emailCard, emailCode, emailH1, emailKicker, emailLayout, emailLead, emailParagraph } = lightEmail;
 
 const MINUTES = Math.round(MAGIC_LINK_TTL_MS / 60000);
 
@@ -34,9 +34,11 @@ export interface Recipient {
  * qu'il est à usage unique et pourquoi il expire vite : sans cette phrase, un
  * client qui reclique le lendemain conclut que « le site est cassé ».
  */
-export async function sendLoginLink(to: Recipient, url: string): Promise<void> {
+export async function sendLoginLink(to: Recipient, url: string, code?: string): Promise<void> {
   const html = emailLayout({
-    preheader: `Votre lien de connexion, valable ${MINUTES} minutes.`,
+    preheader: code
+      ? `Votre code de connexion : ${code}. Valable ${MINUTES} minutes.`
+      : `Votre lien de connexion, valable ${MINUTES} minutes.`,
     contentHtml: [
       emailKicker("01", "Espace direction technique"),
       emailH1("Votre lien de connexion"),
@@ -45,6 +47,7 @@ export async function sendLoginLink(to: Recipient, url: string): Promise<void> {
         `Voici votre accès à votre espace. Ce lien est valable <strong>${MINUTES} minutes</strong> et ne fonctionne qu'une fois.`,
       ),
       emailButton(url, "Ouvrir mon espace"),
+      code ? loginCodeBlock(code) : "",
       emailCard(
         emailParagraph(
           "Une fois connecté, enregistrez une passkey depuis l'écran « Appareils » : vous vous connecterez ensuite d'un geste, sans repasser par votre boîte mail.",
@@ -71,7 +74,7 @@ export async function sendLoginLink(to: Recipient, url: string): Promise<void> {
  * expiré, l'écran de connexion en renvoie un, et le message le dit pour que
  * personne ne conclue que « le site est cassé ».
  */
-export async function sendWelcome(to: Recipient, company: string, url: string): Promise<void> {
+export async function sendWelcome(to: Recipient, company: string, url: string, code?: string): Promise<void> {
   const html = emailLayout({
     preheader: `Votre espace direction technique ${company} est ouvert.`,
     contentHtml: [
@@ -82,6 +85,7 @@ export async function sendWelcome(to: Recipient, company: string, url: string): 
         `L'espace direction technique de <strong>${escapeHtml(company)}</strong> est ouvert. Vous y retrouverez, au fil de l'accompagnement, les décisions, la roadmap, les audits, l'état de votre site et la veille qui vous concerne.`,
       ),
       emailButton(url, "Ouvrir mon espace"),
+      code ? loginCodeBlock(code) : "",
       emailCard(
         emailParagraph(
           `Ce lien vous connecte directement pendant <strong>${MINUTES} minutes</strong>. Passé ce délai, l'écran de connexion vous en envoie un nouveau en un clic. Une fois connecté, enregistrez une passkey depuis « Mes appareils » pour vous connecter ensuite d'un geste.`,
@@ -141,6 +145,19 @@ export async function sendEnrollmentNotice(
     subject: "Nouvel appareil enregistré sur votre espace",
     html,
   });
+}
+
+/**
+ * Le code qui accompagne le lien : pour l'application installée sur le
+ * téléphone, où un lien d'e-mail s'ouvrirait dans le navigateur à côté.
+ */
+function loginCodeBlock(code: string): string {
+  return (
+    emailCode(code, "Ou saisissez ce code dans l'application") +
+    emailParagraph(
+      "Même durée, même usage unique : le code et le lien ouvrent la même porte, le premier qui sert ferme l'autre.",
+    )
+  );
 }
 
 /**

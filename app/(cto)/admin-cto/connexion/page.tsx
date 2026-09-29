@@ -1,9 +1,16 @@
 import { redirect } from "next/navigation";
-import { ADMIN_EMAIL, issueAdminMagicLink, sendAdminLoginLink, MAX_LINKS_PER_WINDOW } from "@cto/admin";
+import {
+  ADMIN_EMAIL,
+  consumeAdminLoginCode,
+  issueAdminMagicLink,
+  sendAdminLoginLink,
+  MAX_LINKS_PER_WINDOW,
+} from "@cto/admin";
 import { MAGIC_LINK_TTL_MS } from "@cto/access";
-import { buttonClass, Label, Notice, Panel } from "../../espace-direction/ui";
+import { buttonClass, inputClass, Label, Notice, Panel } from "../../espace-direction/ui";
 import { AdminPasskeyLoginButton } from "../passkey";
-import { configurationIssue, hasSession, HOME_PATH, LOGIN_PATH } from "../session";
+import { configurationIssue, hasSession, HOME_PATH, LOGIN_PATH, startSession } from "../session";
+import { PurgeHorsLigneAdmin } from "../pwa";
 import { BoutonEnvoi } from "../../bouton-envoi";
 
 export const dynamic = "force-dynamic";
@@ -23,11 +30,11 @@ const MINUTES = Math.round(MAGIC_LINK_TTL_MS / 60000);
 export default async function AdminCtoLoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ envoye?: string; erreur?: string }>;
+  searchParams: Promise<{ envoye?: string; erreur?: string; code?: string }>;
 }) {
   if (await hasSession()) redirect(HOME_PATH);
 
-  const { envoye, erreur } = await searchParams;
+  const { envoye, erreur, code } = await searchParams;
   const probleme = configurationIssue();
 
   async function demanderLien() {
@@ -40,7 +47,7 @@ export default async function AdminCtoLoginPage({
       const url = `${base}${LOGIN_PATH}/verifier?jeton=${encodeURIComponent(issued.token)}`;
 
       try {
-        await sendAdminLoginLink(url);
+        await sendAdminLoginLink(url, issued.code);
       } catch (error) {
         console.error("[cto] envoi du lien admin impossible", error);
         redirect(`${LOGIN_PATH}?erreur=1`);
@@ -54,8 +61,22 @@ export default async function AdminCtoLoginPage({
     redirect(`${LOGIN_PATH}?envoye=1`);
   }
 
+  // Le code du même e-mail, saisi ICI : dans l'application installée, le lien
+  // s'ouvrirait dans le navigateur, qui ne partage pas sa session avec elle.
+  async function validerCode(formData: FormData) {
+    "use server";
+
+    const outcome = await consumeAdminLoginCode(String(formData.get("code") ?? ""));
+    if (!outcome.ok) redirect(`${LOGIN_PATH}?envoye=1&code=faux`);
+
+    await startSession();
+    redirect(HOME_PATH);
+  }
+
   return (
     <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-6">
+      {/* Plus de session : les pages gardées pour la lecture hors ligne partent. */}
+      <PurgeHorsLigneAdmin />
       <Label>Next Impact — Supervision</Label>
       <h1 className="mt-4 font-sans text-2xl font-light text-foreground sm:text-3xl">
         Espace direction technique
@@ -76,8 +97,8 @@ export default async function AdminCtoLoginPage({
           {envoye ? (
             <div className="mb-6">
               <Notice tone="succes">
-                Un lien de connexion vient de partir vers {ADMIN_EMAIL}. Il est valable{" "}
-                {MINUTES} minutes et ne fonctionne qu&rsquo;une fois.
+                Un lien et un code de connexion viennent de partir vers {ADMIN_EMAIL}.
+                Valables {MINUTES} minutes, ils ne servent qu&rsquo;une fois.
               </Notice>
             </div>
           ) : null}
@@ -90,6 +111,12 @@ export default async function AdminCtoLoginPage({
 
           <AdminPasskeyLoginButton />
 
+          {code ? (
+            <div className="mb-6">
+              <Notice tone="erreur">Code incorrect ou expiré. Vérifiez le dernier e-mail reçu.</Notice>
+            </div>
+          ) : null}
+
           <div className="mt-8 border-t border-dark-gray pt-6">
             <form action={demanderLien}>
               <BoutonEnvoi className={buttonClass.ghost} enCours="Envoi du lien…">
@@ -99,6 +126,28 @@ export default async function AdminCtoLoginPage({
             <p className="mt-3 font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray">
               {MAX_LINKS_PER_WINDOW} demandes maximum par quart d&rsquo;heure
             </p>
+
+            <details open={Boolean(envoye || code)} className="mt-6">
+              <summary className="cursor-pointer font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray hover:text-foreground">
+                Saisir le code reçu
+              </summary>
+              <form action={validerCode} className="mt-4 space-y-4">
+                <input
+                  type="text"
+                  name="code"
+                  required
+                  inputMode="numeric"
+                  autoComplete="one-time-code"
+                  maxLength={8}
+                  placeholder="123 456"
+                  aria-label="Code à six chiffres reçu par e-mail"
+                  className={`${inputClass} font-mono tracking-[0.3em]`}
+                />
+                <BoutonEnvoi className={buttonClass.primary} enCours="Vérification…">
+                  Se connecter
+                </BoutonEnvoi>
+              </form>
+            </details>
           </div>
         </Panel>
       )}

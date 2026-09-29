@@ -10,12 +10,17 @@ import {
 } from "../db/schema";
 import {
   accessSecret,
+  createLoginCode,
   createMagicToken,
   createSessionToken,
+  hashLoginCode,
   hashToken,
+  normalizeLoginCode,
+  sameHash,
   shouldSlide,
   verifyMagicToken,
   MAGIC_LINK_TTL_MS,
+  MAX_CODE_ATTEMPTS,
   SESSION_TTL_MS,
 } from "./token";
 
@@ -153,7 +158,7 @@ export async function findPersonById(personId: string): Promise<Person | null> {
 // ─── Liens de secours ─────────────────────────────────────────────────────
 
 export type IssueOutcome =
-  | { ok: true; token: string; expiresAt: Date }
+  | { ok: true; token: string; code: string; expiresAt: Date }
   | { ok: false; reason: "trop de demandes" };
 
 /**
@@ -175,15 +180,18 @@ export async function issueMagicLink(
 
   if (count >= MAX_LINKS_PER_WINDOW) return { ok: false, reason: "trop de demandes" };
 
-  const issued = createMagicToken(personId, accessSecret(), now);
+  const secret = accessSecret();
+  const issued = createMagicToken(personId, secret, now);
+  const code = createLoginCode();
 
   await db().insert(ctoMagicLinks).values({
     personId,
     tokenHash: issued.tokenHash,
+    codeHash: hashLoginCode(issued.tokenHash, code, secret),
     expiresAt: issued.expiresAt,
   });
 
-  return { ok: true, token: issued.token, expiresAt: issued.expiresAt };
+  return { ok: true, token: issued.token, code, expiresAt: issued.expiresAt };
 }
 
 export type ConsumeOutcome =
@@ -219,6 +227,67 @@ export async function consumeMagicLink(
   if (deleted.length === 0) return { ok: false, reason: "consommé" };
 
   return { ok: true, personId: deleted[0].personId };
+}
+
+export type CodeOutcome =
+  | { ok: true; personId: string }
+  | { ok: false; reason: "malformé" | "invalide" };
+
+/**
+ * Consomme un lien par son CODE, saisi dans l'application installée.
+ *
+ * Même règle d'usage unique que le lien (suppression conditionnée, arbitrée par
+ * la base) : le code et le lien sont deux clés de la même ligne, la première
+ * qui sert brûle l'autre. Un code faux compte un essai sur CHACUN des liens
+ * vivants de la personne, et un lien qui atteint `MAX_CODE_ATTEMPTS` disparaît :
+ * au pire trois liens × cinq essais par quart d'heure, contre un million de
+ * codes possibles.
+ */
+export async function consumeLoginCode(
+  personId: string,
+  input: string | null | undefined,
+  now: Date = new Date(),
+): Promise<CodeOutcome> {
+  const code = normalizeLoginCode(input);
+  if (!code) return { ok: false, reason: "malformé" };
+
+  const secret = accessSecret();
+  const vivants = await db()
+    .select({ id: ctoMagicLinks.id, tokenHash: ctoMagicLinks.tokenHash, codeHash: ctoMagicLinks.codeHash })
+    .from(ctoMagicLinks)
+    .where(
+      and(
+        eq(ctoMagicLinks.personId, personId),
+        isNull(ctoMagicLinks.usedAt),
+        gte(ctoMagicLinks.expiresAt, now),
+        lt(ctoMagicLinks.codeAttempts, MAX_CODE_ATTEMPTS),
+      ),
+    );
+
+  const trouve = vivants.find(
+    (ligne) => ligne.codeHash !== null && sameHash(ligne.codeHash, hashLoginCode(ligne.tokenHash, code, secret)),
+  );
+
+  if (trouve) {
+    const deleted = await db()
+      .delete(ctoMagicLinks)
+      .where(and(eq(ctoMagicLinks.id, trouve.id), isNull(ctoMagicLinks.usedAt)))
+      .returning({ personId: ctoMagicLinks.personId });
+    if (deleted.length > 0) return { ok: true, personId: deleted[0].personId };
+    return { ok: false, reason: "invalide" };
+  }
+
+  if (vivants.length > 0) {
+    await db()
+      .update(ctoMagicLinks)
+      .set({ codeAttempts: sql`${ctoMagicLinks.codeAttempts} + 1` })
+      .where(eq(ctoMagicLinks.personId, personId));
+    await db()
+      .delete(ctoMagicLinks)
+      .where(and(eq(ctoMagicLinks.personId, personId), gte(ctoMagicLinks.codeAttempts, MAX_CODE_ATTEMPTS)));
+  }
+
+  return { ok: false, reason: "invalide" };
 }
 
 // ─── Sessions ─────────────────────────────────────────────────────────────

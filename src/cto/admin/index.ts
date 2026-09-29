@@ -10,6 +10,7 @@ export { ADMIN_EMAIL, ADMIN_NAME, ADMIN_USER_ID } from "./identity";
 
 export {
   closeAdminSession,
+  consumeAdminLoginCode,
   consumeAdminMagicLink,
   issueAdminMagicLink,
   openAdminSession,

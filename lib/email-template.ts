@@ -141,6 +141,15 @@ export function createEmailKit(P: EmailPalette) {
     return `<a href="${href}" target="_blank" rel="noopener noreferrer" style="display:inline-block;background:${bg};border:1px solid ${P.charcoal};color:${color};font-family:${P.mono};font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;text-decoration:none;padding:13px 22px;border-radius:2px;">${label}</a>`;
   }
 
+  /** Code à saisir — gros chiffres mono espacés, lisibles d'un coup d'œil sur un téléphone. */
+  function emailCode(code: string, caption: string): string {
+    const spaced = code.length === 6 ? `${code.slice(0, 3)}&nbsp;${code.slice(3)}` : code;
+    return `<div style="background:${P.surface};border:1px solid ${P.border};border-radius:3px;padding:18px 22px;margin:0 0 22px;">
+      <div style="font-family:${P.mono};font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:${P.muted};margin:0 0 8px;">${caption}</div>
+      <div style="font-family:${P.mono};font-size:30px;font-weight:600;letter-spacing:0.18em;color:${P.fg};">${spaced}</div>
+    </div>`;
+  }
+
   function emailButtonRow(buttons: string[]): string {
     return `<div style="margin:0 0 8px;">${buttons.map((b) => `<span style="display:inline-block;margin:0 8px 10px 0;">${b}</span>`).join("")}</div>`;
   }
@@ -251,7 +260,7 @@ export function createEmailKit(P: EmailPalette) {
   </html>`;
   }
 
-  return { emailKicker, emailH1, emailH2, emailLead, emailParagraph, emailDivider, emailCard, emailKvTable, emailSteps, emailButton, emailButtonRow, styleMarkdownForEmail, emailLayout };
+  return { emailKicker, emailH1, emailH2, emailLead, emailParagraph, emailDivider, emailCard, emailKvTable, emailSteps, emailButton, emailCode, emailButtonRow, styleMarkdownForEmail, emailLayout };
 }
 
 /** Kit par défaut : Blueprint sombre (site, Sentinelle, admin). */
@@ -266,6 +275,7 @@ export const {
   emailKvTable,
   emailSteps,
   emailButton,
+  emailCode,
   emailButtonRow,
   styleMarkdownForEmail,
   emailLayout,

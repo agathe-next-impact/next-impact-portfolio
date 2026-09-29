@@ -3,12 +3,17 @@ import { db } from "../db/client";
 import { ctoAdminChallenges, ctoAdminMagicLinks, ctoAdminSessions } from "../db/schema";
 import {
   accessSecret,
+  createLoginCode,
   createMagicToken,
   createSessionToken,
+  hashLoginCode,
   hashToken,
+  normalizeLoginCode,
+  sameHash,
   shouldSlide,
   verifyMagicToken,
   MAGIC_LINK_TTL_MS,
+  MAX_CODE_ATTEMPTS,
   SESSION_TTL_MS,
 } from "@cto/access";
 import { ADMIN_USER_ID } from "./identity";
@@ -28,7 +33,7 @@ import { ADMIN_USER_ID } from "./identity";
 export const MAX_LINKS_PER_WINDOW = 3;
 
 export type IssueOutcome =
-  | { ok: true; token: string; expiresAt: Date }
+  | { ok: true; token: string; code: string; expiresAt: Date }
   | { ok: false; reason: "trop de demandes" };
 
 /** Émet un lien de secours pour l'unique identité admin. */
@@ -48,14 +53,17 @@ export async function issueAdminMagicLink(now: Date = new Date()): Promise<Issue
   // `ADMIN_EMAIL` ici échouerait donc TOUJOURS à la vérification, y compris
   // fraîchement émis. `consumeAdminMagicLink` ignore de toute façon ce champ, la
   // seule identité qui compte est le login unique de cet espace.
-  const issued = createMagicToken(ADMIN_USER_ID, accessSecret(), now);
+  const secret = accessSecret();
+  const issued = createMagicToken(ADMIN_USER_ID, secret, now);
+  const code = createLoginCode();
 
   await db().insert(ctoAdminMagicLinks).values({
     tokenHash: issued.tokenHash,
+    codeHash: hashLoginCode(issued.tokenHash, code, secret),
     expiresAt: issued.expiresAt,
   });
 
-  return { ok: true, token: issued.token, expiresAt: issued.expiresAt };
+  return { ok: true, token: issued.token, code, expiresAt: issued.expiresAt };
 }
 
 export type ConsumeOutcome =
@@ -78,6 +86,45 @@ export async function consumeAdminMagicLink(
   if (deleted.length === 0) return { ok: false, reason: "consommé" };
 
   return { ok: true };
+}
+
+/**
+ * Consomme un lien par son code, saisi dans l'application installée — même
+ * mécanique que `consumeLoginCode` côté client (voir `@cto/access/store.ts`).
+ */
+export async function consumeAdminLoginCode(
+  input: string | null | undefined,
+  now: Date = new Date(),
+): Promise<{ ok: true } | { ok: false; reason: "malformé" | "invalide" }> {
+  const code = normalizeLoginCode(input);
+  if (!code) return { ok: false, reason: "malformé" };
+
+  const secret = accessSecret();
+  const vivants = await db()
+    .select({ id: ctoAdminMagicLinks.id, tokenHash: ctoAdminMagicLinks.tokenHash, codeHash: ctoAdminMagicLinks.codeHash })
+    .from(ctoAdminMagicLinks)
+    .where(and(gte(ctoAdminMagicLinks.expiresAt, now), lt(ctoAdminMagicLinks.codeAttempts, MAX_CODE_ATTEMPTS)));
+
+  const trouve = vivants.find(
+    (ligne) => ligne.codeHash !== null && sameHash(ligne.codeHash, hashLoginCode(ligne.tokenHash, code, secret)),
+  );
+
+  if (trouve) {
+    const deleted = await db()
+      .delete(ctoAdminMagicLinks)
+      .where(eq(ctoAdminMagicLinks.id, trouve.id))
+      .returning({ id: ctoAdminMagicLinks.id });
+    return deleted.length > 0 ? { ok: true } : { ok: false, reason: "invalide" };
+  }
+
+  if (vivants.length > 0) {
+    await db()
+      .update(ctoAdminMagicLinks)
+      .set({ codeAttempts: sql`${ctoAdminMagicLinks.codeAttempts} + 1` });
+    await db().delete(ctoAdminMagicLinks).where(gte(ctoAdminMagicLinks.codeAttempts, MAX_CODE_ATTEMPTS));
+  }
+
+  return { ok: false, reason: "invalide" };
 }
 
 // ─── Sessions ─────────────────────────────────────────────────────────────

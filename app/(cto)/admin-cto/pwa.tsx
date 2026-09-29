@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Download, Share, X } from "lucide-react";
-import { ADMIN_PWA_SCOPE, ADMIN_SW_URL } from "./pwa-config";
+import { ADMIN_PAGES_CACHE, ADMIN_PWA_SCOPE, ADMIN_SW_URL } from "./pwa-config";
+import { oublierPrechargement } from "../prechargement";
 import {
   appareilApple,
   dejaInstallee,
@@ -23,7 +24,19 @@ import {
 //    l'invite native de Chrome/Edge (Android, Windows, macOS, Linux), la
 //    marche à suivre sur iPhone/iPad (Partager) et sur Safari Mac (Ajouter au
 //    Dock). Firefox n'installe pas : rien ne s'affiche.
+//  - `PurgeHorsLigneAdmin` : sur l'écran de connexion, vide les pages gardées
+//    pour la lecture hors ligne — elles rassemblent les données de tous les
+//    clients, elles ne survivent pas à la session.
 // ─────────────────────────────────────────────────────────────────────────────
+
+/** Sur l'écran de connexion : la session est close, les copies partent. */
+export function PurgeHorsLigneAdmin() {
+  useEffect(() => {
+    oublierPrechargement();
+    if ("caches" in window) caches.delete(ADMIN_PAGES_CACHE).catch(() => undefined);
+  }, []);
+  return null;
+}
 
 export function EnregistrementPwaAdmin() {
   useEffect(() => {

@@ -6,6 +6,7 @@ import { poserFlash } from "../../../flash";
 import {
   assembleWeek,
   digestsOfWeek,
+  dismissDigest,
   editDigest,
   parseWeek,
   reopenDigest,
@@ -104,6 +105,21 @@ export async function repasserEnBrouillon(formData: FormData): Promise<void> {
     await reopenDigest(id);
     return "Digest repassé en brouillon.";
   });
+}
+
+/** Refuse UN digest non envoyé : il quitte la relecture et ne sera pas réassemblé. */
+export async function refuser(formData: FormData): Promise<void> {
+  await requireSession();
+  const week = semaineDe(formData);
+  const id = idDe(formData);
+  try {
+    await dismissDigest(id);
+    await poserFlash("Digest refusé : il ne partira pas et ne sera pas réassemblé.");
+  } catch (error) {
+    await poserFlash(error instanceof Error ? error.message : "Refus impossible.", "erreur");
+  }
+  revalidatePath(PAGE);
+  redirect(`${PAGE}?semaine=${week}`);
 }
 
 /** Envoie UN digest validé. */

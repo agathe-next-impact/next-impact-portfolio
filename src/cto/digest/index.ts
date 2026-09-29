@@ -18,6 +18,7 @@ export {
   assembleWeek,
   digestsForClient,
   digestsOfWeek,
+  dismissDigest,
   editDigest,
   reopenDigest,
   resetDigest,

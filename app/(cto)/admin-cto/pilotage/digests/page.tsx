@@ -6,7 +6,7 @@ import { DigestSemaine } from "../../../espace-direction/digest";
 import { adminEspacePath } from "../../../espace-direction/viewer";
 import { buttonClass, formatDate, inputClass, Label, Panel, Tag, type Tone } from "../../../espace-direction/ui";
 import { PILOTAGE_LARGEUR } from "../largeur";
-import { envoyer, reassembler, repasserEnBrouillon, retablir, retoucher } from "./actions";
+import { envoyer, reassembler, refuser, repasserEnBrouillon, retablir, retoucher } from "./actions";
 import { BoutonEnvoi } from "../../../bouton-envoi";
 
 export const metadata: Metadata = { title: "Digests de la semaine" };
@@ -16,6 +16,7 @@ const STATUT: Record<string, { label: string; tone: Tone }> = {
   draft: { label: "Brouillon", tone: "attention" },
   validated: { label: "Validé, non envoyé", tone: "alerte" },
   sent: { label: "Envoyé", tone: "fait" },
+  dismissed: { label: "Refusé", tone: "attention" },
 };
 
 /**
@@ -25,7 +26,8 @@ const STATUT: Record<string, { label: string; tone: Tone }> = {
  * complète. Ici, un digest à la fois : on le retouche (texte des lignes, action
  * de la semaine), on le valide, puis on l'envoie. Rien ne part en lot, rien ne
  * part sans validation, et un digest validé peut repasser en brouillon tant
- * qu'il n'est pas envoyé. Un brouillon retouché n'est plus réassemblé.
+ * qu'il n'est pas envoyé. Un brouillon retouché n'est plus réassemblé. Un
+ * digest non envoyé peut être refusé : il quitte la page et n'est plus réassemblé.
  */
 export default async function DigestsPage({
   searchParams,
@@ -51,7 +53,7 @@ export default async function DigestsPage({
       <h1 className="mt-2 font-sans text-2xl font-light text-foreground sm:text-3xl">{weekLabel(week)}</h1>
       <p className="mt-3 max-w-2xl font-inter-tight text-sm leading-relaxed text-mid-gray">
         Chaque digest se relit, se retouche, se valide puis s&rsquo;envoie à part. Rien ne part
-        sans ces deux gestes.
+        sans ces deux gestes. Un digest refusé disparaît et n&rsquo;est plus réassemblé.
       </p>
 
       <div className="mt-8 flex flex-wrap gap-3">
@@ -110,6 +112,7 @@ export default async function DigestsPage({
                   Repasser en brouillon pour retoucher
                 </BoutonEnvoi>
               </form>
+              <FormRefus digest={digest} week={week} />
             </Panel>
           ) : null}
 
@@ -181,16 +184,32 @@ function Retouche({ digest, week }: { digest: AdminDigest; week: string }) {
         </div>
       </form>
 
-      {content.modifieLe ? (
-        <form action={retablir} className="mt-3">
-          <input type="hidden" name="week" value={week} />
-          <input type="hidden" name="id" value={digest.id} />
-          <BoutonEnvoi className={buttonClass.quiet} enCours="Réassemblage…">
-            Abandonner les retouches et réassembler
-          </BoutonEnvoi>
-        </form>
-      ) : null}
+      <div className="mt-3 flex flex-wrap gap-3">
+        {content.modifieLe ? (
+          <form action={retablir}>
+            <input type="hidden" name="week" value={week} />
+            <input type="hidden" name="id" value={digest.id} />
+            <BoutonEnvoi className={buttonClass.quiet} enCours="Réassemblage…">
+              Abandonner les retouches et réassembler
+            </BoutonEnvoi>
+          </form>
+        ) : null}
+        <FormRefus digest={digest} week={week} />
+      </div>
     </Panel>
+  );
+}
+
+/** Refuse le digest : il quitte la page et le balayage ne le recrée pas. */
+function FormRefus({ digest, week }: { digest: AdminDigest; week: string }) {
+  return (
+    <form action={refuser}>
+      <input type="hidden" name="week" value={week} />
+      <input type="hidden" name="id" value={digest.id} />
+      <BoutonEnvoi className={buttonClass.quiet} enCours="Refus…">
+        Refuser ce digest
+      </BoutonEnvoi>
+    </form>
   );
 }
 
