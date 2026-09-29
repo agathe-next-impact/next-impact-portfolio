@@ -9,7 +9,7 @@ import {
   record,
   sendLoginLinks,
   type SpaceLink,
-  MAGIC_LINK_TTL_MS,
+  ESPACE_LINK_TTL_MS,
 } from "@cto/access";
 import { PasskeyLoginButton } from "./passkey";
 import { PurgeHorsLigne } from "./pwa";
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-const MINUTES = Math.round(MAGIC_LINK_TTL_MS / 60000);
+const JOURS = Math.round(ESPACE_LINK_TTL_MS / 86_400_000);
 
 /**
  * L'adresse qui vient de demander un lien, gardée le temps du lien pour
@@ -147,7 +147,7 @@ async function Connexion({
       sameSite: "lax",
       secure: process.env.NODE_ENV === "production",
       path: ESPACE_PATH,
-      maxAge: Math.round(MAGIC_LINK_TTL_MS / 1000),
+      maxAge: Math.round(ESPACE_LINK_TTL_MS / 1000),
     });
     redirect(`${ESPACE_PATH}?envoye=1`);
   }
@@ -213,7 +213,7 @@ async function Connexion({
             <div className="mt-8">
               <Notice tone="succes">
                 Si cette adresse est enregistrée, un lien et un code de connexion viennent
-                de partir. Valables {MINUTES} minutes, ils ne servent qu'une fois.
+                de partir. Valables {JOURS} jours, ils ne servent qu'une fois.
               </Notice>
             </div>
           ) : null}

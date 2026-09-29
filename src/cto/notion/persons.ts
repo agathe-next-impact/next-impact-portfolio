@@ -70,14 +70,14 @@ export type Attendus = Map<string, { clients: Set<string>; complet: boolean }>;
  * Pur : les clients qu'une ligne réclame, d'après sa relation « Client ».
  * `complet` est faux dès qu'une fiche liée n'est pas encore résoluble : on ne
  * sait alors pas quels accès elle vise, donc on n'en ferme aucun. Une relation
- * VIDE non plus : c'est une erreur de saisie signalée, pas un ordre de couper.
+ * VIDE, elle, est complète : retirer le dernier client coupe le dernier accès.
  */
 export function attendusDe(
   links: string[],
   byNotionPage: Map<string, string>,
 ): { clients: Set<string>; complet: boolean } {
   const clients = new Set<string>();
-  let complet = links.length > 0;
+  let complet = true;
   for (const link of links) {
     const clientId = byNotionPage.get(link);
     if (clientId) clients.add(clientId);
@@ -287,7 +287,8 @@ async function syncOne(
 
   const links = clientPageIds(page);
   if (links.length === 0) {
-    alert(findings, `Personne « ${label} » sans client : elle n'a accès à rien.`);
+    // Ses accès éventuels tombent dans `revokeMissing`, qui le signale.
+    findings.warnings.push(`Personne « ${label} » sans client : elle n'a accès à rien.`);
     return;
   }
 

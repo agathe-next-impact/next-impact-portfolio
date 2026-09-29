@@ -90,10 +90,10 @@ describe("accès portés par une ligne à plusieurs clients", () => {
     expect(portes).toEqual(new Set(["s-s"]));
   });
 
-  it("ne ferme rien sur une relation vide, erreur de saisie signalée", () => {
+  it("ne porte plus aucun accès d'une ligne dont on a retiré tous les clients", () => {
     const attendus: Attendus = new Map([["page-s", attendusDe([], byNotionPage)]]);
     const portes = accesPortes([acces("s-h", "heritech", "s@exemple.fr", "page-s")], attendus);
-    expect(portes).toEqual(new Set(["s-h"]));
+    expect(portes.size).toBe(0);
   });
 
   it("ne porte plus l'accès d'une ligne disparue, ni celui créé sans page", () => {

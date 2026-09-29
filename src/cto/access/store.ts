@@ -19,6 +19,7 @@ import {
   sameHash,
   shouldSlide,
   verifyMagicToken,
+  ESPACE_LINK_TTL_MS,
   MAGIC_LINK_TTL_MS,
   MAX_CODE_ATTEMPTS,
   SESSION_TTL_MS,
@@ -185,7 +186,7 @@ export async function issueMagicLink(
   if (count >= MAX_LINKS_PER_WINDOW) return { ok: false, reason: "trop de demandes" };
 
   const secret = accessSecret();
-  const issued = createMagicToken(personId, secret, now);
+  const issued = createMagicToken(personId, secret, now, ESPACE_LINK_TTL_MS);
   const code = createLoginCode();
 
   await db().insert(ctoMagicLinks).values({
@@ -194,6 +195,17 @@ export async function issueMagicLink(
     codeHash: hashLoginCode(issued.tokenHash, code, secret),
     expiresAt: issued.expiresAt,
   });
+
+  // Au plus `MAX_LINKS_PER_WINDOW` liens vivants par personne : sur quatre
+  // jours de validité, le plafond de demandes par quart d'heure n'y suffit
+  // plus, et chaque lien vivant est un code de plus à deviner.
+  const vivants = await db()
+    .select({ id: ctoMagicLinks.id })
+    .from(ctoMagicLinks)
+    .where(and(eq(ctoMagicLinks.personId, personId), isNull(ctoMagicLinks.usedAt)))
+    .orderBy(desc(ctoMagicLinks.createdAt));
+  const anciens = vivants.slice(MAX_LINKS_PER_WINDOW).map((row) => row.id);
+  if (anciens.length > 0) await db().delete(ctoMagicLinks).where(inArray(ctoMagicLinks.id, anciens));
 
   return { ok: true, token: issued.token, code, expiresAt: issued.expiresAt };
 }
@@ -214,7 +226,9 @@ export async function consumeMagicLink(
   token: string | null | undefined,
   now: Date = new Date(),
 ): Promise<ConsumeOutcome> {
-  const check = verifyMagicToken(token, accessSecret(), now);
+  // L'échéance qui compte est celle de la ligne : c'est elle que l'allongement
+  // à quatre jours a repoussée pour les liens déjà envoyés.
+  const check = verifyMagicToken(token, accessSecret(), now, { expiryFromDb: true });
   if (!check.valid) return { ok: false, reason: check.reason };
 
   const deleted = await db()
@@ -228,7 +242,18 @@ export async function consumeMagicLink(
     )
     .returning({ personId: ctoMagicLinks.personId });
 
-  if (deleted.length === 0) return { ok: false, reason: "consommé" };
+  if (deleted.length === 0) {
+    // Échu ou déjà servi ? L'échéance est en base, pas dans le jeton : c'est
+    // la ligne restante (non encore purgée) qui le dit.
+    const [echu] = await db()
+      .select({ id: ctoMagicLinks.id })
+      .from(ctoMagicLinks)
+      .where(
+        and(eq(ctoMagicLinks.tokenHash, check.tokenHash), isNull(ctoMagicLinks.usedAt), lt(ctoMagicLinks.expiresAt, now)),
+      )
+      .limit(1);
+    return { ok: false, reason: echu ? "expiré" : "consommé" };
+  }
 
   return { ok: true, personId: deleted[0].personId };
 }
@@ -244,7 +269,7 @@ export type CodeOutcome =
  * la base) : le code et le lien sont deux clés de la même ligne, la première
  * qui sert brûle l'autre. Un code faux compte un essai sur CHACUN des liens
  * vivants des personnes visées, et un lien qui atteint `MAX_CODE_ATTEMPTS`
- * disparaît : au pire trois liens × cinq essais par quart d'heure et par
+ * disparaît : au pire trois liens vivants × cinq essais à la fois par
  * personne, contre un million de codes possibles.
  *
  * `personIds` : toutes les personnes de l'adresse saisie. C'est le code qui

@@ -1,6 +1,6 @@
 import { sendMail } from "@/lib/sendMail";
 import { lightEmail } from "@/lib/email-template";
-import { MAGIC_LINK_TTL_MS } from "./token";
+import { ESPACE_LINK_TTL_MS } from "./token";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Les e-mails de la couche d'accès.
@@ -20,7 +20,8 @@ import { MAGIC_LINK_TTL_MS } from "./token";
 
 const { emailButton, emailCard, emailCode, emailH1, emailKicker, emailLayout, emailLead, emailParagraph } = lightEmail;
 
-const MINUTES = Math.round(MAGIC_LINK_TTL_MS / 60000);
+/** « 4 jours » : la validité des liens de l'espace, dite en toutes lettres. */
+const DUREE = `${Math.round(ESPACE_LINK_TTL_MS / 86_400_000)} jours`;
 
 export interface Recipient {
   email: string;
@@ -31,20 +32,20 @@ export interface Recipient {
  * Le lien de secours.
  *
  * Premier accès, nouvel appareil, passkey perdue. Le message dit explicitement
- * qu'il est à usage unique et pourquoi il expire vite : sans cette phrase, un
- * client qui reclique le lendemain conclut que « le site est cassé ».
+ * qu'il est à usage unique et combien de temps il vaut : sans cette phrase, un
+ * client qui reclique après l'échéance conclut que « le site est cassé ».
  */
 export async function sendLoginLink(to: Recipient, url: string, code?: string): Promise<void> {
   const html = emailLayout({
     preheader: code
-      ? `Votre code de connexion : ${code}. Valable ${MINUTES} minutes.`
-      : `Votre lien de connexion, valable ${MINUTES} minutes.`,
+      ? `Votre code de connexion : ${code}. Valable ${DUREE}.`
+      : `Votre lien de connexion, valable ${DUREE}.`,
     contentHtml: [
       emailKicker("01", "Espace direction technique"),
       emailH1("Votre lien de connexion"),
       emailLead(`Bonjour ${escapeHtml(to.name)},`),
       emailParagraph(
-        `Voici votre accès à votre espace. Ce lien est valable <strong>${MINUTES} minutes</strong> et ne fonctionne qu'une fois.`,
+        `Voici votre accès à votre espace. Ce lien est valable <strong>${DUREE}</strong> et ne fonctionne qu'une fois.`,
       ),
       emailButton(url, "Ouvrir mon espace"),
       code ? loginCodeBlock(code) : "",
@@ -91,13 +92,13 @@ export async function sendLoginLinks(to: string, links: SpaceLink[]): Promise<vo
   }
 
   const html = emailLayout({
-    preheader: `Vos liens de connexion, valables ${MINUTES} minutes.`,
+    preheader: `Vos liens de connexion, valables ${DUREE}.`,
     contentHtml: [
       emailKicker("01", "Espace direction technique"),
       emailH1("Vos liens de connexion"),
       emailLead("Bonjour,"),
       emailParagraph(
-        `Cette adresse donne accès à <strong>${links.length} espaces</strong>. Chaque lien, et le code qui l'accompagne, ouvre l'espace indiqué au-dessus de lui : valables <strong>${MINUTES} minutes</strong>, ils ne fonctionnent qu'une fois.`,
+        `Cette adresse donne accès à <strong>${links.length} espaces</strong>. Chaque lien, et le code qui l'accompagne, ouvre l'espace indiqué au-dessus de lui : valables <strong>${DUREE}</strong>, ils ne fonctionnent qu'une fois.`,
       ),
       ...links.map((link) =>
         emailCard(
@@ -124,7 +125,7 @@ export async function sendLoginLinks(to: string, links: SpaceLink[]): Promise<vo
  * La bienvenue : le premier message d'une personne, quand son espace ouvre.
  *
  * Part même si l'espace est encore vide : l'accès existe, la personne doit le
- * savoir. Le lien est un lien de connexion ordinaire, donc court ; s'il a
+ * savoir. Le lien est un lien de connexion ordinaire (quatre jours) ; s'il a
  * expiré, l'écran de connexion en renvoie un, et le message le dit pour que
  * personne ne conclue que « le site est cassé ».
  */
@@ -142,7 +143,7 @@ export async function sendWelcome(to: Recipient, company: string, url: string, c
       code ? loginCodeBlock(code) : "",
       emailCard(
         emailParagraph(
-          `Ce lien vous connecte directement pendant <strong>${MINUTES} minutes</strong>. Passé ce délai, l'écran de connexion vous en envoie un nouveau en un clic. Une fois connecté, enregistrez une passkey depuis « Mes appareils » pour vous connecter ensuite d'un geste.`,
+          `Ce lien reste valable <strong>${DUREE}</strong> et ne sert qu'une fois. Passé ce délai, l'écran de connexion vous en envoie un nouveau en un clic. Une fois connecté, enregistrez une passkey depuis « Mes appareils » pour vous connecter ensuite d'un geste.`,
         ),
       ),
       emailParagraph(

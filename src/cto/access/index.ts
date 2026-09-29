@@ -18,6 +18,7 @@ export {
   shouldSlide,
   verifyMagicToken,
   CHALLENGE_TTL_MS,
+  ESPACE_LINK_TTL_MS,
   MAGIC_LINK_TTL_MS,
   MIN_SECRET_LENGTH,
   SESSION_SLIDE_THRESHOLD_MS,

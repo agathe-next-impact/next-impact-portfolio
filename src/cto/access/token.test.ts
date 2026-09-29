@@ -76,6 +76,18 @@ describe("jeton de lien magique", () => {
     });
   });
 
+  it("laisse la base trancher l'échéance quand on le lui demande, pas la signature", () => {
+    // Les liens de l'espace client émis à quinze minutes ont été allongés à
+    // quatre jours en base : leur jeton porte encore l'ancienne échéance.
+    const now = new Date("2026-09-08T10:00:00Z");
+    const issued = createMagicToken(PERSON, SECRET, now);
+    const later = new Date(now.getTime() + MAGIC_LINK_TTL_MS + 1000);
+
+    expect(verifyMagicToken(issued.token, SECRET, later, { expiryFromDb: true })).toMatchObject({ valid: true });
+    const forged = issued.token.replace(/.$/, (c) => (c === "A" ? "B" : "A"));
+    expect(verifyMagicToken(forged, SECRET, later, { expiryFromDb: true })).toEqual({ valid: false, reason: "signature" });
+  });
+
   it("rejette proprement l'absence et le malformé, sans lever", () => {
     expect(verifyMagicToken(null, SECRET)).toEqual({ valid: false, reason: "absent" });
     expect(verifyMagicToken("a.b.c", SECRET)).toEqual({ valid: false, reason: "malformé" });

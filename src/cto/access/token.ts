@@ -29,6 +29,19 @@ import { createHash, createHmac, randomBytes, randomInt, timingSafeEqual } from 
 export const MAGIC_LINK_TTL_MS = 15 * 60 * 1000;
 
 /**
+ * Quatre jours pour les liens de l'ESPACE CLIENT (décision du 2026-09-29) :
+ * une invitation lue le lundi doit encore ouvrir l'espace le jeudi. La
+ * supervision garde `MAGIC_LINK_TTL_MS`, et c'est aussi la fenêtre du plafond
+ * de demandes (`MAX_LINKS_PER_WINDOW`), qui ne s'allonge pas avec la validité.
+ *
+ * Contrepartie : un code à six chiffres vit quatre jours. Il reste un secret
+ * parce qu'une personne n'a jamais plus de `MAX_LINKS_PER_WINDOW` liens vivants
+ * (les plus anciens tombent à l'émission) et que chacun meurt après
+ * `MAX_CODE_ATTEMPTS` essais faux.
+ */
+export const ESPACE_LINK_TTL_MS = 4 * 24 * 60 * 60 * 1000;
+
+/**
  * Sept jours de session, contre trente chez Sentinelle.
  *
  * L'écart est délibéré et tient au contenu : l'espace CTO porte la cartographie
@@ -157,11 +170,16 @@ export type MagicTokenCheck =
  * vérification hors ligne est le seul rempart bon marché contre quelqu'un qui
  * essaierait des URL au hasard — la base n'est interrogée que pour un jeton dont
  * la signature est déjà bonne.
+ *
+ * `options.expiryFromDb` : l'échéance inscrite dans le jeton n'est pas
+ * vérifiée, c'est la ligne en base qui fait foi. Sert à l'espace client, dont
+ * la durée de validité a été allongée après l'émission de liens déjà envoyés.
  */
 export function verifyMagicToken(
   token: string | null | undefined,
   secret: string,
   now: Date = new Date(),
+  options: { expiryFromDb?: boolean } = {},
 ): MagicTokenCheck {
   if (!token) return { valid: false, reason: "absent" };
 
@@ -177,7 +195,7 @@ export function verifyMagicToken(
 
   const expiresAt = Number(rawExpiry);
   if (!Number.isFinite(expiresAt)) return { valid: false, reason: "malformé" };
-  if (expiresAt <= now.getTime()) return { valid: false, reason: "expiré" };
+  if (!options.expiryFromDb && expiresAt <= now.getTime()) return { valid: false, reason: "expiré" };
 
   return {
     valid: true,
@@ -196,8 +214,8 @@ export function verifyMagicToken(
 //
 // Six chiffres, c'est un million de possibilités : ce n'est un secret que
 // parce que les essais sont comptés (`MAX_CODE_ATTEMPTS` par lien, au plus
-// `MAX_LINKS_PER_WINDOW` liens vivants) et que le code meurt avec son lien,
-// en quinze minutes.
+// `MAX_LINKS_PER_WINDOW` liens vivants) et que le code meurt avec son lien
+// (quinze minutes pour la supervision, `ESPACE_LINK_TTL_MS` pour l'espace).
 
 /** Codes faux tolérés par lien avant de le brûler. */
 export const MAX_CODE_ATTEMPTS = 5;

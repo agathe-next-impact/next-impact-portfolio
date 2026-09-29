@@ -28,7 +28,7 @@ const MESSAGES: Record<string, string> = {
   absent: "Ce lien est incomplet.",
   malformé: "Ce lien est incomplet.",
   signature: "Ce lien n'est pas valide.",
-  expiré: "Ce lien a expiré. Les liens de connexion ne durent que quinze minutes.",
+  expiré: "Ce lien a expiré. Les liens de connexion durent quatre jours : demandez-en un nouveau ci-dessous.",
   consommé: "Ce lien a déjà servi. Chaque lien ne fonctionne qu'une fois.",
   révoqué: "Cet accès a été révoqué.",
   clos: "Cet espace est clos.",
