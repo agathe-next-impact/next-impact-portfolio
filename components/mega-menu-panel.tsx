@@ -129,7 +129,7 @@ export function MegaMenuPanel({
     <div id={`mega-${section.key}`} className="border-x border-b border-dark-gray">
       {/* Ligne supérieure : mène à la page mère, comme l'entrée de nav qui
           ouvre le panneau. À gauche le besoin, à droite un bouton qui dit où
-          l'on va (« Voir la page Prestations »), toute la ligne cliquable. */}
+          l'on va (« Voir la page Réalisations »), toute la ligne cliquable. */}
       {/* Sans page mère (« À propos ») : le besoin seul, sans lien. */}
       {!section.href ? (
         <div className="flex flex-col gap-0.5 border-b border-dark-gray bg-obsidian px-6 py-4 lg:px-8">
@@ -161,10 +161,15 @@ export function MegaMenuPanel({
       </Link>
       )}
 
-      {/* Une case par offre : deux ou trois colonnes selon le moment. */}
+      {/* Une case par offre : une, deux ou trois colonnes selon le menu
+          (deux pour « Agents de veille IA », ADR-042). */}
       <div
         className={`grid gap-px bg-dark-gray ${
-          section.items.length === 2 ? "lg:grid-cols-2" : "lg:grid-cols-3"
+          section.items.length === 1
+            ? ""
+            : section.items.length === 2
+              ? "lg:grid-cols-2"
+              : "lg:grid-cols-3"
         }`}
       >
         {section.items.map((item) => (

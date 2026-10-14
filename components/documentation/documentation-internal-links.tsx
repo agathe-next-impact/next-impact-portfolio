@@ -66,7 +66,7 @@ const TOOL_LINKS_EN: ToolLink[] = [
 const SERVICE_LINKS_FR: ToolLink[] = [
   {
     href: "/solutions-web",
-    title: "Nos offres",
+    title: "Réalisations",
     description: "Mise en œuvre après une décision Web & IA claire.",
     icon: Briefcase,
     color: "text-orange",
@@ -74,7 +74,7 @@ const SERVICE_LINKS_FR: ToolLink[] = [
   {
     href: "/etudes-de-cas",
     title: "Études de cas",
-    description: "Découvrez nos réalisations concrètes en production.",
+    description: "Des projets livrés, en production, et les décisions qui les ont guidés.",
     icon: FolderOpen,
     color: "text-regularblue",
   },
@@ -90,7 +90,7 @@ const SERVICE_LINKS_FR: ToolLink[] = [
 const SERVICE_LINKS_EN: ToolLink[] = [
   {
     href: "/solutions-web",
-    title: "Our offerings",
+    title: "Delivery",
     description: "Implementation after a clear Web & AI decision.",
     icon: Briefcase,
     color: "text-orange",
@@ -366,7 +366,7 @@ function buildCategoryTools(isEn: boolean): Record<string, ToolLink[]> {
     "design-ui-ux": [
       TOOL_LINKS[3],
       { ...SERVICE_LINKS[0], description: t("UI/UX design in our offerings.", "Design UI/UX dans nos offres.") },
-      { ...SERVICE_LINKS[1], description: t("Our design work.", "Nos réalisations design.") },
+      { ...SERVICE_LINKS[1], description: t("Design case studies.", "Des études de cas en design.") },
     ],
     "marketing-digital": [
       TOOL_LINKS[1],

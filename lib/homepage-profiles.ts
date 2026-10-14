@@ -38,8 +38,8 @@ export const HERO_VARIANTS: Record<ProfileId | "default", HeroVariant> = {
     // Héros de la charte v1.7 (ADR-019) : les trois idées, pas la douleur.
     // `headline` + `subHeadline` forment le h1, `tagline` le sous-titre ; la
     // description porte le mesurable.
-    headline: "Menons",
-    subHeadline: "votre projet web",
+    headline: "Développeuse - Conseil",
+    subHeadline: "web",
     tagline: "Surveiller, maintenir, réaliser.",
     description: `Un avis tranché avant d'engager un budget, puis ${PRESTATIONS_OU} au forfait : prix et délai écrits avant de commencer, performance mesurée avant et après, veille technique et stratégique à chaque étape.`,
     valueProposition:

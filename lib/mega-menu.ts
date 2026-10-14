@@ -9,9 +9,7 @@ import {
   type BesoinKey,
   type Situation,
 } from "@/lib/situations";
-import { NEWSLETTER_SUBSCRIBE_URL } from "@/lib/newsletter";
-import { OFFER_AMOUNT_CENTS, OFFER_PRICE_LABEL } from "@/lib/sentinelle-offer";
-import { formatEuros, trajectoireDuNom, type Lang } from "@/lib/trajectoires";
+import { trajectoireDuNom, type Lang } from "@/lib/trajectoires";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Données du mega menu : l'offre par situation (charte v1.6, ADR-014). Les
@@ -38,8 +36,8 @@ import { formatEuros, trajectoireDuNom, type Lang } from "@/lib/trajectoires";
 // L'entrée de nav ouvre le panneau au survol et au focus, et mène à la page
 // mère au clic ; la ligne supérieure du panneau (le besoin + « Voir la page
 // … ») y mène aussi (ADR-022, points 14 et 16). Dans les trois moments, Sentinelle n'est pas une
-// case : elle est incluse dans le suivi. Elle a sa case dans le panneau
-// « La veille » (VEILLE_SECTION, plus bas).
+// case : elle est incluse dans le suivi. Le panneau « Agents de veille IA »
+// a été retiré le 2026-10-14 (ADR-043).
 //
 // Les clés techniques (`decider`, `refaire`, `tenir`) ne changent pas. Aucun
 // texte ni prix n'est écrit ici pour les situations : tout vient de
@@ -72,7 +70,7 @@ export interface MegaSection {
   key: string;
   /**
    * Page mère : l'entrée de nav et la ligne supérieure du panneau y mènent
-   * (ADR-022). Absente pour « À propos » : l'entrée ouvre seulement le panneau.
+   * (ADR-022). Absente : l'entrée ouvre seulement le panneau.
    */
   href?: string;
   /** Le besoin, dit par le visiteur : titre du panneau. */
@@ -151,76 +149,8 @@ const SCAN_ITEM: MegaItem = {
   featured: true,
 };
 
-// « La veille » (clé technique `surveiller`) : hors moments, donc hors
-// lib/situations.ts. Deux cases, demandées par Agathe : la lettre gratuite puis
-// Sentinelle. Le prix de Sentinelle vient de sa source unique.
-const SENTINELLE_PRIX_EN = `${formatEuros(OFFER_AMOUNT_CENTS / 100, "en")}/month`;
-const VEILLE_SECTION: MegaSection = {
-  key: "surveiller",
-  href: "/veille",
-  heading: { fr: "Je veux suivre ce qui change", en: "I want to keep up with what changes" },
-  items: [
-    {
-      label: { fr: "Lettre de veille", en: "Tech watch newsletter" },
-      desc: {
-        fr: "Le marché web & IA : une synthèse par mois, un focus par semaine.",
-        en: "The web & AI market: one digest a month, one focus a week.",
-      },
-      // Inscription Substack dans un nouvel onglet (demande d'Agathe, 2026-09-27).
-      href: NEWSLETTER_SUBSCRIBE_URL,
-      external: true,
-      badge: { fr: "Gratuit", en: "Free" },
-      tag: { fr: "Gratuit", en: "Free" },
-    },
-    {
-      label: { fr: "Sentinelle", en: "Sentinelle" },
-      desc: {
-        fr: "La veille personnalisée de votre site : alertes ciblées, deux lettres par mois.",
-        en: "A personalised watch on your site: targeted alerts, two letters a month.",
-      },
-      href: "/sentinelle",
-      badge: { fr: `${OFFER_PRICE_LABEL}, sans engagement`, en: `${SENTINELLE_PRIX_EN}, no commitment` },
-      price: { fr: OFFER_PRICE_LABEL, en: SENTINELLE_PRIX_EN },
-      // Mise en avant demandée par Agathe (2026-09-27).
-      featured: true,
-    },
-  ],
-};
-
-// « À propos » (demande d'Agathe du 2026-09-28) : la preuve et la personne,
-// regroupées en un panneau. Hors moments, donc hors lib/situations.ts. Pas de
-// compte d'études de cas ici : lib/case-studies-data.ts alourdirait le bundle
-// du header.
-// Pas de page mère (demande d'Agathe du 2026-09-28) : l'entrée ne fait
-// qu'ouvrir le panneau, dont les deux cases sont les seules destinations.
-const A_PROPOS_SECTION: MegaSection = {
-  key: "about",
-  heading: { fr: "Je veux savoir à qui je m'adresse", en: "I want to know who I'm dealing with" },
-  items: [
-    {
-      label: { fr: "Études de cas", en: "Case studies" },
-      desc: {
-        fr: "Des projets livrés, avec leurs résultats mesurés avant et après.",
-        en: "Delivered projects, with results measured before and after.",
-      },
-      href: "/etudes-de-cas",
-      featured: true,
-    },
-    {
-      label: { fr: "À propos", en: "About" },
-      desc: {
-        fr: "Agathe Karinthi-Martin : 20 ans d'expérience, dont 15 ans de WordPress.",
-        en: "Agathe Karinthi-Martin: 20 years of experience, 15 of them with WordPress.",
-      },
-      href: "/a-propos",
-    },
-  ],
-};
-
 export const MEGA_SECTIONS: Record<string, MegaSection> = {
   decider: section("decider", [SCAN_ITEM]),
   refaire: section("refaire"),
   tenir: section("tenir"),
-  surveiller: VEILLE_SECTION,
-  about: A_PROPOS_SECTION,
 };

@@ -1,6 +1,7 @@
 import * as React from "react";
 import { ArrowRight } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import { NEWSLETTER_SUBSCRIBE_URL } from "@/lib/newsletter";
 import { BlueprintSection, SectionHeading } from "@/components/aspect/section";
 import { HERO_BTN_PRIMARY, HERO_BTN_SECONDARY } from "@/components/aspect/page-hero";
 import { cn } from "@/lib/utils";
@@ -97,12 +98,15 @@ export function VeilleBloc({
         ))}
       </div>
       <div className="border-t border-dark-gray px-6 py-5 lg:px-8">
-        <Link
-          href="/veille#gratuite"
+        {/* /veille fermée (ADR-043) : inscription Substack directe. */}
+        <a
+          href={NEWSLETTER_SUBSCRIBE_URL}
+          target="_blank"
+          rel="noopener noreferrer"
           className="font-mono text-2xs uppercase tracking-[0.08em] text-accent-secondary no-underline hover:text-foreground"
         >
           {isEn ? "Read the free watch letter →" : "Lire la lettre de veille gratuite →"}
-        </Link>
+        </a>
       </div>
     </BlueprintSection>
   );

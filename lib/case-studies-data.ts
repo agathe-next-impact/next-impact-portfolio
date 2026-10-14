@@ -1,4 +1,5 @@
 import type { Locale } from "@/i18n/routing";
+import { NEWSLETTER_SUBSCRIBE_URL } from "@/lib/newsletter";
 
 // ─── Types ─────────────────────────────────────────────────────────────────
 
@@ -125,6 +126,63 @@ export interface CaseStudy extends CaseStudyMeta, CaseStudyContent {
 // ─── Locale-agnostic meta ──────────────────────────────────────────────────
 
 const META: CaseStudyMeta[] = [
+  {
+    id: "30",
+    slug: "newsletter-veille-ia",
+    famille: "automatisations",
+    statut: "publie",
+    featured: null,
+    offreConstruction: null,
+    // Porte d'entrée gratuite, pas une offre vendue : aucun lien d'offre conseil.
+    offreConseil: null,
+    budgetIndicatif: null,
+    // Première édition le 18/05/2026 ; publication en continu.
+    delai: { depuis: 2026 },
+    clientId: null,
+    // Produit interne Next Impact, même choix que signaux-faibles. TODO(Agathe): confirmer
+    clientType: "independant",
+    clientName: "Quelle techno pour mon site web à l'heure de l'IA ?",
+    // TODO(Agathe): bannière d'édition à fournir (logo provisoire Next Impact)
+    imageUrl: "/img/logo-next-impact-bleu.png",
+    // TODO(Agathe): bannière d'édition à fournir (visuel neutre provisoire)
+    galleryUrl: "/img/about-code.jpg",
+    date: { month: 5, year: 2026 },
+    technologies: ["Claude", "Notion", "Substack", "LinkedIn", "HTML"],
+    website: NEWSLETTER_SUBSCRIBE_URL,
+  },
+  {
+    id: "29",
+    slug: "signaux-faibles",
+    famille: "automatisations",
+    statut: "publie",
+    featured: null,
+    offreConstruction: null,
+    // Outil d'appui au conseil (décision du 2026-09-26) : pas une offre vendue
+    // seule, le lien d'offre passe par l'accompagnement de direction technique.
+    offreConseil: "direction-technique",
+    budgetIndicatif: null,
+    // Du premier commit (09/09/2026) au dernier (26/09/2026) du portail, 82 commits.
+    delai: { value: 3, unit: "semaines" },
+    clientId: null,
+    // Produit interne Next Impact : l'enum n'a pas de type « interne » ;
+    // « independant » est le plus neutre (studio solo). TODO(Agathe): confirmer
+    clientType: "independant",
+    clientName: "Signaux Faibles",
+    imageUrl: "/img/logo-signaux-faibles.png",
+    // Vignette de la vidéo YouTube zxK3PjpilpU (vue d'ensemble de l'espace client).
+    galleryUrl: "/img/desktop-screen-signaux-faibles.jpg",
+    date: { month: 9, year: 2026 },
+    technologies: [
+      "Claude Cowork",
+      "Notion",
+      "Next.js",
+      "Tailwind CSS",
+      "Vercel",
+      "PWA",
+      "Google Workspace",
+    ],
+    youtubeVideoId: "zxK3PjpilpU",
+  },
   {
     id: "28",
     slug: "hermitage-sejours",
@@ -707,6 +765,93 @@ const META: CaseStudyMeta[] = [
 // ─── French content ────────────────────────────────────────────────────────
 
 const CONTENT_FR: Record<string, CaseStudyContent> = {
+  // Produit interne. Faits relevés sur l'archive Substack publique (14/10/2026),
+  // dans lib/newsletter.ts et dans la skill Claude `newsletter-hebdo`.
+  // TODO(Agathe): nombre d'abonnés (Substack + LinkedIn) et taux d'ouverture si tu veux les publier.
+  "newsletter-veille-ia": {
+    title: "Quelle techno pour mon site web à l'heure de l'IA ? · Une newsletter de veille gratuite",
+    seoTitle: "Newsletter de veille gratuite : quelle techno pour mon site web à l'heure de l'IA ?",
+    description:
+      "Une newsletter gratuite qui aide à trancher les choix techniques d'un site à l'heure de l'IA : un focus par semaine, une synthèse par mois. Un agent IA prépare chaque brouillon depuis ma base de veille ; je relis et je publie.",
+    detailedDescription: `Une PME qui fait tourner un site WordPress depuis des années reçoit chaque semaine une nouvelle promesse : l'IA construit les sites, tel outil en remplace un autre, telle obligation arrive. La question qu'elle se pose est plus concrète : que faire de son site maintenant, avec quel budget et quel risque ? Les éléments de réponse existent, mais dispersés entre annonces d'éditeurs, articles techniques et textes réglementaires. Je pratique la veille depuis 2012 et je l'ai étudiée (master Veille technologique et innovation, Aix-Marseille) : je voulais en tirer une lecture régulière, gratuite, utile à quelqu'un qui décide sans être technicien.\n\nJ'ai lancé « Quelle techno pour mon site web à l'heure de l'IA ? » sur Substack le 18 mai 2026. Elle est aussi publiée comme newsletter LinkedIn, sous le titre « Quelle techno pour mon site ? ». Le rythme : un focus par semaine, une synthèse par mois. Chaque édition part d'un recadrage, la vraie question n'est pas X, c'est Y : « Faut-il refondre maintenant que l'IA construit les sites ? », « Combien coûte vraiment un site WordPress ? », « La sécurité WordPress devient un flux continu ». Certaines éditions sont déclinées par type de structure.\n\nLa production repose sur un agent Claude dédié, une skill que j'ai écrite pour ce rôle. Il choisit le sujet dans ma base Notion de veille concurrentielle, parmi les briefs datés des 7 à 10 derniers jours, selon quatre critères dans l'ordre : toucher au budget, au risque ou à la durée pour une PME au WordPress existant ; permettre un recadrage ; servir l'offre sans vendre frontalement ; être frais et sourcé, sans aucun chiffre inventé. Il rédige l'article, de 900 à 1 300 mots, selon une mécanique en sept temps, génère la bannière 1920 × 1080 aux couleurs de la charte par un script de rendu HTML, puis dépose un brouillon dans Notion avec ses sources et le second choix écarté. Dernier contrôle avant livraison : est-ce que ça sonne Next Impact ?\n\nLa publication reste un geste humain : je relis chaque brouillon, je l'ajuste et je le publie. Du 18 mai au 13 octobre 2026, l'archive compte 22 éditions et un épisode de podcast. Cette newsletter n'est pas une offre payante : c'est une preuve de méthode, lisible par tous, et une porte d'entrée gratuite. Elle montre en clair comment je lis un signal avant d'en tirer un arbitrage.`,
+    objectives: [
+      "Aider un décideur non technicien à trancher les choix techniques de son site à l'heure de l'IA",
+      "Tenir un rythme régulier : un focus par semaine, une synthèse par mois",
+      "Partir de signaux frais et sourcés, sans aucun chiffre inventé",
+      "Confier à un agent IA la sélection du sujet, le premier jet et la bannière, en gardant la publication entre des mains humaines",
+      "Offrir une porte d'entrée gratuite qui montre la méthode avant toute prestation",
+    ],
+    results: [
+      "22 éditions et 1 épisode de podcast publiés du 18 mai au 13 octobre 2026 (archive Substack relevée le 14 octobre 2026)",
+      "Une double diffusion : Substack et newsletter LinkedIn « Quelle techno pour mon site ? »",
+      "Des éditions de 900 à 1 300 mots, 4 à 5 minutes de lecture, construites en sept temps",
+      "Un sujet retenu parmi les briefs des 7 à 10 derniers jours, livré en brouillon Notion avec ses sources et le second choix écarté",
+      "Des éditions générales et des éditions déclinées par type de structure",
+    ],
+    arbitrage: {
+      consideredOptions: [
+        "Newsletter écrite entièrement à la main",
+        "Contenu généré par IA et publié sans relecture",
+        "Revue de liens sans analyse",
+        "Agent IA qui sélectionne et rédige un brouillon, relu et publié par un humain",
+      ],
+      decision:
+        "Un agent IA qui choisit le sujet dans ma base de veille, rédige le premier jet et prépare la bannière ; un brouillon que je relis et publie moi-même.",
+      rationale:
+        "Écrire chaque édition de zéro demande un temps que la régularité ne supporte pas. Publier sans relecture ferait courir le risque d'un chiffre faux ou d'un ton qui n'est pas le mien, sur un support dont la seule valeur est la confiance. Une revue de liens informe sans aider à décider. L'agent fait le tri, la mise en forme et le premier jet ; il ne garde que des faits sourcés et signale le sujet écarté. Je garde ce qui engage : le choix final, la relecture et la publication.",
+    },
+    solution:
+      "L'agent lit la base Notion de veille : des briefs datés, classés par thèmes (WordPress, IA et SEO, réglementaire, techno, conseil et accompagnement, entre autres). Il retient un sujet des 7 à 10 derniers jours selon quatre critères dans l'ordre, rédige l'article en sept temps, génère la bannière 1920 × 1080 par un script de rendu HTML aux couleurs de la charte, puis dépose le tout en brouillon dans Notion, avec les sources et le second choix écarté. Je relis, j'ajuste et je publie sur Substack et sur LinkedIn. Les abonnés reçoivent l'édition par e-mail.",
+    // TODO(Agathe): remplacer quand la bannière d'édition sera fournie
+    galleryAlt: "Visuel provisoire : arborescence de fichiers de code sur un écran sombre",
+    tags: ["IA", "Automatisation", "Veille", "Newsletter"],
+    cardTitle: "Newsletter de veille IA · Quelle techno pour mon site ?",
+    cardDescription:
+      "Une newsletter gratuite, un focus par semaine et une synthèse par mois, préparée par un agent IA depuis ma base de veille, relue et publiée par moi.",
+  },
+  // Produit interne. Faits relevés dans le dépôt signaux-faibles (README,
+  // CLAUDE.md, docs/onboarding-organisation.md, docs/api-veille.md) le 13/10/2026.
+  "signaux-faibles": {
+    title: "Signaux Faibles · Une veille stratégique hebdomadaire par agents IA",
+    seoTitle: "Signaux Faibles : veille stratégique par agents IA",
+    description:
+      "Une veille stratégique hebdomadaire, cadrée pour chaque organisation, produite par des agents IA et relue par un humain, avec un espace en ligne sans mot de passe. L'outil sur lequel j'appuie mes arbitrages techniques et mes recommandations.",
+    detailedDescription: `Une cartographie ponctuelle répond à une question à une date donnée. Un arbitrage technique ou stratégique, lui, se tient dans la durée : il faut savoir quand le contexte qui l'a justifié change. Une fin de financement, un concurrent qui ouvre, une obligation qui tombe, une techno qui perd son support. Ces signaux existent, mais dispersés, et personne n'a le temps de les chercher chaque semaine. J'avais besoin d'une chaîne continue : du signal à l'arbitrage, de l'arbitrage à la décision, de la décision à la roadmap.\n\nJ'ai conçu Signaux Faibles comme cette chaîne. Chaque organisation est cadrée à partir de trois questions : ce qui remplit son carnet, qui signe et ce qui déclenche, ce qui tuerait l'activité à douze mois. Ce cadrage installe deux veilles : l'écosystème, qui suit ce qui s'impose à l'organisation, et la veille concurrentielle, qui compare sa position à d'autres. Une collectivité n'a pas de concurrents commerciaux, elle a des territoires voisins qui captent les mêmes ressources : la veille porte alors le nom qui lui correspond. Chaque axe de la note est scoré à trois niveaux seulement, fort, moyen ou rien à signaler.\n\nLa production repose sur des tâches Claude Cowork planifiées, qui cadrent, rédigent et relisent, puis écrivent dans Notion. Notion sert de back-office unique. Le lecteur, lui, ouvre un espace en ligne développé en Next.js et hébergé sur Vercel : des pages générées à l'avance, qui lisent Notion sans jamais y écrire et sans base de données à maintenir. Sept écrans : la vue d'ensemble, les lettres, les axes, les acteurs suivis d'édition en édition, les recommandations, les archives et le périmètre de la veille. L'accès se fait par un lien personnel, valable douze mois, sans mot de passe. L'espace s'installe comme une application et se relit hors ligne.\n\nJ'ai mis l'effort sur la fiabilité plus que sur la quantité. Tout ce qui est calculable est sorti des consignes données au modèle : dates, numéros d'édition, contrôle de forme. Le modèle garde ce qu'il fait bien : lire, scorer, rédiger. Chaque édition passe avant l'envoi dans le même code que celui qui l'affiche, et ce qui a été vérifié sans rien donner reste distingué d'un fait. La première lettre d'une organisation n'atteint personne avant d'avoir été relue. C'est sur cette veille que s'appuient mes recommandations : une preuve de méthode, pas un produit à part.`,
+    objectives: [
+      "Relier chaque signal à un arbitrage, une décision et une roadmap, plutôt qu'à un fil d'actualité",
+      "Cadrer la veille de chaque organisation sur ce qui remplit son carnet, qui décide et ce qui la menace à douze mois",
+      "Garder un humain aux étapes qui engagent : cadrage, première lettre, synthèse envoyée aux clients",
+      "Donner à chaque lecteur un accès direct à ses éditions, sans mot de passe et sans jamais exposer les données d'un autre client",
+      "Limiter la part du modèle de langage à ce qu'il fait bien : lire, scorer, rédiger",
+    ],
+    results: [
+      "Dispositif conçu et livré en 3 semaines, du 9 au 26 septembre 2026, en 82 commits",
+      "Deux veilles par organisation, l'écosystème et la position concurrentielle, chaque axe scoré à trois niveaux",
+      "Un espace en ligne de 7 écrans, sans mot de passe, cloisonné par organisation, installable et lisible hors ligne",
+      "Une organisation équipée en sept statuts et trois exécutions, avec ouverture automatique de son espace depuis le 11 septembre 2026",
+      "Chaque édition contrôlée avant l'envoi ; « L'essentiel » tient en 8 lignes de 140 caractères au plus, repris tel quel dans la synthèse hebdomadaire des clients accompagnés",
+    ],
+    arbitrage: {
+      consideredOptions: [
+        "Agents IA de veille sur mesure, cadrés par organisation",
+        "Outil de veille SaaS par mots-clés",
+        "Veille manuelle",
+        "Newsletters sectorielles ou étude de cabinet",
+      ],
+      decision:
+        "Des agents IA cadrés pour chaque organisation, qui produisent une note hebdomadaire scorée, relue par un humain, et lisible dans un espace en ligne dédié.",
+      rationale:
+        "Un outil par mots-clés remonte des articles, pas un arbitrage : il ne sait pas ce qui compte pour une organisation donnée, et une absence ne déclenche aucune alerte. Une newsletter sectorielle parle à tout le secteur, jamais à une structure précise. Une étude de cabinet est figée le jour de sa remise. La veille manuelle demande un temps que ni mes clients ni moi ne pouvons garantir chaque semaine. Les agents lisent à partir du cadrage de l'organisation, scorent chaque axe et signalent ce qu'ils n'ont pas pu vérifier. La valeur n'est pas la lettre de la semaine, c'est la continuité : savoir quand le contexte d'une décision a changé.",
+    },
+    solution:
+      "Trois exécutions Cowork équipent une organisation : la première lit son site et produit ses référentiels, la deuxième applique les réponses du client à chaque point de validation, la troisième produit la première lettre, qui reste en brouillon jusqu'à relecture. Ensuite, la veille tourne chaque semaine : deux lettres par organisation, chacune organisée en axes scorés, avec les dossiers ouverts suivis d'une édition à l'autre et une action de la semaine. Avant l'envoi, l'espace en ligne relit l'édition avec son propre code et bloque ce qu'il n'afficherait pas correctement. Le soir, il contrôle la dernière lettre envoyée de chaque client actif. « L'essentiel » de chaque édition, 8 lignes au plus, remonte dans la synthèse hebdomadaire des clients accompagnés, relue avant envoi.",
+    galleryAlt:
+      "Vue d'ensemble d'un espace Signaux Faibles : axes suivis, signal fort, acteurs suivis et action de la semaine",
+    tags: ["IA", "Automatisation", "Veille", "Aide à la décision"],
+    cardTitle: "Signaux Faibles · Veille stratégique par agents IA",
+    cardDescription:
+      "Une veille hebdomadaire cadrée pour chaque organisation, produite par des agents IA, relue par un humain et lue dans un espace sans mot de passe.",
+  },
   "hermitage-sejours": {
     title: "L'Hermitage · Séjours de groupe et d'entreprise",
     description:
@@ -1434,6 +1579,87 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
 // ─── English content ───────────────────────────────────────────────────────
 
 const CONTENT_EN: Record<string, CaseStudyContent> = {
+  "newsletter-veille-ia": {
+    title: "Quelle techno pour mon site web à l'heure de l'IA ? · A free monitoring newsletter",
+    seoTitle: "Free monitoring newsletter: which technology for my website in the age of AI?",
+    description:
+      "A free newsletter that helps settle the technical choices of a website in the age of AI: one focus a week, one summary a month. An AI agent prepares each draft from my monitoring database; I review and publish.",
+    detailedDescription: `An SME that has been running a WordPress site for years receives a new promise every week: AI builds websites, one tool replaces another, a new obligation is coming. The question it actually asks is more concrete: what should it do with its website now, with what budget and what risk? The answers exist, but they are scattered across vendor announcements, technical articles and regulatory texts. I have been practising technology monitoring since 2012 and I studied it (master's degree in Technology Monitoring and Innovation, Aix-Marseille): I wanted to turn it into a regular, free read, useful to someone who makes decisions without being technical.\n\nI launched "Quelle techno pour mon site web à l'heure de l'IA ?" ("Which technology for my website in the age of AI?") on Substack on 18 May 2026. It is also published as a LinkedIn newsletter, under the title "Quelle techno pour mon site ?". The rhythm: one focus a week, one summary a month. Each edition starts from a reframing, the real question is not X, it is Y: "Should you rebuild now that AI builds websites?", "How much does a WordPress site really cost?", "WordPress security is becoming a continuous flow". Some editions are adapted to a given type of organisation.\n\nProduction runs on a dedicated Claude agent, a skill I wrote for this role. It picks the topic from my Notion competitive monitoring database, among the dated briefs of the last 7 to 10 days, according to four criteria in order: it affects budget, risk or lifespan for an SME with an existing WordPress site; it allows a reframing; it serves the offer without selling head-on; it is fresh and sourced, with no invented figures. It writes the article, 900 to 1,300 words, following a seven-step structure, generates the 1920 × 1080 banner in the brand colours through an HTML rendering script, then drops a draft into Notion with its sources and the runner-up topic it set aside. Last check before delivery: does it sound like Next Impact?\n\nPublishing remains a human step: I review every draft, adjust it and publish it. From 18 May to 13 October 2026, the archive holds 22 editions and one podcast episode. This newsletter is not a paid offer: it is proof of method, readable by anyone, and a free way in. It shows plainly how I read a signal before turning it into a trade-off.`,
+    objectives: [
+      "Help a non-technical decision-maker settle the technical choices of their website in the age of AI",
+      "Keep a regular rhythm: one focus a week, one summary a month",
+      "Start from fresh, sourced signals, with no invented figures",
+      "Hand topic selection, the first draft and the banner to an AI agent, while keeping publishing in human hands",
+      "Offer a free way in that shows the method before any engagement",
+    ],
+    results: [
+      "22 editions and 1 podcast episode published from 18 May to 13 October 2026 (public Substack archive checked on 14 October 2026)",
+      "Two channels: Substack and the LinkedIn newsletter \"Quelle techno pour mon site ?\"",
+      "Editions of 900 to 1,300 words, a 4 to 5 minute read, built in seven steps",
+      "A topic chosen from the briefs of the last 7 to 10 days, delivered as a Notion draft with its sources and the runner-up topic set aside",
+      "General editions and editions adapted to a given type of organisation",
+    ],
+    arbitrage: {
+      consideredOptions: [
+        "Newsletter written entirely by hand",
+        "AI-generated content published without review",
+        "Link roundup without analysis",
+        "AI agent that selects and drafts, reviewed and published by a human",
+      ],
+      decision:
+        "An AI agent that picks the topic from my monitoring database, writes the first draft and prepares the banner; a draft that I review and publish myself.",
+      rationale:
+        "Writing each edition from scratch takes time that a regular rhythm cannot sustain. Publishing without review would risk a wrong figure or a tone that is not mine, on a medium whose only value is trust. A link roundup informs without helping anyone decide. The agent does the sorting, the formatting and the first draft; it keeps only sourced facts and flags the topic it set aside. I keep what commits: the final choice, the review and the publishing.",
+    },
+    solution:
+      "The agent reads the Notion monitoring database: dated briefs, sorted by theme (WordPress, AI and SEO, regulation, technology, consulting and support, among others). It picks a topic from the last 7 to 10 days according to four criteria in order, writes the article in seven steps, generates the 1920 × 1080 banner through an HTML rendering script in the brand colours, then drops everything into Notion as a draft, with the sources and the runner-up topic set aside. I review, adjust and publish on Substack and on LinkedIn. Subscribers receive the edition by email.",
+    galleryAlt: "Placeholder visual: code file tree on a dark screen",
+    tags: ["AI", "Automation", "Monitoring", "Newsletter"],
+    cardTitle: "AI monitoring newsletter · Which technology for my website?",
+    cardDescription:
+      "A free newsletter, one focus a week and one summary a month, prepared by an AI agent from my monitoring database, reviewed and published by me.",
+  },
+  "signaux-faibles": {
+    title: "Signaux Faibles · Weekly strategic intelligence by AI agents",
+    seoTitle: "Signaux Faibles: strategic intelligence by AI agents",
+    description:
+      "Weekly strategic intelligence, scoped for each organisation, produced by AI agents and reviewed by a human, with a password-free online space. The tool I rely on for my technical trade-offs and recommendations.",
+    detailedDescription: `A one-off market map answers a question on a given date. A technical or strategic trade-off, on the other hand, has to hold over time: you need to know when the context that justified it changes. Funding coming to an end, a competitor opening, a new obligation, a technology losing support. Those signals exist, but they are scattered, and nobody has time to hunt for them every week. I needed a continuous chain: from signal to trade-off, from trade-off to decision, from decision to roadmap.\n\nI designed Signaux Faibles as that chain. Each organisation is scoped from three questions: what fills its order book, who signs and what triggers the decision, and what would kill the business within twelve months. That scoping sets up two streams of intelligence: the ecosystem, which tracks what is imposed on the organisation, and competitive intelligence, which compares its position with others. A local authority has no commercial competitors; it has neighbouring areas competing for the same resources, so the stream takes the name that fits. Every axis of the brief is scored on three levels only: high, medium or nothing to report.\n\nProduction runs on scheduled Claude Cowork tasks that scope, write and review, then write into Notion. Notion is the single back office. The reader opens an online space built with Next.js and hosted on Vercel: pages generated in advance, which read Notion without ever writing to it and with no database to maintain. Seven screens: the overview, the briefs, the axes, the players followed from one edition to the next, the recommendations, the archive and the scope of the intelligence. Access is through a personal link, valid for twelve months, with no password. The space installs like an app and can be read offline.\n\nI put the effort into reliability rather than volume. Everything that can be computed has been taken out of the model's instructions: dates, edition numbers, format checks. The model keeps what it does well: reading, scoring, writing. Before sending, every edition goes through the same code that displays it, and anything checked without result stays distinct from a fact. An organisation's first brief reaches nobody until it has been reviewed. My recommendations rest on this intelligence: proof of method, not a separate product.`,
+    objectives: [
+      "Connect every signal to a trade-off, a decision and a roadmap, rather than to a news feed",
+      "Scope each organisation's intelligence around what fills its order book, who decides and what threatens it within twelve months",
+      "Keep a human at the steps that commit: scoping, first brief, summary sent to clients",
+      "Give every reader direct access to their editions, with no password and without ever exposing another client's data",
+      "Limit the language model's role to what it does well: reading, scoring, writing",
+    ],
+    results: [
+      "System designed and delivered in 3 weeks, from 9 to 26 September 2026, in 82 commits",
+      "Two intelligence streams per organisation, ecosystem and competitive position, each axis scored on three levels",
+      "An online space of 7 screens, password-free, partitioned by organisation, installable and readable offline",
+      "An organisation onboarded through seven statuses and three runs, with its space opening automatically since 11 September 2026",
+      "Every edition checked before sending; \"Key points\" fits in 8 lines of 140 characters at most, carried over as is into the weekly summary for supported clients",
+    ],
+    arbitrage: {
+      consideredOptions: [
+        "Custom AI intelligence agents, scoped per organisation",
+        "Keyword-based SaaS monitoring tool",
+        "Manual monitoring",
+        "Industry newsletters or a consultancy study",
+      ],
+      decision:
+        "AI agents scoped for each organisation, producing a scored weekly brief, reviewed by a human and read in a dedicated online space.",
+      rationale:
+        "A keyword tool returns articles, not a trade-off: it does not know what matters to a given organisation, and an absence triggers no alert. An industry newsletter speaks to the whole sector, never to one specific organisation. A consultancy study is frozen on the day it is delivered. Manual monitoring takes time that neither my clients nor I can guarantee every week. The agents read from the organisation's scoping, score each axis and flag what they could not verify. The value is not this week's brief, it is continuity: knowing when the context of a decision has changed.",
+    },
+    solution:
+      "Three Cowork runs onboard an organisation: the first reads its website and produces its reference documents, the second applies the client's answers to each validation point, the third produces the first brief, which stays in draft until it has been reviewed. From then on, the intelligence runs every week: two briefs per organisation, each organised into scored axes, with open files followed from one edition to the next and an action for the week. Before sending, the online space re-reads the edition with its own code and blocks anything it would not display correctly. Every evening, it checks the last brief sent to each active client. The \"Key points\" of each edition, 8 lines at most, feed into the weekly summary for supported clients, reviewed before sending.",
+    galleryAlt:
+      "Overview of a Signaux Faibles space: tracked axes, high signal, tracked players and action of the week",
+    tags: ["AI", "Automation", "Monitoring", "Decision support"],
+    cardTitle: "Signaux Faibles · Strategic intelligence by AI agents",
+    cardDescription:
+      "Weekly intelligence scoped for each organisation, produced by AI agents, reviewed by a human and read in a password-free space.",
+  },
   "hermitage-sejours": {
     title: "L'Hermitage · Group and corporate stays",
     description:
@@ -2192,6 +2418,19 @@ function getClientTestimonial(
 // ─── Result highlights (per slug, per locale) ──────────────────────────────
 
 const RESULT_HIGHLIGHTS_FR: Record<string, ResultHighlight[]> = {
+  // Archive Substack publique relevée le 14/10/2026 + skill `newsletter-hebdo`.
+  // TODO(Agathe): remplacer un chiffre par le nombre d'abonnés si tu veux le publier.
+  "newsletter-veille-ia": [
+    { value: "22 éditions", label: "Publiées du 18 mai au 13 octobre 2026" },
+    { value: "4 à 5 min", label: "De lecture par édition, 900 à 1 300 mots" },
+    { value: "7 à 10 jours", label: "De veille passés au crible pour choisir chaque sujet" },
+  ],
+  // Relevé dans le dépôt signaux-faibles (git log, CLAUDE.md, docs/api-veille.md), 13/10/2026.
+  "signaux-faibles": [
+    { value: "3 semaines", label: "Du premier au dernier commit du dispositif" },
+    { value: "7 écrans", label: "Dans l'espace de chaque organisation" },
+    { value: "8 lignes", label: "Pour l'essentiel de chaque édition, contrôlé avant envoi" },
+  ],
   // Relevé sur le site en ligne (26/09/2026). TODO(Agathe): PageSpeed / délai / demandes de séjour si disponibles
   "hermitage-sejours": [
     { value: "6 briques", label: "Pour composer un séjour sur mesure" },
@@ -2329,6 +2568,16 @@ const RESULT_HIGHLIGHTS_FR: Record<string, ResultHighlight[]> = {
 };
 
 const RESULT_HIGHLIGHTS_EN: Record<string, ResultHighlight[]> = {
+  "newsletter-veille-ia": [
+    { value: "22 editions", label: "Published from 18 May to 13 October 2026" },
+    { value: "4 to 5 min", label: "Reading time per edition, 900 to 1,300 words" },
+    { value: "7 to 10 days", label: "Of monitoring screened to pick each topic" },
+  ],
+  "signaux-faibles": [
+    { value: "3 weeks", label: "From the first to the last commit of the system" },
+    { value: "7 screens", label: "In each organisation's space" },
+    { value: "8 lines", label: "For the key points of each edition, checked before sending" },
+  ],
   // Taken from the live site (2026-09-26). TODO(Agathe): PageSpeed / delivery time / stay enquiries if available
   "hermitage-sejours": [
     { value: "6 blocks", label: "To build a tailor-made stay" },

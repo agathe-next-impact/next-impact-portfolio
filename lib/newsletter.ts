@@ -1,7 +1,10 @@
 // Newsletter gratuite « Quelle techno pour mon site web à l'heure de l'IA ? »
 //
-// Source unique des URL : y pointent la page /veille, le méga-menu, le widget
-// de contact flottant et le panneau « dernier numéro » du héros d'accueil.
+// Source unique des URL : y pointent l'onglet newsletter de /contact, le widget
+// de contact flottant, les liens « Lire la lettre de veille gratuite »
+// (/maintenance-wordpress, pages de pack) et l'étude de cas
+// `newsletter-veille-ia` (champ `website`). La page /veille est fermée et le
+// méga-menu « Agents de veille IA » retiré depuis l'ADR-043 (2026-10-14).
 // Tout lien « newsletter » du site doit mener à NEWSLETTER_SUBSCRIBE_URL —
 // c'est la seule page Substack qui porte un champ e-mail.
 //

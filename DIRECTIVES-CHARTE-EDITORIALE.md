@@ -80,7 +80,7 @@ Les deux paliers existent pour chaque type de site : la grille remplace l'ancien
 
 On compte les offres, pas les paliers (v1.5). Les paliers Essentiel et Actif sont deux paliers d'une même ligne, comme Référent et Direction technique. La mise sous suivi (état des lieux de démarrage, 290 € HT une fois, offerte pour un site livré par Next Impact) est une condition du suivi et maintenance, pas une offre.
 
-Hors catalogue, mais légitimes : Sentinelle (19 € par mois, sans engagement, source `lib/sentinelle-offer.ts`), vendue depuis le rapport de l'analyse du site et présentée sur `/sentinelle` ; la veille gratuite (`/veille`) ; l'analyse du site (`/scan`).
+Hors catalogue, mais légitimes : Sentinelle (19 € par mois, sans engagement, source `lib/sentinelle-offer.ts`), vendue depuis le rapport de l'analyse du site et présentée sur `/sentinelle` ; la lettre de veille gratuite (Substack, inscription depuis `/contact` ; `/veille` fermée, ADR-043) ; l'analyse du site (`/scan`).
 
 Toute page, tout formulaire, toute métadonnée qui cite une offre cite l'une de ces sept lignes, avec ce libellé et ce prix. Source unique de chaque prix : `lib/visio-conseil.ts`, `lib/trajectoires.ts` (nom et montant des trois prestations ; `components/services/PricingCards.tsx` en garde le détail rédactionnel), `lib/cto-externalise.ts`, `lib/sentinelle-offer.ts`, `lib/maintenance-offer.ts`. Source unique des besoins, des situations, des packs et de leurs budgets : `lib/situations.ts`.
 
@@ -94,7 +94,7 @@ Les cinq premières lignes se vendent au forfait, une fois. Les deux autres sont
 | Évoluer | « Je veux faire évoluer mon site web » | Optimisation · Refonte (recommandée) · Évolution | `/solutions-web` |
 | Gérer | « Je veux agir dans la durée » | Suivi et maintenance · Expert technique externalisé | `/maintenance-wordpress` |
 
-Les moments portent un seul nom chacun : Diagnostiquer, Évoluer, Gérer (en anglais : Diagnose, Evolve, Manage). Le menu principal a ses propres libellés depuis l'ADR-022 : Audit, Prestations, Pilotage, Veille, Études de cas. Le besoin est la phrase du visiteur : il titre le panneau du menu, la colonne de la home et le groupe de `/packs`. Les anciens noms Décider, Refaire et Tenir ne s'affichent plus comme noms de moment ; ils subsistent dans les identifiants techniques (`decider`, `refaire`, `tenir`, `TenirBanner`), qui ne changent pas.
+Les moments portent un seul nom chacun : Diagnostiquer, Évoluer, Gérer (en anglais : Diagnose, Evolve, Manage). Le menu principal a ses propres libellés depuis l'ADR-022, amendés par les ADR-043 et ADR-044 (14 octobre 2026) : Audit, Réalisations (ex-Prestations, les trois prestations), Maintenance (vers `/maintenance-wordpress`), Conseil (vers `/cto-externalise`), Études de cas. Le besoin est la phrase du visiteur : il titre le panneau du menu, la colonne de la home et le groupe de `/packs`. Les anciens noms Décider, Refaire et Tenir ne s'affichent plus comme noms de moment ; ils subsistent dans les identifiants techniques (`decider`, `refaire`, `tenir`, `TenirBanner`), qui ne changent pas.
 
 **L'offre par situation (v1.6).** Le besoin mène au pack par la situation précise. Une situation est la phrase que le visiteur se dit ; un pack est le parcours qui y répond : avant, pendant, après, avec un budget.
 
@@ -315,7 +315,7 @@ Pages des trois prestations, Optimisation, Refonte, Évolution (27 septembre 202
 
 ### Sentinelle `/sentinelle` (v1.5)
 
-Hors catalogue depuis la v1.5, toujours dans l'index. Elle se vend depuis le rapport de l'analyse du site (`/scan`) et reste incluse dans le suivi et maintenance, où elle se dit en pastille. Sa page reste sa fiche produit : elle prévient, elle n'intervient pas, et renvoie vers le suivi et maintenance pour qui veut qu'on intervienne. Elle n'apparaît ni dans le menu ni en carte d'offre ; le footer garde son lien et `/tarifs` donne son prix en note. `/veille` reste la page de la veille gratuite, sans prix.
+Hors catalogue depuis la v1.5, toujours dans l'index. Elle se vend depuis le rapport de l'analyse du site (`/scan`) et reste incluse dans le suivi et maintenance, où elle se dit en pastille. Sa page reste sa fiche produit : elle prévient, elle n'intervient pas, et renvoie vers le suivi et maintenance pour qui veut qu'on intervienne. Elle n'apparaît ni dans le menu ni en carte d'offre ; le footer garde son lien et `/tarifs` donne son prix en note. `/veille` est fermée depuis l'ADR-043.
 
 ### Espace client `/espace-client` (v1.4)
 
@@ -330,6 +330,8 @@ La seule page qui montre à la fois les packs et le catalogue : d'abord les sept
 Rôle : le CTA chaud. Le formulaire de production propose six sujets alignés sur les anciennes offres ; il passe à cinq, alignés sur le catalogue : Une décision à trancher (avec renvoi vers l'échange de 15 minutes) · Audit + roadmap (650 €) · Projet de refonte (WordPress, headless ou web app) · Diagnostic gratuit de mon site · Autre. Les libellés parlent situation ou offre, jamais techno seule. Conserver : réponse sous 24 h, coordonnées directes, un témoignage nommé.
 
 ### Veille `/veille` et blog
+
+Amendement du 14 octobre 2026 (ADR-042 puis ADR-043, demandes d'Agathe) : `/veille` est fermée (404), hors menu, footer, sitemap et llms. Les agents de veille, Signaux Faibles et la lettre de veille techno gratuite, se présentent comme études de cas dans Réalisations, famille « Automatisations », sans prix. Le paragraphe qui suit vaut pour le blog et pour la lettre elle-même.
 
 Registre de la charte newsletter, inchangé : impersonnel, informatif, sans offre ni prix. C'est le seul endroit du site où le « vous » est absent. Un seul pont vers le commercial : un encadré discret en fin de page, « Votre site est concerné ? Diagnostic en 2 minutes ».
 

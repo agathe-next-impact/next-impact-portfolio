@@ -190,9 +190,7 @@ export async function GET() {
       // `vous-etes` est volontairement `noindex` (robots.index=false) → exclu du sitemap.
       { path: "articles/reduire-contribution-agefiph-sous-traitance-tih", source: "app/[locale]/articles/reduire-contribution-agefiph-sous-traitance-tih/page.tsx", changefreq: "monthly", priority: 0.7 },
       { path: "articles/attestation-deductibilite-tih-guide-entreprises", source: "app/[locale]/articles/attestation-deductibilite-tih-guide-entreprises/page.tsx", changefreq: "monthly", priority: 0.7 },
-      // Page veille (Sentinelle en tête, puis la lettre gratuite, ressources,
-      // outils) — FR uniquement (locale EN en noindex), donc sans alternates hreflang.
-      { path: "veille", source: "app/[locale]/veille/page.tsx", changefreq: "monthly", priority: 0.8 },
+      // /veille retirée (404) le 2026-10-14, ADR-043.
       // Sentinelle : retirée du SEO/GEO le 2026-09-04, de retour dans l'index le
       // 2026-09-27 (ADR-012). Hors catalogue depuis l'ADR-013 : elle se vend
       // depuis le rapport de l'analyse du site, sa page reste sa fiche produit.

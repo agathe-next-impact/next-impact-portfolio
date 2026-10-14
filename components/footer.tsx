@@ -28,7 +28,6 @@ const RESOURCE_LINKS = [
   { href: "/sentinelle", key: "sentinelle" },
   { href: "/maintenance-wordpress", key: "maintenance" },
   { href: "/cto-externalise", key: "ctoExternalise" },
-  { href: "/veille",        key: "veille" },
   { href: "/outils",        key: "tools" },
   { href: "/contact",       key: "startWebApp" },
 ] as const;

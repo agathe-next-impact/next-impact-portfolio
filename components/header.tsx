@@ -19,17 +19,18 @@ import { MEGA_SECTIONS } from "@/lib/mega-menu";
 import { MegaMenuPanel } from "@/components/mega-menu-panel";
 import { useSamePageAnchor } from "@/hooks/use-same-page-anchor";
 import { CTA_CHAUD } from "@/lib/visio-conseil";
+import { MAINTENANCE_PATH } from "@/lib/maintenance-offer";
+import { CTO_PATH } from "@/lib/cto-externalise";
 
 type NavHref = Parameters<typeof Link>[0]["href"];
 
 // Nav principale — trois moments, puis la preuve et la personne.
 //
-// Nav : Audit · Prestations · Pilotage · Veille · Études de cas (libellés
-// choisis par Agathe le 2026-09-27, ADR-022 ; auparavant Diagnostiquer ·
-// Évoluer · Gérer · La veille, charte
-// v1.5, ADR-013 ; « La veille » placée avant les études de cas à la demande
-// d'Agathe). Les trois moments et « La veille » (clé technique `surveiller` :
-// lettre de veille, Sentinelle) sont des mega menus dérivés de
+// Nav : Audit · Réalisations · Maintenance · Conseil · Études de cas (libellés
+// choisis par Agathe le 2026-09-27, ADR-022 ; « La veille » retirée et
+// « Pilotage » remplacé par Maintenance et Conseil le 2026-10-14, ADR-043 et
+// ADR-044 ; auparavant Diagnostiquer · Évoluer · Gérer · La veille, charte
+// v1.5, ADR-013). Audit et Réalisations (ex-Prestations, clé `refaire`) sont des mega menus dérivés de
 // lib/mega-menu.ts :
 // le panneau n'est monté dans le DOM que lorsqu'il est ouvert, ce qui évite le
 // préchargement fantôme des destinations (le menu « Ressources » avait été
@@ -43,10 +44,20 @@ type NavHref = Parameters<typeof Link>[0]["href"];
 // (2026-09-28, remplace le lien vers /contact). L'analyse du site (CTA froid) et la prise de
 // rendez-vous (CTA chaud) restent dans le tiroir mobile et en fin de page.
 
-// Les entrées à mega menu (clé = clé de traduction `nav`) : les trois moments,
-// « La veille », puis « À propos » (études de cas et page À propos, demande
-// d'Agathe du 2026-09-28 ; « Études de cas » n'est plus une entrée à part).
-const MEGA_KEYS = ["decider", "refaire", "tenir", "surveiller", "about"] as const;
+// Les entrées à mega menu (clé = clé de traduction `nav`) : Audit et
+// Réalisations (`refaire`). « Agents de veille IA » (`surveiller`) et « Suivi et Pilotage »
+// (`tenir`) retirés le 2026-10-14 (ADR-043, ADR-044).
+const MEGA_KEYS = ["decider", "refaire"] as const;
+
+// Puis des liens simples, sans sous-menu (demandes d'Agathe du 2026-10-14) :
+// « Maintenance » (offre suivi et maintenance), « Conseil » (offre expert
+// technique externalisé, la direction technique), « Études de cas » (clé `realisation`, études de
+// cas, remplace le mega menu « À propos »).
+const SIMPLE_LINKS = [
+  { key: "navMaintenance", href: MAINTENANCE_PATH },
+  { key: "navConseil", href: CTO_PATH },
+  { key: "realisation", href: "/etudes-de-cas" },
+] as const;
 
 // CTA froid : /scan vit hors de app/[locale]/ (groupe (sentinelle)) — balise
 // <a> et non le Link i18n, qui donnerait /en/scan en anglais.
@@ -117,7 +128,7 @@ export default function Header() {
             NEXT IMPACT
           </Link>
 
-          {/* Desktop nav : Audit · Prestations · Pilotage · Veille · À propos (mega) */}
+          {/* Desktop nav : Audit · Réalisations (mega) · Maintenance · Conseil · Études de cas */}
           <nav className="hidden flex-1 items-center justify-center gap-1 lg:flex">
             {MEGA_KEYS.map((key) => {
               const section = MEGA_SECTIONS[key];
@@ -135,7 +146,7 @@ export default function Header() {
               const cls = `inline-flex items-center gap-1 px-3 py-2 text-sm no-underline transition-colors hover:text-foreground ${
                 open ? "text-foreground" : "text-mid-gray"
               }`;
-              // Sans page mère (« À propos ») : un bouton qui ouvre et ferme
+              // Sans page mère : un bouton qui ouvre et ferme
               // le panneau, sans navigation.
               if (!section.href) {
                 return (
@@ -175,7 +186,17 @@ export default function Header() {
                 </Link>
               );
             })}
-
+            {SIMPLE_LINKS.map(({ key, href }) => (
+              <Link
+                key={key}
+                href={href}
+                onMouseEnter={closeMenu}
+                onFocus={closeMenu}
+                className="inline-flex items-center px-3 py-2 text-sm text-mid-gray no-underline transition-colors hover:text-foreground"
+              >
+                {t(key)}
+              </Link>
+            ))}
           </nav>
 
           {/* Desktop right */}
@@ -405,7 +426,16 @@ export default function Header() {
                   </div>
                 );
               })}
-
+              {SIMPLE_LINKS.map(({ key, href }) => (
+                <Link
+                  key={key}
+                  href={href}
+                  onClick={() => setMobileOpen(false)}
+                  className="flex min-h-16 w-full items-center border-b border-dark-gray px-5 py-3 text-xl font-light tracking-tight text-foreground no-underline"
+                >
+                  {t(key)}
+                </Link>
+              ))}
 
               {profileId && (
                 <button

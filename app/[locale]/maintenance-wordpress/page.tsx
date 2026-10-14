@@ -8,6 +8,7 @@ import { PageHero, HERO_BTN_PRIMARY, HERO_BTN_SECONDARY } from "@/components/asp
 import { HeroNavCards, heroCardsEnfants } from "@/components/aspect/hero-nav-cards";
 import { MEGA_SECTIONS } from "@/lib/mega-menu";
 import { Link } from "@/i18n/navigation";
+import { NEWSLETTER_SUBSCRIBE_URL } from "@/lib/newsletter";
 import type { Locale } from "@/i18n/routing";
 import {
   CTO_BILLING_UNIT_CODE,
@@ -402,12 +403,15 @@ export default async function MaintenancePage({
               Les composants installés chez vous sont suivis. Une faille publiée devient une alerte, puis une
               correction ; deux lettres par mois disent ce qui change pour votre site.
             </p>
-            <Link
-              href="/veille#gratuite"
+            {/* /veille fermée (ADR-043) : inscription Substack directe. */}
+            <a
+              href={NEWSLETTER_SUBSCRIBE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               className="mt-4 font-mono text-2xs uppercase tracking-[0.08em] text-accent-secondary no-underline hover:text-foreground"
             >
               Lire la lettre de veille gratuite →
-            </Link>
+            </a>
           </div>
         </div>
       </BlueprintSection>

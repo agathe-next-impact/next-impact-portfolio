@@ -1009,3 +1009,90 @@ l'anglais est fermé aux visiteurs et aux robots.
   sitemap ; les rapports `/scan/<id>` restent en noindex et exclus de
   robots.txt (`Disallow: /scan/`). Surcharge dans `app/(sentinelle)/scan/page.tsx`,
   prévue par le layout du groupe.
+
+## ADR-042 — 2026-10-14 — La veille devient « Agents de veille IA » : Signaux Faibles et la lettre gratuite
+
+Demandes d'Agathe du 2026-10-14 (plusieurs itérations le même jour ; seul
+l'état final est retenu ici). L'offre « Veille » se renomme **Agents de veille
+IA** (EN « AI watch agents ») : entrée de nav, footer, fil d'Ariane,
+métadonnées. URL `/veille` et clé technique `surveiller` inchangées.
+
+- Les agents de veille sont **uniquement** : **Signaux Faibles**, la veille
+  stratégique de l'organisation (une note scorée par semaine, un espace en
+  ligne sans mot de passe ; faits repris de l'étude de cas `signaux-faibles`),
+  et la **lettre de veille techno gratuite** (Substack, marché web & IA).
+  `/veille` les présente dans cet ordre, puis les ressources et les outils en
+  secondaire ; le mega menu « Agents de veille IA » a ces deux cases.
+- Signaux Faibles n'a pas de prix publié : aucun montant n'est affiché, la
+  section renvoie vers `/contact` et vers l'étude de cas. Elle reste hors des
+  sept lignes du catalogue. Revient sur la décision du 2026-09-26
+  (« Signaux Faibles n'est pas une offre ni une page produit »).
+- **Sentinelle** n'est plus présentée sur `/veille` ni dans ce menu. Elle garde
+  sa fiche `/sentinelle`, son lien de footer, sa note sur `/tarifs`, sa vente
+  depuis l'analyse du site et sa place dans le suivi et maintenance.
+
+Amende le paragraphe « Veille `/veille` et blog » de la charte et le §
+Sentinelle (« `/veille` reste la page de la veille gratuite, sans prix »).
+
+## ADR-043 — 2026-10-14 — Le menu « Agents de veille IA » disparaît, la veille passe en Réalisations
+
+Demande d'Agathe, le même jour que l'ADR-042, qu'elle remplace pour la
+navigation et la page `/veille`.
+
+- Le mega menu « Agents de veille IA » (clé `surveiller`) est retiré du
+  header ; le lien `/veille` quitte le footer.
+- `/veille` est **inaccessible** : `notFound()` derrière le drapeau
+  `VEILLE_PUBLISHED = false` (`app/[locale]/veille/page.tsx`), hors sitemap
+  et hors llms. Le contenu reste pour une réouverture. Les liens « Lire la
+  lettre de veille gratuite » (`/maintenance-wordpress`, pages de pack) mènent
+  à l'inscription Substack (`NEWSLETTER_SUBSCRIBE_URL`).
+- Les agents de veille vivent désormais dans **Réalisations**, famille
+  « Automatisations » : l'étude de cas Signaux Faibles est conservée, une
+  étude de cas de la newsletter gratuite (« Quelle techno pour mon site web
+  à l'heure de l'IA ? ») est ajoutée. Aucune des deux n'est une offre ni n'a
+  de prix.
+- L'entrée de nav « Pilotage » (clé `tenir`) se renomme **« Suivi et
+  Pilotage »** (EN « Monitoring and steering »).
+- Sentinelle n'est pas touchée : `/sentinelle` reste accessible (rapport de
+  `/scan`, footer, `/tarifs`, suivi et maintenance).
+
+Amende la charte : libellés du menu principal (ADR-022) et § « Veille
+`/veille` et blog ».
+
+## ADR-044 — 2026-10-14 — « Suivi et Pilotage » devient deux entrées : Maintenance et Conseil
+
+Demande d'Agathe. Le mega menu « Suivi et Pilotage » (clé `tenir`) quitte le
+header. Deux entrées de premier niveau le remplacent, en liens simples, sans
+panneau : **Maintenance** → `/maintenance-wordpress` (offre suivi et
+maintenance) et **Conseil** (EN « Advisory ») → `/cto-externalise` (offre
+expert technique externalisé, la direction technique). Pas de panneau : la
+charte réserve les paliers à la page de l'offre et à `/tarifs`.
+
+Navigation : Audit · Prestations · Maintenance · Conseil · Réalisations.
+Clés `nav.navMaintenance`, `nav.navConseil` ; `SIMPLE_LINKS` dans
+`components/header.tsx`. La section `tenir` reste dans `lib/mega-menu.ts` :
+elle alimente les cartes du héros de `/maintenance-wordpress`.
+
+Attention : le libellé « Conseil » de la nav mène à `/cto-externalise`, pas à
+la page `/conseil` (moment Diagnostiquer, sous « Audit »).
+
+Complément du même jour (demande d'Agathe) : « Prestations » (clé `refaire`,
+mega menu des trois prestations) se renomme **« Réalisations »** (EN
+« Delivery ») et le lien « Réalisations » (clé `realisation`, `/etudes-de-cas`)
+se renomme **« Études de cas »** (EN « Case studies »). Navigation :
+Audit · Réalisations · Maintenance · Conseil · Études de cas.
+Textes alignés selon le contexte : les libellés qui nomment la page
+`/solutions-web` disent « Réalisations » (fil d'Ariane, surtitre
+« Réalisations · Trois prestations », footer, liens de la documentation,
+llms.txt) ; « trois prestations » reste le nom des offres dans le texte
+courant (charte). Les « prestations » de l'espace client, de l'admin et du
+cahier des charges (prestations facturées) ne changent pas, ni les
+« réalisations » au sens de projets livrés (page `/demo`).
+
+Page `/cto-externalise` (demande d'Agathe, même jour) : le h1 devient le nom
+de l'offre, « Expert technique *externalisé* » (EN « Outsourced *technical
+expert* »), au lieu de « Direction technique, *externalisée*. » ; le surtitre
+devient « Conseil · Direction technique à temps partagé ». Écart assumé à la
+charte (§ « Le h1 nomme une douleur ou un bénéfice ») : la douleur et le
+bénéfice passent dans la description du héros, inchangée. Le title SEO
+commençait déjà par « Expert technique externalisé ».

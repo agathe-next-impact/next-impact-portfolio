@@ -41,30 +41,30 @@ export default function CtoExternalisePage() {
 
   return (
     <main>
-      {/* § 01 — Héros : la douleur d'abord, le nom de l'offre traduit juste après. */}
+      {/* § 01 — Héros : le nom de l'offre en titre, traduit juste après. */}
       <PageHero
         index="№ 01"
+        // Titre = le nom de l'offre (demande d'Agathe du 2026-10-14) ; le
+        // surtitre reprend l'entrée de nav « Conseil » (ADR-044).
         kicker={
           isEn
-            ? "Outsourced technical expert · Shared technical direction"
-            : "Expert technique externalisé · Direction technique à temps partagé"
+            ? "Advisory · Shared technical direction"
+            : "Conseil · Direction technique à temps partagé"
         }
         title={
           isEn ? (
             <>
-              Technical decisions to make,{" "}
+              Outsourced{" "}
               <em className="font-normal not-italic text-accent-secondary">
-                nobody in-house to settle them
+                technical expert
               </em>
-              .
             </>
           ) : (
             <>
-              Direction technique,{" "}
+              Expert technique{" "}
               <em className="font-normal not-italic text-accent-secondary">
-                externalisée
+                externalisé
               </em>
-              .
             </>
           )
         }

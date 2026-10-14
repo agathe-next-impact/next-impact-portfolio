@@ -61,7 +61,7 @@ export default function ServicesClient() {
       {/* § 01 — Héros (harmonisé /veille) */}
       <PageHero
         index="№ 01"
-        kicker={isEn ? "Evolve · Three services" : "Évoluer · Trois prestations"}
+        kicker={isEn ? "Delivery · Three services" : "Réalisations · Trois prestations"}
         // h1 fixé par Agathe le 2026-09-27 (ADR-022, puis reformulé le même
         // jour), identique pour tous les profils. Il ne reprend plus le titre
         // du panneau du mega menu.
