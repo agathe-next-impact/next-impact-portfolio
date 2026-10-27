@@ -191,10 +191,6 @@ export async function GET() {
       { path: "articles/reduire-contribution-agefiph-sous-traitance-tih", source: "app/[locale]/articles/reduire-contribution-agefiph-sous-traitance-tih/page.tsx", changefreq: "monthly", priority: 0.7 },
       { path: "articles/attestation-deductibilite-tih-guide-entreprises", source: "app/[locale]/articles/attestation-deductibilite-tih-guide-entreprises/page.tsx", changefreq: "monthly", priority: 0.7 },
       // /veille retirée (404) le 2026-10-14, ADR-043.
-      // Sentinelle : retirée du SEO/GEO le 2026-09-04, de retour dans l'index le
-      // 2026-09-27 (ADR-012). Hors catalogue depuis l'ADR-013 : elle se vend
-      // depuis le rapport de l'analyse du site, sa page reste sa fiche produit.
-      { path: "sentinelle", source: "app/[locale]/sentinelle/page.tsx", changefreq: "monthly", priority: 0.7 },
       // Récapitulatif de toutes les offres, par moment (ADR-012).
       { path: "tarifs", source: "app/[locale]/tarifs/page.tsx", changefreq: "monthly", priority: 0.8 },
       // Analyse gratuite du site : le CTA froid, indexé depuis le 2026-09-28.

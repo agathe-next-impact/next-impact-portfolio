@@ -20,13 +20,12 @@ import { CTA_CHAUD, CTA_ECHANGE } from "@/lib/visio-conseil";
 //     signature (règle d'or : prouver avant de demander) ;
 //   – pour le client, l'accès : lien « Espace client » du header et du footer.
 //
-// Deux espaces existent, et cette page est la seule à les connaître tous les
-// deux : l'espace des accompagnements (/espace-direction, src/cto/) et
-// l'espace abonné Sentinelle (/espace). Les deux vivent hors de app/[locale]/ :
-// balises <a>, jamais le Link i18n (qui donnerait /en/espace…).
+// L'espace des accompagnements (/espace-direction, src/cto/) vit hors de
+// app/[locale]/ : balise <a>, jamais le Link i18n (qui donnerait /en/espace…).
+// Le lien vers l'espace abonné Sentinelle a été retiré de cette page.
 //
-// Aucune capture d'un vrai client : l'aperçu est un schéma, présenté comme tel.
-// Les rubriques décrites reprennent celles de l'espace (src/cto/espace/
+// Aucune capture d'un vrai client : l'aperçu est une vidéo de présentation
+// (YouTube Short, intégrée en nocookie). Les rubriques décrites reprennent celles de l'espace (src/cto/espace/
 // sections.ts) sans l'importer : la vitrine ne dépend pas du code de l'espace.
 // Contenu FR uniquement (locale EN en noindex).
 // ─────────────────────────────────────────────────────────────────────────────
@@ -34,7 +33,32 @@ import { CTA_CHAUD, CTA_ECHANGE } from "@/lib/visio-conseil";
 export const revalidate = 86400;
 
 const ESPACE_ACCOMPAGNEMENT = "/espace-direction";
-const ESPACE_SENTINELLE = "/espace/connexion";
+const VIDEO_ID = "vzhmhfr1JOY";
+
+function Apercu() {
+  // Short YouTube (format vertical 9:16), intégré dans la colonne de droite du
+  // héros. Domaine nocookie + chargement différé : aucun impact sur les CWV.
+  return (
+    <figure className="m-0 mx-auto w-full max-w-[320px]">
+      <div className="rounded-md bg-overlay-gray p-2 md:p-3">
+        <div className="relative aspect-[9/16] w-full overflow-hidden rounded-sm border border-dark-gray bg-jet">
+          <iframe
+            src={`https://www.youtube-nocookie.com/embed/${VIDEO_ID}?rel=0&playsinline=1`}
+            title="Visite de l'espace client Next Impact"
+            loading="lazy"
+            allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+            allowFullScreen
+            referrerPolicy="strict-origin-when-cross-origin"
+            className="absolute inset-0 h-full w-full border-0"
+          />
+        </div>
+      </div>
+      <figcaption className="mt-3 font-inter-tight text-sm text-mid-gray">
+        La visite de l&apos;espace en ligne en quelques secondes.
+      </figcaption>
+    </figure>
+  );
+}
 
 export async function generateMetadata({
   params,
@@ -100,59 +124,7 @@ const PAR_OFFRE = [
     href: CTO_PATH,
     ouvre: "Les décisions, la cartographie de votre système, les arbitrages, les documents et la veille technique.",
   },
-  {
-    offre: "Sentinelle",
-    href: "/sentinelle",
-    ouvre: "Un espace abonné : vos numéros, vos alertes et la fiche des composants surveillés.",
-  },
 ];
-
-function Apercu() {
-  // Schéma de l'espace (barre latérale + tableau de bord). Décoratif : la
-  // description textuelle des rubriques est juste en dessous.
-  const nav = ["Accueil", "Missions", "Votre site", "Agir", "Veille"];
-  return (
-    <figure className="m-0">
-      <div className="rounded-md bg-overlay-gray p-2 md:p-3">
-        <div className="grid min-h-[260px] grid-cols-[120px_minmax(0,1fr)] overflow-hidden rounded-sm border border-dark-gray bg-jet" aria-hidden>
-          <div className="flex flex-col gap-1 border-r border-dark-gray p-3">
-            {nav.map((n, i) => (
-              <span
-                key={n}
-                className={
-                  i === 2
-                    ? "rounded-sm bg-obsidian px-2 py-1.5 font-mono text-2xs uppercase tracking-[0.1em] text-accent-secondary"
-                    : "px-2 py-1.5 font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray"
-                }
-              >
-                {n}
-              </span>
-            ))}
-          </div>
-          <div className="flex flex-col gap-3 p-4">
-            <span className="font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">État du site</span>
-            <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-              {["Disponibilité", "Sauvegardes", "Mises à jour", "Failles"].map((m) => (
-                <div key={m} className="rounded-sm border border-dark-gray bg-obsidian p-2.5">
-                  <span className="block font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray">{m}</span>
-                  <span className="mt-2 block h-2 w-3/5 rounded-full bg-charcoal" />
-                </div>
-              ))}
-            </div>
-            <div className="flex-1 rounded-sm border border-dark-gray bg-obsidian p-3">
-              <span className="block h-2 w-2/5 rounded-full bg-charcoal" />
-              <span className="mt-3 block h-2 w-4/5 rounded-full bg-dark-gray" />
-              <span className="mt-2 block h-2 w-3/5 rounded-full bg-dark-gray" />
-            </div>
-          </div>
-        </div>
-      </div>
-      <figcaption className="mt-3 font-inter-tight text-sm text-mid-gray">
-        Schéma de l&apos;espace en ligne, sans données réelles.
-      </figcaption>
-    </figure>
-  );
-}
 
 export default async function EspaceClientPage({
   params,
@@ -185,16 +157,13 @@ export default async function EspaceClientPage({
         actions={
           <>
             {/* Premier bouton de chaque héros : l'échange gratuit (Calendly).
-                Les deux connexions suivent, en filet. */}
+                La connexion suit, en filet. */}
             <a href={CTA_ECHANGE.href} target="_blank" rel="noopener noreferrer" className={HERO_BTN_PRIMARY}>
               {CTA_ECHANGE.label.fr}
             </a>
             <a href={ESPACE_ACCOMPAGNEMENT} className={HERO_BTN_SECONDARY}>
               <KeyRound size={14} aria-hidden />
               Me connecter
-            </a>
-            <a href={ESPACE_SENTINELLE} className={HERO_BTN_SECONDARY}>
-              Espace abonné Sentinelle
             </a>
           </>
         }

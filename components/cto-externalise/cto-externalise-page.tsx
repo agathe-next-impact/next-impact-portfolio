@@ -85,9 +85,6 @@ export default function CtoExternalisePage() {
               {isEn ? CTA_ECHANGE.label.en : CTA_ECHANGE.label.fr}
               <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
             </a>
-            <Link href={CTO_CONTACT_HREF} className={HERO_BTN_SECONDARY}>
-              Contact
-            </Link>
             <a href="#paliers" className={HERO_BTN_SECONDARY}>
               {isEn ? "See the two tiers" : "Voir les deux paliers"}
             </a>
@@ -97,6 +94,22 @@ export default function CtoExternalisePage() {
           isEn
             ? `${price.amount} ${price.period} · Reply within 48h · Single point of contact`
             : `${price.amount} ${price.period} · Réponse sous 48 h · Interlocutrice unique`
+        }
+        aside={
+          <video
+            src="/video/espace-client-direction-technique-fil-4x5.mp4"
+            aria-label={
+              isEn
+                ? "Your online workspace: technical direction thread"
+                : "Votre espace en ligne : le fil de la direction technique"
+            }
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            className="mx-auto aspect-[4/5] w-full max-w-[480px] rounded-md border border-dark-gray bg-obsidian object-cover lg:max-w-none"
+          />
         }
       />
 

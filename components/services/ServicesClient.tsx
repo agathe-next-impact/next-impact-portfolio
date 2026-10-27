@@ -5,6 +5,7 @@ import { OfferSections } from "@/components/services/OfferSections";
 import AppsSection from "@/components/services/AppsSection";
 import Process from "@/components/process";
 import ServicesFAQ from "@/components/services/ServicesFAQ";
+import { MaintenanceSection } from "@/components/services/maintenance-section";
 import HomePerf from "@/components/home-perf";
 import { EnBref } from "@/components/en-bref";
 import { useLocale, useTranslations } from "next-intl";
@@ -16,8 +17,6 @@ import {
   PageHero,
   HERO_BTN_PRIMARY,
 } from "@/components/aspect/page-hero";
-import { HeroNavCards, heroCardsEnfants } from "@/components/aspect/hero-nav-cards";
-import { MEGA_SECTIONS } from "@/lib/mega-menu";
 import { CTA_ECHANGE } from "@/lib/visio-conseil";
 import { BesoinTitle } from "@/components/aspect/besoin-title";
 import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
@@ -52,16 +51,12 @@ export default function ServicesClient() {
     return variante ? variantePriceHT(variante, l).replace(/^./, (c) => c.toLowerCase()) : "";
   };
 
-  // Colonne droite du héros (page mère) : ses pages enfants, et elles seules,
-  // les parcours du panneau « Évoluer » du menu.
-  const heroCards = heroCardsEnfants(MEGA_SECTIONS.refaire, l);
-
   return (
     <main>
       {/* § 01 — Héros (harmonisé /veille) */}
       <PageHero
         index="№ 01"
-        kicker={isEn ? "Delivery · Three services" : "Réalisations · Trois prestations"}
+        kicker={isEn ? "Delivery · Three services" : "Prestations web · Trois prestations"}
         // h1 fixé par Agathe le 2026-09-27 (ADR-022, puis reformulé le même
         // jour), identique pour tous les profils. Il ne reprend plus le titre
         // du panneau du mega menu.
@@ -85,12 +80,17 @@ export default function ServicesClient() {
             <ArrowRight size={14} />
           </a>
         }
+        // Colonne droite du héros : la vidéo des prestations (demande d'Agathe).
         aside={
-          <HeroNavCards
-            label={isEn ? "The services" : "Les prestations"}
-            cards={heroCards}
-            recommendedLabel={isEn ? "Recommended" : "Recommandée"}
-            fill
+          <video
+            src="/video/next-impact_services.mp4"
+            aria-label={isEn ? "Our web services in video" : "Nos prestations web en vidéo"}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            className="mx-auto aspect-[4/5] w-full max-w-[480px] rounded-md border border-dark-gray bg-obsidian object-cover lg:max-w-none"
           />
         }
       />
@@ -170,11 +170,16 @@ export default function ServicesClient() {
 
       <Separator />
 
-      {/* § 06 — Comment je choisis votre stack */}
+      {/* § 06 — Suivi et maintenance (après la livraison) */}
+      <MaintenanceSection index="№ 06" />
+
+      <Separator />
+
+      {/* § 07 — Comment je choisis votre stack */}
       <BlueprintSection tone="obsidian">
         <Reveal className="border-b border-dark-gray px-6 py-12 lg:px-8 lg:py-16">
           <SectionHeading
-            index="№ 06"
+            index="№ 07"
             kicker={t("stackMethod.label")}
             title={t("stackMethod.title")}
           />
@@ -210,14 +215,14 @@ export default function ServicesClient() {
 
       <Separator />
 
-      {/* § 07 — Preuve de performance (socle technique) */}
-      <HomePerf index="№ 07" />
+      {/* § 08 — Preuve de performance (socle technique) */}
+      <HomePerf index="№ 08" />
 
       <Separator />
 
-      {/* § 08 — Méthode */}
+      {/* § 09 — Méthode */}
       <BlueprintSection tone="obsidian" innerClassName="border-t border-dark-gray px-6 py-16 lg:px-8 lg:py-20">
-        <Process index="№ 08" />
+        <Process index="№ 09" />
       </BlueprintSection>
 
       <Separator />

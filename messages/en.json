@@ -20,6 +20,8 @@
     "ctoExternalise": "Outsourced technical expert",
     "veille": "AI watch agents",
     "decider": "Audit",
+    "accompagnement": "Support",
+    "ctoExterne": "External CTO",
     "refaire": "Delivery",
     "surveiller": "AI watch agents",
     "tenir": "Monitoring and steering",
@@ -278,7 +280,7 @@
   },
   "realisations": {
     "tabs": {
-      "selection": "Selected work",
+      "tous": "All",
       "sites-institutionnels": "Institutional websites",
       "app-web-mobile": "Web & mobile apps",
       "automatisations": "Automations"

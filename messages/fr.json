@@ -20,7 +20,9 @@
     "ctoExternalise": "Expert technique externalisé",
     "veille": "Agents de veille IA",
     "decider": "Audit",
-    "refaire": "Réalisations",
+    "accompagnement": "Accompagnement",
+    "ctoExterne": "CTO externe",
+    "refaire": "Prestations web",
     "surveiller": "Agents de veille IA",
     "tenir": "Suivi et Pilotage",
     "navMaintenance": "Maintenance",
@@ -60,7 +62,7 @@
     "privacy": "Confidentialité",
     "updated": "Mis à jour : septembre 2026",
     "about": "À propos",
-    "services": "Réalisations",
+    "services": "Prestations web",
     "caseStudies": "Études de cas",
     "documentation": "Documentation",
     "blog": "Blog",
@@ -278,7 +280,7 @@
   },
   "realisations": {
     "tabs": {
-      "selection": "Sélection",
+      "tous": "Tous",
       "sites-institutionnels": "Sites institutionnels",
       "app-web-mobile": "App web et mobile",
       "automatisations": "Automatisations"
@@ -384,7 +386,7 @@
     "metaTitle": "Refonte WordPress : trois prestations pour un site qui vieillit",
     "metaDescription": "Trois prestations pour un site WordPress qui vieillit : Optimisation, Refonte (recommandée) ou Évolution. Prix et délai écrits avant de commencer, veille incluse.",
     "breadcrumbHome": "Accueil",
-    "breadcrumbServices": "Réalisations",
+    "breadcrumbServices": "Prestations web",
     "calculateGain": {
       "title": "Calculez votre gain",
       "description": "Estimez si optimiser, réparer, refondre ou construire peut réellement se rentabiliser.",

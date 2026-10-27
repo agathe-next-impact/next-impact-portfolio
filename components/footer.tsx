@@ -25,7 +25,6 @@ const NAV_LINKS = [
 const RESOURCE_LINKS = [
   { href: "/conseil", key: "visioConseil" },
   { href: "/tarifs", key: "tarifs" },
-  { href: "/sentinelle", key: "sentinelle" },
   { href: "/maintenance-wordpress", key: "maintenance" },
   { href: "/cto-externalise", key: "ctoExternalise" },
   { href: "/outils",        key: "tools" },

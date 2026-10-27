@@ -4,9 +4,6 @@ import * as React from "react";
 import {
   X as CloseIcon,
   Menu as MenuIcon,
-  ChevronDown,
-  ArrowRight,
-  ArrowUpRight,
   KeyRound,
 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
@@ -15,22 +12,19 @@ import type { Locale } from "@/i18n/routing";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useDocumentationMode } from "@/contexts/documentation-mode-context";
 import { PROFILES } from "@/lib/documentation-profiles";
-import { MEGA_SECTIONS } from "@/lib/mega-menu";
-import { MegaMenuPanel } from "@/components/mega-menu-panel";
-import { useSamePageAnchor } from "@/hooks/use-same-page-anchor";
-import { CTA_CHAUD } from "@/lib/visio-conseil";
-import { MAINTENANCE_PATH } from "@/lib/maintenance-offer";
+import { packHref } from "@/lib/situations";
 import { CTO_PATH } from "@/lib/cto-externalise";
+import { CTA_CHAUD } from "@/lib/visio-conseil";
 
 type NavHref = Parameters<typeof Link>[0]["href"];
 
 // Nav principale — trois moments, puis la preuve et la personne.
 //
-// Nav : Audit · Réalisations · Maintenance · Conseil · Études de cas (libellés
+// Nav : Audit · Prestations web · Accompagnement (Maintenance + Référent technique externalisé, ADR-046) · Études de cas (libellés
 // choisis par Agathe le 2026-09-27, ADR-022 ; « La veille » retirée et
 // « Pilotage » remplacé par Maintenance et Conseil le 2026-10-14, ADR-043 et
 // ADR-044 ; auparavant Diagnostiquer · Évoluer · Gérer · La veille, charte
-// v1.5, ADR-013). Audit et Réalisations (ex-Prestations, clé `refaire`) sont des mega menus dérivés de
+// v1.5, ADR-013). Audit et Prestations (clé `refaire`) sont des mega menus dérivés de
 // lib/mega-menu.ts :
 // le panneau n'est monté dans le DOM que lorsqu'il est ouvert, ce qui évite le
 // préchargement fantôme des destinations (le menu « Ressources » avait été
@@ -44,18 +38,21 @@ type NavHref = Parameters<typeof Link>[0]["href"];
 // (2026-09-28, remplace le lien vers /contact). L'analyse du site (CTA froid) et la prise de
 // rendez-vous (CTA chaud) restent dans le tiroir mobile et en fin de page.
 
-// Les entrées à mega menu (clé = clé de traduction `nav`) : Audit et
-// Réalisations (`refaire`). « Agents de veille IA » (`surveiller`) et « Suivi et Pilotage »
-// (`tenir`) retirés le 2026-10-14 (ADR-043, ADR-044).
-const MEGA_KEYS = ["decider", "refaire"] as const;
+// Plus aucun mega menu : « Audit » (clé `decider`), « Prestations web » (clé
+// `refaire`) et « CTO externe » sont des liens directs vers leur page. Les
+// panneaux « Agents de veille IA » et « Suivi et Pilotage » étaient retirés
+// le 2026-10-14 (ADR-043, ADR-044).
+const DIRECT_LINKS = [
+  { key: "decider", href: packHref("etat-des-lieux") },
+  { key: "refaire", href: "/solutions-web" },
+  { key: "ctoExterne", href: CTO_PATH },
+] as const;
 
 // Puis des liens simples, sans sous-menu (demandes d'Agathe du 2026-10-14) :
 // « Maintenance » (offre suivi et maintenance), « Conseil » (offre expert
 // technique externalisé, la direction technique), « Études de cas » (clé `realisation`, études de
 // cas, remplace le mega menu « À propos »).
 const SIMPLE_LINKS = [
-  { key: "navMaintenance", href: MAINTENANCE_PATH },
-  { key: "navConseil", href: CTO_PATH },
   { key: "realisation", href: "/etudes-de-cas" },
 ] as const;
 
@@ -70,16 +67,7 @@ export default function Header() {
   const t = useTranslations("nav");
   const locale = useLocale() as Locale;
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [activeMenu, setActiveMenu] = React.useState<string | null>(null);
-  const [mobileExpanded, setMobileExpanded] = React.useState<string | null>(null);
   const { profileId, clearProfile } = useDocumentationMode();
-
-  // Les destinations du mega menu et du CTA sont des ancres d'offre : une fois
-  // sur la page cible, c'est ce handler qui scrolle (le Link next-intl, lui, ne
-  // ferait qu'une navigation « même route » sans bouger la vue).
-  const scrollToAnchor = useSamePageAnchor();
-
-  const closeMenu = React.useCallback(() => setActiveMenu(null), []);
 
   // Tiroir mobile ouvert : la page derrière ne défile plus, Échap le ferme.
   React.useEffect(() => {
@@ -96,27 +84,12 @@ export default function Header() {
     };
   }, [mobileOpen]);
 
-  // Escape ferme le panneau ouvert.
-  React.useEffect(() => {
-    if (!activeMenu) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setActiveMenu(null);
-    };
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-  }, [activeMenu]);
-
   return (
     // `id="top"` = cible du lien « ↑ Haut de page » du footer.
     <header id="top" className="sticky top-0 z-50 bg-obsidian px-2.5 lg:px-0">
-      {/* Wrapper relatif : porte la barre + le panneau de mega menu. Le survol
-          qui quitte l'ensemble ferme le panneau ; le focus qui sort aussi. */}
+      {/* Wrapper relatif : porte la barre. */}
       <div
         className="relative mx-auto w-full max-w-[1200px]"
-        onMouseLeave={closeMenu}
-        onBlur={(e) => {
-          if (!e.currentTarget.contains(e.relatedTarget as Node)) closeMenu();
-        }}
       >
         <div className="flex h-16 items-center justify-between border border-x-dark-gray border-b border-b-dark-gray border-t-0 px-5 lg:px-6">
           {/* Logotype */}
@@ -128,70 +101,21 @@ export default function Header() {
             NEXT IMPACT
           </Link>
 
-          {/* Desktop nav : Audit · Réalisations (mega) · Maintenance · Conseil · Études de cas */}
+          {/* Desktop nav : Audit (lien) · Prestations web · Accompagnement (mega) · Études de cas */}
           <nav className="hidden flex-1 items-center justify-center gap-1 lg:flex">
-            {MEGA_KEYS.map((key) => {
-              const section = MEGA_SECTIONS[key];
-              const open = activeMenu === key;
-              const inner = (
-                <>
-                  {t(key as Parameters<typeof t>[0])}
-                  <ChevronDown
-                    size={13}
-                    aria-hidden
-                    className={`transition-transform ${open ? "rotate-180" : ""}`}
-                  />
-                </>
-              );
-              const cls = `inline-flex items-center gap-1 px-3 py-2 text-sm no-underline transition-colors hover:text-foreground ${
-                open ? "text-foreground" : "text-mid-gray"
-              }`;
-              // Sans page mère : un bouton qui ouvre et ferme
-              // le panneau, sans navigation.
-              if (!section.href) {
-                return (
-                  <button
-                    key={key}
-                    type="button"
-                    aria-haspopup="true"
-                    aria-expanded={open}
-                    aria-controls={`mega-${key}`}
-                    onMouseEnter={() => setActiveMenu(key)}
-                    onFocus={() => setActiveMenu(key)}
-                    // Pas de bascule : le survol ou le focus l'a déjà ouvert,
-                    // un clic le refermerait aussitôt. Échap et la sortie ferment.
-                    onClick={() => setActiveMenu(key)}
-                    className={cls}
-                  >
-                    {inner}
-                  </button>
-                );
-              }
-              return (
-                // L'entrée mène à sa page mère (demande d'Agathe du
-                // 2026-09-27, revient sur l'ADR-022 §13) ; le survol et le
-                // focus ouvrent toujours le panneau.
-                <Link
-                  key={key}
-                  href={section.href as NavHref}
-                  aria-haspopup="true"
-                  aria-expanded={open}
-                  aria-controls={`mega-${key}`}
-                  onMouseEnter={() => setActiveMenu(key)}
-                  onFocus={() => setActiveMenu(key)}
-                  onClick={closeMenu}
-                  className={cls}
-                >
-                  {inner}
-                </Link>
-              );
-            })}
+            {DIRECT_LINKS.map(({ key, href }) => (
+              <Link
+                key={key}
+                href={href as NavHref}
+                className="inline-flex items-center px-3 py-2 text-sm text-mid-gray no-underline transition-colors hover:text-foreground"
+              >
+                {t(key)}
+              </Link>
+            ))}
             {SIMPLE_LINKS.map(({ key, href }) => (
               <Link
                 key={key}
                 href={href}
-                onMouseEnter={closeMenu}
-                onFocus={closeMenu}
                 className="inline-flex items-center px-3 py-2 text-sm text-mid-gray no-underline transition-colors hover:text-foreground"
               >
                 {t(key)}
@@ -224,7 +148,6 @@ export default function Header() {
                 Link i18n la préfixerait en /en/… */}
             <a
               href="/espace-direction"
-              onMouseEnter={closeMenu}
               className="inline-flex items-center gap-1.5 px-2 py-2 text-sm text-mid-gray no-underline transition-colors hover:text-foreground"
             >
               <KeyRound size={14} aria-hidden />
@@ -239,7 +162,6 @@ export default function Header() {
               href={CTA_HREF}
               target="_blank"
               rel="noopener noreferrer"
-              onMouseEnter={closeMenu}
               className="inline-flex h-9 items-center rounded-sm bg-accent-secondary px-4 font-mono text-xs font-semibold uppercase tracking-[0.1em] text-obsidian no-underline transition-colors hover:bg-accent-secondary/85"
             >
               {t("discutonsEn")}
@@ -259,12 +181,6 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Panneau de mega menu (desktop) — monté seulement à l'ouverture. */}
-        {activeMenu && (
-          <div className="absolute left-0 right-0 top-16 z-50 hidden lg:block">
-            <MegaMenuPanel section={MEGA_SECTIONS[activeMenu]} onNavigate={closeMenu} />
-          </div>
-        )}
       </div>
 
       {/* Tiroir mobile, pensé pour un usage simple (demande d'Agathe du
@@ -311,121 +227,16 @@ export default function Header() {
             </div>
 
             <nav className="flex-1 overflow-y-auto overscroll-contain">
-              {MEGA_KEYS.map((key) => {
-                const section = MEGA_SECTIONS[key];
-                const expanded = mobileExpanded === key;
-                const label = t(key as Parameters<typeof t>[0]);
-                return (
-                  <div key={key} className="border-b border-dark-gray">
-                    <button
-                      type="button"
-                      aria-expanded={expanded}
-                      aria-controls={`mobile-${key}`}
-                      onClick={() => setMobileExpanded((cur) => (cur === key ? null : key))}
-                      className="flex min-h-16 w-full items-center justify-between gap-4 px-5 py-3 text-left"
-                    >
-                      <span className="flex flex-col gap-0.5">
-                        <span
-                          className={`text-xl font-light tracking-tight ${
-                            expanded ? "text-accent-secondary" : "text-foreground"
-                          }`}
-                        >
-                          {label}
-                        </span>
-                        <span className="font-inter-tight text-sm text-mid-gray">
-                          {section.heading[locale]}
-                        </span>
-                      </span>
-                      <ChevronDown
-                        size={20}
-                        aria-hidden
-                        className={`shrink-0 text-mid-gray transition-transform ${expanded ? "rotate-180" : ""}`}
-                      />
-                    </button>
-
-                    {expanded && (
-                      <ul id={`mobile-${key}`} className="flex flex-col gap-2 bg-jet px-3 pb-4 pt-3">
-                        {section.items.map((item) => {
-                          const inner = (
-                            <>
-                              <span className="flex min-w-0 flex-col gap-0.5">
-                                <span
-                                  className={`inline-flex items-center gap-1 text-base ${
-                                    item.featured ? "text-accent-secondary" : "text-foreground"
-                                  }`}
-                                >
-                                  {item.label[locale]}
-                                  {item.external && <ArrowUpRight size={12} className="text-mid-gray" />}
-                                </span>
-                                <span className="font-inter-tight text-sm leading-snug text-mid-gray">
-                                  {item.desc[locale]}
-                                </span>
-                              </span>
-                              <span className="flex shrink-0 flex-col items-end gap-1 text-right">
-                                {item.tag && (
-                                  <span className="rounded-full bg-accent-secondary px-2 py-0.5 font-mono text-2xs uppercase tracking-[0.1em] text-obsidian">
-                                    {item.tag[locale]}
-                                  </span>
-                                )}
-                                {item.price && (
-                                  <span className="max-w-[9rem] font-inter-tight text-sm leading-snug text-foreground">
-                                    {item.price[locale]}
-                                  </span>
-                                )}
-                              </span>
-                            </>
-                          );
-                          const cls = `flex min-h-12 items-center justify-between gap-3 rounded-sm border px-3 py-3 no-underline transition-colors ${
-                            item.featured
-                              ? "border-accent-secondary bg-obsidian"
-                              : "border-dark-gray bg-obsidian/40 active:bg-obsidian"
-                          }`;
-                          return (
-                            <li key={`${item.label.fr}-${item.href}`}>
-                              {item.external || item.horsLocale ? (
-                                <a
-                                  href={item.href}
-                                  {...(item.external
-                                    ? { target: "_blank", rel: "noopener noreferrer" }
-                                    : {})}
-                                  onClick={() => setMobileOpen(false)}
-                                  className={cls}
-                                >
-                                  {inner}
-                                </a>
-                              ) : (
-                                <Link
-                                  href={item.href as NavHref}
-                                  onClick={(e) => {
-                                    scrollToAnchor(item.href, e);
-                                    setMobileOpen(false);
-                                  }}
-                                  className={cls}
-                                >
-                                  {inner}
-                                </Link>
-                              )}
-                            </li>
-                          );
-                        })}
-                        {/* La page mère, en fin de liste (ADR-022), quand il y en a une. */}
-                        {section.href && (
-                        <li>
-                          <Link
-                            href={section.href as NavHref}
-                            onClick={() => setMobileOpen(false)}
-                            className="flex min-h-12 items-center justify-center gap-2 rounded-sm px-3 font-mono text-xs uppercase tracking-[0.1em] text-accent-secondary no-underline"
-                          >
-                            {locale === "en" ? `See the ${label} page` : `Voir la page ${label}`}
-                            <ArrowRight size={14} />
-                          </Link>
-                        </li>
-                        )}
-                      </ul>
-                    )}
-                  </div>
-                );
-              })}
+              {DIRECT_LINKS.map(({ key, href }) => (
+                <Link
+                  key={key}
+                  href={href as NavHref}
+                  onClick={() => setMobileOpen(false)}
+                  className="flex min-h-16 w-full items-center border-b border-dark-gray px-5 py-3 text-xl font-light tracking-tight text-foreground no-underline"
+                >
+                  {t(key)}
+                </Link>
+              ))}
               {SIMPLE_LINKS.map(({ key, href }) => (
                 <Link
                   key={key}

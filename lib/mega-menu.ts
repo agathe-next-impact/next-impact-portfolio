@@ -149,8 +149,37 @@ const SCAN_ITEM: MegaItem = {
   featured: true,
 };
 
+// Entrée « Accompagnement » du menu (2026-10-27, ADR-046) : le Référent
+// technique externalisé seul. La Maintenance en est retirée (demande d'Agathe) :
+// elle est présentée dans une section de /solutions-web. `tenir` reste la
+// source des cartes du héros de /maintenance-wordpress. Sans page mère :
+// l'entrée ouvre seulement le panneau. La case de l'offre d'expert technique
+// porte, dans le menu, le libellé « Référent technique externalisé ».
+function accompagnement(): MegaSection {
+  const base = section("tenir");
+  return {
+    ...base,
+    key: "accompagnement",
+    href: undefined,
+    items: base.items
+      .filter((item) => !item.href.includes("site-a-tenir") && !item.href.includes("maintenance"))
+      .map((item) =>
+      item.href.includes("decisions-techniques")
+        ? {
+            ...item,
+            label: {
+              fr: "Référent technique externalisé",
+              en: "Outsourced technical lead",
+            },
+          }
+        : item,
+    ),
+  };
+}
+
 export const MEGA_SECTIONS: Record<string, MegaSection> = {
   decider: section("decider", [SCAN_ITEM]),
   refaire: section("refaire"),
   tenir: section("tenir"),
+  accompagnement: accompagnement(),
 };

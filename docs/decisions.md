@@ -1096,3 +1096,34 @@ devient « Conseil · Direction technique à temps partagé ». Écart assumé �
 charte (§ « Le h1 nomme une douleur ou un bénéfice ») : la douleur et le
 bénéfice passent dans la description du héros, inchangée. Le title SEO
 commençait déjà par « Expert technique externalisé ».
+
+## ADR-045 — 2026-10-27 — « Réalisations » redevient « Prestations »
+
+Demande d'Agathe. Le libellé du mega menu des trois prestations (clé `refaire`,
+page `/solutions-web`) repasse de « Réalisations » à **« Prestations »**,
+annulant le renommage du complément de l'ADR-044. Navigation : Audit ·
+Prestations · Maintenance · Conseil · Études de cas. Alignés : fil d'Ariane
+(`breadcrumbServices`, éligibilité), surtitre « Prestations · Trois
+prestations », liens de la documentation, commentaires de `header.tsx` et
+`mega-menu-panel.tsx`. EN inchangé (« Delivery », version fermée). Les
+« réalisations » au sens de projets livrés (page `/demo`) ne changent pas.
+
+## ADR-046 — 2026-10-27 — Maintenance et Conseil réunis sous « Accompagnement »
+
+Demande d'Agathe. Les liens simples « Maintenance » et « Conseil » du menu
+laissent place à une entrée **« Accompagnement »** (EN « Support »), mega menu
+sans page mère qui contient deux cases : Maintenance (`/maintenance-wordpress`)
+et **Référent technique externalisé** (`/cto-externalise`, ex-« Conseil »).
+Navigation : Audit · Prestations · Accompagnement · Études de cas.
+Implémentation : section `accompagnement` dans `lib/mega-menu.ts` (copie de
+`tenir`, qui reste la source des cartes du héros de `/maintenance-wordpress`),
+clé `nav.accompagnement`. Les clés `navMaintenance` et `navConseil` ne sont
+plus utilisées. Écart à valider : le nom de l'offre reste « Expert technique
+externalisé » (ADR-010) partout ailleurs ; seul le libellé de la case du menu
+change.
+
+Complément à l'ADR-045 (même jour, demande d'Agathe) : « Prestations » devient
+**« Prestations web »** là où il nomme la page `/solutions-web` : entrée du
+mega menu (`nav.refaire`), `nav.services`, fil d'Ariane, surtitre
+« Prestations web · Trois prestations », liens de la documentation,
+llms.txt. « Trois prestations » reste le nom des offres dans le texte courant.

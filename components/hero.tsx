@@ -9,6 +9,7 @@ import type { Locale } from "@/i18n/routing";
 import { BlueprintSection } from "@/components/aspect/section";
 import { Reveal } from "@/components/ui/reveal";
 import { AuroraGlow } from "@/components/visuals/aurora-glow";
+import { Marquee } from "@/components/visuals/marquee";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Héros de la home, refait le 2026-09-27 (ADR-018, charte §6 et §9 point 1).
@@ -162,7 +163,7 @@ export default function Hero() {
           {isEn ? "Trusted by" : "Ils m'ont fait confiance"}
         </span>
         {/* Uniquement des assets détourés (fond transparent vérifié). */}
-        <div className="flex flex-wrap items-center gap-x-[62px] gap-y-[42px]">
+        <Marquee gap={62} duration={90}>
           {LOGOS.map((logo) => (
             <Image
               key={logo.src}
@@ -170,10 +171,10 @@ export default function Hero() {
               alt={logo.alt}
               width={108}
               height={27}
-              className="h-[27px] w-auto opacity-90 transition-opacity hover:opacity-100"
+              className="h-[27px] w-auto max-w-none shrink-0 opacity-90 transition-opacity hover:opacity-100"
             />
           ))}
-        </div>
+        </Marquee>
       </div>
     </BlueprintSection>
   );

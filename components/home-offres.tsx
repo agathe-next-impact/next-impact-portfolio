@@ -47,13 +47,29 @@ import { PackLink } from "@/components/packs/pack-link";
 
 const ONGLET_PAR_DEFAUT: BesoinKey = "refaire";
 
+/** Libellés des onglets de la home : ceux de la navigation (Audit · Prestations web · Accompagnement). */
+const LIBELLE_ONGLET: Record<BesoinKey, { fr: string; en: string }> = {
+  decider: { fr: "Audit", en: "Audit" },
+  refaire: { fr: "Prestations web", en: "Web services" },
+  tenir: { fr: "Accompagnement", en: "Support" },
+};
+
 /**
  * Un parcours en cartouche pleine largeur : nom, technique, pour qui, budget.
  * Deux gabarits, pour que la liste ne soit pas un bloc uniforme : la cartouche
  * mise en avant (gratuite ou recommandée) est grande, bordée d'accent, avec sa
  * pastille ; les autres sont plus compactes et plus discrètes.
  */
-function PackCartouche({ situation, lang }: { situation: Situation; lang: Lang }) {
+function PackCartouche({
+  situation,
+  lang,
+  empile = false,
+}: {
+  situation: Situation;
+  lang: Lang;
+  /** Trois blocs les uns sous les autres (colonne étroite), au lieu de trois colonnes. */
+  empile?: boolean;
+}) {
   const isEn = lang === "en";
   const prestation = trajectoireDuNom(situation.offre.fr);
   // Sous le nom : la technique pour une prestation, sinon l'offre au centre.
@@ -70,7 +86,8 @@ function PackCartouche({ situation, lang }: { situation: Situation; lang: Lang }
   return (
     <PackLink situation={situation}
       className={cn(
-        "group grid items-center gap-3 rounded-md border no-underline transition-colors md:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)_auto] md:gap-8",
+        "group grid items-center gap-3 rounded-md border no-underline transition-colors",
+        !empile && "md:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)_auto] md:gap-8",
         enAvant
           ? "border-accent-secondary bg-jet px-5 py-6 shadow-[0_0_0_4px_hsl(var(--accent-2)/0.12)] lg:px-7 lg:py-8"
           : "border-charcoal bg-transparent px-5 py-4 hover:border-mid-gray hover:bg-jet lg:px-7",
@@ -111,7 +128,12 @@ function PackCartouche({ situation, lang }: { situation: Situation; lang: Lang }
       >
         {citer(situation.phrase, lang)}
       </span>
-      <span className="flex flex-row flex-wrap items-baseline justify-between gap-x-4 gap-y-1 md:flex-col md:items-end md:text-right">
+      <span
+        className={cn(
+          "flex flex-row flex-wrap items-baseline justify-between gap-x-4 gap-y-1",
+          !empile && "md:flex-col md:items-end md:text-right",
+        )}
+      >
         <span className={cn("tracking-tight text-foreground", enAvant ? "text-xl" : "text-base")}>
           {packPrixEntree(situation, lang)}
         </span>
@@ -152,6 +174,63 @@ function PiedOnglet({ besoin, lang }: { besoin: BesoinKey; lang: Lang }) {
       <Link href="/espace-client" className="no-underline">
         <Pill>{isEn ? "Tracked in your online workspace →" : "Suivi dans votre espace en ligne →"}</Pill>
       </Link>
+    </div>
+  );
+}
+
+/** Vidéos d'accompagnement (4:5) des onglets qui en ont une, à droite des offres. */
+const VIDEOS: Partial<Record<BesoinKey, { src: string; label: Record<Lang, string> }>> = {
+  decider: {
+    src: "/video/audit-roadmap-espace-client-fil-4x5.mp4",
+    label: {
+      fr: "Votre espace en ligne : l'audit et la roadmap",
+      en: "Your online workspace: the audit and the roadmap",
+    },
+  },
+  refaire: {
+    src: "/video/next-impact_services.mp4",
+    label: {
+      fr: "Nos prestations web en vidéo",
+      en: "Our web services in video",
+    },
+  },
+  tenir: {
+    src: "/video/espace-client-direction-technique-fil-4x5.mp4",
+    label: {
+      fr: "Votre espace en ligne : le fil de la direction technique",
+      en: "Your online workspace: technical direction thread",
+    },
+  },
+};
+
+/**
+ * Contenu d'un panneau. Quand l'onglet a une vidéo, deux colonnes 50 / 50 : les
+ * offres (cartes empilées) à gauche, la vidéo à droite (desktop).
+ */
+function PanneauContenu({ besoin, lang }: { besoin: BesoinKey; lang: Lang }) {
+  const video = VIDEOS[besoin];
+  return (
+    <div
+      className={cn(video && "grid items-start gap-6 lg:grid-cols-2 lg:gap-8")}
+    >
+      <div className="flex flex-col gap-4">
+        {situationsDuBesoin(besoin).map((s) => (
+          <PackCartouche key={s.slug} situation={s} lang={lang} empile={!!video} />
+        ))}
+        <PiedOnglet besoin={besoin} lang={lang} />
+      </div>
+      {video && (
+        <video
+          src={video.src}
+          aria-label={video.label[lang]}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          className="mx-auto aspect-[4/5] w-full max-w-[360px] rounded-md border border-dark-gray bg-obsidian object-cover lg:max-w-none"
+        />
+      )}
     </div>
   );
 }
@@ -245,7 +324,7 @@ export default function HomeOffres() {
                   >
                     {b.index} ·
                   </span>
-                  {b.moment[l]}
+                  {LIBELLE_ONGLET[b.key][l]}
                 </button>
               );
             })}
@@ -275,10 +354,7 @@ export default function HomeOffres() {
             <h3 className="text-xl font-light leading-snug tracking-tight text-foreground lg:text-2xl">
               {citer(b.phrase, l)}
             </h3>
-            {situationsDuBesoin(b.key).map((s) => (
-              <PackCartouche key={s.slug} situation={s} lang={l} />
-            ))}
-            <PiedOnglet besoin={b.key} lang={l} />
+            <PanneauContenu besoin={b.key} lang={l} />
           </div>
         ))}
 

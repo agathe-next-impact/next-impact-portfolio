@@ -66,7 +66,7 @@ const TOOL_LINKS_EN: ToolLink[] = [
 const SERVICE_LINKS_FR: ToolLink[] = [
   {
     href: "/solutions-web",
-    title: "Réalisations",
+    title: "Prestations web",
     description: "Mise en œuvre après une décision Web & IA claire.",
     icon: Briefcase,
     color: "text-orange",

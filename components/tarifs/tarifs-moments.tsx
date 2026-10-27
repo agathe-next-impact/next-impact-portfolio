@@ -211,10 +211,7 @@ export function TarifsMoments() {
           <>
             Sentinelle, la lettre de veille et les alertes sur les composants de votre site, est incluse dans le
             suivi et maintenance. Seule, elle se souscrit depuis l&apos;analyse de votre site : {OFFER_PRICE_LABEL},
-            sans engagement.{" "}
-            <Link href="/sentinelle" className="text-accent-secondary no-underline hover:text-foreground">
-              Voir Sentinelle →
-            </Link>
+            sans engagement.
           </>
         }
       />

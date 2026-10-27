@@ -7,9 +7,6 @@ import type { Locale } from "@/i18n/routing";
 import { CountUp } from "@/components/ui/count-up";
 import { Stagger, StaggerItem } from "@/components/ui/reveal";
 
-const FIGARO_URL =
-  "https://www.lefigaro.fr/economie/wordpress-headless-comment-les-pme-peuvent-moderniser-leur-site-sans-tout-reconstruire-avec-next-impact-digital-20260512";
-
 type ProofItem = {
   value: string;
   /** Décompte animé (CountUp) pour les valeurs numériques ; absent = texte statique. */
@@ -47,13 +44,13 @@ export function ProofStrip({
         { value: "45 → 98", label: "Google speed score, before and after redesign", href: "/etudes-de-cas/proditec" },
         { value: String(documented), count: { end: documented }, label: "documented projects", href: "/etudes-de-cas" },
         { value: "CWV", label: "the three Google speed measures, live on this site" },
-        { value: "Le Figaro", label: "featured · May 2026", href: FIGARO_URL, external: true },
+        { value: "Client area", label: "follow your site's health, online", href: "/espace-client" },
       ]
     : [
         { value: "45 → 98", label: "score de vitesse Google, avant et après refonte", href: "/etudes-de-cas/proditec" },
         { value: String(documented), count: { end: documented }, label: "projets documentés", href: "/etudes-de-cas" },
         { value: "CWV", label: "les trois mesures de vitesse Google, en direct sur ce site" },
-        { value: "Le Figaro", label: "cité · mai 2026", href: FIGARO_URL, external: true },
+        { value: "Espace client", label: "le suivi de votre site, en ligne", href: "/espace-client" },
       ];
 
   return (

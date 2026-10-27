@@ -130,7 +130,8 @@ const META: CaseStudyMeta[] = [
     id: "30",
     slug: "newsletter-veille-ia",
     famille: "automatisations",
-    statut: "publie",
+    // Retirée de la vitrine à la demande d'Agathe (2026-10-27) : brouillon.
+    statut: "brouillon",
     featured: null,
     offreConstruction: null,
     // Porte d'entrée gratuite, pas une offre vendue : aucun lien d'offre conseil.
@@ -728,7 +729,8 @@ const META: CaseStudyMeta[] = [
     id: "25",
     slug: "hermitage-veille",
     famille: "automatisations",
-    statut: "publie",
+    // Retiré de la vitrine à la demande d'Agathe (2026-10-27) : brouillon.
+    statut: "brouillon",
     featured: null,
     offreConstruction: null,
     offreConseil: "pack-ia",
@@ -746,7 +748,8 @@ const META: CaseStudyMeta[] = [
     id: "26",
     slug: "urban-pousses-veille",
     famille: "automatisations",
-    statut: "publie",
+    // Retiré de la vitrine à la demande d'Agathe (2026-10-27) : brouillon.
+    statut: "brouillon",
     featured: null,
     offreConstruction: null,
     offreConseil: "pack-ia",

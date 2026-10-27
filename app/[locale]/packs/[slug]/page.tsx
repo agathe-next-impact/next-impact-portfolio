@@ -181,13 +181,17 @@ export default async function PackPage({
   // (demande d'Agathe du 2026-09-27). Ni sur l'Audit, ni sur Maintenance et
   // Pilotage.
   const avecMethode = Boolean(trajectoire);
+  // Page Audit + roadmap : la section « La preuve » est remplacée par une vidéo.
+  const preuveEnVideo = situation.slug === "etat-des-lieux";
+  // Audit + roadmap : la section 1 et la vidéo sont reprises dans le héros.
+  const heroAudit = preuveEnVideo && !!page.prestation;
   // Numéros des sections après le héros, dans l'ordre où elles s'affichent.
   const sections = [
     ...(detaille ? [...(concept ? ["concept"] : []), ...offres.map((o) => `offre-${o.id}`)] : []),
     // La preuve : sur toutes les pages ; le processus : sur les prestations
     // de réalisation seulement (demandes d'Agathe du 2026-09-27).
     ...(avecMethode ? ["processus"] : []),
-    ...(page.sansPreuve ? [] : ["preuve"]),
+    ...(page.sansPreuve || preuveEnVideo ? [] : ["preuve"]),
     ...(paliersAvant ? ["paliers", "veille"] : ["veille"]),
     ...(page.sansBudget ? [] : ["budget"]),
     ...(Paliers && !paliersAvant ? ["paliers"] : []),
@@ -239,7 +243,7 @@ export default async function PackPage({
           detail: `${page.prestation.livrables.length} livrables, décrits un par un`,
           href: "#prestation",
         },
-        { index: "02", ...sansCle(cartePreuve) },
+        ...(preuveEnVideo ? [] : [{ index: "02", ...sansCle(cartePreuve) }]),
       ]
     : [
         ...(concept ? [{ label: "Le concept", detail: concept.points.map((pt) => pt.titre).join(" · "), href: "#concept" }] : []),
@@ -357,30 +361,75 @@ export default async function PackPage({
         // h1 = nom de la case du mega menu (packNom, même source que le menu) ;
         // l'ancien titre, le bénéfice, ouvre la description.
         title={
-          <BesoinTitle
-            phrase={page.h1 ?? packNom(situation, "fr")}
-            accent={page.h1Accent ?? page.h1 ?? packNom(situation, "fr")}
-          />
+          heroAudit ? (
+            // Page Audit + roadmap : la section 1 (« La prestation ») devient le
+            // héros — nom, prix, description et vidéo de l'espace client.
+            <>
+              {situation.offre.fr},{" "}
+              <span className="text-accent-secondary">{formatEuros(budget.total, "fr")} HT</span>
+            </>
+          ) : (
+            <BesoinTitle
+              phrase={page.h1 ?? packNom(situation, "fr")}
+              accent={page.h1Accent ?? page.h1 ?? packNom(situation, "fr")}
+            />
+          )
         }
         // Prestation de réalisation : la solution technique en sous-titre
         // (demande d'Agathe du 2026-09-27).
         subtitle={trajectoire?.technique.fr}
-        description={`${page.titre.avant}${page.titre.accent}${page.titre.apres} ${page.promesse}`}
+        description={
+          heroAudit && page.prestation
+            ? page.prestation.description
+            : `${page.titre.avant}${page.titre.accent}${page.titre.apres} ${page.promesse}`
+        }
         actions={
           <>
-            {/* L'échange gratuit en premier (Calendly, nouvel onglet) ; /scan vit
-                hors de app/[locale]/ : balise <a>, pas le Link i18n. */}
-            <a href={CTA_ECHANGE.href} target="_blank" rel="noopener noreferrer" className={HERO_BTN_PRIMARY}>
+            {/* Audit : l'offre d'abord (demande d'audit), puis l'échange gratuit
+                (Calendly, nouvel onglet) et l'analyse du site, pour les prospects
+                froids. /scan vit hors de app/[locale]/ : balise <a>, pas le Link
+                i18n. Autres pages : l'échange gratuit en premier. */}
+            {heroAudit && (
+              <Link href={page.contactHref as Parameters<typeof Link>[0]["href"]} className={HERO_BTN_PRIMARY}>
+                Demander l&apos;audit + roadmap
+                <ArrowRight size={14} />
+              </Link>
+            )}
+            <a
+              href={CTA_ECHANGE.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={heroAudit ? HERO_BTN_SECONDARY : HERO_BTN_PRIMARY}
+            >
               {CTA_ECHANGE.label.fr}
-              <ArrowRight size={14} />
+              {!heroAudit && <ArrowRight size={14} />}
             </a>
             <a href="/scan" className={HERO_BTN_SECONDARY}>
               Analysez votre site
             </a>
           </>
         }
-        note={`« ${situation.phrase.fr} » · ${trajectoire ? `Forfait ${prixForfait}` : budgetLabel}`}
-        aside={<HeroNavCards label="Sur cette page" cards={heroCards} />}
+        note={
+          heroAudit
+            ? "Prix hors taxes, écrit avant de commencer"
+            : `« ${situation.phrase.fr} » · ${trajectoire ? `Forfait ${prixForfait}` : budgetLabel}`
+        }
+        aside={
+          heroAudit ? (
+            <video
+              src="/video/audit-roadmap-espace-client-fil-4x5.mp4"
+              aria-label="Votre espace en ligne : l'audit et la roadmap"
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              className="mx-auto aspect-[4/5] w-full max-w-[480px] rounded-md border border-dark-gray bg-obsidian object-cover lg:max-w-none"
+            />
+          ) : (
+            <HeroNavCards label="Sur cette page" cards={heroCards} />
+          )
+        }
       />
 
       <Separator />
@@ -489,6 +538,12 @@ export default async function PackPage({
         <>
           {/* ── Page réduite à la prestation : description, livrables, prix ── */}
           <BlueprintSection tone="jet" id="prestation">
+            {/* Page Audit + roadmap : descriptif, tarif et livrables à gauche, la
+                vidéo de l'espace client à droite (la section « La preuve » est
+                remplacée). */}
+            <div>
+            <div className="min-w-0">
+            {!heroAudit && (
             <div className="border-b border-dark-gray px-6 py-12 lg:px-8 lg:py-16">
               <SectionHeading
                 index="№ 01"
@@ -502,6 +557,7 @@ export default async function PackPage({
                 description={page.prestation.description}
               />
             </div>
+            )}
             <ol>
               {page.prestation.livrables.map((livrable, i) => {
                 const numero = (
@@ -580,9 +636,11 @@ export default async function PackPage({
                 Tous les tarifs →
               </Link>
             </p>
+            </div>
+            </div>
           </BlueprintSection>
           <Separator />
-          {sectionPreuve("№ 02")}
+          {!preuveEnVideo && sectionPreuve("№ 02")}
         </>
       ) : (
         <>

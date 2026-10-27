@@ -91,10 +91,7 @@ export function MaintenancePaliers({ index, tone }: Props) {
       <div className="border-t border-dark-gray px-6 py-5 lg:px-8">
         <p className="max-w-3xl font-inter-tight text-sm leading-relaxed text-mid-gray">
           Vous avez déjà un prestataire, ou vous intervenez vous-même ? La veille se souscrit seule depuis
-          l&apos;analyse de votre site : Sentinelle, {OFFER_PRICE_LABEL}, sans engagement.{" "}
-          <Link href="/sentinelle" className="text-accent-secondary no-underline hover:text-foreground">
-            Voir Sentinelle →
-          </Link>
+          l&apos;analyse de votre site : Sentinelle, {OFFER_PRICE_LABEL}, sans engagement.
         </p>
       </div>
     </BlueprintSection>

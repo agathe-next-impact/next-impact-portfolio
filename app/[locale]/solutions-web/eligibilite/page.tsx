@@ -42,7 +42,7 @@ export default async function EligibilityPage({
       locale={locale}
       items={[
         { name: isEn ? "Home" : "Accueil", url: "/" },
-        { name: isEn ? "Delivery" : "Réalisations", url: "/solutions-web" },
+        { name: isEn ? "Delivery" : "Prestations web", url: "/solutions-web" },
         { name: isEn ? "Project diagnostic" : "Diagnostic de projet", url: "/solutions-web/eligibilite" },
       ]}
     />
