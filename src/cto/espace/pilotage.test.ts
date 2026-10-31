@@ -9,6 +9,7 @@ import {
   missionsOf,
   missionsVerdict,
   sitePoints,
+  siteLePlusUrgent,
   siteVerdict,
   withoutPrice,
 } from "./pilotage";
@@ -186,7 +187,7 @@ describe("missions", () => {
 describe("site", () => {
   it("ne signale rien sur un site sain, mises à jour comprises", () => {
     expect(sitePoints(snapshot(), now)).toEqual([]);
-    expect(siteVerdict({ projectId: 1, snapshot: snapshot(), fetchedAt: now, error: null, errorAt: null }, now)).toEqual({
+    expect(siteVerdict({ projectId: 1, name: null, url: null, snapshot: snapshot(), fetchedAt: now, error: null, errorAt: null }, now)).toEqual({
       headline: "Bon état",
       tone: "fait",
     });
@@ -200,7 +201,7 @@ describe("site", () => {
   });
 
   it("distingue à corriger et à surveiller", () => {
-    const state = (s: SiteSnapshot) => ({ projectId: 1, snapshot: s, fetchedAt: now, error: null, errorAt: null });
+    const state = (s: SiteSnapshot) => ({ projectId: 1, name: null, url: null, snapshot: s, fetchedAt: now, error: null, errorAt: null });
     expect(siteVerdict(state(snapshot({ failles: 1 })), now)).toEqual({ headline: "1 point à corriger", tone: "alerte" });
     expect(siteVerdict(state(snapshot({ phpSecure: false })), now)).toEqual({
       headline: "Bon état, 1 point à surveiller",
@@ -284,5 +285,35 @@ describe("frise", () => {
     const items = [roadmap("a", "Ouvert", "2026-10-01"), roadmap("b", "Ouvert", "2026-10-03")];
     const frise = buildFrise(missionsOf(items, now), items, now);
     expect(frise.lanes[1].rows).toHaveLength(2);
+  });
+});
+
+describe("site le plus urgent", () => {
+  const etat = (projectId: number, s: SiteSnapshot | null) => ({
+    projectId,
+    name: `Site ${projectId}`,
+    url: null,
+    snapshot: s,
+    fetchedAt: s ? now : null,
+    error: null,
+    errorAt: null,
+  });
+
+  it("rend null sans site", () => {
+    expect(siteLePlusUrgent([], now)).toBeNull();
+  });
+
+  it("garde le premier site quand tous sont sains", () => {
+    expect(siteLePlusUrgent([etat(1, snapshot()), etat(2, snapshot())], now)?.projectId).toBe(1);
+  });
+
+  it("remonte le site qui a un point à corriger, même en deuxième position", () => {
+    const sites = [etat(1, snapshot()), etat(2, snapshot({ failles: 2 })), etat(3, snapshot({ phpSecure: false }))];
+    expect(siteLePlusUrgent(sites, now)?.projectId).toBe(2);
+  });
+
+  it("préfère un site sans relevé à rien, mais pas à un site en alerte", () => {
+    expect(siteLePlusUrgent([etat(1, null), etat(2, snapshot())], now)?.projectId).toBe(1);
+    expect(siteLePlusUrgent([etat(1, null), etat(2, snapshot({ failles: 1 }))], now)?.projectId).toBe(2);
   });
 });

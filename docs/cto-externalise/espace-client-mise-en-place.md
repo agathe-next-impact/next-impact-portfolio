@@ -703,3 +703,36 @@ que Signaux Faibles.
 | Dossier de restitution (collecte, PDF) | `src/cto/restitution/`, `app/(cto)/espace-direction/restitution/route.ts` |
 | Digest hebdomadaire (assemblage, e-mail) | `src/cto/digest/`, `scripts/cto-digest.ts` |
 | Supervision (digests, prestations) | `app/(cto)/admin-cto/pilotage/digests/`, `app/(cto)/admin-cto/pilotage/prestations/` |
+
+---
+
+## Notes client et sites multiples (2026-10-31)
+
+### Notes client
+
+Colonne texte **« Notes client »** sur la fiche de la base Clients (facultative).
+Affichée en cartouche « Notes de votre interlocutrice » sur l'accueil et sur
+l'écran Actions ; vide, rien n'est affiché. Une ligne = un paragraphe.
+Migration `0025_notes_client`.
+
+### Plusieurs sites par client
+
+Nouvelle base Notion **« Sites »**, facultative, une ligne par site :
+
+| Colonne | Type | Rôle |
+| --- | --- | --- |
+| Site | titre | nom affiché |
+| Client | relation | UNE fiche client |
+| URL | url | adresse du site |
+| ID projet WP Umbrella | nombre | supervision (vide : site non supervisé) |
+| Ordre | nombre | facultatif, ordre d'affichage |
+
+Variable `CTO_NOTION_DB_SITES` (Vercel + `.env.local`) ; sans elle, la base est
+ignorée. Le projet unique de la fiche client reste lu comme un site de plus
+tant qu'une ligne de la base ne le reprend pas : rien à ressaisir. Une ligne
+supprimée dans Notion retire le site de l'espace (`removed_at`), le relevé est
+conservé. Migration `0026_sites_multiples` (clé primaire des relevés =
+accompagnement + projet) à appliquer avant le prochain balayage.
+
+Limites actuelles : la veille Sentinelle reste un site surveillé par client, et
+les organisations multiples ne sont pas encore traitées.

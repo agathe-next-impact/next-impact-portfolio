@@ -21,7 +21,7 @@ import {
 } from "@cto/espace";
 import { ARCHIVE_MONTHS, letterForClient, lettersForClient, structureLettre, type LetterSummary } from "@cto/letters";
 import { digestsForClient } from "@cto/digest";
-import { siteReportsFor } from "@cto/site";
+import { siteReportsFor, type SiteState } from "@cto/site";
 import { idPropositionScenario } from "@cto/notion/scenarios";
 import type { PropositionDeScenario } from "./audit-formes";
 import { Calendrier } from "./calendrier";
@@ -746,9 +746,7 @@ export async function VueLectureAudit({
 // ─── Votre site ──────────────────────────────────────────────────────────
 
 export async function VueSite({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
-  const state = context.site;
-  const verdict = siteVerdict(state);
-  const points = state?.snapshot ? sitePoints(state.snapshot) : [];
+  const sites = context.sites;
   const traiter = href(viewer, context, "agir");
   const reports = await siteReportsFor(viewer.clientId);
 
@@ -759,39 +757,10 @@ export async function VueSite({ viewer, context }: { viewer: Viewer; context: Es
       active="site"
       title="État du site"
     >
-      {state ? (
-        <>
-          {state.snapshot ? (
-            <Panel className="mt-10 px-5 py-5">
-              <p className="flex items-start gap-2.5 font-sans text-lg text-foreground">
-                <Dot tone={verdict.tone} label={verdict.tone === "fait" ? "En ordre" : "À regarder"} />
-                <span>{verdict.headline}</span>
-              </p>
-              {points.length > 0 ? (
-                <ul className="mt-4 space-y-2">
-                  {points.map((point) => (
-                    <li key={point.id} className="flex flex-wrap items-baseline gap-2">
-                      <ActionTag action={{ id: point.id, kind: "site", title: point.title, detail: null, tone: point.tone, date: null, item: null }} />
-                      <span className="font-inter-tight text-sm text-foreground">{point.title}</span>
-                      {point.detail ? (
-                        <span className="font-inter-tight text-xs text-mid-gray">{point.detail}</span>
-                      ) : null}
-                    </li>
-                  ))}
-                </ul>
-              ) : null}
-              {points.length > 0 && traiter ? (
-                <Link
-                  href={traiter}
-                  className="mt-4 inline-block font-mono text-[10px] uppercase tracking-[0.14em] text-accent-secondary hover:text-foreground"
-                >
-                  En parler depuis « Actions » →
-                </Link>
-              ) : null}
-            </Panel>
-          ) : null}
-          <SuiviTechnique state={state} />
-        </>
+      {sites.length > 0 ? (
+        sites.map((state) => (
+          <BlocSite key={state.projectId} state={state} plusieurs={sites.length > 1} traiter={traiter} />
+        ))
       ) : (
         <EnPreparation>
           La supervision de votre site est en cours de mise en place. Le relevé quotidien
@@ -805,6 +774,59 @@ export async function VueSite({ viewer, context }: { viewer: Viewer; context: Es
         <RapportsMaintenance reports={reports} base={viewer.base} />
       </Groupe>
     </Espace>
+  );
+}
+
+/** Un site : son verdict et ses points d'abord, puis le relevé complet. Titré dès qu'il y en a plusieurs. */
+function BlocSite({
+  state,
+  plusieurs,
+  traiter,
+}: {
+  state: SiteState;
+  plusieurs: boolean;
+  traiter: string | null;
+}) {
+  const verdict = siteVerdict(state);
+  const points = state.snapshot ? sitePoints(state.snapshot) : [];
+  const titre = state.name ?? state.url?.replace(/^https?:\/\//, "").replace(/\/$/, "") ?? "Site";
+
+  return (
+    <section aria-label={plusieurs ? titre : undefined} className={plusieurs ? "mt-12" : undefined}>
+      {plusieurs ? (
+        <h2 className="mt-10 font-sans text-xl font-light text-foreground">{titre}</h2>
+      ) : null}
+      {state.snapshot ? (
+        <Panel className="mt-10 px-5 py-5">
+          <p className="flex items-start gap-2.5 font-sans text-lg text-foreground">
+            <Dot tone={verdict.tone} label={verdict.tone === "fait" ? "En ordre" : "À regarder"} />
+            <span>{verdict.headline}</span>
+          </p>
+          {points.length > 0 ? (
+            <ul className="mt-4 space-y-2">
+              {points.map((point) => (
+                <li key={point.id} className="flex flex-wrap items-baseline gap-2">
+                  <ActionTag action={{ id: point.id, kind: "site", title: point.title, detail: null, tone: point.tone, date: null, item: null }} />
+                  <span className="font-inter-tight text-sm text-foreground">{point.title}</span>
+                  {point.detail ? (
+                    <span className="font-inter-tight text-xs text-mid-gray">{point.detail}</span>
+                  ) : null}
+                </li>
+              ))}
+            </ul>
+          ) : null}
+          {points.length > 0 && traiter ? (
+            <Link
+              href={traiter}
+              className="mt-4 inline-block font-mono text-[10px] uppercase tracking-[0.14em] text-accent-secondary hover:text-foreground"
+            >
+              En parler depuis « Actions » →
+            </Link>
+          ) : null}
+        </Panel>
+      ) : null}
+      <SuiviTechnique state={state} />
+    </section>
   );
 }
 

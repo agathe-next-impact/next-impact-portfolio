@@ -224,6 +224,13 @@ export const PROPS = {
     role: "Rôle",
     revoked: "Révoquée",
   },
+  /** Base « Sites » : une ligne par site web, reliée à sa fiche client par `PROPS.client`. */
+  sites: {
+    name: "Site",
+    url: "URL",
+    wpUmbrellaProjectId: "ID projet WP Umbrella",
+    order: "Ordre",
+  },
 } as const;
 
 /**
@@ -238,6 +245,22 @@ export const UNTITLED = "(sans titre)";
 /** Le lien vers la fiche client, tel que la relation le porte. */
 export function clientPageIds(page: NotionPage): string[] {
   return p.relation(page, PROPS.client);
+}
+
+/** Les colonnes d'une ligne de la base « Sites ». */
+export function siteRow(page: NotionPage): {
+  name: string | null;
+  url: string | null;
+  wpUmbrellaProjectId: number | null;
+  order: number;
+} {
+  const projet = p.number(page, PROPS.sites.wpUmbrellaProjectId);
+  return {
+    name: p.text(page, PROPS.sites.name),
+    url: p.url(page, PROPS.sites.url),
+    wpUmbrellaProjectId: projet !== null && Number.isInteger(projet) && projet > 0 ? projet : null,
+    order: Math.trunc(p.number(page, PROPS.sites.order) ?? 0),
+  };
 }
 
 /** L'UUID d'accompagnement inscrit sur une fiche de la base Clients. */

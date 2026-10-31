@@ -35,6 +35,7 @@ import { syncLetters, type LettersReport } from "./letters";
 import { provisionSentinelle, type ProvisionReport, type WatchWish } from "../sentinelle/provision";
 import { veilleOfferte } from "../espace/veille-offerte";
 import { syncPersons, type PersonsReport } from "./persons";
+import { syncSitesFromNotion } from "./sites";
 import {
   auditActionInput,
   auditAnnexFiles,
@@ -1314,6 +1315,18 @@ export async function syncFromNotion(
   const persons = await syncPersons(clients.byNotionPage, { dryRun, force: options.force === true });
   report.persons = persons.report;
   merge(report, persons);
+
+  // Les sites web de chaque client : base facultative. Un échec ici ne coûte
+  // rien d'autre — l'espace garde les sites tels qu'ils étaient.
+  try {
+    const sites = await syncSitesFromNotion(clients.byNotionPage, { dryRun, force: options.force === true });
+    merge(report, sites);
+  } catch (error) {
+    console.error("[cto] balayage des sites impossible", error);
+    report.warnings.push(
+      `Sites illisibles (${error instanceof Error ? error.message : "erreur"}) : rien changé ce tour-ci.`,
+    );
+  }
 
   // Les audits avant les livrables : leurs actions validées alimentent la
   // roadmap, qui doit les recevoir dans son propre balayage. Un échec ici ne

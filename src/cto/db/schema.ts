@@ -7,6 +7,7 @@ import {
   jsonb,
   boolean,
   pgEnum,
+  primaryKey,
   uniqueIndex,
   index,
 } from "drizzle-orm/pg-core";
@@ -826,18 +827,60 @@ export const ctoFiles = pgTable("cto_files", {
  * Écrite par le Cron, jamais pendant une requête client : l'espace ne dépend
  * pas plus de WP Umbrella qu'il ne dépend de Notion.
  */
-export const ctoSiteSnapshots = pgTable("cto_site_snapshots", {
-  clientId: uuid("client_id")
-    .primaryKey()
-    .references(() => ctoClients.id, { onDelete: "cascade" }),
-  projectId: integer("project_id").notNull(),
-  /** Le relevé normalisé (`src/cto/site/types.ts`), jamais la réponse brute. */
-  data: jsonb("data").notNull(),
-  fetchedAt: timestamp("fetched_at").notNull().defaultNow(),
-  /** Dernière erreur de balayage. Le relevé précédent reste affiché. */
-  error: text("error"),
-  errorAt: timestamp("error_at"),
-});
+export const ctoSiteSnapshots = pgTable(
+  "cto_site_snapshots",
+  {
+    clientId: uuid("client_id")
+      .notNull()
+      .references(() => ctoClients.id, { onDelete: "cascade" }),
+    projectId: integer("project_id").notNull(),
+    /** Le relevé normalisé (`src/cto/site/types.ts`), jamais la réponse brute. */
+    data: jsonb("data").notNull(),
+    fetchedAt: timestamp("fetched_at").notNull().defaultNow(),
+    /** Dernière erreur de balayage. Le relevé précédent reste affiché. */
+    error: text("error"),
+    errorAt: timestamp("error_at"),
+  },
+  // Un accompagnement peut suivre plusieurs sites : un relevé par projet.
+  (t) => [primaryKey({ columns: [t.clientId, t.projectId] })],
+);
+
+/**
+ * Les sites web d'un accompagnement (base Notion « Sites »), un client en
+ * ayant autant que nécessaire.
+ *
+ * Chaque ligne désigne un site et, s'il est supervisé, son projet WP Umbrella.
+ * Le projet unique de la fiche client (`cto_clients.wp_umbrella_project_id`)
+ * reste lu comme un site de plus tant qu'aucune ligne ne le reprend : un
+ * accompagnement existant ne perd rien et n'a rien à ressaisir.
+ *
+ * `removed_at` : la ligne a disparu de Notion. Elle est gardée, pour que le
+ * relevé et l'historique d'un site retiré ne soient pas orphelins, mais elle
+ * n'est plus balayée ni affichée.
+ */
+export const ctoSites = pgTable(
+  "cto_sites",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    clientId: uuid("client_id")
+      .notNull()
+      .references(() => ctoClients.id, { onDelete: "cascade" }),
+    /** Page Notion de la ligne : sa clé de rattachement. */
+    notionPageId: text("notion_page_id").notNull(),
+    name: text("name").notNull(),
+    url: text("url"),
+    /** Projet WP Umbrella ; `null` : site connu mais pas (encore) supervisé. */
+    wpUmbrellaProjectId: integer("wp_umbrella_project_id"),
+    /** Ordre d'affichage (colonne « Ordre »), puis création. */
+    position: integer("position").notNull().default(0),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    removedAt: timestamp("removed_at"),
+  },
+  (t) => [
+    uniqueIndex("cto_site_page").on(t.notionPageId),
+    index("cto_site_client").on(t.clientId),
+  ],
+);
 
 /**
  * Un rapport de maintenance mensuel, archivé.

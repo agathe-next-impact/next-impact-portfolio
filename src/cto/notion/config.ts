@@ -55,6 +55,8 @@ const ENV_PERSONNES = "CTO_NOTION_DB_PERSONNES";
 const ENV_EDITIONS = "CTO_NOTION_DB_EDITIONS";
 /** Facultative : l'échéancier des prestations. */
 const ENV_PAIEMENTS = "CTO_NOTION_DB_PAIEMENTS";
+/** Facultative : les sites web de chaque client (plusieurs par accompagnement). */
+const ENV_SITES = "CTO_NOTION_DB_SITES";
 
 function read(name: string): string {
   const value = process.env[name]?.trim();
@@ -110,6 +112,14 @@ export function editionsDatabaseId(): string | null {
  */
 export function paymentsDatabaseId(): string | null {
   return process.env[ENV_PAIEMENTS]?.trim() || null;
+}
+
+/**
+ * Identifiant de la base « Sites », ou `null` si la variable n'est pas posée :
+ * chaque accompagnement garde alors son projet unique de la fiche client.
+ */
+export function sitesDatabaseId(): string | null {
+  return process.env[ENV_SITES]?.trim() || null;
 }
 
 /**

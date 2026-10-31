@@ -1,6 +1,7 @@
 import { eq } from "drizzle-orm";
 import { db } from "../db/client";
 import { ctoClients } from "../db/schema";
+import { hasSupervisedSite } from "../site";
 
 /**
  * Ce que l'espace doit savoir d'un accompagnement pour se composer : ses
@@ -36,11 +37,11 @@ export interface ClientProfile {
 }
 
 export async function clientProfile(clientId: string): Promise<ClientProfile> {
+  const hasSite = await hasSupervisedSite(clientId);
   const [row] = await db()
     .select({
       services: ctoClients.services,
       tier: ctoClients.tier,
-      projectId: ctoClients.wpUmbrellaProjectId,
       sentinelleClientId: ctoClients.sentinelleClientId,
       status: ctoClients.status,
       contractStart: ctoClients.contractStart,
@@ -58,7 +59,7 @@ export async function clientProfile(clientId: string): Promise<ClientProfile> {
   return {
     services: row?.services ?? null,
     tier: row?.tier ?? "direction",
-    hasSite: Boolean(row?.projectId),
+    hasSite,
     hasSentinelle: Boolean(row?.sentinelleClientId),
     status: row?.status ?? "actif",
     contractStart: row?.contractStart ?? null,

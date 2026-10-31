@@ -56,7 +56,7 @@ function facultative(name: string, ...types: ColumnType[]): Column {
 }
 
 /** Les bases dont les noms de colonnes vivent dans `PROPS` (`map.ts`). */
-export type SchemaBase = DeliverableKind | "clients" | "persons" | "paiement" | "editions";
+export type SchemaBase = DeliverableKind | "clients" | "persons" | "sites" | "paiement" | "editions";
 
 /**
  * Présentes sur chaque base de contenu, sous le même nom.
@@ -99,6 +99,15 @@ export const COLUMNS: Record<SchemaBase, Column[]> = {
     column(PROPS.persons.role, "rich_text"),
     column(PROPS.persons.revoked, "checkbox"),
     column(PROPS.client, "relation"),
+  ],
+  // Facultative dans son ensemble (variable absente = base ignorée) ; ses
+  // colonnes, elles, sont toutes lues dès que la base est branchée.
+  sites: [
+    column(PROPS.sites.name, "title"),
+    column(PROPS.client, "relation"),
+    column(PROPS.sites.url, "url"),
+    column(PROPS.sites.wpUmbrellaProjectId, "number"),
+    facultative(PROPS.sites.order, "number"),
   ],
   decision: [
     ...CONTENT,

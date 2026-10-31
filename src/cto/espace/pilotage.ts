@@ -298,6 +298,31 @@ export function sitePoints(snapshot: SiteSnapshot, now: Date = new Date()): Site
   return points;
 }
 
+/**
+ * Parmi les sites d'un accompagnement, celui que les repères généraux (carte
+ * de l'accueil, pastille, barre latérale, « Prochaine étape ») doivent
+ * montrer : celui qui a le plus de points à corriger, puis le plus de points
+ * à surveiller, à égalité le premier de la liste. Un site sans relevé ne passe
+ * qu'après les sites qui ont quelque chose à dire. Tous restent lisibles sur
+ * l'écran « État du site ».
+ */
+export function siteLePlusUrgent(sites: SiteState[], now: Date = new Date()): SiteState | null {
+  let retenu: SiteState | null = null;
+  let meilleur: [number, number] = [-1, -1];
+  for (const site of sites) {
+    const points = site.snapshot ? sitePoints(site.snapshot, now) : [];
+    const score: [number, number] = [
+      points.filter((point) => point.tone === "alerte").length,
+      points.length,
+    ];
+    if (score[0] > meilleur[0] || (score[0] === meilleur[0] && score[1] > meilleur[1])) {
+      retenu = site;
+      meilleur = score;
+    }
+  }
+  return retenu;
+}
+
 /** « Comment va le site ? », en une phrase. */
 export function siteVerdict(state: SiteState | null, now: Date = new Date()): Verdict {
   if (!state?.snapshot) return { headline: "Premier relevé en préparation", tone: "neutre" };
@@ -364,18 +389,31 @@ const TONE_RANK: Record<Tone, number> = { alerte: 0, attention: 1, neutre: 2, fa
  */
 export function actionsFor(
   items: Deliverable[],
-  snapshot: SiteSnapshot | null,
+  site: SiteSnapshot | { name: string | null; snapshot: SiteSnapshot | null }[] | null,
   now: Date = new Date(),
 ): Actions {
   const today = startOfDay(now).getTime();
   const horizon = today + ANTICIPATION_DAYS * JOUR;
   const aTraiter: Action[] = [];
 
-  if (snapshot) {
-    for (const point of sitePoints(snapshot, now)) {
-      aTraiter.push({ id: `site-${point.id}`, kind: "site", title: point.title, detail: point.detail, tone: point.tone, date: null, item: null });
+  // Un seul relevé : les points tels quels. Plusieurs sites : chaque point
+  // porte le nom de son site, et son identifiant le numéro du site.
+  const releves = Array.isArray(site) ? site : site ? [{ name: null, snapshot: site }] : [];
+  releves.forEach((releve, index) => {
+    if (!releve.snapshot) return;
+    const plusieurs = releves.length > 1;
+    for (const point of sitePoints(releve.snapshot, now)) {
+      aTraiter.push({
+        id: plusieurs ? `site-${index}-${point.id}` : `site-${point.id}`,
+        kind: "site",
+        title: plusieurs && releve.name ? `${releve.name} : ${point.title}` : point.title,
+        detail: point.detail,
+        tone: point.tone,
+        date: null,
+        item: null,
+      });
     }
-  }
+  });
 
   for (const item of items) {
     if (item.kind !== "cartographie" || !item.occurredAt) continue;

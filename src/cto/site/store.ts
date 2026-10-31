@@ -1,6 +1,6 @@
-import { and, desc, eq, isNotNull, ne } from "drizzle-orm";
+import { and, asc, desc, eq, isNotNull, isNull, ne } from "drizzle-orm";
 import { db } from "../db/client";
-import { ctoClients, ctoSiteReports, ctoSiteSnapshots } from "../db/schema";
+import { ctoClients, ctoSiteReports, ctoSiteSnapshots, ctoSites } from "../db/schema";
 import { importFile } from "../files";
 import { getWpu, wpUmbrellaToken, WpUmbrellaError } from "./api";
 import { buildSnapshot, isoDate } from "./normalize";
@@ -147,8 +147,74 @@ function toDate(value: unknown): Date | null {
   return iso ? new Date(iso) : null;
 }
 
+/** Un site supervisé : un projet WP Umbrella, avec de quoi l'afficher. */
+export interface SiteSurveille {
+  clientId: string;
+  company: string;
+  projectId: number;
+  name: string | null;
+  url: string | null;
+  position: number;
+}
+
 /**
- * Balaie tous les accompagnements qui ont un projet WP Umbrella.
+ * Pur : les projets d'un accompagnement, sans doublon. Les sites de la base
+ * « Sites » d'abord (dans l'ordre saisi), puis le projet unique de la fiche
+ * client s'il n'est repris par aucun d'eux.
+ */
+export function fusionnerProjets(
+  sites: { projectId: number; name: string | null; url: string | null; position: number }[],
+  projetFiche: number | null,
+): { projectId: number; name: string | null; url: string | null; position: number }[] {
+  const vus = new Set<number>();
+  const liste = [...sites]
+    .sort((a, b) => a.position - b.position)
+    .filter((site) => (vus.has(site.projectId) ? false : (vus.add(site.projectId), true)));
+  if (projetFiche !== null && !vus.has(projetFiche)) {
+    liste.push({ projectId: projetFiche, name: null, url: null, position: Number.MAX_SAFE_INTEGER });
+  }
+  return liste;
+}
+
+/** Les sites supervisés d'un seul accompagnement. */
+export async function sitesSupervisesDe(clientId: string): Promise<SiteSurveille[]> {
+  const [client] = await db()
+    .select({ company: ctoClients.company, projet: ctoClients.wpUmbrellaProjectId })
+    .from(ctoClients)
+    .where(eq(ctoClients.id, clientId))
+    .limit(1);
+  if (!client) return [];
+
+  const rows = await db()
+    .select({
+      projectId: ctoSites.wpUmbrellaProjectId,
+      name: ctoSites.name,
+      url: ctoSites.url,
+      position: ctoSites.position,
+    })
+    .from(ctoSites)
+    .where(and(eq(ctoSites.clientId, clientId), isNull(ctoSites.removedAt), isNotNull(ctoSites.wpUmbrellaProjectId)))
+    .orderBy(asc(ctoSites.position), asc(ctoSites.createdAt));
+
+  return fusionnerProjets(
+    rows.flatMap((row) => (row.projectId === null ? [] : [{ ...row, projectId: row.projectId }])),
+    client.projet,
+  ).map((site) => ({ clientId, company: client.company, ...site }));
+}
+
+/** Tous les projets à balayer : accompagnements non clos, un projet par site. */
+async function projetsASurveiller(): Promise<SiteSurveille[]> {
+  const clients = await db()
+    .select({ id: ctoClients.id })
+    .from(ctoClients)
+    .where(ne(ctoClients.status, "clos"));
+  const out: SiteSurveille[] = [];
+  for (const client of clients) out.push(...(await sitesSupervisesDe(client.id)));
+  return out;
+}
+
+/**
+ * Balaie tous les projets WP Umbrella des accompagnements — un par site.
  *
  * Indépendant de la colonne « Services » : le relevé est tenu à jour même si
  * la section n'est pas encore ouverte au client, pour qu'elle soit pleine le
@@ -170,17 +236,9 @@ export async function syncSites(options: { dryRun?: boolean } = {}): Promise<Sit
     return report;
   }
 
-  const clients = await db()
-    .select({
-      id: ctoClients.id,
-      company: ctoClients.company,
-      projectId: ctoClients.wpUmbrellaProjectId,
-    })
-    .from(ctoClients)
-    .where(and(isNotNull(ctoClients.wpUmbrellaProjectId), ne(ctoClients.status, "clos")));
+  const clients = await projetsASurveiller();
 
   for (const client of clients) {
-    if (client.projectId === null) continue;
     report.projects += 1;
     const partial: string[] = [];
 
@@ -190,7 +248,7 @@ export async function syncSites(options: { dryRun?: boolean } = {}): Promise<Sit
         await db()
           .insert(ctoSiteSnapshots)
           .values({
-            clientId: client.id,
+            clientId: client.clientId,
             projectId: client.projectId,
             data: snapshot,
             fetchedAt: new Date(),
@@ -198,9 +256,8 @@ export async function syncSites(options: { dryRun?: boolean } = {}): Promise<Sit
             errorAt: null,
           })
           .onConflictDoUpdate({
-            target: ctoSiteSnapshots.clientId,
+            target: [ctoSiteSnapshots.clientId, ctoSiteSnapshots.projectId],
             set: {
-              projectId: client.projectId,
               data: snapshot,
               fetchedAt: new Date(),
               error: null,
@@ -221,7 +278,9 @@ export async function syncSites(options: { dryRun?: boolean } = {}): Promise<Sit
         await db()
           .update(ctoSiteSnapshots)
           .set({ error: message, errorAt: new Date() })
-          .where(eq(ctoSiteSnapshots.clientId, client.id));
+          .where(
+            and(eq(ctoSiteSnapshots.clientId, client.clientId), eq(ctoSiteSnapshots.projectId, client.projectId)),
+          );
       }
       // Un jeton refusé l'est pour tout le monde : inutile d'insister.
       if (error instanceof WpUmbrellaError && (error.status === 401 || error.status === 403)) break;
@@ -229,7 +288,7 @@ export async function syncSites(options: { dryRun?: boolean } = {}): Promise<Sit
     }
 
     const reportWarnings: string[] = [];
-    report.reportsArchived += await archiveReports(client.id, client.projectId, dryRun, reportWarnings);
+    report.reportsArchived += await archiveReports(client.clientId, client.projectId, dryRun, reportWarnings);
     for (const warning of reportWarnings) {
       report.warnings.push(`« ${client.company} » — ${warning}.`);
     }
@@ -241,33 +300,43 @@ export async function syncSites(options: { dryRun?: boolean } = {}): Promise<Sit
 // ─── Lecture ─────────────────────────────────────────────────────────────
 
 /**
- * Le relevé d'un accompagnement, ou null s'il n'a pas de projet WP Umbrella.
+ * Les relevés des sites d'un accompagnement, dans l'ordre de la base « Sites »
+ * (puis le projet de la fiche client). Vide s'il n'a aucun projet WP Umbrella.
  *
- * Résolu depuis l'identifiant d'ACCOMPAGNEMENT (celui de la session), jamais
+ * Résolus depuis l'identifiant d'ACCOMPAGNEMENT (celui de la session), jamais
  * depuis un identifiant de projet venu d'ailleurs : c'est la règle posée sur
- * `cto_clients.wp_umbrella_project_id`.
+ * `cto_clients.wp_umbrella_project_id`, et elle vaut pour chaque site.
  */
+export async function siteStatesFor(clientId: string): Promise<SiteState[]> {
+  const sites = await sitesSupervisesDe(clientId);
+  if (sites.length === 0) return [];
+
+  const rows = await db().select().from(ctoSiteSnapshots).where(eq(ctoSiteSnapshots.clientId, clientId));
+  const parProjet = new Map(rows.map((row) => [row.projectId, row]));
+
+  return sites.map((site) => {
+    const row = parProjet.get(site.projectId);
+    const snapshot = row ? (row.data as SiteSnapshot) : null;
+    return {
+      projectId: site.projectId,
+      name: site.name ?? snapshot?.site.name ?? null,
+      url: site.url ?? snapshot?.site.url ?? null,
+      snapshot,
+      fetchedAt: row?.fetchedAt ?? null,
+      error: row?.error ?? null,
+      errorAt: row?.errorAt ?? null,
+    };
+  });
+}
+
+/** Le premier site : pour ce qui n'en lit qu'un. Préférer `siteStatesFor`. */
 export async function siteStateFor(clientId: string): Promise<SiteState | null> {
-  const [client] = await db()
-    .select({ projectId: ctoClients.wpUmbrellaProjectId })
-    .from(ctoClients)
-    .where(eq(ctoClients.id, clientId))
-    .limit(1);
-  if (!client?.projectId) return null;
+  return (await siteStatesFor(clientId))[0] ?? null;
+}
 
-  const [row] = await db()
-    .select()
-    .from(ctoSiteSnapshots)
-    .where(eq(ctoSiteSnapshots.clientId, clientId))
-    .limit(1);
-
-  return {
-    projectId: client.projectId,
-    snapshot: row ? (row.data as SiteSnapshot) : null,
-    fetchedAt: row?.fetchedAt ?? null,
-    error: row?.error ?? null,
-    errorAt: row?.errorAt ?? null,
-  };
+/** Vrai si l'accompagnement a au moins un site supervisé. */
+export async function hasSupervisedSite(clientId: string): Promise<boolean> {
+  return (await sitesSupervisesDe(clientId)).length > 0;
 }
 
 /** Les rapports archivés d'un accompagnement, le plus récent en tête. */

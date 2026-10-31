@@ -5,8 +5,11 @@ export { wpUmbrellaToken, WpUmbrellaError } from "./api";
 export { buildSnapshot, performanceScore } from "./normalize";
 export {
   fetchSnapshot,
+  fusionnerProjets,
+  hasSupervisedSite,
   siteReportsFor,
   siteStateFor,
+  siteStatesFor,
   syncSites,
   type SiteSyncReport,
 } from "./store";

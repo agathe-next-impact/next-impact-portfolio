@@ -17,6 +17,7 @@ import {
   lastSuccessfulBackup,
   missionsOf,
   sitePoints,
+  siteLePlusUrgent,
   siteVerdict,
   SYNTHESE_SEGMENT,
   visibleGroups,
@@ -33,7 +34,7 @@ import {
 import { digestsForClient } from "@cto/digest";
 import { lettersForClient } from "@cto/letters";
 import { sentinelleStateFor } from "@cto/sentinelle";
-import { siteStateFor, type SiteState } from "@cto/site";
+import { siteStatesFor, type SiteState } from "@cto/site";
 import { BasculeTheme } from "./bascule-theme";
 import { auditPath, nouveaute, sortRecentFirst } from "./livrables";
 import { NAV_COOKIE } from "./nav";
@@ -83,6 +84,8 @@ export interface EspaceContext {
   since: Date | null;
   /** Le relevé du site, si le suivi technique fait partie de l'accompagnement. */
   site: SiteState | null;
+  /** Tous les sites supervisés, dans l'ordre de la base « Sites ». `site` est le plus urgent. */
+  sites: SiteState[];
   missions: Mission[];
   actions: Actions;
   /**
@@ -123,8 +126,8 @@ export async function loadEspace(viewer: Viewer): Promise<EspaceContext> {
   const sections = visibleSections(profile.services, contents);
 
   const ouverte = (key: SectionKey) => sections.some((section) => section.key === key);
-  const [site, prestations, lettres, digests, sentinelle] = await Promise.all([
-    ouverte("site") ? siteStateFor(viewer.clientId) : null,
+  const [sites, prestations, lettres, digests, sentinelle] = await Promise.all([
+    ouverte("site") ? siteStatesFor(viewer.clientId) : [],
     // Les prestations signées sont des missions comme les chantiers : elles
     // entrent dans le pilotage (cartes, frise, retards) dès que l'écran
     // Contrats est ouvert au client, sans leur tarif. `items` ne les reçoit
@@ -137,9 +140,12 @@ export async function loadEspace(viewer: Viewer): Promise<EspaceContext> {
     ouverte("veille-technique") ? sentinelleStateFor(viewer.clientId) : null,
   ]);
   const now = new Date();
+  // Les repères généraux (carte, pastille, barre latérale) montrent le site
+  // qui a le plus à dire ; l'écran « État du site » les montre tous.
+  const site = siteLePlusUrgent(sites, now);
   const suivis = [...items, ...prestations.map(withoutPrice)];
   const missions = missionsOf(suivis, now);
-  const actions = actionsFor(suivis, site?.snapshot ?? null, now);
+  const actions = actionsFor(suivis, sites, now);
 
   return {
     profile,
@@ -148,6 +154,7 @@ export async function loadEspace(viewer: Viewer): Promise<EspaceContext> {
     sections,
     since,
     site,
+    sites,
     missions,
     actions,
     sansInformation: sectionsSansInformation(sections, {
