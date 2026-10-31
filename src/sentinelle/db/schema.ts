@@ -354,13 +354,17 @@ export const alerts = pgTable(
     // par le matching et la création de sa page ; `notion/sync.ts` comble tout
     // brouillon resté sans page d'une passe à l'autre.
     notionPageId: text("notion_page_id"),
+    // Le site concerné : celui du composant qui a matché (`stack_items.site_url`).
+    // Chaîne vide : le site principal. Un client à plusieurs sites reçoit UNE
+    // alerte par site touché, pour que chacun voie s'il est concerné.
+    siteUrl: text("site_url").notNull().default(""),
   },
   (t) => [
-    // Un client n'est alerté qu'une fois par fait. C'est cet index qui garantit
+    // Un client n'est alerté qu'une fois par fait ET par site. C'est cet index qui garantit
     // qu'un bug de matching ne se traduit pas par un doublon dans la boîte du
     // client — la garantie est dans le moteur, pas dans du code applicatif, et
     // elle reste ici : Notion n'a pas de contrainte d'unicité à lui confier.
-    uniqueIndex("alert_client_intel").on(t.clientId, t.intelItemId),
+    uniqueIndex("alert_client_intel_site").on(t.clientId, t.intelItemId, t.siteUrl),
     // File de validation de l'admin.
     index("alert_status_created_at").on(t.status, t.createdAt),
     uniqueIndex("alert_notion_page").on(t.notionPageId),

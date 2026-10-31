@@ -833,3 +833,21 @@ cochés « Veille technique ») ; le bouton général devient « Scanner tous le
 sites ». Le ciblage passe par `rescan: ["https://…"]` sur
 `/api/sentinelle/provision` puis par l'événement `sentinelle/client.subscribed`
 (`sites`). Un site ajouté ou modifié reste analysé avec tous les autres.
+
+### Sentinelle et les clients à plusieurs sites : une alerte par site
+
+Un client suivi sur plusieurs sites reçoit **une alerte par fait ET par site
+touché** (index unique `alert_client_intel_site`, colonne `alerts.site_url`,
+vide = site principal). Avant, une seule alerte par fait couvrait tout le client,
+et sa page Notion affichait toujours le site principal : une faille sur un site
+supplémentaire passait pour une faille du site principal.
+- La page Notion de l'alerte porte le **site du composant** (propriété « Site »)
+  et son composant est suivi du site (« WordPress v6.4 — boutique.fr ») ; la clé
+  du site principal est inchangée (`client:fait`), les pages existantes se
+  retrouvent sans migration.
+- L'export porte `site` sur l'alerte ; l'espace affiche le composant avec son
+  site.
+- La **lettre de veille** reçoit la fiche rangée par site (sinon deux
+  « WordPress » à deux versions se liraient comme un seul) et la consigne de
+  nommer le site dont elle parle.
+Migration Sentinelle `0010_alertes_par_site`, à appliquer avant le déploiement.

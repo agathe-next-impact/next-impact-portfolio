@@ -3,6 +3,8 @@ import { alertsDatabaseId, createPage, pageUrl, queryDatabase, updatePage, type 
 import * as p from "./properties";
 import {
   alertKey,
+  composantAffiche,
+  siteCourt,
   PROPS,
   statusFromLabel,
   STATUS_LABEL,
@@ -115,4 +117,4 @@ export async function listAlertPages(): Promise<AlertPageRecord[]> {
   return pages.map(parseAlertPage);
 }
 
-export { alertKey, pageUrl };
+export { alertKey, composantAffiche, pageUrl, siteCourt };

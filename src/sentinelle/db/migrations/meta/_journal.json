@@ -71,6 +71,13 @@
       "when": 1793422435332,
       "tag": "0009_sites_multiples",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1793464443857,
+      "tag": "0010_alertes_par_site",
+      "breakpoints": true
     }
   ]
 }

@@ -2,7 +2,7 @@ import { and, eq, isNotNull, sql } from "drizzle-orm";
 import { db } from "@sentinelle/db/client";
 import { alerts, clients, intelItems, stackItems } from "@sentinelle/db/schema";
 import type { NewAlert } from "@sentinelle/types";
-import { alertKey, createAlertPage } from "@sentinelle/notion";
+import { alertKey, composantAffiche, createAlertPage } from "@sentinelle/notion";
 import { decide, type MatchableIntel, type MatchableStackItem } from "./match";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -52,6 +52,7 @@ export async function runMatching(now: Date = new Date()): Promise<MatchReport> 
         type: stackItems.type,
         ecosystem: stackItems.ecosystem,
         version: stackItems.version,
+        siteUrl: stackItems.siteUrl,
         label: stackItems.label,
         source: stackItems.source,
         meta: stackItems.meta,
@@ -128,19 +129,26 @@ export async function runMatching(now: Date = new Date()): Promise<MatchReport> 
       clientId: row.stack.clientId,
       stackItemId: row.stack.id,
       intelItemId: row.intel.id,
+      siteUrl: row.stack.siteUrl,
       status: "draft",
       verdict: decision.verdict,
     });
-    byPairKey.set(`${row.stack.clientId}:${row.intel.id}`, row);
+    byPairKey.set(`${row.stack.clientId}:${row.intel.id}:${row.stack.siteUrl}`, row);
   }
 
   if (drafts.length > 0) {
     const created = await db()
       .insert(alerts)
       .values(drafts)
-      // Un client n'est alerté qu'une fois par fait : le rejeu ne produit rien.
-      .onConflictDoNothing({ target: [alerts.clientId, alerts.intelItemId] })
-      .returning({ id: alerts.id, clientId: alerts.clientId, intelItemId: alerts.intelItemId, verdict: alerts.verdict });
+      // Un client n'est alerté qu'une fois par fait et par site : le rejeu ne produit rien.
+      .onConflictDoNothing({ target: [alerts.clientId, alerts.intelItemId, alerts.siteUrl] })
+      .returning({
+        id: alerts.id,
+        clientId: alerts.clientId,
+        intelItemId: alerts.intelItemId,
+        siteUrl: alerts.siteUrl,
+        verdict: alerts.verdict,
+      });
 
     report.created = created.length;
 
@@ -148,21 +156,20 @@ export async function runMatching(now: Date = new Date()): Promise<MatchReport> 
     // qu'un humain relira. Un échec ici n'interrompt pas les autres alertes de
     // la passe — `notion/sync.ts` répare au passage suivant (`backfillMissingPages`).
     for (const row of created) {
-      const source = byPairKey.get(`${row.clientId}:${row.intelItemId}`);
+      const source = byPairKey.get(`${row.clientId}:${row.intelItemId}:${row.siteUrl}`);
       if (!source) continue; // ne devrait pas arriver : la clé vient d'être posée ci-dessus
 
       try {
         const pageId = await createAlertPage({
           clientId: row.clientId,
           clientLabel: source.client.company ?? source.client.name,
-          siteUrl: source.client.siteUrl,
-          component: source.stack.version
-            ? `${source.stack.label} v${source.stack.version}`
-            : source.stack.label,
+          // Le site du composant qui a matché, pas celui de la fiche client.
+          siteUrl: row.siteUrl || source.client.siteUrl,
+          component: composantAffiche(source.stack.label, source.stack.version, row.siteUrl),
           verdict: row.verdict ?? "info",
           source: source.intel.source,
           severity: source.intel.severity,
-          key: alertKey(row.clientId, row.intelItemId),
+          key: alertKey(row.clientId, row.intelItemId, row.siteUrl),
         });
 
         await db().update(alerts).set({ notionPageId: pageId }).where(eq(alerts.id, row.id));

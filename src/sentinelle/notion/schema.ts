@@ -74,6 +74,19 @@ export function verdictFromLabel(label: string | null): Verdict | null {
 }
 
 /** Clé de rapprochement d'une alerte — stable, indépendante de l'ordre d'écriture. */
-export function alertKey(clientId: string, intelItemId: string): string {
-  return `${clientId}:${intelItemId}`;
+export function alertKey(clientId: string, intelItemId: string, siteUrl = ""): string {
+  // Le site principal garde la clé d'avant les sites multiples : les pages Notion
+  // existantes se retrouvent sans migration.
+  return siteUrl ? `${clientId}:${intelItemId}:${siteUrl}` : `${clientId}:${intelItemId}`;
+}
+
+/** « https://www.exemple.fr/ » → « exemple.fr » : de quoi reconnaître un site d'un coup d'œil. */
+export function siteCourt(url: string): string {
+  return url.replace(/^https?:\/\//, "").replace(/^www\./, "").replace(/\/$/, "");
+}
+
+/** Le composant d'une alerte, suivi du site quand il ne s'agit pas du site principal. */
+export function composantAffiche(label: string, version: string | null, siteUrl: string): string {
+  const base = version ? `${label} v${version}` : label;
+  return siteUrl ? `${base} — ${siteCourt(siteUrl)}` : base;
 }

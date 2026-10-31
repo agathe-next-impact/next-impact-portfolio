@@ -9,6 +9,8 @@ export { alertsDatabaseId, configurationIssue, pageUrl, type NotionPage } from "
 
 export {
   alertKey,
+  composantAffiche,
+  siteCourt,
   createAlertPage,
   listAlertPages,
   markSent,

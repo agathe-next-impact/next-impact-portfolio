@@ -57,8 +57,10 @@ export const ExportAlertSchema = z.object({
   title: z.string(),
   verdict: z.enum(VERDICTS).nullable(),
   status: z.enum(["validated", "sent"]),
-  /** Composant concerné, tel qu'il s'affiche dans la fiche. */
+  /** Composant concerné, tel qu'il s'affiche dans la fiche (suivi du site s'il n'est pas le principal). */
   component: z.string(),
+  /** Site concerné ; absent ou null : le site principal. Ajout compatible (v1). */
+  site: z.string().nullable().optional(),
   recommendedAction: z.string(),
   /** Le corps relu de l'alerte, tel que le client l'a reçu. Ajout compatible (v1). */
   body: z.string().optional(),

@@ -39,6 +39,8 @@ const Alert = z.object({
   verdict: z.enum(SENTINELLE_VERDICTS).nullable(),
   status: z.enum(["validated", "sent"]),
   component: z.string(),
+  /** Site concerné ; absent ou null : le site principal. */
+  site: z.string().nullable().optional(),
   recommendedAction: z.string(),
   body: z.string().optional(),
   at: z.string(),

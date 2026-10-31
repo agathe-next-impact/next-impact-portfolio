@@ -43,15 +43,36 @@ function line(label: string, value: string | null): string {
   return `${label} : ${value && value.trim() !== "" ? value : "non renseigné"}`;
 }
 
-/** Composant tel qu'il apparaît au modèle : nom, version, et rien d'implicite. */
-function componentLines(blocks: NewsletterBlocks): string[] {
+/** Les sites suivis, le principal en tête (clé vide), d'après les composants de la fiche. */
+export function sitesDeLaFiche(blocks: NewsletterBlocks, principal: string): string[] {
+  const vus = new Set<string>([principal]);
+  for (const component of blocks.health.components) if (component.site) vus.add(component.site);
+  return [...vus];
+}
+
+/**
+ * Composant tel qu'il apparaît au modèle : nom, version, et rien d'implicite.
+ * Un client à plusieurs sites voit sa fiche rangée PAR SITE : sans cela, deux
+ * « WordPress » à deux versions se liraient comme un seul.
+ */
+function componentLines(blocks: NewsletterBlocks, principal: string): string[] {
   if (blocks.health.components.length === 0) return ["- aucun composant suivi"];
 
-  return blocks.health.components.map((component) => {
+  const ligne = (component: NewsletterBlocks["health"]["components"][number]) => {
     const version = component.version ? component.version : "version inconnue";
     const alertes =
       component.openAlerts > 0 ? ` — ${component.openAlerts} alerte(s) sur la période` : "";
     return `- ${component.label} (${version})${alertes}`;
+  };
+
+  const sites = sitesDeLaFiche(blocks, principal);
+  if (sites.length === 1) return blocks.health.components.map(ligne);
+
+  return sites.flatMap((site) => {
+    const lignes = blocks.health.components
+      .filter((component) => (component.site || principal) === site)
+      .map(ligne);
+    return [`## ${site}${site === principal ? " (site principal)" : ""}`, ...(lignes.length > 0 ? lignes : ["- aucun composant suivi"])];
   });
 }
 
@@ -82,15 +103,18 @@ export function renderConstate(context: LettreContext): string {
     "# Période",
     `Numéro de ${context.periodLabel}, daté du ${blocks.issueDate.slice(0, 10)}.`,
     "",
-    "# Le site à observer",
-    context.siteUrl,
+    sitesDeLaFiche(blocks, context.siteUrl).length > 1 ? "# Les sites à observer" : "# Le site à observer",
+    ...sitesDeLaFiche(blocks, context.siteUrl),
+    sitesDeLaFiche(blocks, context.siteUrl).length > 1
+      ? "(Plusieurs sites : nomme toujours le site dont tu parles, ne généralise jamais d'un site à l'autre.)"
+      : "",
     "",
     "# Contexte du client",
     line("Secteur et taille", context.sector),
     line("Ce qu'il faut savoir du site", context.notes),
     "",
     "# Fiche technique établie (acquise — ne pas recollecter, ne pas contredire)",
-    ...componentLines(blocks),
+    ...componentLines(blocks, context.siteUrl),
     blocks.health.withoutVersion > 0
       ? `(${blocks.health.withoutVersion} composant(s) suivis dont la version reste inconnue)`
       : "",

@@ -2,6 +2,7 @@ import { and, desc, eq, gte, inArray } from "drizzle-orm";
 import { db } from "@sentinelle/db/client";
 import { alerts, clients, digests, intelItems, stackItems } from "@sentinelle/db/schema";
 import { initialContent } from "@sentinelle/admin/content";
+import { composantAffiche } from "@sentinelle/notion/schema";
 import { parseIssue } from "@sentinelle/lettre/issue";
 import { loadConstate } from "@sentinelle/newsletter/build";
 import { newsletterPeriodAt } from "@sentinelle/newsletter/period";
@@ -50,6 +51,7 @@ async function loadAlerts(clientId: string, since: Date): Promise<ExportAlert[]>
       sentAt: alerts.sentAt,
       createdAt: alerts.createdAt,
       component: stackItems.label,
+      siteUrl: alerts.siteUrl,
       source: intelItems.source,
       externalId: intelItems.externalId,
       intelTitle: intelItems.title,
@@ -75,7 +77,8 @@ async function loadAlerts(clientId: string, since: Date): Promise<ExportAlert[]>
       title: content.title.trim() || row.intelTitle,
       verdict: verdictOf(row.verdict),
       status: row.status as ExportAlert["status"],
-      component: row.component,
+      component: composantAffiche(row.component, null, row.siteUrl),
+      site: row.siteUrl || null,
       recommendedAction: (row.recommendedAction ?? content.recommendedAction ?? "").trim(),
       body: content.body.trim(),
       at: (row.sentAt ?? row.createdAt).toISOString(),

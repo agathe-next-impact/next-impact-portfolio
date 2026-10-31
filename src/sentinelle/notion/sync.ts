@@ -12,7 +12,7 @@ import {
   writeDraftContent,
   type AlertPageRecord,
 } from "./alerts";
-import { alertKey, VERDICT_LABEL } from "./schema";
+import { alertKey, composantAffiche, VERDICT_LABEL } from "./schema";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // La synchro Notion → Postgres, et son seul effet de bord : l'envoi.
@@ -78,6 +78,7 @@ export async function backfillMissingPages(): Promise<{ backfilled: number; warn
       generatedText: alerts.generatedText,
       component: stackItems.label,
       componentVersion: stackItems.version,
+      alertSite: alerts.siteUrl,
       intelSource: intelItems.source,
       severity: intelItems.severity,
       intelItemId: intelItems.id,
@@ -91,7 +92,7 @@ export async function backfillMissingPages(): Promise<{ backfilled: number; warn
   let backfilled = 0;
 
   for (const row of rows) {
-    const key = alertKey(row.clientId, row.intelItemId);
+    const key = alertKey(row.clientId, row.intelItemId, row.alertSite);
 
     try {
       const deja = existantes.get(key);
@@ -100,8 +101,8 @@ export async function backfillMissingPages(): Promise<{ backfilled: number; warn
         (await createAlertPage({
           clientId: row.clientId,
           clientLabel: row.clientLabel ?? row.clientName,
-          siteUrl: row.siteUrl,
-          component: row.componentVersion ? `${row.component} v${row.componentVersion}` : row.component,
+          siteUrl: row.alertSite || row.siteUrl,
+          component: composantAffiche(row.component, row.componentVersion, row.alertSite),
           verdict: row.verdict ?? "info",
           source: row.intelSource,
           severity: row.severity,
@@ -134,6 +135,7 @@ async function loadSendable(notionPageId: string) {
       clientActive: clients.active,
       clientPlan: clients.plan,
       clientSite: clients.siteUrl,
+      alertSite: alerts.siteUrl,
       componentLabel: stackItems.label,
       componentVersion: stackItems.version,
     })
@@ -192,7 +194,7 @@ async function trySend(
   const mail = await renderAlertEmail({
     content: record.content,
     component: { label: loaded.componentLabel, version: loaded.componentVersion },
-    siteUrl: loaded.clientSite,
+    siteUrl: loaded.alertSite || loaded.clientSite,
     sentAt: now,
   });
 
