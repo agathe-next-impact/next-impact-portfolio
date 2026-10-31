@@ -87,7 +87,10 @@ export function decideProvision(wish: WatchWish, state: WatchState): ProvisionDe
     if (!state.sentinelleClientId) return { kind: "skip" };
     body = { id: state.sentinelleClientId, active: false };
   } else {
-    const missing = [!wish.site ? "« Site surveillé »" : null, !wish.contact ? "« Contact veille »" : null].filter(
+    // Sans « Site surveillé » sur la fiche, le premier site de la base Sites
+    // coché « Veille » tient lieu de site principal.
+    const site = wish.site ?? state.extraSites[0]?.url ?? null;
+    const missing = [!site ? "« Site surveillé » (ou un site coché « Veille »)" : null, !wish.contact ? "« Contact veille »" : null].filter(
       (value): value is string => value !== null,
     );
     if (missing.length > 0) return { kind: "incomplete", missing };
@@ -97,7 +100,7 @@ export function decideProvision(wish: WatchWish, state: WatchState): ProvisionDe
       email: wish.contact as string,
       name: state.contactName ?? wish.company,
       company: wish.company,
-      siteUrl: wish.site as string,
+      siteUrl: site as string,
       extraSites: state.extraSites,
     };
   }

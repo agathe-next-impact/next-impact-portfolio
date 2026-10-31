@@ -49,7 +49,7 @@ describe("decideProvision", () => {
   it("dit ce qui manque au lieu d'envoyer une demande incomplète", () => {
     expect(decideProvision(wish({ site: null, contact: null }), state())).toEqual({
       kind: "incomplete",
-      missing: ["« Site surveillé »", "« Contact veille »"],
+      missing: ["« Site surveillé » (ou un site coché « Veille »)", "« Contact veille »"],
     });
   });
 
@@ -113,5 +113,27 @@ describe("provisionConflicts", () => {
     ]);
     expect([...conflicts.keys()].sort()).toEqual(["cto-1", "cto-2"]);
     expect(conflicts.get("cto-2")).toContain("partagé entre « Premier », « Second »");
+  });
+});
+
+describe("site principal de repli", () => {
+  it("prend le premier site coché « Veille » quand la fiche n'a pas de « Site surveillé »", () => {
+    const decision = decideProvision(
+      wish({ site: null }),
+      state({ extraSites: [{ url: "https://cafecitoyen.art", name: "Café citoyen" }, { url: "https://egc.org", name: "EGC" }] }),
+    );
+    expect(decision).toMatchObject({ kind: "send", body: { siteUrl: "https://cafecitoyen.art" } });
+  });
+
+  it("préfère le « Site surveillé » de la fiche", () => {
+    const decision = decideProvision(
+      wish({ site: "https://fiche.fr" }),
+      state({ extraSites: [{ url: "https://cafecitoyen.art", name: null }] }),
+    );
+    expect(decision).toMatchObject({ kind: "send", body: { siteUrl: "https://fiche.fr" } });
+  });
+
+  it("reste incomplet sans site de fiche ni site coché", () => {
+    expect(decideProvision(wish({ site: null }), state())).toMatchObject({ kind: "incomplete" });
   });
 });

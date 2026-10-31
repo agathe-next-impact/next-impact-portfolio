@@ -423,7 +423,15 @@ async function voeuSentinelle(reglage: ReglageClient): Promise<WatchWish> {
       .from(ctoClients)
       .where(eq(ctoClients.id, reglage.id))
       .limit(1);
-    return { clientId: reglage.id, company: reglage.company, wanted: voulu, site: fiche?.site ?? null, contact: fiche?.contact ?? null };
+    // Sans « Site surveillé » sur la fiche : le premier site coché « Veille » de la base Sites.
+    const premierSurveille = reglage.sites.find((site) => site.watch && !site.sansSuivi)?.url ?? null;
+    return {
+      clientId: reglage.id,
+      company: reglage.company,
+      wanted: voulu,
+      site: fiche?.site ?? premierSurveille,
+      contact: fiche?.contact ?? null,
+    };
   }
 
   const surveilles = reglage.sites.filter((site) => site.watch && !site.sansSuivi);
