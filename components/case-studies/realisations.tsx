@@ -151,7 +151,7 @@ export default function Realisations({ cards: toutes, defaultTab = "tous" }: Rea
                     {/* Résultat chiffré (1er highlight de l'étude de cas) — une carte
                         sans chiffre est une image, pas une preuve. */}
                     {card.highlight && (
-                      <div className="mt-3.5 inline-flex w-fit items-baseline gap-2 border border-dark-gray bg-jet/50 px-2.5 py-1">
+                      <div className="mt-3.5 flex w-fit flex-col gap-0.5 border border-dark-gray bg-jet/50 px-2.5 py-1 sm:inline-flex sm:flex-row sm:items-baseline sm:gap-2">
                         <span className="font-mono text-sm font-semibold tracking-tight text-accent-secondary tabular-nums">
                           {card.highlight.value}
                         </span>
