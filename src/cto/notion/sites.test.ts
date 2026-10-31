@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { fusionnerProjets } from "../site/store";
 import { fusionOrganisations } from "./map";
+import { siteLePlusUrgent } from "../espace/pilotage";
 import { nomDuSite, planifier, type SiteExistant, type SiteVoulu } from "./sites";
 
 const voulu = (page: string, extra: Partial<SiteVoulu> = {}): SiteVoulu => ({
@@ -165,5 +166,25 @@ describe("plan : niveaux de service", () => {
       new Set(["a"]),
     );
     expect(plan.mettreAJour).toEqual([{ id: "id-a", patch: { suiviFormule: "Actif", sansSuivi: true } }]);
+  });
+});
+
+describe("site le plus urgent avec des sites non supervisés", () => {
+  const etat = (projectId: number | null, nom: string) => ({
+    projectId,
+    name: nom,
+    url: null,
+    snapshot: null,
+    fetchedAt: null,
+    error: null,
+    errorAt: null,
+  });
+
+  it("préfère un site supervisé à un site sans projet, même placé après", () => {
+    expect(siteLePlusUrgent([etat(null, "EGC"), etat(7, "Café citoyen")])?.name).toBe("Café citoyen");
+  });
+
+  it("garde le seul site sans projet quand il n'y en a pas d'autre", () => {
+    expect(siteLePlusUrgent([etat(null, "EGC")])?.name).toBe("EGC");
   });
 });

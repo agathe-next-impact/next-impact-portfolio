@@ -302,20 +302,23 @@ export function sitePoints(snapshot: SiteSnapshot, now: Date = new Date()): Site
  * Parmi les sites d'un accompagnement, celui que les repères généraux (carte
  * de l'accueil, pastille, barre latérale, « Prochaine étape ») doivent
  * montrer : celui qui a le plus de points à corriger, puis le plus de points
- * à surveiller, à égalité le premier de la liste. Un site sans relevé ne passe
- * qu'après les sites qui ont quelque chose à dire. Tous restent lisibles sur
- * l'écran « État du site ».
+ * à surveiller, à égalité le premier de la liste. Un site sans projet WP
+ * Umbrella (associé mais non supervisé) ne passe qu'après ceux qui le sont :
+ * il ne dit rien de l'état technique. Tous restent lisibles sur l'écran
+ * « État du site ».
  */
 export function siteLePlusUrgent(sites: SiteState[], now: Date = new Date()): SiteState | null {
   let retenu: SiteState | null = null;
-  let meilleur: [number, number] = [-1, -1];
+  let meilleur: [number, number, number] = [-1, -1, -1];
   for (const site of sites) {
     const points = site.snapshot ? sitePoints(site.snapshot, now) : [];
-    const score: [number, number] = [
+    const score: [number, number, number] = [
       points.filter((point) => point.tone === "alerte").length,
       points.length,
+      site.projectId === null ? 0 : 1,
     ];
-    if (score[0] > meilleur[0] || (score[0] === meilleur[0] && score[1] > meilleur[1])) {
+    const meilleurQue = score[0] - meilleur[0] || score[1] - meilleur[1] || score[2] - meilleur[2];
+    if (meilleurQue > 0) {
       retenu = site;
       meilleur = score;
     }

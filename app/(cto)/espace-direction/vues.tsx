@@ -760,7 +760,7 @@ export async function VueSite({ viewer, context }: { viewer: Viewer; context: Es
       {sites.length > 0 ? (
         sites.map((state) => (
           <BlocSite
-            key={state.projectId}
+            key={state.projectId ?? state.url ?? state.name ?? "site"}
             state={state}
             plusieurs={sites.length > 1}
             traiter={traiter}
@@ -803,11 +803,29 @@ function BlocSite({
 
   return (
     <section aria-label={plusieurs ? titre : undefined} className={plusieurs ? "mt-12" : undefined}>
-      {plusieurs || state.formule ? (
+      {plusieurs || state.formule || state.projectId === null ? (
         <div className="mt-10 flex flex-wrap items-baseline gap-x-3 gap-y-1">
           <h2 className="font-sans text-xl font-light text-foreground">{titre}</h2>
           {formule ? <Tag>{`Suivi ${formule}`}</Tag> : null}
         </div>
+      ) : null}
+      {state.projectId === null ? (
+        <Panel className="mt-10 px-5 py-5">
+          {state.url ? (
+            <a
+              href={/^https?:\/\//.test(state.url) ? state.url : `https://${state.url}`}
+              className="font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray underline underline-offset-4 hover:text-foreground"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {state.url.replace(/^https?:\/\//, "").replace(/\/$/, "")}
+            </a>
+          ) : null}
+          <p className="mt-2 font-inter-tight text-sm text-mid-gray">
+            Ce site fait partie de votre accompagnement. Sa supervision technique (disponibilité,
+            mises à jour, sauvegardes) n&rsquo;est pas encore branchée.
+          </p>
+        </Panel>
       ) : null}
       {state.snapshot ? (
         <Panel className="mt-10 px-5 py-5">
@@ -838,7 +856,7 @@ function BlocSite({
           ) : null}
         </Panel>
       ) : null}
-      <SuiviTechnique state={state} />
+      {state.projectId === null ? null : <SuiviTechnique state={state} />}
     </section>
   );
 }

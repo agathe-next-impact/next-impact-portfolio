@@ -182,8 +182,15 @@ export function fusionnerProjets<T extends { projectId: number; position: number
   return liste;
 }
 
-/** Les sites supervisés d'un seul accompagnement. */
-export async function sitesSupervisesDe(clientId: string): Promise<SiteSurveille[]> {
+/** Un site de l'accompagnement, supervisé ou non : sans projet WP Umbrella, il reste associé et affiché. */
+export type SiteDeClient = Omit<SiteSurveille, "projectId"> & { projectId: number | null };
+
+/**
+ * Tous les sites d'un accompagnement, dans l'ordre de la base « Sites » : ceux
+ * qui ont un projet WP Umbrella (plus le projet unique de la fiche client),
+ * puis ceux qui n'en ont pas. Un site « Sans suivi » n'y figure pas.
+ */
+export async function sitesDe(clientId: string): Promise<SiteDeClient[]> {
   const [client] = await db()
     .select({ company: ctoClients.company, projet: ctoClients.wpUmbrellaProjectId })
     .from(ctoClients)
@@ -201,15 +208,27 @@ export async function sitesSupervisesDe(clientId: string): Promise<SiteSurveille
       position: ctoSites.position,
     })
     .from(ctoSites)
-    .where(and(eq(ctoSites.clientId, clientId), isNull(ctoSites.removedAt), isNotNull(ctoSites.wpUmbrellaProjectId)))
+    .where(and(eq(ctoSites.clientId, clientId), isNull(ctoSites.removedAt)))
     .orderBy(asc(ctoSites.position), asc(ctoSites.createdAt));
 
   const avecProjet = rows.flatMap((row) => (row.projectId === null ? [] : [{ ...row, projectId: row.projectId }]));
-  return fusionnerProjets(
+  const supervises: SiteDeClient[] = fusionnerProjets(
     avecProjet.filter((row) => !row.sansSuivi),
     client.projet,
     avecProjet.filter((row) => row.sansSuivi).map((row) => row.projectId),
   ).map((site) => ({ clientId, company: client.company, ...site }));
+  const sansProjet: SiteDeClient[] = rows
+    .filter((row) => row.projectId === null && !row.sansSuivi)
+    .map((row) => ({ clientId, company: client.company, ...row, projectId: null }));
+
+  return [...supervises, ...sansProjet].sort((a, b) => a.position - b.position);
+}
+
+/** Les sites supervisés (un projet WP Umbrella) d'un seul accompagnement. */
+export async function sitesSupervisesDe(clientId: string): Promise<SiteSurveille[]> {
+  return (await sitesDe(clientId)).flatMap((site) =>
+    site.projectId === null ? [] : [{ ...site, projectId: site.projectId }],
+  );
 }
 
 /** Tous les projets à balayer : accompagnements non clos, un projet par site. */
@@ -318,14 +337,14 @@ export async function syncSites(options: { dryRun?: boolean } = {}): Promise<Sit
  * `cto_clients.wp_umbrella_project_id`, et elle vaut pour chaque site.
  */
 export async function siteStatesFor(clientId: string): Promise<SiteState[]> {
-  const sites = await sitesSupervisesDe(clientId);
+  const sites = await sitesDe(clientId);
   if (sites.length === 0) return [];
 
   const rows = await db().select().from(ctoSiteSnapshots).where(eq(ctoSiteSnapshots.clientId, clientId));
   const parProjet = new Map(rows.map((row) => [row.projectId, row]));
 
   return sites.map((site) => {
-    const row = parProjet.get(site.projectId);
+    const row = site.projectId === null ? undefined : parProjet.get(site.projectId);
     const snapshot = row ? (row.data as SiteSnapshot) : null;
     return {
       projectId: site.projectId,
@@ -345,9 +364,9 @@ export async function siteStateFor(clientId: string): Promise<SiteState | null> 
   return (await siteStatesFor(clientId))[0] ?? null;
 }
 
-/** Vrai si l'accompagnement a au moins un site supervisé. */
+/** Vrai si l'accompagnement a au moins un site associé, supervisé ou non. */
 export async function hasSupervisedSite(clientId: string): Promise<boolean> {
-  return (await sitesSupervisesDe(clientId)).length > 0;
+  return (await sitesDe(clientId)).length > 0;
 }
 
 /** Les rapports archivés d'un accompagnement, le plus récent en tête. */
