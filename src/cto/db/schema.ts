@@ -165,6 +165,16 @@ export const ctoClients = pgTable(
      */
     sector: text("sector"),
     /**
+     * TOUS les packs sectoriels des fiches organisation du client (un client
+     * peut relever de plusieurs organisations), sans doublon. `sector` reste le
+     * pack de la première organisation, celle qui nomme le client. Les lettres
+     * sectorielles se distribuent sur cette liste : le client reçoit celles de
+     * chacun de ses packs.
+     */
+    sectors: text("sectors").array(),
+    /** Raisons sociales des fiches organisation reliées, dans l'ordre de la relation Notion. */
+    organisations: text("organisations").array(),
+    /**
      * Identifiant du site chez WP Umbrella (supervision technique : uptime,
      * sauvegardes, vulnérabilités). Saisi dans Notion (colonne « ID projet WP
      * Umbrella »), jamais par le client : résolu depuis SA session, jamais

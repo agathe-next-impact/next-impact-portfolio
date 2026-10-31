@@ -54,6 +54,8 @@ import {
   servicesOuverts,
   companyName,
   documentFiles,
+  fusionOrganisations,
+  type OrganisationLue,
   mapPage,
   paymentOf,
   prestationInvoiceFiles,
@@ -576,59 +578,80 @@ async function adopterFicheOrganisation(
     );
     return;
   }
-  if (liens.length > 1) {
-    alert(
-      findings,
-      `« ${nomAffiche} » est rattachée à ${liens.length} fiches organisation : à trancher, aucune n'est retenue.`,
-    );
-    return;
+  // Plusieurs organisations par client (décision du 2026-10-31) : chacune
+  // route ses lettres personnalisées vers ce client, et ses packs s'ajoutent
+  // aux lettres sectorielles reçues. La première de la relation nomme le client.
+  const lues: OrganisationLue[] = [];
+  for (const lien of liens) {
+    const deja = byOrganisation.get(lien);
+    if (deja && deja !== clientId) {
+      alert(
+        findings,
+        `« ${nomAffiche} » désigne la fiche organisation de « ${nomParClient.get(deja) ?? deja} » : ignorée pour elle. ` +
+          "Fiche dupliquée ? Une organisation ne se relie qu'à un accompagnement.",
+      );
+      continue;
+    }
+
+    let organisation: NotionPage;
+    try {
+      organisation = await fetchPage(lien);
+    } catch (error) {
+      console.error("[cto] fiche organisation illisible", error);
+      warnings.push(`Fiche organisation de « ${nomAffiche} » illisible : rattachement ignoré.`);
+      // Une fiche illisible ne doit pas faire retomber le pack des autres ni
+      // en retirer les lettres : on garde ce qui est déjà en base.
+      return;
+    }
+    byOrganisation.set(organisation.id, clientId);
+    lues.push({
+      name: prop.text(organisation, PROPS.organisation.name),
+      pack: prop.select(organisation, PROPS.organisation.pack),
+    });
   }
-
-  const deja = byOrganisation.get(liens[0]);
-  if (deja && deja !== clientId) {
-    alert(
-      findings,
-      `« ${nomAffiche} » désigne la fiche organisation de « ${nomParClient.get(deja) ?? deja} » : ignorée pour elle. ` +
-        "Fiche dupliquée ? Une organisation ne se relie qu'à un accompagnement.",
-    );
-    return;
-  }
-
-  let organisation: NotionPage;
-  try {
-    organisation = await fetchPage(liens[0]);
-  } catch (error) {
-    console.error("[cto] fiche organisation illisible", error);
-    warnings.push(`Fiche organisation de « ${nomAffiche} » illisible : rattachement ignoré.`);
-    return;
-  }
-
-  byOrganisation.set(organisation.id, clientId);
-
-  const raisonSociale = prop.text(organisation, PROPS.organisation.name);
-  const pack = prop.select(organisation, PROPS.organisation.pack);
 
   const [actuel] = await db()
-    .select({ company: ctoClients.company, sector: ctoClients.sector })
+    .select({
+      company: ctoClients.company,
+      sector: ctoClients.sector,
+      sectors: ctoClients.sectors,
+      organisations: ctoClients.organisations,
+    })
     .from(ctoClients)
     .where(eq(ctoClients.id, clientId))
     .limit(1);
   if (!actuel) return;
 
-  const company = raisonSociale ?? actuel.company;
-  if (company === actuel.company && pack === actuel.sector) return;
+  const voulu = fusionOrganisations(lues, actuel.company);
+  if (!voulu) return;
+
+  const memeListe = (a: string[] | null, b: string[] | null) =>
+    JSON.stringify(a ?? null) === JSON.stringify(b ?? null);
+  if (
+    voulu.company === actuel.company &&
+    voulu.sector === actuel.sector &&
+    memeListe(voulu.sectors, actuel.sectors) &&
+    memeListe(voulu.organisations, actuel.organisations)
+  ) {
+    return;
+  }
 
   if (dryRun) {
     warnings.push(
-      `« ${nomAffiche} » serait alignée sur sa fiche organisation : ${company}` +
-        `${pack ? `, ${pack}` : ", sans pack"}.`,
+      `« ${nomAffiche} » serait alignée sur ${voulu.organisations.length > 1 ? `ses ${voulu.organisations.length} fiches organisation` : "sa fiche organisation"} : ` +
+        `${voulu.company}${voulu.sectors ? `, ${voulu.sectors.join(" + ")}` : ", sans pack"}.`,
     );
     return;
   }
 
   await db()
     .update(ctoClients)
-    .set({ company, sector: pack })
+    .set({
+      company: voulu.company,
+      sector: voulu.sector,
+      sectors: voulu.sectors,
+      organisations: voulu.organisations,
+    })
     .where(eq(ctoClients.id, clientId));
 }
 

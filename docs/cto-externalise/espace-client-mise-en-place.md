@@ -736,3 +736,16 @@ accompagnement + projet) à appliquer avant le prochain balayage.
 
 Limites actuelles : la veille Sentinelle reste un site surveillé par client, et
 les organisations multiples ne sont pas encore traitées.
+
+### Plusieurs organisations par client
+
+La relation **« Organisation »** de la fiche client accepte désormais plusieurs
+fiches organisation (jusqu'ici : « à trancher, aucune retenue »).
+- La **première** nomme le client (raison sociale) et donne son pack principal.
+- **Chacune** route ses lettres personnalisées vers ce client ; une organisation
+  déjà reliée à un autre client reste refusée (alerte).
+- Le client reçoit les lettres **sectorielles de tous les packs** de ses
+  organisations (`cto_clients.sectors`), sans doublon.
+- Une fiche organisation illisible suspend l'alignement (rien n'est retiré).
+Migration `0027_organisations_multiples` (colonnes `sectors`, `organisations`,
+rattrapage du pack existant) à appliquer avant le prochain balayage.

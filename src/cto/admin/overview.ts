@@ -23,6 +23,11 @@ const STATUS_ORDER: Record<ClientStatus, number> = {
   clos: 3,
 };
 
+/** « Pack A + Pack B » pour un client à plusieurs organisations, le pack seul sinon. */
+function packsAffiches(client: { sector: string | null; sectors: string[] | null }): string | null {
+  return client.sectors && client.sectors.length > 0 ? client.sectors.join(" + ") : client.sector;
+}
+
 export interface ClientOverviewRow {
   id: string;
   company: string;
@@ -97,7 +102,7 @@ export async function listClients(now: Date = new Date()): Promise<ClientOvervie
       tier: client.tier,
       status: client.status as ClientStatus,
       statusChangedAt: client.statusChangedAt,
-      sector: client.sector,
+      sector: packsAffiches(client),
       syncEnabled: client.syncEnabled,
       activePersons: persons.get(client.id)?.active ?? 0,
       revokedPersons: persons.get(client.id)?.revoked ?? 0,
@@ -197,7 +202,7 @@ export async function clientDetail(
     tier: client.tier,
     status: client.status as ClientStatus,
     statusChangedAt: client.statusChangedAt,
-    sector: client.sector,
+    sector: packsAffiches(client),
     syncEnabled: client.syncEnabled,
     createdAt: client.createdAt,
     persons: persons.map((person) => ({

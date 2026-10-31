@@ -191,8 +191,12 @@ function visibleTo(clientId: string) {
     eq(ctoLetters.scope, "generale"),
     and(
       eq(ctoLetters.scope, "sectorielle"),
-      sql`${ctoLetters.sector} is not null and ${ctoLetters.sector} = (
-        select ${ctoClients.sector} from ${ctoClients} where ${ctoClients.id} = ${clientId}
+      // Un client peut relever de plusieurs organisations, donc de plusieurs
+      // packs : il reçoit les lettres sectorielles de chacun. `sector` seul
+      // couvre un client pas encore resynchronisé.
+      sql`${ctoLetters.sector} is not null and ${ctoLetters.sector} = any(
+        select unnest(coalesce(${ctoClients.sectors}, array[${ctoClients.sector}]))
+        from ${ctoClients} where ${ctoClients.id} = ${clientId}
       )`,
     ),
     and(eq(ctoLetters.scope, "personnalisee"), eq(ctoLetters.clientId, clientId)),

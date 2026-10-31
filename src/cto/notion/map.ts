@@ -247,6 +247,32 @@ export function clientPageIds(page: NotionPage): string[] {
   return p.relation(page, PROPS.client);
 }
 
+/** Une fiche organisation lue : son identité et son pack sectoriel. */
+export interface OrganisationLue {
+  name: string | null;
+  pack: string | null;
+}
+
+/**
+ * Pur : ce qu'un client tire de SES fiches organisation, dans l'ordre de la
+ * relation Notion. La première nomme le client et donne son pack principal
+ * (`sector`) ; tous les packs, sans doublon, servent à distribuer les lettres
+ * sectorielles (`sectors`). Sans fiche lisible : `null`, rien n'est touché.
+ */
+export function fusionOrganisations(
+  lues: OrganisationLue[],
+  raisonSocialeActuelle: string,
+): { company: string; sector: string | null; sectors: string[] | null; organisations: string[] } | null {
+  if (lues.length === 0) return null;
+  const packs = [...new Set(lues.flatMap((lue) => (lue.pack ? [lue.pack] : [])))];
+  return {
+    company: lues[0].name ?? raisonSocialeActuelle,
+    sector: lues[0].pack,
+    sectors: packs.length > 0 ? packs : null,
+    organisations: lues.flatMap((lue) => (lue.name ? [lue.name] : [])),
+  };
+}
+
 /** Les colonnes d'une ligne de la base « Sites ». */
 export function siteRow(page: NotionPage): {
   name: string | null;
