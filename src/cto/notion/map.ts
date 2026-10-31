@@ -229,6 +229,8 @@ export const PROPS = {
     name: "Site",
     url: "URL",
     wpUmbrellaProjectId: "ID projet WP Umbrella",
+    /** Case : ce site entre aussi dans la veille technique (Sentinelle). */
+    watch: "Veille",
     order: "Ordre",
   },
 } as const;
@@ -278,6 +280,7 @@ export function siteRow(page: NotionPage): {
   name: string | null;
   url: string | null;
   wpUmbrellaProjectId: number | null;
+  watch: boolean;
   order: number;
 } {
   const projet = p.number(page, PROPS.sites.wpUmbrellaProjectId);
@@ -285,6 +288,7 @@ export function siteRow(page: NotionPage): {
     name: p.text(page, PROPS.sites.name),
     url: p.url(page, PROPS.sites.url),
     wpUmbrellaProjectId: projet !== null && Number.isInteger(projet) && projet > 0 ? projet : null,
+    watch: p.checkbox(page, PROPS.sites.watch),
     order: Math.trunc(p.number(page, PROPS.sites.order) ?? 0),
   };
 }

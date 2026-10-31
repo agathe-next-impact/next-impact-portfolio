@@ -881,6 +881,8 @@ export const ctoSites = pgTable(
     url: text("url"),
     /** Projet WP Umbrella ; `null` : site connu mais pas (encore) supervisé. */
     wpUmbrellaProjectId: integer("wp_umbrella_project_id"),
+    /** Colonne « Veille » : ce site est aussi surveillé par Sentinelle (veille technique). */
+    watch: boolean("watch").notNull().default(false),
     /** Ordre d'affichage (colonne « Ordre »), puis création. */
     position: integer("position").notNull().default(0),
     createdAt: timestamp("created_at").notNull().defaultNow(),

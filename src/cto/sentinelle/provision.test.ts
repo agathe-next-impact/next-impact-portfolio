@@ -16,6 +16,7 @@ const state = (overrides: Partial<WatchState> = {}): WatchState => ({
   sentinelleClientId: null,
   digest: null,
   contactName: null,
+  extraSites: [],
   ...overrides,
 });
 

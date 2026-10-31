@@ -36,6 +36,7 @@ export interface SiteExistant {
   name: string;
   url: string | null;
   wpUmbrellaProjectId: number | null;
+  watch: boolean;
   position: number;
   removedAt: Date | null;
 }
@@ -46,6 +47,7 @@ export interface SiteVoulu {
   name: string;
   url: string | null;
   wpUmbrellaProjectId: number | null;
+  watch: boolean;
   position: number;
 }
 
@@ -89,6 +91,7 @@ export function planifier(voulus: SiteVoulu[], existants: SiteExistant[], pagesV
     if (actuel.wpUmbrellaProjectId !== voulu.wpUmbrellaProjectId) {
       patch.wpUmbrellaProjectId = voulu.wpUmbrellaProjectId;
     }
+    if (actuel.watch !== voulu.watch) patch.watch = voulu.watch;
     if (actuel.position !== voulu.position) patch.position = voulu.position;
     if (actuel.removedAt) patch.removedAt = null;
     if (Object.keys(patch).length > 0) plan.mettreAJour.push({ id: actuel.id, patch });
@@ -154,6 +157,7 @@ export async function syncSitesFromNotion(
       name: nom,
       url: row.url,
       wpUmbrellaProjectId: row.wpUmbrellaProjectId,
+      watch: row.watch,
       position: row.order,
     });
   }
@@ -166,6 +170,7 @@ export async function syncSitesFromNotion(
       name: ctoSites.name,
       url: ctoSites.url,
       wpUmbrellaProjectId: ctoSites.wpUmbrellaProjectId,
+      watch: ctoSites.watch,
       position: ctoSites.position,
       removedAt: ctoSites.removedAt,
     })

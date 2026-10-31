@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
-import { and, eq, isNull, ne } from "drizzle-orm";
+import { and, asc, eq, isNull, ne } from "drizzle-orm";
 import { db } from "../db/client";
-import { ctoClients, ctoPersons } from "../db/schema";
+import { ctoClients, ctoPersons, ctoSites } from "../db/schema";
 import { redirectError, sentinelleExportConfig } from "./api";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -46,6 +46,11 @@ export interface WatchState {
   digest: string | null;
   /** Nom de la personne dont l'adresse est le contact, s'il est connu de l'espace. */
   contactName: string | null;
+  /**
+   * Sites supplémentaires à surveiller : les lignes de la base Sites dont la
+   * case « Veille » est cochée (le site principal reste « Site surveillé »).
+   */
+  extraSites: { url: string; name: string | null }[];
 }
 
 export type ProvisionBody =
@@ -57,6 +62,7 @@ export type ProvisionBody =
       name: string;
       company: string;
       siteUrl: string;
+      extraSites: { url: string; name: string | null }[];
     };
 
 export type ProvisionDecision =
@@ -87,6 +93,7 @@ export function decideProvision(wish: WatchWish, state: WatchState): ProvisionDe
       name: state.contactName ?? wish.company,
       company: wish.company,
       siteUrl: wish.site as string,
+      extraSites: state.extraSites,
     };
   }
 
@@ -200,7 +207,19 @@ async function stateOf(clientId: string, contact: string | null): Promise<WatchS
     contactName = person?.name ?? null;
   }
 
-  return { sentinelleClientId: row?.sentinelleClientId ?? null, digest: row?.digest ?? null, contactName };
+  const sites = await db()
+    .select({ url: ctoSites.url, name: ctoSites.name })
+    .from(ctoSites)
+    .where(and(eq(ctoSites.clientId, clientId), eq(ctoSites.watch, true), isNull(ctoSites.removedAt)))
+    .orderBy(asc(ctoSites.position), asc(ctoSites.createdAt));
+  const extraSites = sites.flatMap((site) => (site.url ? [{ url: site.url, name: site.name }] : []));
+
+  return {
+    sentinelleClientId: row?.sentinelleClientId ?? null,
+    digest: row?.digest ?? null,
+    contactName,
+    extraSites,
+  };
 }
 
 /**

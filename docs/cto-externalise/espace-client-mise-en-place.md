@@ -749,3 +749,24 @@ fiches organisation (jusqu'ici : « à trancher, aucune retenue »).
 - Une fiche organisation illisible suspend l'alignement (rien n'est retiré).
 Migration `0027_organisations_multiples` (colonnes `sectors`, `organisations`,
 rattrapage du pack existant) à appliquer avant le prochain balayage.
+
+### Plusieurs sites surveillés par Sentinelle
+
+Dans la base **Sites**, la colonne **« Veille »** (case, facultative) ajoute le
+site à la veille technique. Le site principal reste la colonne « Site
+surveillé » de la fiche client ; les sites cochés viennent en plus (dix au
+plus). À la synchro, la liste part à Sentinelle avec le reste de la demande de
+provisionnement ; un changement de liste relance l'analyse :
+- chaque site est scanné à part, et ses composants portent son adresse
+  (`stack_items.site_url`, vide = site principal) ;
+- le même composant peut exister sur deux sites, à deux versions : une ligne
+  par site, donc une alerte par site concerné ;
+- un site décoché voit ses composants détectés retirés de la fiche (les
+  composants déclarés à la main restent, rattachés au site principal) ;
+- l'export Sentinelle porte `site` sur chaque composant (champ facultatif,
+  `EXPORT_VERSION` inchangée) et la « Fiche technique » de l'espace nomme le
+  site de chaque composant dès qu'il y en a plusieurs.
+
+Migrations : Sentinelle `0009_sites_multiples` (`npm run db:migrate`) ; espace
+`0028_sites_veille` (`npm run db:cto:migrate`). À appliquer AVANT de déployer :
+l'index unique des composants change.

@@ -1,0 +1,1 @@
+ALTER TABLE "cto_sites" ADD COLUMN "watch" boolean DEFAULT false NOT NULL;

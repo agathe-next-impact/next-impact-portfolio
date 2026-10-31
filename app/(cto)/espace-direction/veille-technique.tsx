@@ -69,6 +69,11 @@ function CarteAlerte({ alert }: { alert: SentinelleAlert }) {
   );
 }
 
+/** « https://www.exemple.fr/ » → « exemple.fr » : de quoi reconnaître un site d'un coup d'œil. */
+function nomDuSite(url: string): string {
+  return url.replace(/^https?:\/\//, "").replace(/^www\./, "").replace(/\/$/, "");
+}
+
 export async function VueVeilleTechnique({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
   const [state, lettres] = await Promise.all([
     sentinelleStateFor(viewer.clientId),
@@ -88,6 +93,9 @@ export async function VueVeilleTechnique({ viewer, context }: { viewer: Viewer; 
   }
 
   const { data } = state;
+  // Plusieurs sites surveillés : chaque composant dit sur lequel il tourne.
+  const sitesVus = new Set(data.stack.components.map((component) => component.site ?? data.client.siteUrl));
+  const plusieursSites = sitesVus.size > 1;
   const alertes = [...data.alerts].sort(
     (a, b) => RANG[a.verdict ?? "info"] - RANG[b.verdict ?? "info"] || b.at.localeCompare(a.at),
   );
@@ -213,10 +221,17 @@ export async function VueVeilleTechnique({ viewer, context }: { viewer: Viewer; 
           <Panel className="divide-y divide-dark-gray">
             {data.stack.components.map((component) => (
               <div
-                key={`${component.type}-${component.slug}`}
+                key={`${component.type}-${component.slug}-${component.site ?? ""}`}
                 className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 px-5 py-3"
               >
-                <p className="font-inter-tight text-[15px] text-foreground">{component.label}</p>
+                <p className="font-inter-tight text-[15px] text-foreground">
+                  {component.label}
+                  {plusieursSites ? (
+                    <span className="ml-2 font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray">
+                      {nomDuSite(component.site ?? data.client.siteUrl)}
+                    </span>
+                  ) : null}
+                </p>
                 <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray">
                   {component.version ? `version ${component.version}` : "version inconnue"}
                 </p>
@@ -225,7 +240,7 @@ export async function VueVeilleTechnique({ viewer, context }: { viewer: Viewer; 
           </Panel>
         )}
         <p className="mt-3 font-inter-tight text-xs text-mid-gray">
-          Relevé du {formatDay(state.fetchedAt)} · {data.client.siteUrl}
+          Relevé du {formatDay(state.fetchedAt)} · {plusieursSites ? `${sitesVus.size} sites surveillés` : data.client.siteUrl}
         </p>
       </Groupe>
 

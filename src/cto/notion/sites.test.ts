@@ -9,6 +9,7 @@ const voulu = (page: string, extra: Partial<SiteVoulu> = {}): SiteVoulu => ({
   name: `Site ${page}`,
   url: null,
   wpUmbrellaProjectId: 10,
+  watch: false,
   position: 0,
   ...extra,
 });
@@ -20,6 +21,7 @@ const existant = (page: string, extra: Partial<SiteExistant> = {}): SiteExistant
   name: `Site ${page}`,
   url: null,
   wpUmbrellaProjectId: 10,
+  watch: false,
   position: 0,
   removedAt: null,
   ...extra,
