@@ -115,15 +115,16 @@ export async function getFiche(clientId: string): Promise<Fiche | null> {
 export async function importScannedStack(
   clientId: string,
   result: ScanResult,
+  siteUrl = "",
 ): Promise<{ written: number }> {
   const drafts = stackItemsFromScan(result);
   if (drafts.length === 0) return { written: 0 };
 
   const written = await db()
     .insert(stackItems)
-    .values(drafts.map((draft) => ({ ...draft, clientId })))
+    .values(drafts.map((draft) => ({ ...draft, clientId, siteUrl })))
     .onConflictDoUpdate({
-      target: [stackItems.clientId, stackItems.slug, stackItems.type],
+      target: [stackItems.clientId, stackItems.siteUrl, stackItems.slug, stackItems.type],
       set: {
         label: sql`excluded.label`,
         version: sql`excluded.version`,
@@ -144,6 +145,28 @@ export interface ProfilePatch {
   siteUrl?: string | null;
   sector?: string | null;
   notes?: string | null;
+}
+
+/**
+ * Retire les composants DÉTECTÉS sur des sites que le client ne suit plus.
+ *
+ * `sitesGardes` : les adresses encore suivies (le site principal, de chaîne
+ * vide, est toujours gardé). Un composant déclaré à la main n'est jamais
+ * touché : il appartient au site principal.
+ */
+export async function dropScannedOutsideSites(clientId: string, sitesGardes: string[]): Promise<number> {
+  const gardes = ["", ...sitesGardes];
+  const removed = await db()
+    .delete(stackItems)
+    .where(
+      and(
+        eq(stackItems.clientId, clientId),
+        eq(stackItems.source, "scanned"),
+        sql`${stackItems.siteUrl} not in (${sql.join(gardes.map((url) => sql`${url}`), sql`, `)})`,
+      ),
+    )
+    .returning({ id: stackItems.id });
+  return removed.length;
 }
 
 /**
@@ -189,9 +212,9 @@ export async function saveDeclaredStack(
 
   await db()
     .insert(stackItems)
-    .values(declared.map((item) => ({ ...item, clientId })))
+    .values(declared.map((item) => ({ ...item, clientId, siteUrl: "" })))
     .onConflictDoUpdate({
-      target: [stackItems.clientId, stackItems.slug, stackItems.type],
+      target: [stackItems.clientId, stackItems.siteUrl, stackItems.slug, stackItems.type],
       set: {
         label: sql`excluded.label`,
         version: sql`excluded.version`,

@@ -160,6 +160,7 @@ export async function buildExport(clientId: string, now = new Date()): Promise<S
         slug: slugByLabel.get(line.label) ?? line.label,
         type: line.type,
         version: line.version,
+        site: line.site ?? null,
         openAlerts: line.openAlerts,
       })),
       withoutVersion: health.withoutVersion,

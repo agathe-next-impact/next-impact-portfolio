@@ -39,6 +39,7 @@ async function loadComponents(clientId: string): Promise<{
       slug: stackItems.slug,
       version: stackItems.version,
       type: stackItems.type,
+      siteUrl: stackItems.siteUrl,
       openAlerts: sql<number>`(
         select count(*) from ${alerts}
         where ${alerts.stackItemId} = ${stackItems.id}
@@ -54,6 +55,7 @@ async function loadComponents(clientId: string): Promise<{
       label: row.label,
       version: row.version,
       type: row.type,
+      site: row.siteUrl || null,
       openAlerts: Number(row.openAlerts),
     })),
     // Le vocabulaire autorisé du numéro : ce que le client a, rien d'autre.

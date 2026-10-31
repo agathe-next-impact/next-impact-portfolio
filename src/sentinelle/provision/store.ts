@@ -2,7 +2,7 @@ import { eq, sql } from "drizzle-orm";
 import { db } from "@sentinelle/db/client";
 import { clients, stackItems } from "@sentinelle/db/schema";
 import { clientSubscribed, inngest } from "@sentinelle/inngest";
-import { planProvision, type ExistingClient, type ProvisionRequest } from "./plan";
+import { planProvision, siteList, type ExistingClient, type ProvisionRequest } from "./plan";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Exécution d'un plan de provisionnement.
@@ -25,6 +25,7 @@ async function loadExisting(where: ReturnType<typeof eq>): Promise<ExistingClien
       name: clients.name,
       company: clients.company,
       siteUrl: clients.siteUrl,
+      extraSites: clients.extraSites,
       sector: clients.sector,
       active: clients.active,
       plan: clients.plan,
@@ -36,7 +37,7 @@ async function loadExisting(where: ReturnType<typeof eq>): Promise<ExistingClien
     .from(clients)
     .where(where)
     .limit(1);
-  return row ? { ...row, components: Number(row.components) } : null;
+  return row ? { ...row, extraSites: siteList(row.extraSites), components: Number(row.components) } : null;
 }
 
 async function emailTakenByAnother(email: string, id: string): Promise<boolean> {

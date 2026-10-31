@@ -4,6 +4,10 @@
 
 export {
   planProvision,
+  siteList,
+  ExtraSiteSchema,
+  MAX_EXTRA_SITES,
+  type ExtraSite,
   ProvisionRequestSchema,
   type ExistingClient,
   type ProvisionPlan,

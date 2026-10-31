@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { planProvision, ProvisionRequestSchema, type ExistingClient } from "./plan";
+import { planProvision, ProvisionRequestSchema, siteList, type ExistingClient } from "./plan";
 
 const ID = "0b9c6f0e-2b1a-4c3d-9e8f-1a2b3c4d5e6f";
 
@@ -10,6 +10,7 @@ const existing = (overrides: Partial<ExistingClient> = {}): ExistingClient => ({
   company: "Client SAS",
   siteUrl: "https://client.fr/",
   sector: null,
+  extraSites: [],
   active: true,
   plan: "accompagnement",
   components: 4,
@@ -103,3 +104,43 @@ function planSite(raw: string): string {
   if (plan.kind !== "create") throw new Error("normalisation inattendue");
   return plan.values.siteUrl;
 }
+
+describe("sites supplémentaires", () => {
+  it("normalise la liste : adresses valides, sans doublon ni site principal", () => {
+    expect(
+      siteList(
+        [
+          { url: "https://boutique.client.fr", name: " Boutique " },
+          { url: "boutique.client.fr/" },
+          { url: "https://client.fr" },
+          { url: "pas une adresse" },
+          null,
+        ],
+        "https://client.fr/",
+      ),
+    ).toEqual([{ url: "https://boutique.client.fr", name: "Boutique" }]);
+    expect(siteList("n'importe quoi")).toEqual([]);
+  });
+
+  it("scanne de nouveau quand les sites supplémentaires changent, et pas sinon", () => {
+    const request = { ...active, extraSites: [{ url: "https://boutique.client.fr", name: "Boutique" }] };
+    const plan = planProvision(request, existing({ siteUrl: planSite("client.fr") }));
+    expect(plan.kind).toBe("update");
+    if (plan.kind === "update") {
+      expect(plan.scan).toBe(true);
+      expect(plan.patch.extraSites).toEqual([{ url: "https://boutique.client.fr", name: "Boutique" }]);
+    }
+    const inchange = planProvision(request, existing({ siteUrl: planSite("client.fr"), extraSites: [{ url: "https://boutique.client.fr", name: "Boutique" }] }));
+    expect(inchange.kind).toBe("noop");
+  });
+
+  it("laisse les sites en place quand la demande n'en parle pas", () => {
+    const plan = planProvision(active, existing({ siteUrl: planSite("client.fr"), extraSites: [{ url: "https://boutique.client.fr", name: null }] }));
+    expect(plan.kind).toBe("noop");
+  });
+
+  it("les retire quand la demande envoie une liste vide", () => {
+    const plan = planProvision({ ...active, extraSites: [] }, existing({ siteUrl: planSite("client.fr"), extraSites: [{ url: "https://boutique.client.fr", name: null }] }));
+    expect(plan.kind === "update" && plan.patch.extraSites).toEqual([]);
+  });
+});

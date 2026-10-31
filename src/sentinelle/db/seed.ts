@@ -171,7 +171,7 @@ export async function seed(): Promise<void> {
       .insert(stackItems)
       .values(values)
       .onConflictDoUpdate({
-        target: [stackItems.clientId, stackItems.slug, stackItems.type],
+        target: [stackItems.clientId, stackItems.siteUrl, stackItems.slug, stackItems.type],
         set: {
           version: sql`excluded.version`,
           ecosystem: sql`excluded.ecosystem`,

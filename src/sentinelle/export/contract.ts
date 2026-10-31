@@ -105,6 +105,8 @@ export const SentinelleExportSchema = z.object({
         slug: z.string(),
         type: z.string(),
         version: z.string().nullable(),
+        /** Site où le composant a été vu ; absent ou null : le site principal. */
+        site: z.string().nullable().optional(),
         openAlerts: z.number(),
       }),
     ),

@@ -31,6 +31,8 @@ export interface HealthLine {
   label: string;
   version: string | null;
   type: string;
+  /** Site sur lequel il a été vu ; null : le site principal du client. */
+  site?: string | null;
   /** Alertes ouvertes ou envoyées sur ce composant pendant la période. */
   openAlerts: number;
 }

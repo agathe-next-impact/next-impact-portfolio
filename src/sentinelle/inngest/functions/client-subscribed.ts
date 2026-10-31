@@ -1,7 +1,8 @@
 import { eq } from "drizzle-orm";
 import { db } from "@sentinelle/db/client";
 import { clients, scans } from "@sentinelle/db/schema";
-import { importScannedStack, linkOriginScan, sendWelcome } from "@sentinelle/onboarding";
+import { dropScannedOutsideSites, importScannedStack, linkOriginScan, sendWelcome } from "@sentinelle/onboarding";
+import { siteList } from "@sentinelle/provision";
 import { scanSite } from "@sentinelle/scanner";
 import type { ScanResult } from "@sentinelle/types";
 import { inngest } from "../client";
@@ -34,7 +35,7 @@ export const onClientSubscribed = inngest.createFunction(
 
     const client = await step.run("load-client", async () => {
       const [row] = await db()
-        .select({ id: clients.id, siteUrl: clients.siteUrl, email: clients.email })
+        .select({ id: clients.id, siteUrl: clients.siteUrl, email: clients.email, extraSites: clients.extraSites })
         .from(clients)
         .where(eq(clients.id, clientId))
         .limit(1);
@@ -89,13 +90,33 @@ export const onClientSubscribed = inngest.createFunction(
       return written;
     });
 
-    if (withWelcome === false) return { clientId, imported, welcome: "non demandée" };
+    // Les sites supplémentaires du client : chacun est scanné à part, et ses
+    // composants portent son adresse. Un site qui refuse l'analyse ne bloque
+    // pas les autres ; ceux qui ne sont plus suivis sont retirés de la fiche.
+    const extraImported = await step.run("import-extra-sites", async () => {
+      const sites = siteList(client.extraSites);
+      let written = 0;
+      for (const site of sites) {
+        const outcome = await scanSite(site.url);
+        if (!outcome.ok) {
+          console.warn(`[sentinelle] abonnement ${clientId} : site ${site.url} non analysé (${outcome.reason})`);
+          continue;
+        }
+        written += (await importScannedStack(clientId, outcome.result, site.url)).written;
+      }
+      await dropScannedOutsideSites(clientId, sites.map((site) => site.url));
+      return written;
+    });
+
+    if (withWelcome === false) {
+      return { clientId, imported: imported + extraImported, welcome: "non demandée" };
+    }
 
     const welcome = await step.run("send-welcome", async () => {
       const outcome = await sendWelcome(clientId);
       return outcome.sent ? "envoyée" : outcome.reason;
     });
 
-    return { clientId, imported, welcome };
+    return { clientId, imported: imported + extraImported, welcome };
   },
 );

@@ -23,6 +23,7 @@ export {
 } from "./stack";
 
 export {
+  dropScannedOutsideSites,
   getFiche,
   importScannedStack,
   linkOriginScan,

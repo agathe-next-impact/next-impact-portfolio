@@ -143,6 +143,11 @@ export const clients = pgTable("clients", {
   name: text("name").notNull(),
   company: text("company"),
   siteUrl: text("site_url").notNull(),
+  // Sites SUPPLÉMENTAIRES suivis pour ce client (`[{ url, name }]`) : un
+  // accompagnement peut couvrir plusieurs sites. Le site principal reste
+  // `site_url`. Posé par le provisionnement ; chaque site est scanné, et ses
+  // composants portent son adresse (`stack_items.site_url`).
+  extraSites: jsonb("extra_sites").notNull().default([]),
   sector: text("sector"), // contexte pour la rédaction LLM
   notes: text("notes"), // mémoire libre (échanges, contexte)
   plan: planEnum("plan").notNull().default("veille"),
@@ -270,11 +275,17 @@ export const stackItems = pgTable(
     source: stackItemSourceEnum("source").notNull(),
     meta: jsonb("meta"), // licence, date expiration, etc.
     watchEnabled: boolean("watch_enabled").notNull().default(true),
+    // Le site sur lequel le composant a été vu. Chaîne vide : le site
+    // principal du client (`clients.site_url`) — et non null, pour que l'index
+    // unique ci-dessous distingue bien « même composant, même site ».
+    siteUrl: text("site_url").notNull().default(""),
     lastCheckedAt: timestamp("last_checked_at"),
     createdAt: timestamp("created_at").notNull().defaultNow(),
   },
   (t) => [
-    uniqueIndex("stack_client_slug_type").on(t.clientId, t.slug, t.type),
+    // Le même composant (WordPress, PHP) peut tourner sur deux sites du même
+    // client, à deux versions : une ligne par site.
+    uniqueIndex("stack_client_site_slug_type").on(t.clientId, t.siteUrl, t.slug, t.type),
     // Le matching part de (targetSlug, targetType) vers les stacks actifs.
     index("stack_slug_type").on(t.slug, t.type),
   ],
