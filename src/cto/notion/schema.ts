@@ -91,6 +91,7 @@ export const COLUMNS: Record<SchemaBase, Column[]> = {
     facultative(PROPS.clients.suiviFormule, "select"),
     facultative(PROPS.clients.suiviInclus, "date"),
     facultative(PROPS.clients.sansSuggestions, "checkbox"),
+    facultative(PROPS.clients.notesClient, "rich_text"),
   ],
   persons: [
     column(PROPS.persons.name, "title"),

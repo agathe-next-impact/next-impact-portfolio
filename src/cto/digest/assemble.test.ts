@@ -1,18 +1,12 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import type { Block } from "../notion/blocks";
 import { SentinelleExportSchema, type SentinelleExport } from "../sentinelle/contract";
 import {
   assembleDigest,
   assembleSentinelle,
   clip,
-  extractAxes,
-  extractEssentiel,
-  pickEditions,
-  readAxisTitle,
-  type EditionInput,
 } from "./assemble";
-import { LINE_CHARS, SENTINELLE_LINES, SIGNAL_LINES } from "./types";
+import { LINE_CHARS, SENTINELLE_LINES } from "./types";
 import { previousWeek, weekLabel, weekOf, weekRange } from "./week";
 
 const exemple: SentinelleExport = SentinelleExportSchema.parse(
@@ -20,33 +14,6 @@ const exemple: SentinelleExport = SentinelleExportSchema.parse(
 );
 const key = (id: string) => `sentinelle-${id}`;
 const semaine39 = weekRange("2026-W39");
-
-const p = (t: string): Block => ({ k: "p", s: [{ t }] });
-const li = (t: string): Block => ({ k: "li", s: [{ t }] });
-const h1 = (t: string): Block => ({ k: "h1", s: [{ t }] });
-const h2 = (t: string): Block => ({ k: "h2", s: [{ t }] });
-
-function edition(overrides: Partial<EditionInput> = {}): EditionInput {
-  return {
-    letterKey: "page-1",
-    title: "Veille Écosystème, lundi 21 septembre 2026",
-    label: "Écosystème",
-    action: "Relire le cahier des charges avant jeudi.",
-    period: new Date("2026-09-21T06:00:00Z"),
-    body: [
-      { k: "callout", s: [{ t: "Livraison interne" }] },
-      h1("L’essentiel"),
-      li("Un appel d'offres régional ouvre le 30 septembre."),
-      li("PHP 8.1 arrive en fin de support [S:endoflife:php/8.1]."),
-      h1("Actualités par axe"),
-      h2("① Commande publique — FORT"),
-      p("Détail."),
-      h2("② Financements — RAS"),
-      h2("③ Emploi — MOYEN"),
-    ],
-    ...overrides,
-  };
-}
 
 describe("semaines", () => {
   it("range un lundi 00:30 à Paris dans sa propre semaine", () => {
@@ -108,84 +75,16 @@ describe("veille technique", () => {
   });
 });
 
-describe("Signaux Faibles", () => {
-  it("reprend « L'essentiel » jusqu'au prochain titre", () => {
-    expect(extractEssentiel(edition().body)).toEqual([
-      "Un appel d'offres régional ouvre le 30 septembre.",
-      "PHP 8.1 arrive en fin de support [S:endoflife:php/8.1].",
-    ]);
-  });
-
-  it("s'arrête aussi à un titre d'axe de niveau 2", () => {
-    const body = [h1("L'essentiel"), p("Une ligne."), h2("① Marché — FORT"), p("Hors rubrique.")];
-    expect(extractEssentiel(body)).toEqual(["Une ligne."]);
-  });
-
-  it("ne garde jamais plus de 8 lignes", () => {
-    const body = [h1("L’essentiel"), ...Array.from({ length: 12 }, (_, i) => li(`Ligne ${i}`))];
-    const digest = assembleDigest({
-      week: "2026-W39",
-      range: semaine39,
-      sentinelle: null,
-      sentinelleLetterKey: key,
-      editions: [edition({ body })],
-      signauxAttendus: true,
-    });
-    expect(digest?.signaux[0].lines).toHaveLength(SIGNAL_LINES);
-  });
-
-  it("relie une ligne à l'alerte Sentinelle qu'elle cite", () => {
-    const digest = assembleDigest({
-      week: "2026-W39",
-      range: semaine39,
-      sentinelle: null,
-      sentinelleLetterKey: key,
-      editions: [edition()],
-      signauxAttendus: true,
-    });
-    expect(digest?.signaux[0].lines[1].ref).toBe("endoflife:php/8.1");
-  });
-
-  it("lit le niveau d'un axe et trie du plus fort au plus faible", () => {
-    expect(readAxisTitle("② Marché du travail — FORT")).toEqual({ name: "Marché du travail", level: "FORT" });
-    expect(readAxisTitle("5G et réseaux")).toEqual({ name: "5G et réseaux", level: null });
-    expect(extractAxes(edition().body).map((a) => a.level)).toEqual(["FORT", "MOYEN", "RAS"]);
-  });
-
-  it("préfère deux veilles différentes à deux éditions de la même", () => {
-    const picked = pickEditions([
-      edition({ letterKey: "a", label: "Écosystème", period: new Date("2026-09-24T06:00:00Z") }),
-      edition({ letterKey: "b", label: "Écosystème", period: new Date("2026-09-21T06:00:00Z") }),
-      edition({ letterKey: "c", label: "Positionnement", period: new Date("2026-09-22T06:00:00Z") }),
-    ]);
-    expect(picked.map((e) => e.letterKey)).toEqual(["a", "c"]);
-  });
-});
-
 describe("assembleDigest", () => {
-  it("ne produit rien sans aucune veille", () => {
+  it("ne produit rien sans veille technique reliée", () => {
     expect(
-      assembleDigest({
-        week: "2026-W39",
-        range: semaine39,
-        sentinelle: null,
-        sentinelleLetterKey: key,
-        editions: [],
-        signauxAttendus: false,
-      }),
+      assembleDigest({ week: "2026-W39", range: semaine39, sentinelle: null, sentinelleLetterKey: key }),
     ).toBeNull();
   });
 
-  it("produit un digest qui dit l'absence d'édition quand une veille est attendue", () => {
-    const digest = assembleDigest({
-      week: "2026-W39",
-      range: semaine39,
-      sentinelle: exemple,
-      sentinelleLetterKey: key,
-      editions: [],
-      signauxAttendus: true,
-    });
-    expect(digest?.signaux).toEqual([]);
-    expect(digest?.signauxAttendus).toBe(true);
+  it("produit un digest de la seule veille technique, sans Signaux Faibles", () => {
+    const digest = assembleDigest({ week: "2026-W39", range: semaine39, sentinelle: exemple, sentinelleLetterKey: key });
+    expect(digest?.sentinelle).not.toBeNull();
+    expect(digest).not.toHaveProperty("signaux");
   });
 });

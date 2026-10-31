@@ -1,0 +1,1 @@
+ALTER TABLE "cto_clients" ADD COLUMN "notes_client" text;

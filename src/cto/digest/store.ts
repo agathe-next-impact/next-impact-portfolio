@@ -1,10 +1,9 @@
-import { and, desc, eq, gte, inArray, isNull, lt, ne } from "drizzle-orm";
+import { and, desc, eq, gte, inArray, ne } from "drizzle-orm";
 import { db } from "../db/client";
-import { ctoClients, ctoDigests, ctoLetters } from "../db/schema";
+import { ctoClients, ctoDigests } from "../db/schema";
 import { activePersons } from "../access";
-import type { Block } from "../notion/blocks";
 import { sentinelleLetterKey, sentinelleStateFor } from "../sentinelle";
-import { assembleDigest, type EditionInput } from "./assemble";
+import { assembleDigest } from "./assemble";
 import { appliquerRetouches, type DigestEdits } from "./edit";
 import { sendDigestEmail } from "./email";
 import { DIGEST_VERSION, type DigestContent } from "./types";
@@ -44,54 +43,6 @@ function monthsAgo(months: number, now = new Date()): Date {
   return date;
 }
 
-async function editionsOf(clientId: string, range: { from: Date; to: Date }): Promise<EditionInput[]> {
-  const rows = await db()
-    .select({
-      notionPageId: ctoLetters.notionPageId,
-      title: ctoLetters.title,
-      label: ctoLetters.label,
-      action: ctoLetters.action,
-      period: ctoLetters.period,
-      body: ctoLetters.body,
-    })
-    .from(ctoLetters)
-    .where(
-      and(
-        eq(ctoLetters.source, "signaux-faibles"),
-        eq(ctoLetters.clientId, clientId),
-        isNull(ctoLetters.withdrawnAt),
-        gte(ctoLetters.period, range.from),
-        lt(ctoLetters.period, range.to),
-      ),
-    );
-
-  return rows
-    .filter((row) => row.period !== null)
-    .map((row) => ({
-      letterKey: row.notionPageId,
-      title: row.title,
-      label: row.label,
-      action: row.action,
-      period: row.period as Date,
-      body: row.body as Block[],
-    }));
-}
-
-async function receivesSignals(clientId: string): Promise<boolean> {
-  const [row] = await db()
-    .select({ id: ctoLetters.id })
-    .from(ctoLetters)
-    .where(
-      and(
-        eq(ctoLetters.source, "signaux-faibles"),
-        eq(ctoLetters.clientId, clientId),
-        gte(ctoLetters.period, monthsAgo(ARCHIVE_MONTHS)),
-      ),
-    )
-    .limit(1);
-  return Boolean(row);
-}
-
 /** Assemble (ou réassemble) les brouillons d'une semaine pour tous les accompagnements actifs. */
 export async function assembleWeek(
   week: string,
@@ -125,8 +76,6 @@ export async function assembleWeek(
       range,
       sentinelle: sentinelle?.data ?? null,
       sentinelleLetterKey,
-      editions: await editionsOf(client.id, range),
-      signauxAttendus: await receivesSignals(client.id),
     });
 
     if (!content) {

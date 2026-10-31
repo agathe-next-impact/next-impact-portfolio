@@ -62,6 +62,8 @@ export const PROPS = {
     suiviInclus: "Fin du suivi inclus",
     /** Coupe la carte « Prochaine étape » pour ce client. */
     sansSuggestions: "Sans suggestions",
+    /** Notes manuelles pour le client : cartouche de l'accueil et des Actions. */
+    notesClient: "Notes client",
   },
   /**
    * Colonnes de la « Base des fiches organisation », qui vit hors de l'atelier
@@ -508,6 +510,7 @@ export function clientCommercial(page: NotionPage): {
   suiviFormule: string | null;
   suiviInclusJusquau: Date | null;
   suggestionsCoupees: boolean;
+  notesClient: string | null;
 } {
   const formule = p.select(page, PROPS.clients.suiviFormule);
   return {
@@ -517,6 +520,7 @@ export function clientCommercial(page: NotionPage): {
     suiviFormule: formule === "Essentiel" || formule === "Actif" ? formule : null,
     suiviInclusJusquau: p.date(page, PROPS.clients.suiviInclus),
     suggestionsCoupees: p.checkbox(page, PROPS.clients.sansSuggestions),
+    notesClient: p.text(page, PROPS.clients.notesClient),
   };
 }
 

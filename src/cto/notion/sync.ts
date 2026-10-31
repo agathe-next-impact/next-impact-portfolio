@@ -451,6 +451,7 @@ async function alignerFiche(
       suiviFormule: ctoClients.suiviFormule,
       suiviInclusJusquau: ctoClients.suiviInclusJusquau,
       suggestionsCoupees: ctoClients.suggestionsCoupees,
+      notesClient: ctoClients.notesClient,
       servicesOuverts: ctoClients.servicesOuverts,
       notionDeletedAt: ctoClients.notionDeletedAt,
     })
@@ -471,6 +472,7 @@ async function alignerFiche(
     suiviFormule?: string | null;
     suiviInclusJusquau?: Date | null;
     suggestionsCoupees?: boolean;
+    notesClient?: string | null;
     servicesOuverts?: Record<string, string>;
   } = {};
 
@@ -486,6 +488,7 @@ async function alignerFiche(
   if (commercial.suggestionsCoupees !== actuel.suggestionsCoupees) {
     patch.suggestionsCoupees = commercial.suggestionsCoupees;
   }
+  if (commercial.notesClient !== actuel.notesClient) patch.notesClient = commercial.notesClient;
   const ouverts = servicesOuverts(services.codes, actuel.servicesOuverts, new Date());
   if (JSON.stringify(ouverts) !== JSON.stringify(actuel.servicesOuverts)) patch.servicesOuverts = ouverts;
   if (status && status !== actuel.status) patch.status = status;
@@ -519,6 +522,7 @@ async function alignerFiche(
       "contractStart" in patch ? "début du contrat" : null,
       "suiviFormule" in patch ? `formule suivi → ${patch.suiviFormule ?? "aucune"}` : null,
       "suiviInclusJusquau" in patch ? "fin du suivi inclus" : null,
+      "notesClient" in patch ? "notes client" : null,
       "suggestionsCoupees" in patch ? `suggestions → ${patch.suggestionsCoupees ? "coupées" : "actives"}` : null,
       "notionDeletedAt" in patch ? "fiche revenue de la corbeille" : null,
     ].filter(Boolean);

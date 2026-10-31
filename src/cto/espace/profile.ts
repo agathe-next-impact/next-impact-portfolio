@@ -27,6 +27,8 @@ export interface ClientProfile {
   suiviInclusJusquau: Date | null;
   /** Case « Sans suggestions » de la fiche. */
   suggestionsCoupees: boolean;
+  /** Notes manuelles pour le client (colonne Notion « Notes client »), ou null. */
+  notesClient: string | null;
   /** Date d'ouverture de chaque service coché (code → ISO). */
   servicesOuverts: Record<string, string>;
   /** Ouverture de l'espace (création de l'accompagnement) : départ du mois de veille offerte. */
@@ -45,6 +47,7 @@ export async function clientProfile(clientId: string): Promise<ClientProfile> {
       suiviFormule: ctoClients.suiviFormule,
       suiviInclusJusquau: ctoClients.suiviInclusJusquau,
       suggestionsCoupees: ctoClients.suggestionsCoupees,
+      notesClient: ctoClients.notesClient,
       servicesOuverts: ctoClients.servicesOuverts,
       createdAt: ctoClients.createdAt,
     })
@@ -62,6 +65,7 @@ export async function clientProfile(clientId: string): Promise<ClientProfile> {
     suiviFormule: row?.suiviFormule ?? null,
     suiviInclusJusquau: row?.suiviInclusJusquau ?? null,
     suggestionsCoupees: row?.suggestionsCoupees ?? false,
+    notesClient: row?.notesClient ?? null,
     servicesOuverts: row?.servicesOuverts ?? {},
     ouverture: row?.createdAt ?? new Date(),
   };

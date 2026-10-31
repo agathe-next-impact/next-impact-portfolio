@@ -148,28 +148,6 @@ function Retouche({ digest, week }: { digest: AdminDigest; week: string }) {
           </fieldset>
         ) : null}
 
-        {content.signaux.map((signal, n) => (
-          <fieldset key={signal.letterKey} className="mt-6">
-            <legend>
-              <Label>{signal.label ? `Signaux faibles · ${signal.label}` : "Signaux faibles"}</Label>
-            </legend>
-            <div className="mt-3 space-y-2">
-              {signal.lines.map((line, i) => (
-                <ChampLigne key={i} nom={`signal.${n}.${i}`} line={line} />
-              ))}
-            </div>
-            <label className="mt-3 block">
-              <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray">Action de la semaine</span>
-              <textarea
-                name={`signal.${n}.action`}
-                defaultValue={signal.action ?? ""}
-                rows={2}
-                className={`${inputClass} mt-1 text-sm`}
-              />
-            </label>
-          </fieldset>
-        ))}
-
         <p className="mt-4 font-inter-tight text-xs text-mid-gray">
           {`Une ligne fait ${LINE_CHARS} caractères au plus ; vider un champ retire la ligne. Le ton et l'étiquette restent ceux de la source.`}
         </p>

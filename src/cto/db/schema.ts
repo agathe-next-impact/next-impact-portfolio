@@ -231,6 +231,12 @@ export const ctoClients = pgTable(
     /** Case « Sans suggestions » de la fiche : coupe la carte « Prochaine étape » pour ce client. */
     suggestionsCoupees: boolean("suggestions_coupees").notNull().default(false),
     /**
+     * Notes manuelles destinées au client (colonne Notion « Notes client »),
+     * affichées en cartouche sur l'accueil et sur l'écran Actions. Texte brut,
+     * retours à la ligne conservés. `null` : rien à dire, pas de cartouche.
+     */
+    notesClient: text("notes_client"),
+    /**
      * Date à laquelle chaque service a été vu coché pour la première fois
      * (code → ISO). Servait à la semaine de grâce des sections vides,
      * supprimée le 2026-09-27 (une section vide sort aussitôt de la

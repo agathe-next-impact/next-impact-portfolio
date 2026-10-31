@@ -15,7 +15,7 @@ import { weekLabel } from "./week";
 // ─────────────────────────────────────────────────────────────────────────────
 
 // Variante claire (fond blanc) : c'est un e-mail client.
-const { emailButton, emailCard, emailDivider, emailH1, emailH2, emailKicker, emailLayout, emailLead, emailParagraph } =
+const { emailButton, emailCard, emailH1, emailH2, emailKicker, emailLayout, emailLead } =
   lightEmail;
 
 const TONE_COLOR: Record<DigestTone, string> = {
@@ -60,25 +60,12 @@ export function digestEmailHtml(content: DigestContent, name: string, url: strin
   const parts: string[] = [
     emailKicker("01", "Veille de la semaine"),
     emailH1(escapeHtml(weekLabel(content.week))),
-    emailLead(`Bonjour ${escapeHtml(name)}, voici ce que vos deux veilles retiennent de la semaine.`),
+    emailLead(`Bonjour ${escapeHtml(name)}, voici ce que votre veille technique retient de la semaine.`),
   ];
 
   if (content.sentinelle) {
     parts.push(emailH2("Veille technique · votre site"));
     parts.push(emailCard(linesHtml(content.sentinelle.lines)));
-  }
-
-  if (content.signaux.length > 0) {
-    parts.push(emailDivider());
-    for (const signal of content.signaux) {
-      parts.push(emailH2(`Signaux faibles · ${escapeHtml(signal.label ?? signal.title)}`));
-      const action = signal.action
-        ? `<div style="margin:10px 0 0;padding:10px 12px;border-left:2px solid ${EMAIL.accent2};font-family:${EMAIL.body};font-size:14px;color:${EMAIL.fg};"><span style="font-family:${EMAIL.mono};font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:${EMAIL.muted};">Action de la semaine</span><br>${escapeHtml(signal.action)}</div>`
-        : "";
-      parts.push(emailCard(linesHtml(signal.lines) + action));
-    }
-  } else if (content.signauxAttendus) {
-    parts.push(emailParagraph("Signaux faibles : pas de nouvelle édition cette semaine."));
   }
 
   parts.push(emailButton(url, "Voir le digest et les lettres complètes"));

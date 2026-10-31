@@ -27,6 +27,7 @@ import type { PropositionDeScenario } from "./audit-formes";
 import { Calendrier } from "./calendrier";
 import { CarteApercus } from "./apercus";
 import { CarteContrats } from "./contrats";
+import { CarteNotes } from "./notes-client";
 import { CarteProchaineEtape } from "./prochaine-etape";
 import { DigestSemaine } from "./digest";
 import { Historique } from "./historique";
@@ -412,6 +413,8 @@ export async function VueTableau({
       {/* Ce qui est nouveau, les versions de travail à regarder, l'essentiel en
           questions, les contrats. Un livrable à la une n'est pas répété dessous. La frise vit dans Pilotage, le contact dans la barre
           latérale : les répéter ici n'apprenait rien de plus. */}
+      <CarteNotes context={context} />
+
       <NouveauPourVous viewer={viewer} context={context} items={une} />
 
       <CarteApercus viewer={viewer} context={context} />
@@ -895,6 +898,8 @@ export async function VueAgir({ viewer, context }: { viewer: Viewer; context: Es
       active="agir"
       title="Actions"
     >
+      <CarteNotes context={context} />
+
       {arbitrage ? (
         <SectionNav
           items={[

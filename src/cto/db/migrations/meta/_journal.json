@@ -176,6 +176,13 @@
       "when": 1790683830814,
       "tag": "0024_personne_multi_clients",
       "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1793420882105,
+      "tag": "0025_notes_client",
+      "breakpoints": true
     }
   ]
 }

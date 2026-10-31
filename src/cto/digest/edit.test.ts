@@ -12,38 +12,30 @@ const content: DigestContent = {
     letterKey: null,
     stats: { components: 5, withoutVersion: 1, alerts: 2, critiques: 0, attention: 1 },
   },
-  signaux: [
-    { letterKey: "sf-1", title: "Édition", label: "Écosystème", date: "2026-09-21", lines: [ligne("Signal")], action: "Relancer", axes: [] },
-  ],
-  signauxAttendus: true,
 };
 const now = new Date("2026-09-28T10:00:00Z");
 
 describe("retouche d'un digest", () => {
   it("réécrit le texte, garde ton, étiquette et référence, et marque la retouche", () => {
-    const out = appliquerRetouches(content, { sentinelle: ["  Première   revue ", "Deuxième"], signaux: [{ lines: ["Signal"], action: "Appeler" }] }, now);
+    const out = appliquerRetouches(content, { sentinelle: ["  Première   revue ", "Deuxième"] }, now);
     expect(out.sentinelle?.lines[0]).toEqual({ ...ligne("Première revue") });
-    expect(out.signaux[0].action).toBe("Appeler");
     expect(out.modifieLe).toBe(now.toISOString());
   });
 
-  it("retire une ligne vidée et une action vidée", () => {
-    const out = appliquerRetouches(content, { sentinelle: ["", "Deuxième"], signaux: [{ lines: [" "], action: "" }] }, now);
+  it("retire une ligne vidée", () => {
+    const out = appliquerRetouches(content, { sentinelle: ["", "Deuxième"] }, now);
     expect(out.sentinelle?.lines.map((l) => l.text)).toEqual(["Deuxième"]);
-    expect(out.signaux[0].lines).toEqual([]);
-    expect(out.signaux[0].action).toBeNull();
   });
 
   it(`borne une ligne à ${LINE_CHARS} caractères`, () => {
-    const out = appliquerRetouches(content, { sentinelle: ["x".repeat(300), "Deuxième"], signaux: [] }, now);
+    const out = appliquerRetouches(content, { sentinelle: ["x".repeat(300), "Deuxième"] }, now);
     expect(out.sentinelle?.lines[0].text).toHaveLength(LINE_CHARS);
   });
 
   it("lit le formulaire, et garde le texte d'origine d'un champ absent", () => {
-    const champs: Record<string, string> = { "sentinelle.1": "Retouchée", "signal.0.action": "Rappeler" };
+    const champs: Record<string, string> = { "sentinelle.1": "Retouchée" };
     expect(retouchesDuFormulaire(content, (nom) => champs[nom] ?? null)).toEqual({
       sentinelle: ["Première", "Retouchée"],
-      signaux: [{ lines: ["Signal"], action: "Rappeler" }],
     });
   });
 });
