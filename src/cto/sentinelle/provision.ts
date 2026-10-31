@@ -63,6 +63,8 @@ export type ProvisionBody =
       company: string;
       siteUrl: string;
       extraSites: { url: string; name: string | null }[];
+      /** Geste de l'admin : relancer l'analyse de tous les sites même sans changement. */
+      rescan?: boolean;
     };
 
 export type ProvisionDecision =
@@ -220,6 +222,64 @@ async function stateOf(clientId: string, contact: string | null): Promise<WatchS
     contactName,
     extraSites,
   };
+}
+
+/**
+ * Provisionne UN client à la demande (admin) : crée ou aligne son client
+ * Sentinelle, et relance l'analyse de ses sites si `rescan`. Même décision que
+ * le balayage (`decideProvision`), mais sans attendre la synchro. Ne lève pas :
+ * le résultat dit ce qui s'est passé, pour l'afficher tel quel.
+ */
+export async function provisionOne(
+  wish: WatchWish,
+  options: { rescan: boolean },
+): Promise<{ ok: boolean; message: string }> {
+  if (!sentinelleExportConfig()) {
+    return { ok: false, message: "SENTINELLE_EXPORT_URL ou SENTINELLE_EXPORT_SECRET n'est pas posée." };
+  }
+
+  const state = await stateOf(wish.clientId, wish.contact);
+  // Un rescan force l'envoi même si la demande n'a pas changé depuis la dernière acceptée.
+  const decision = decideProvision(wish, options.rescan ? { ...state, digest: null } : state);
+
+  if (decision.kind === "skip") return { ok: true, message: "Sentinelle est déjà à jour pour ce client." };
+  if (decision.kind === "incomplete") {
+    return { ok: false, message: `${decision.missing.join(" et ")} manque : Sentinelle ne peut pas démarrer.` };
+  }
+
+  try {
+    const body = options.rescan && decision.body.active ? { ...decision.body, rescan: true } : decision.body;
+    const result = await callSentinelle(body);
+
+    const [holder] = await db()
+      .select({ company: ctoClients.company })
+      .from(ctoClients)
+      .where(and(eq(ctoClients.sentinelleClientId, result.id), ne(ctoClients.id, wish.clientId)))
+      .limit(1);
+    if (holder) {
+      return {
+        ok: false,
+        message:
+          `Sentinelle a rendu le client de « ${holder.company} » : non relié. ` +
+          "Un autre accompagnement utilise déjà cette adresse de contact.",
+      };
+    }
+
+    await db()
+      .update(ctoClients)
+      .set({ sentinelleClientId: result.id, sentinelleSyncDigest: decision.digest })
+      .where(eq(ctoClients.id, wish.clientId));
+
+    const verbe = { created: "créé", adopted: "relié", updated: "aligné", deactivated: "désactivé", unchanged: "inchangé" }[
+      result.outcome
+    ];
+    return {
+      ok: true,
+      message: `Client Sentinelle ${verbe}${result.scanning ? " ; analyse des sites lancée (quelques minutes)" : ""}.`,
+    };
+  } catch (error) {
+    return { ok: false, message: `Sentinelle injoignable ou refus : ${error instanceof Error ? error.message : "erreur"}.` };
+  }
 }
 
 /**

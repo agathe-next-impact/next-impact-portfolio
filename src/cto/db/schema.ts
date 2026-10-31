@@ -875,8 +875,11 @@ export const ctoSites = pgTable(
     clientId: uuid("client_id")
       .notNull()
       .references(() => ctoClients.id, { onDelete: "cascade" }),
-    /** Page Notion de la ligne : sa clé de rattachement. */
-    notionPageId: text("notion_page_id").notNull(),
+    /**
+     * Page Notion de la ligne : sa clé de rattachement. `null` : site créé
+     * depuis l'admin, que la synchro ne touche jamais (ni mise à jour, ni retrait).
+     */
+    notionPageId: text("notion_page_id"),
     name: text("name").notNull(),
     url: text("url"),
     /** Projet WP Umbrella ; `null` : site connu mais pas (encore) supervisé. */

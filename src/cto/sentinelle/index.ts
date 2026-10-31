@@ -14,6 +14,7 @@ export {
 export {
   decideProvision,
   digestOf,
+  provisionOne,
   provisionSentinelle,
   type ProvisionBody,
   type ProvisionDecision,

@@ -66,6 +66,8 @@ export const ProvisionRequestSchema = z.union([
     name: z.string().min(1).max(200),
     company: z.string().max(200).nullable().optional(),
     siteUrl: z.string().min(1),
+    /** Vrai : relancer l'analyse de tous les sites même si rien n'a changé (geste de l'admin). */
+    rescan: z.boolean().optional(),
     /** Sites supplémentaires du même client. Absent : inchangés ; `[]` : tous retirés. */
     extraSites: z.array(ExtraSiteSchema).max(MAX_EXTRA_SITES).optional(),
     sector: z.string().max(200).nullable().optional(),
@@ -173,7 +175,7 @@ export function planProvision(request: ProvisionRequest, existing: ExistingClien
   if (!existing.active) patch.active = true;
   if (existing.plan !== "accompagnement") patch.plan = "accompagnement";
 
-  const scan = patch.siteUrl !== undefined || patch.extraSites !== undefined || existing.components === 0 || patch.active === true;
+  const scan = (request.rescan === true) || patch.siteUrl !== undefined || patch.extraSites !== undefined || existing.components === 0 || patch.active === true;
   const adopted = !request.id;
 
   if (Object.keys(patch).length === 0 && !scan) return { kind: "noop", id: existing.id };

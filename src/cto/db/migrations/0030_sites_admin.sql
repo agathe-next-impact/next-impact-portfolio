@@ -1,0 +1,1 @@
+ALTER TABLE "cto_sites" ALTER COLUMN "notion_page_id" DROP NOT NULL;

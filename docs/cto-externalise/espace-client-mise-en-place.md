@@ -791,3 +791,29 @@ Avec UNE organisation, le client prend sa raison sociale (comportement
 d'origine). Avec PLUSIEURS, il garde la « Raison sociale » de sa fiche Clients :
 aucune organisation ne parle pour lui (ex. Auger St Vincent = Les doléances +
 EGC + Café citoyen).
+
+### Créer et administrer un client depuis l'admin
+
+`/admin-cto/pilotage` → **Nouveau client** : raison sociale, palier, contact
+(premier accès), services, jusqu'à quatre sites (URL, ID projet WP Umbrella
+facultatif, formule, case « Veille technique », « Sans suivi »), invitation
+facultative. Le client créé n'a **pas de fiche Notion** : l'admin en est la
+source de vérité et la synchro n'y touche jamais (`cto_clients.notion_page_id`
+vide ; ses sites ont `cto_sites.notion_page_id` vide, hors du balayage).
+
+Sur sa fiche (`/admin-cto/pilotage/clients/<id>`), « Administration de
+l'espace » permet, pour un client créé depuis l'admin :
+- modifier raison sociale, palier, statut ;
+- activer ou désactiver des services (l'espace se recompose à l'affichage
+  suivant ; rien n'est supprimé, un service réactivé retrouve son contenu) ;
+- ajouter, modifier, retirer des sites (un site sans projet WP Umbrella reste
+  associé et affiché) ;
+- ajouter une personne, révoquer ou rétablir un accès (sessions fermées) ;
+- **Lancer le scan Sentinelle** : crée ou aligne le client chez Sentinelle
+  (site principal = premier site « Veille technique », contact = première
+  personne à l'accès ouvert) et relance l'analyse de tous ses sites
+  (`rescan` sur `/api/sentinelle/provision`).
+
+Un client piloté par Notion s'y affiche **en lecture seule** (le modifier ici
+serait écrasé à la synchro). Migration `0030_sites_admin`
+(`cto_sites.notion_page_id` nullable) à appliquer avant le déploiement.

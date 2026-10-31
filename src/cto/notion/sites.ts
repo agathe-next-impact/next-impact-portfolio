@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { eq, isNotNull } from "drizzle-orm";
 import { db } from "../db/client";
 import { ctoSites } from "../db/schema";
 import { queryDatabase } from "./api";
@@ -170,7 +170,7 @@ export async function syncSitesFromNotion(
     });
   }
 
-  const existants: SiteExistant[] = await db()
+  const lus = await db()
     .select({
       id: ctoSites.id,
       clientId: ctoSites.clientId,
@@ -184,7 +184,12 @@ export async function syncSitesFromNotion(
       position: ctoSites.position,
       removedAt: ctoSites.removedAt,
     })
-    .from(ctoSites);
+    .from(ctoSites)
+    // Les sites créés depuis l'admin n'ont pas de page Notion : hors du balayage.
+    .where(isNotNull(ctoSites.notionPageId));
+  const existants: SiteExistant[] = lus.flatMap((site) =>
+    site.notionPageId === null ? [] : [{ ...site, notionPageId: site.notionPageId }],
+  );
 
   const plan = planifier(voulus, existants, pagesVues);
 

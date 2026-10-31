@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { EVENT_LABELS, listForClient } from "@cto/access";
-import { clientDetail } from "@cto/admin";
+import { clientDetail, estClientLocal } from "@cto/admin";
 import { BackLink, Dot, buttonClass, formatDate, Label, Panel, Tag, type Tone } from "../../../../espace-direction/ui";
 import { adminEspacePath } from "../../../../espace-direction/viewer";
 import { basculerSynchro, envoyerLien } from "../../actions";
+import { basculerPersonne } from "../../actions-clients";
+import { Administration } from "./administration";
 import { BoutonEnvoi } from "../../../../bouton-envoi";
 import { PILOTAGE_LARGEUR } from "../../largeur";
 
@@ -47,7 +49,7 @@ export default async function ClientDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const [detail, journal] = await Promise.all([clientDetail(id), listForClient(id, 100)]);
+  const [detail, journal, local] = await Promise.all([clientDetail(id), listForClient(id, 100), estClientLocal(id)]);
 
   if (!detail) notFound();
 
@@ -102,6 +104,8 @@ export default async function ClientDetailPage({
         </Panel>
       </section>
 
+      <Administration clientId={detail.id} />
+
       <section className="mt-10">
         <Panel className="flex flex-wrap items-center justify-between gap-4 p-4">
           <div>
@@ -148,7 +152,19 @@ export default async function ClientDetailPage({
 
               <div className="flex flex-wrap items-center gap-2">
                 {person.revokedAt ? (
-                  <Tag>Révoquée le {formatDate(person.revokedAt)}</Tag>
+                  <>
+                    <Tag>Révoquée le {formatDate(person.revokedAt)}</Tag>
+                    {local ? (
+                      <form action={basculerPersonne}>
+                        <input type="hidden" name="clientId" value={detail.id} />
+                        <input type="hidden" name="personId" value={person.id} />
+                        <input type="hidden" name="action" value="retablir" />
+                        <BoutonEnvoi className={buttonClass.quiet} enCours="…">
+                          Rétablir
+                        </BoutonEnvoi>
+                      </form>
+                    ) : null}
+                  </>
                 ) : (
                   <>
                     <Tag tone={person.openSessions > 0 ? "fait" : "neutre"}>
@@ -163,6 +179,16 @@ export default async function ClientDetailPage({
                           enCours="Envoi…"
                         >
                           {person.lastLoginAt ? "Renvoyer un lien" : "Envoyer l'invitation"}
+                        </BoutonEnvoi>
+                      </form>
+                    ) : null}
+                    {local ? (
+                      <form action={basculerPersonne}>
+                        <input type="hidden" name="clientId" value={detail.id} />
+                        <input type="hidden" name="personId" value={person.id} />
+                        <input type="hidden" name="action" value="revoquer" />
+                        <BoutonEnvoi className={buttonClass.quiet} enCours="…">
+                          Révoquer
                         </BoutonEnvoi>
                       </form>
                     ) : null}
@@ -215,7 +241,10 @@ export default async function ClientDetailPage({
         <Panel className="p-4">
           <Label>Modifier le statut, ajouter ou révoquer une personne</Label>
           <p className="mt-2 font-inter-tight text-sm text-mid-gray">
-            Dans l&rsquo;atelier Notion (colonne « État » de la fiche Clients, base Personnes), puis
+            {local
+              ? "Ici, depuis « Administration de l'espace » et la liste des personnes : ce client n'a pas de fiche Notion. "
+              : null}
+            Pour un client piloté par Notion : dans l&rsquo;atelier Notion (colonne « État » de la fiche Clients, base Personnes), puis
             « Synchroniser » sur la vue d&rsquo;ensemble. Détail : « Exploitation courante » dans{" "}
             <code className="font-mono text-[12px]">
               docs/cto-externalise/espace-client-mise-en-place.md

@@ -70,6 +70,12 @@ export default async function PilotagePage() {
       </h1>
       <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2">
         <Link
+          href="/admin-cto/pilotage/nouveau"
+          className="font-mono text-[11px] uppercase tracking-[0.14em] text-foreground underline underline-offset-4 transition-colors hover:text-accent-secondary"
+        >
+          Nouveau client →
+        </Link>
+        <Link
           href="/admin-cto/pilotage/prestations"
           className="font-mono text-[11px] uppercase tracking-[0.14em] text-foreground underline underline-offset-4 transition-colors hover:text-accent-secondary"
         >

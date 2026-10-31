@@ -55,3 +55,30 @@ export { newAlerts, summarizeNotify, summarizeSync, type ReportSummary } from ".
 
 // Le journal des balayages : ce que le Cron de 4 h a remonté, relu au matin.
 export { lastSyncRun, recordSyncRun, type SyncRun, type SyncRunSource } from "./runs";
+
+// Les clients créés et administrés depuis l'admin (sans fiche Notion).
+export {
+  ajouterPersonneLocale,
+  ajouterSiteLocal,
+  basculerAccesLocal,
+  creerClientLocal,
+  estClientLocal,
+  lancerScanSentinelle,
+  lireServices,
+  majClientLocal,
+  majSiteLocal,
+  manquesDeSite,
+  normaliserUrlSite,
+  reglageClient,
+  retirerSiteLocal,
+  SERVICES,
+  STATUTS,
+  TIERS,
+  validerNouveauClient,
+  validerSite,
+  type NouveauClient,
+  type ReglageClient,
+  type SiteAdmin,
+  type SiteSaisi,
+  type Validation,
+} from "./local";
