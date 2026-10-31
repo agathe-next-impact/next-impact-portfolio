@@ -61,5 +61,11 @@ export const clientSubscribed = eventType("sentinelle/client.subscribed", {
      * Absent : comportement d'origine (bienvenue envoyée).
      */
     welcome: z.boolean().optional(),
+    /**
+     * Adresses (normalisées) des seuls sites à analyser. Absent : tous les
+     * sites du client. Posé par l'admin pour relancer UN site d'un client qui en
+     * a plusieurs.
+     */
+    sites: z.array(z.string()).max(11).optional(),
   }),
 });

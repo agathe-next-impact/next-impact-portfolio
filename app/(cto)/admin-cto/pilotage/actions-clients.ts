@@ -220,10 +220,11 @@ export async function retirerSite(formData: FormData): Promise<void> {
   return fin(clientId, await etSentinelle(clientId, "Site retiré de l'espace du client."));
 }
 
-/** Provisionne Sentinelle pour ce client et relance l'analyse de tous ses sites. */
+/** Provisionne Sentinelle pour ce client et relance l'analyse de tous ses sites, ou du seul site désigné (`siteUrl`). */
 export async function lancerScan(formData: FormData): Promise<void> {
   await requireSession();
   const clientId = texte(formData, "clientId");
-  const resultat = await lancerScanSentinelle(clientId);
+  const siteUrl = texte(formData, "siteUrl").trim() || null;
+  const resultat = await lancerScanSentinelle(clientId, siteUrl);
   return fin(clientId, resultat.message, resultat.ok);
 }

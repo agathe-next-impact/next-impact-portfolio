@@ -442,13 +442,27 @@ async function voeuSentinelle(reglage: ReglageClient): Promise<WatchWish> {
   };
 }
 
-export async function lancerScanSentinelle(clientId: string): Promise<{ ok: boolean; message: string }> {
+export async function lancerScanSentinelle(
+  clientId: string,
+  siteUrl: string | null = null,
+): Promise<{ ok: boolean; message: string }> {
   const reglage = await reglageClient(clientId);
   if (!reglage) return { ok: false, message: "Client introuvable." };
   if (!(reglage.services ?? []).includes("veille-technique")) {
     return { ok: false, message: "Le service « Veille technique » n'est pas activé pour ce client." };
   }
   if (reglage.status === "clos") return { ok: false, message: "Accompagnement clos : Sentinelle ne le suit plus." };
+
+  // Un seul site : il doit faire partie de ceux que Sentinelle surveille pour ce client.
+  if (siteUrl) {
+    const voeu = await voeuSentinelle(reglage);
+    const surveilles = [voeu.site, ...reglage.sites.filter((site) => site.watch && !site.sansSuivi).map((site) => site.url)];
+    const cle = (valeur: string | null) => (valeur ?? "").toLowerCase().replace(/^https?:\/\//, "").replace(/^www\./, "").replace(/\/$/, "");
+    if (!surveilles.some((url) => cle(url) === cle(siteUrl))) {
+      return { ok: false, message: "Ce site n'est pas surveillé par Sentinelle : cocher « Veille technique » sur sa ligne." };
+    }
+    return provisionOne(voeu, { rescan: [siteUrl] });
+  }
   return provisionOne(await voeuSentinelle(reglage), { rescan: true });
 }
 

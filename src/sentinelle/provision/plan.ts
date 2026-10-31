@@ -67,7 +67,7 @@ export const ProvisionRequestSchema = z.union([
     company: z.string().max(200).nullable().optional(),
     siteUrl: z.string().min(1),
     /** Vrai : relancer l'analyse de tous les sites même si rien n'a changé (geste de l'admin). */
-    rescan: z.boolean().optional(),
+    rescan: z.union([z.boolean(), z.array(z.string()).min(1).max(11)]).optional(),
     /** Sites supplémentaires du même client. Absent : inchangés ; `[]` : tous retirés. */
     extraSites: z.array(ExtraSiteSchema).max(MAX_EXTRA_SITES).optional(),
     sector: z.string().max(200).nullable().optional(),
@@ -123,6 +123,8 @@ export type ProvisionPlan =
       }>;
       /** Relancer l'analyse : site changé, fiche jamais amorcée, ou réactivation. */
       scan: boolean;
+      /** Les seuls sites à analyser ; `null` : tous. */
+      scanSites: string[] | null;
       adopted: boolean;
     };
 
@@ -175,9 +177,24 @@ export function planProvision(request: ProvisionRequest, existing: ExistingClien
   if (!existing.active) patch.active = true;
   if (existing.plan !== "accompagnement") patch.plan = "accompagnement";
 
-  const scan = (request.rescan === true) || patch.siteUrl !== undefined || patch.extraSites !== undefined || existing.components === 0 || patch.active === true;
+  // Un rescan ciblé (liste d'adresses) ne vaut que s'il est la SEULE raison de
+  // scanner : un site ajouté, une fiche vide ou une réactivation analysent tout.
+  const ciblage = Array.isArray(request.rescan)
+    ? request.rescan.flatMap((url) => {
+        const net = normalizeSiteUrl(url);
+        return net ? [net] : [];
+      })
+    : [];
+  const raisonsDeToutScanner =
+    request.rescan === true ||
+    patch.siteUrl !== undefined ||
+    patch.extraSites !== undefined ||
+    existing.components === 0 ||
+    patch.active === true;
+  const scan = raisonsDeToutScanner || ciblage.length > 0;
+  const scanSites = raisonsDeToutScanner || ciblage.length === 0 ? null : ciblage;
   const adopted = !request.id;
 
   if (Object.keys(patch).length === 0 && !scan) return { kind: "noop", id: existing.id };
-  return { kind: "update", id: existing.id, patch, scan, adopted };
+  return { kind: "update", id: existing.id, patch, scan, scanSites, adopted };
 }

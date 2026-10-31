@@ -45,8 +45,8 @@ async function emailTakenByAnother(email: string, id: string): Promise<boolean> 
   return Boolean(row && row.id !== id);
 }
 
-async function queueScan(clientId: string): Promise<void> {
-  await inngest.send(clientSubscribed.create({ clientId, welcome: false }));
+async function queueScan(clientId: string, sites: string[] | null = null): Promise<void> {
+  await inngest.send(clientSubscribed.create({ clientId, welcome: false, ...(sites ? { sites } : {}) }));
 }
 
 export async function provisionClient(request: ProvisionRequest): Promise<ProvisionResult> {
@@ -92,7 +92,7 @@ export async function provisionClient(request: ProvisionRequest): Promise<Provis
           .set({ ...plan.patch, ...(plan.patch.active ? { deactivatedAt: null } : {}) })
           .where(eq(clients.id, plan.id));
       }
-      if (plan.scan) await queueScan(plan.id);
+      if (plan.scan) await queueScan(plan.id, plan.scanSites);
       return {
         ok: true,
         id: plan.id,

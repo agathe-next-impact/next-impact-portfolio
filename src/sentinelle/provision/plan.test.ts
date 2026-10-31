@@ -144,3 +144,25 @@ describe("sites supplémentaires", () => {
     expect(plan.kind === "update" && plan.patch.extraSites).toEqual([]);
   });
 });
+
+describe("rescan ciblé", () => {
+  const courant = () => existing({ siteUrl: planSite("client.fr"), extraSites: [{ url: "https://boutique.client.fr", name: null }] });
+
+  it("ne scanne que les sites désignés quand c'est la seule raison de scanner", () => {
+    const plan = planProvision({ ...active, rescan: ["boutique.client.fr/"] }, courant());
+    expect(plan).toMatchObject({ kind: "update", scan: true, scanSites: ["https://boutique.client.fr"] });
+  });
+
+  it("scanne tout avec rescan true", () => {
+    expect(planProvision({ ...active, rescan: true }, courant())).toMatchObject({ scan: true, scanSites: null });
+  });
+
+  it("scanne tout dès qu'un site change, même avec un ciblage", () => {
+    const plan = planProvision({ ...active, extraSites: [], rescan: ["boutique.client.fr"] }, courant());
+    expect(plan).toMatchObject({ kind: "update", scan: true, scanSites: null });
+  });
+
+  it("ignore un ciblage d'adresses invalides", () => {
+    expect(planProvision({ ...active, rescan: ["pas une adresse"] }, courant()).kind).toBe("noop");
+  });
+});

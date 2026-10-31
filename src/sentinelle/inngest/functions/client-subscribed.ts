@@ -21,6 +21,12 @@ import { clientSubscribed as clientSubscribedEvent } from "../events";
 // upsert, la bienvenue est protégée par une écriture conditionnelle.
 // ─────────────────────────────────────────────────────────────────────────────
 
+/** Une adresse est-elle dans la liste des sites ciblés (comparée sans schéma, sans « www. » ni barre finale) ? */
+function visee(url: string, ciblage: string[]): boolean {
+  const cle = (valeur: string) => valeur.toLowerCase().replace(/^https?:\/\//, "").replace(/^www\./, "").replace(/\/$/, "");
+  return ciblage.some((cible) => cle(cible) === cle(url));
+}
+
 export const onClientSubscribed = inngest.createFunction(
   {
     id: "sentinelle-client-subscribed",
@@ -31,7 +37,7 @@ export const onClientSubscribed = inngest.createFunction(
     retries: 3,
   },
   async ({ event, step }) => {
-    const { clientId, scanId, welcome: withWelcome } = event.data;
+    const { clientId, scanId, welcome: withWelcome, sites: ciblage } = event.data;
 
     const client = await step.run("load-client", async () => {
       const [row] = await db()
@@ -67,6 +73,8 @@ export const onClientSubscribed = inngest.createFunction(
       }
 
       if (!client.siteUrl) return null;
+      // Relance ciblée sur d'autres sites : le site principal n'est pas rescanné.
+      if (ciblage && !visee(client.siteUrl, ciblage)) return null;
 
       const outcome = await scanSite(client.siteUrl);
       if (!outcome.ok) {
@@ -97,6 +105,7 @@ export const onClientSubscribed = inngest.createFunction(
       const sites = siteList(client.extraSites);
       let written = 0;
       for (const site of sites) {
+        if (ciblage && !visee(site.url, ciblage)) continue;
         const outcome = await scanSite(site.url);
         if (!outcome.ok) {
           console.warn(`[sentinelle] abonnement ${clientId} : site ${site.url} non analysé (${outcome.reason})`);

@@ -24,6 +24,20 @@ import { ChampsSite } from "../../champs-site";
 
 const etiquette = "font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray";
 
+/** Relance l'analyse Sentinelle de CE site seulement. Réservé aux sites que Sentinelle surveille. */
+function ScanDuSite({ clientId, site }: { clientId: string; site: { url: string; watch: boolean; sansSuivi: boolean } }) {
+  if (!site.watch || site.sansSuivi) return null;
+  return (
+    <form action={lancerScan}>
+      <input type="hidden" name="clientId" value={clientId} />
+      <input type="hidden" name="siteUrl" value={site.url} />
+      <BoutonEnvoi className={buttonClass.quiet} enCours="Lancement…">
+        Scanner ce site
+      </BoutonEnvoi>
+    </form>
+  );
+}
+
 function NoteNotion() {
   return (
     <Panel className="border-l-2 border-l-accent-secondary p-4">
@@ -98,7 +112,8 @@ export async function Administration({ clientId }: { clientId: string }) {
         <Label>Sentinelle</Label>
         <Panel className="mt-3 flex flex-wrap items-center justify-between gap-4 p-5">
           <p className="max-w-prose font-inter-tight text-sm text-mid-gray">
-            Crée ou aligne le client chez Sentinelle et relance l&rsquo;analyse de tous ses sites.{" "}
+            Crée ou aligne le client chez Sentinelle et relance l&rsquo;analyse de tous ses sites (ou d&rsquo;un seul, avec
+            « Scanner ce site » dans la liste ci-dessus).{" "}
             {local
               ? "Site principal : le premier site « Veille technique » ; contact : la première personne dont l'accès est ouvert."
               : "Site principal et contact : ceux de sa fiche Notion (Site surveillé, Contact veille)."}{" "}
@@ -108,7 +123,9 @@ export async function Administration({ clientId }: { clientId: string }) {
           <form action={lancerScan}>
             <input type="hidden" name="clientId" value={reglage.id} />
             <BoutonEnvoi className={buttonClass.primary} enCours="Lancement…">
-              Lancer le scan Sentinelle
+              {reglage.sites.filter((site) => site.watch && !site.sansSuivi).length > 1
+                ? "Scanner tous les sites"
+                : "Lancer le scan Sentinelle"}
             </BoutonEnvoi>
           </form>
         </Panel>
@@ -185,13 +202,16 @@ function Sites({ reglage }: { reglage: ReglageClient }) {
                   </BoutonEnvoi>
                 </div>
               </form>
-              <form action={retirerSite} className="mt-2">
-                <input type="hidden" name="clientId" value={reglage.id} />
-                <input type="hidden" name="siteId" value={site.id} />
-                <BoutonEnvoi className={buttonClass.quiet} enCours="Retrait…">
-                  Retirer ce site
-                </BoutonEnvoi>
-              </form>
+              <div className="mt-2 flex flex-wrap gap-3">
+                <ScanDuSite clientId={reglage.id} site={site} />
+                <form action={retirerSite}>
+                  <input type="hidden" name="clientId" value={reglage.id} />
+                  <input type="hidden" name="siteId" value={site.id} />
+                  <BoutonEnvoi className={buttonClass.quiet} enCours="Retrait…">
+                    Retirer ce site
+                  </BoutonEnvoi>
+                </form>
+              </div>
             </div>
           ) : (
             <div key={site.id} className="flex flex-wrap items-center justify-between gap-3 px-5 py-4">
@@ -205,6 +225,7 @@ function Sites({ reglage }: { reglage: ReglageClient }) {
                 {site.watch ? <Tag tone="fait">Veille</Tag> : null}
                 {site.suiviFormule ? <Tag>Suivi {site.suiviFormule}</Tag> : null}
                 {site.sansSuivi ? <Tag>Sans suivi</Tag> : null}
+                <ScanDuSite clientId={reglage.id} site={site} />
               </div>
             </div>
           ),

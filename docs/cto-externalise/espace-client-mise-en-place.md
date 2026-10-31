@@ -826,3 +826,10 @@ message. Le bouton « Lancer le scan Sentinelle » marche aussi pour un client
 piloté par Notion : son « Site surveillé » et son « Contact veille » sont
 recopiés de la fiche à chaque balayage (`cto_clients.watched_site`,
 `watch_contact`, migration `0031_veille_fiche`).
+
+**Scan Sentinelle par site.** Pour un client qui a plusieurs sites surveillés,
+chaque site de la liste porte un bouton « Scanner ce site » (réservé aux sites
+cochés « Veille technique ») ; le bouton général devient « Scanner tous les
+sites ». Le ciblage passe par `rescan: ["https://…"]` sur
+`/api/sentinelle/provision` puis par l'événement `sentinelle/client.subscribed`
+(`sites`). Un site ajouté ou modifié reste analysé avec tous les autres.

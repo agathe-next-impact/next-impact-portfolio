@@ -63,8 +63,11 @@ export type ProvisionBody =
       company: string;
       siteUrl: string;
       extraSites: { url: string; name: string | null }[];
-      /** Geste de l'admin : relancer l'analyse de tous les sites même sans changement. */
-      rescan?: boolean;
+      /**
+       * Geste de l'admin : relancer l'analyse sans changement — `true` pour tous
+       * les sites, ou la liste des seuls sites à relancer.
+       */
+      rescan?: boolean | string[];
     };
 
 export type ProvisionDecision =
@@ -232,7 +235,7 @@ async function stateOf(clientId: string, contact: string | null): Promise<WatchS
  */
 export async function provisionOne(
   wish: WatchWish,
-  options: { rescan: boolean },
+  options: { rescan: boolean | string[] },
 ): Promise<{ ok: boolean; message: string }> {
   if (!sentinelleExportConfig()) {
     return { ok: false, message: "SENTINELLE_EXPORT_URL ou SENTINELLE_EXPORT_SECRET n'est pas posée." };
@@ -240,7 +243,7 @@ export async function provisionOne(
 
   const state = await stateOf(wish.clientId, wish.contact);
   // Un rescan force l'envoi même si la demande n'a pas changé depuis la dernière acceptée.
-  const decision = decideProvision(wish, options.rescan ? { ...state, digest: null } : state);
+  const decision = decideProvision(wish, options.rescan !== false ? { ...state, digest: null } : state);
 
   if (decision.kind === "skip") return { ok: true, message: "Sentinelle est déjà à jour pour ce client." };
   if (decision.kind === "incomplete") {
@@ -248,7 +251,8 @@ export async function provisionOne(
   }
 
   try {
-    const body = options.rescan && decision.body.active ? { ...decision.body, rescan: true } : decision.body;
+    const body =
+      options.rescan !== false && decision.body.active ? { ...decision.body, rescan: options.rescan } : decision.body;
     const result = await callSentinelle(body);
 
     const [holder] = await db()
