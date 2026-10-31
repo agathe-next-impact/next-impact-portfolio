@@ -260,15 +260,20 @@ export interface OrganisationLue {
  * relation Notion. La première nomme le client et donne son pack principal
  * (`sector`) ; tous les packs, sans doublon, servent à distribuer les lettres
  * sectorielles (`sectors`). Sans fiche lisible : `null`, rien n'est touché.
+ *
+ * Le client n'est nommé d'après son organisation que s'il n'en a qu'UNE. À
+ * plusieurs, aucune ne parle pour lui : il garde la raison sociale de sa fiche
+ * Clients (`raisonSocialeFiche`), sans quoi « Auger St Vincent » deviendrait
+ * « Les doléances », la première de ses trois organisations.
  */
 export function fusionOrganisations(
   lues: OrganisationLue[],
-  raisonSocialeActuelle: string,
+  raisonSocialeFiche: string,
 ): { company: string; sector: string | null; sectors: string[] | null; organisations: string[] } | null {
   if (lues.length === 0) return null;
   const packs = [...new Set(lues.flatMap((lue) => (lue.pack ? [lue.pack] : [])))];
   return {
-    company: lues[0].name ?? raisonSocialeActuelle,
+    company: lues.length === 1 ? (lues[0].name ?? raisonSocialeFiche) : raisonSocialeFiche,
     sector: lues[0].pack,
     sectors: packs.length > 0 ? packs : null,
     organisations: lues.flatMap((lue) => (lue.name ? [lue.name] : [])),

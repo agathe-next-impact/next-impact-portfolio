@@ -89,7 +89,7 @@ describe("projets d'un accompagnement", () => {
 });
 
 describe("organisations d'un client", () => {
-  it("nomme le client d'après la première et réunit tous les packs sans doublon", () => {
+  it("garde la raison sociale de la fiche client à plusieurs organisations, et réunit tous les packs sans doublon", () => {
     expect(
       fusionOrganisations(
         [
@@ -97,17 +97,25 @@ describe("organisations d'un client", () => {
           { name: "Ligue Sud", pack: "pack-culture" },
           { name: "Club Est", pack: "pack-sport" },
         ],
-        "Ancien nom",
+        "Auger St Vincent",
       ),
     ).toEqual({
-      company: "Fédération Nord",
+      company: "Auger St Vincent",
       sector: "pack-sport",
       sectors: ["pack-sport", "pack-culture"],
       organisations: ["Fédération Nord", "Ligue Sud", "Club Est"],
     });
   });
 
-  it("garde la raison sociale actuelle quand la première fiche n'a pas de nom, et ne devine pas de pack", () => {
+  it("nomme le client d'après son organisation quand il n'en a qu'une", () => {
+    expect(fusionOrganisations([{ name: "Mastora SAS", pack: "pack-formation" }], "Mastora")).toMatchObject({
+      company: "Mastora SAS",
+      sector: "pack-formation",
+    });
+    expect(fusionOrganisations([{ name: null, pack: null }], "Mastora")?.company).toBe("Mastora");
+  });
+
+  it("ne devine pas de pack quand aucune organisation n'en a", () => {
     expect(fusionOrganisations([{ name: null, pack: null }, { name: "Ligue", pack: null }], "Actuel")).toEqual({
       company: "Actuel",
       sector: null,
