@@ -108,6 +108,8 @@ export const COLUMNS: Record<SchemaBase, Column[]> = {
     column(PROPS.sites.url, "url"),
     column(PROPS.sites.wpUmbrellaProjectId, "number"),
     facultative(PROPS.sites.watch, "checkbox"),
+    facultative(PROPS.sites.suiviFormule, "select"),
+    facultative(PROPS.sites.sansSuivi, "checkbox"),
     facultative(PROPS.sites.order, "number"),
   ],
   decision: [

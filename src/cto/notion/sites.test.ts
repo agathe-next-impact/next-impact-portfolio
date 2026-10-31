@@ -10,6 +10,8 @@ const voulu = (page: string, extra: Partial<SiteVoulu> = {}): SiteVoulu => ({
   url: null,
   wpUmbrellaProjectId: 10,
   watch: false,
+  suiviFormule: null,
+  sansSuivi: false,
   position: 0,
   ...extra,
 });
@@ -22,6 +24,8 @@ const existant = (page: string, extra: Partial<SiteExistant> = {}): SiteExistant
   url: null,
   wpUmbrellaProjectId: 10,
   watch: false,
+  suiviFormule: null,
+  sansSuivi: false,
   position: 0,
   removedAt: null,
   ...extra,
@@ -68,6 +72,7 @@ describe("plan de la synchro des sites", () => {
 
 describe("projets d'un accompagnement", () => {
   const site = (projectId: number, position: number, name: string | null = null) => ({
+    formule: null,
     projectId,
     name,
     url: null,
@@ -126,5 +131,39 @@ describe("organisations d'un client", () => {
 
   it("ne touche à rien sans fiche lisible", () => {
     expect(fusionOrganisations([], "Actuel")).toBeNull();
+  });
+});
+
+describe("niveaux de service par site", () => {
+  const site = (projectId: number, formule: string | null = null) => ({
+    projectId,
+    name: `Site ${projectId}`,
+    url: null,
+    formule,
+    position: projectId,
+  });
+
+  it("ne rend pas par la fiche client un projet marqué « Sans suivi »", () => {
+    expect(fusionnerProjets([site(2)], 9, [9]).map((s) => s.projectId)).toEqual([2]);
+    expect(fusionnerProjets([], 9, [9])).toEqual([]);
+  });
+
+  it("garde la formule de chaque site", () => {
+    expect(fusionnerProjets([site(1, "Actif"), site(2, "Essentiel"), site(3)], null).map((s) => "formule" in s && s.formule)).toEqual([
+      "Actif",
+      "Essentiel",
+      null,
+    ]);
+  });
+});
+
+describe("plan : niveaux de service", () => {
+  it("met à jour la formule et le « Sans suivi » d'un site", () => {
+    const plan = planifier(
+      [voulu("a", { suiviFormule: "Actif", sansSuivi: true })],
+      [existant("a")],
+      new Set(["a"]),
+    );
+    expect(plan.mettreAJour).toEqual([{ id: "id-a", patch: { suiviFormule: "Actif", sansSuivi: true } }]);
   });
 });

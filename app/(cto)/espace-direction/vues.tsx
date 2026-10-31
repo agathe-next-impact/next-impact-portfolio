@@ -759,7 +759,13 @@ export async function VueSite({ viewer, context }: { viewer: Viewer; context: Es
     >
       {sites.length > 0 ? (
         sites.map((state) => (
-          <BlocSite key={state.projectId} state={state} plusieurs={sites.length > 1} traiter={traiter} />
+          <BlocSite
+            key={state.projectId}
+            state={state}
+            plusieurs={sites.length > 1}
+            traiter={traiter}
+            formuleClient={context.profile.suiviFormule}
+          />
         ))
       ) : (
         <EnPreparation>
@@ -782,19 +788,26 @@ function BlocSite({
   state,
   plusieurs,
   traiter,
+  formuleClient,
 }: {
   state: SiteState;
   plusieurs: boolean;
   traiter: string | null;
+  formuleClient: string | null;
 }) {
+  // Chaque site a son niveau de service : sa formule, sinon celle de la fiche client.
+  const formule = state.formule ?? formuleClient;
   const verdict = siteVerdict(state);
   const points = state.snapshot ? sitePoints(state.snapshot) : [];
   const titre = state.name ?? state.url?.replace(/^https?:\/\//, "").replace(/\/$/, "") ?? "Site";
 
   return (
     <section aria-label={plusieurs ? titre : undefined} className={plusieurs ? "mt-12" : undefined}>
-      {plusieurs ? (
-        <h2 className="mt-10 font-sans text-xl font-light text-foreground">{titre}</h2>
+      {plusieurs || state.formule ? (
+        <div className="mt-10 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+          <h2 className="font-sans text-xl font-light text-foreground">{titre}</h2>
+          {formule ? <Tag>{`Suivi ${formule}`}</Tag> : null}
+        </div>
       ) : null}
       {state.snapshot ? (
         <Panel className="mt-10 px-5 py-5">

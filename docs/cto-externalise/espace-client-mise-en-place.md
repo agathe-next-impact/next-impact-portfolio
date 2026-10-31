@@ -770,3 +770,24 @@ provisionnement ; un changement de liste relance l'analyse :
 Migrations : Sentinelle `0009_sites_multiples` (`npm run db:migrate`) ; espace
 `0028_sites_veille` (`npm run db:cto:migrate`). À appliquer AVANT de déployer :
 l'index unique des composants change.
+
+### Niveau de service par site
+
+Chaque ligne de la base Sites peut avoir son propre niveau :
+
+| Colonne | Type | Effet |
+| --- | --- | --- |
+| Formule suivi | sélection (Essentiel, Actif) | formule de CE site, affichée sur son bloc ; vide = celle de la fiche client |
+| Sans suivi | case | site non supervisé : ni relevé WP Umbrella, ni bloc dans « État du site », même avec un ID projet (le projet unique de la fiche client ne le ramène pas) |
+| Veille | case | site surveillé par Sentinelle (en plus du « Site surveillé » principal) |
+
+La colonne « Services » de la fiche client reste le plafond : elle ouvre les
+sections (Suivi technique, Veille technique) ; les colonnes ci-dessus
+précisent le niveau de chaque site à l'intérieur. Migration `0029_sites_niveaux`.
+
+### Plusieurs organisations : le nom du client
+
+Avec UNE organisation, le client prend sa raison sociale (comportement
+d'origine). Avec PLUSIEURS, il garde la « Raison sociale » de sa fiche Clients :
+aucune organisation ne parle pour lui (ex. Auger St Vincent = Les doléances +
+EGC + Café citoyen).

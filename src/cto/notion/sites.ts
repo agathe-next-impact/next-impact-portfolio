@@ -37,6 +37,8 @@ export interface SiteExistant {
   url: string | null;
   wpUmbrellaProjectId: number | null;
   watch: boolean;
+  suiviFormule: string | null;
+  sansSuivi: boolean;
   position: number;
   removedAt: Date | null;
 }
@@ -48,6 +50,8 @@ export interface SiteVoulu {
   url: string | null;
   wpUmbrellaProjectId: number | null;
   watch: boolean;
+  suiviFormule: string | null;
+  sansSuivi: boolean;
   position: number;
 }
 
@@ -92,6 +96,8 @@ export function planifier(voulus: SiteVoulu[], existants: SiteExistant[], pagesV
       patch.wpUmbrellaProjectId = voulu.wpUmbrellaProjectId;
     }
     if (actuel.watch !== voulu.watch) patch.watch = voulu.watch;
+    if (actuel.suiviFormule !== voulu.suiviFormule) patch.suiviFormule = voulu.suiviFormule;
+    if (actuel.sansSuivi !== voulu.sansSuivi) patch.sansSuivi = voulu.sansSuivi;
     if (actuel.position !== voulu.position) patch.position = voulu.position;
     if (actuel.removedAt) patch.removedAt = null;
     if (Object.keys(patch).length > 0) plan.mettreAJour.push({ id: actuel.id, patch });
@@ -158,6 +164,8 @@ export async function syncSitesFromNotion(
       url: row.url,
       wpUmbrellaProjectId: row.wpUmbrellaProjectId,
       watch: row.watch,
+      suiviFormule: row.suiviFormule,
+      sansSuivi: row.sansSuivi,
       position: row.order,
     });
   }
@@ -171,6 +179,8 @@ export async function syncSitesFromNotion(
       url: ctoSites.url,
       wpUmbrellaProjectId: ctoSites.wpUmbrellaProjectId,
       watch: ctoSites.watch,
+      suiviFormule: ctoSites.suiviFormule,
+      sansSuivi: ctoSites.sansSuivi,
       position: ctoSites.position,
       removedAt: ctoSites.removedAt,
     })

@@ -883,6 +883,14 @@ export const ctoSites = pgTable(
     wpUmbrellaProjectId: integer("wp_umbrella_project_id"),
     /** Colonne « Veille » : ce site est aussi surveillé par Sentinelle (veille technique). */
     watch: boolean("watch").notNull().default(false),
+    /**
+     * Formule du suivi propre à ce site (colonne « Formule suivi » : Essentiel
+     * ou Actif). `null` : celle de la fiche client. Chaque site peut avoir son
+     * niveau de service.
+     */
+    suiviFormule: text("suivi_formule"),
+    /** Colonne « Sans suivi » : le site n'est pas supervisé (ni balayé, ni affiché dans « État du site »). */
+    sansSuivi: boolean("sans_suivi").notNull().default(false),
     /** Ordre d'affichage (colonne « Ordre »), puis création. */
     position: integer("position").notNull().default(0),
     createdAt: timestamp("created_at").notNull().defaultNow(),

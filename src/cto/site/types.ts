@@ -92,6 +92,8 @@ export interface SiteSnapshot {
 /** Le relevé tel que l'espace le lit : données, fraîcheur, dernière erreur. */
 export interface SiteState {
   projectId: number;
+  /** Formule de suivi propre au site (Essentiel, Actif) ; absente : celle de la fiche client. */
+  formule?: string | null;
   /** Nom saisi dans la base « Sites », sinon celui que WP Umbrella donne au site. */
   name: string | null;
   url: string | null;

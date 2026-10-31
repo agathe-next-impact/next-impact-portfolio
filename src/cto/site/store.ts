@@ -154,6 +154,8 @@ export interface SiteSurveille {
   projectId: number;
   name: string | null;
   url: string | null;
+  /** Formule de ce site (Essentiel, Actif) ; `null` : celle de la fiche client. */
+  formule: string | null;
   position: number;
 }
 
@@ -162,16 +164,20 @@ export interface SiteSurveille {
  * « Sites » d'abord (dans l'ordre saisi), puis le projet unique de la fiche
  * client s'il n'est repris par aucun d'eux.
  */
-export function fusionnerProjets(
-  sites: { projectId: number; name: string | null; url: string | null; position: number }[],
+export function fusionnerProjets<T extends { projectId: number; position: number }>(
+  sites: T[],
   projetFiche: number | null,
-): { projectId: number; name: string | null; url: string | null; position: number }[] {
-  const vus = new Set<number>();
-  const liste = [...sites]
+  exclus: number[] = [],
+): (T | { projectId: number; name: null; url: null; formule: null; position: number })[] {
+  // Un projet marqué « Sans suivi » ne revient pas par la fiche client.
+  const vus = new Set<number>(exclus);
+  const liste: (T | { projectId: number; name: null; url: null; formule: null; position: number })[] = [
+    ...sites,
+  ]
     .sort((a, b) => a.position - b.position)
     .filter((site) => (vus.has(site.projectId) ? false : (vus.add(site.projectId), true)));
   if (projetFiche !== null && !vus.has(projetFiche)) {
-    liste.push({ projectId: projetFiche, name: null, url: null, position: Number.MAX_SAFE_INTEGER });
+    liste.push({ projectId: projetFiche, name: null, url: null, formule: null, position: Number.MAX_SAFE_INTEGER });
   }
   return liste;
 }
@@ -190,15 +196,19 @@ export async function sitesSupervisesDe(clientId: string): Promise<SiteSurveille
       projectId: ctoSites.wpUmbrellaProjectId,
       name: ctoSites.name,
       url: ctoSites.url,
+      formule: ctoSites.suiviFormule,
+      sansSuivi: ctoSites.sansSuivi,
       position: ctoSites.position,
     })
     .from(ctoSites)
     .where(and(eq(ctoSites.clientId, clientId), isNull(ctoSites.removedAt), isNotNull(ctoSites.wpUmbrellaProjectId)))
     .orderBy(asc(ctoSites.position), asc(ctoSites.createdAt));
 
+  const avecProjet = rows.flatMap((row) => (row.projectId === null ? [] : [{ ...row, projectId: row.projectId }]));
   return fusionnerProjets(
-    rows.flatMap((row) => (row.projectId === null ? [] : [{ ...row, projectId: row.projectId }])),
+    avecProjet.filter((row) => !row.sansSuivi),
     client.projet,
+    avecProjet.filter((row) => row.sansSuivi).map((row) => row.projectId),
   ).map((site) => ({ clientId, company: client.company, ...site }));
 }
 
@@ -319,6 +329,7 @@ export async function siteStatesFor(clientId: string): Promise<SiteState[]> {
     const snapshot = row ? (row.data as SiteSnapshot) : null;
     return {
       projectId: site.projectId,
+      formule: site.formule,
       name: site.name ?? snapshot?.site.name ?? null,
       url: site.url ?? snapshot?.site.url ?? null,
       snapshot,

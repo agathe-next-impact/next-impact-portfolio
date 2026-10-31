@@ -231,6 +231,10 @@ export const PROPS = {
     wpUmbrellaProjectId: "ID projet WP Umbrella",
     /** Case : ce site entre aussi dans la veille technique (Sentinelle). */
     watch: "Veille",
+    /** Essentiel ou Actif ; vide = la formule de la fiche client. */
+    suiviFormule: "Formule suivi",
+    /** Case : site non supervisé, même avec un ID projet WP Umbrella. */
+    sansSuivi: "Sans suivi",
     order: "Ordre",
   },
 } as const;
@@ -286,6 +290,8 @@ export function siteRow(page: NotionPage): {
   url: string | null;
   wpUmbrellaProjectId: number | null;
   watch: boolean;
+  suiviFormule: string | null;
+  sansSuivi: boolean;
   order: number;
 } {
   const projet = p.number(page, PROPS.sites.wpUmbrellaProjectId);
@@ -294,6 +300,11 @@ export function siteRow(page: NotionPage): {
     url: p.url(page, PROPS.sites.url),
     wpUmbrellaProjectId: projet !== null && Number.isInteger(projet) && projet > 0 ? projet : null,
     watch: p.checkbox(page, PROPS.sites.watch),
+    // Seules les formules publiées passent, comme pour la fiche client.
+    suiviFormule: ((formule) => (formule === "Essentiel" || formule === "Actif" ? formule : null))(
+      p.select(page, PROPS.sites.suiviFormule),
+    ),
+    sansSuivi: p.checkbox(page, PROPS.sites.sansSuivi),
     order: Math.trunc(p.number(page, PROPS.sites.order) ?? 0),
   };
 }
