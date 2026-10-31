@@ -77,7 +77,17 @@ interface Occurrence {
   slug: string;
   version: string | null;
   source: string;
+  /** Ressource d'une bibliothèque embarquée : son `?ver=` est celui de la bibliothèque. */
+  bundled: boolean;
 }
+
+/**
+ * Sous-dossiers où une extension range des bibliothèques tierces. Le `?ver=`
+ * d'un fichier qui s'y trouve est celui de la bibliothèque, pas de l'extension :
+ * constaté sur Elementor Pro, dont `assets/lib/smartmenus/…?ver=1.2.1` donnait
+ * « Elementor Pro 1.2.1 » alors que tout le reste de l'extension portait 4.3.2.
+ */
+const BUNDLED_LIBRARY = /\/(?:lib|libs|vendor|vendors|third-party|node_modules)\//i;
 
 function collect(sources: string[], pattern: RegExp): Occurrence[] {
   const occurrences: Occurrence[] = [];
@@ -91,7 +101,13 @@ function collect(sources: string[], pattern: RegExp): Occurrence[] {
       // match[0] est l'URL qui a matché — et c'est la SEULE dans laquelle on a
       // le droit de chercher une version.
       const url = match[0];
-      occurrences.push({ slug, version: versionFromQuery(url), source: url });
+      const inside = url.slice(url.toLowerCase().indexOf(`/${slug}/`) + slug.length + 1);
+      occurrences.push({
+        slug,
+        version: versionFromQuery(url),
+        source: url,
+        bundled: BUNDLED_LIBRARY.test(inside),
+      });
     }
   }
 
@@ -102,35 +118,35 @@ function toComponents(
   occurrences: Occurrence[],
   type: "cms_plugin" | "cms_theme",
 ): DetectedComponent[] {
-  const bySlug = new Map<string, DetectedComponent>();
-
+  const bySlug = new Map<string, Occurrence[]>();
   for (const occurrence of occurrences) {
-    const existing = bySlug.get(occurrence.slug);
+    bySlug.set(occurrence.slug, [...(bySlug.get(occurrence.slug) ?? []), occurrence]);
+  }
 
-    if (existing) {
-      // Une même extension apparaît souvent plusieurs fois ; on garde la
-      // première version trouvée.
-      if (!existing.version && occurrence.version) {
-        existing.version = occurrence.version;
-        existing.versionConfidence = "medium";
-      }
-      continue;
+  return [...bySlug].map(([slug, seen]) => {
+    // Une même extension apparaît souvent plusieurs fois, avec parfois des
+    // versions différentes : on retient la plus fréquente parmi les ressources
+    // propres à l'extension. Une bibliothèque embarquée ne compte jamais ; sans
+    // autre indice, mieux vaut ne pas de version qu'une version fausse.
+    const votes = new Map<string, number>();
+    for (const occurrence of seen) {
+      if (occurrence.bundled || !occurrence.version) continue;
+      votes.set(occurrence.version, (votes.get(occurrence.version) ?? 0) + 1);
     }
+    const version = [...votes].sort((a, b) => b[1] - a[1])[0]?.[0] ?? null;
 
-    bySlug.set(occurrence.slug, {
+    return {
       type,
-      slug: occurrence.slug,
-      label: humanizeSlug(occurrence.slug),
+      slug,
+      label: humanizeSlug(slug),
       ecosystem: "wordpress",
-      version: occurrence.version,
-      versionConfidence: occurrence.version ? "medium" : null,
+      version,
+      versionConfidence: version ? "medium" : null,
       // La présence est certaine : le fichier est réellement chargé par la page.
       confidence: "high",
       evidence: type === "cms_theme" ? "thème chargé par la page" : "extension chargée par la page",
-    });
-  }
-
-  return [...bySlug.values()];
+    } satisfies DetectedComponent;
+  });
 }
 
 /**

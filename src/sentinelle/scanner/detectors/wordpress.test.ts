@@ -135,6 +135,32 @@ describe("detectWordPressComponents", () => {
   });
 });
 
+describe("bibliothèques embarquées", () => {
+  it("ignore le ?ver= d'une bibliothèque rangée dans lib/ ou vendor/", () => {
+    // Cas réel (Elementor Pro) : jquery.smartmenus.min.js?ver=1.2.1 passait en
+    // premier et donnait « Elementor Pro 1.2.1 » au lieu de 4.3.2.
+    const evidence = buildEvidence({
+      url: "https://x.fr",
+      finalUrl: "https://x.fr/",
+      status: 200,
+      headers: {},
+      setCookies: [],
+      html: `
+        <script src="/wp-content/plugins/elementor-pro/assets/lib/smartmenus/jquery.smartmenus.min.js?ver=1.2.1"></script>
+        <script src="/wp-content/plugins/elementor-pro/assets/js/frontend.min.js?ver=4.3.2"></script>
+        <link href="/wp-content/plugins/elementor-pro/assets/css/widget-form.min.css?ver=4.3.2" />
+        <script src="/wp-content/plugins/seule-lib/vendor/x.js?ver=9.9"></script>`,
+    });
+
+    const bySlug = (slug: string) =>
+      detectWordPressComponents(evidence).find((c) => c.slug === slug);
+
+    expect(bySlug("elementor-pro")?.version).toBe("4.3.2");
+    // Rien d'autre que la bibliothèque : pas de version plutôt qu'une fausse.
+    expect(bySlug("seule-lib")).toMatchObject({ version: null, versionConfidence: null });
+  });
+});
+
 describe("non-contamination des versions", () => {
   it("n'attribue pas à un composant la version d'un autre", () => {
     // Régression constatée sur wordpress.org : le ?ver= était cherché dans le
