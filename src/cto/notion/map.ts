@@ -269,15 +269,20 @@ export interface OrganisationLue {
  * plusieurs, aucune ne parle pour lui : il garde la raison sociale de sa fiche
  * Clients (`raisonSocialeFiche`), sans quoi « Auger St Vincent » deviendrait
  * « Les doléances », la première de ses trois organisations.
+ *
+ * `nombreDeLiens` : combien de fiches la relation désigne, lisibles ou non. Une
+ * fiche illisible ou déjà prise par un autre client ne doit pas faire passer un
+ * client à trois organisations pour un client à une seule.
  */
 export function fusionOrganisations(
   lues: OrganisationLue[],
   raisonSocialeFiche: string,
+  nombreDeLiens: number = lues.length,
 ): { company: string; sector: string | null; sectors: string[] | null; organisations: string[] } | null {
   if (lues.length === 0) return null;
   const packs = [...new Set(lues.flatMap((lue) => (lue.pack ? [lue.pack] : [])))];
   return {
-    company: lues.length === 1 ? (lues[0].name ?? raisonSocialeFiche) : raisonSocialeFiche,
+    company: lues.length === 1 && nombreDeLiens === 1 ? (lues[0].name ?? raisonSocialeFiche) : raisonSocialeFiche,
     sector: lues[0].pack,
     sectors: packs.length > 0 ? packs : null,
     organisations: lues.flatMap((lue) => (lue.name ? [lue.name] : [])),

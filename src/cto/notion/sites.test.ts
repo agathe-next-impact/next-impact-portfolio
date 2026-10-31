@@ -121,6 +121,12 @@ describe("organisations d'un client", () => {
     expect(fusionOrganisations([{ name: null, pack: null }], "Mastora")?.company).toBe("Mastora");
   });
 
+  it("ne renomme pas un client à plusieurs organisations dont une seule est lisible", () => {
+    expect(fusionOrganisations([{ name: "Les doléances", pack: null }], "Auger St Vincent", 3)?.company).toBe(
+      "Auger St Vincent",
+    );
+  });
+
   it("ne devine pas de pack quand aucune organisation n'en a", () => {
     expect(fusionOrganisations([{ name: null, pack: null }, { name: "Ligue", pack: null }], "Actuel")).toEqual({
       company: "Actuel",

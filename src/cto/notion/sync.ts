@@ -622,7 +622,7 @@ async function adopterFicheOrganisation(
     .limit(1);
   if (!actuel) return;
 
-  const voulu = fusionOrganisations(lues, nomAffiche);
+  const voulu = fusionOrganisations(lues, nomAffiche, liens.length);
   if (!voulu) return;
 
   const memeListe = (a: string[] | null, b: string[] | null) =>
