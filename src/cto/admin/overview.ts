@@ -125,6 +125,10 @@ export interface AdminPersonRow {
   openSessions: number;
   /** Dernière connexion réussie (lien ou passkey) ; `null` = jamais entrée, invitation à envoyer. */
   lastLoginAt: Date | null;
+  /** Dernière invitation partie (bienvenue ou envoi manuel) ; `null` = aucune. */
+  invitedAt: Date | null;
+  /** Tous les envois d'invitation, le plus récent d'abord, échecs compris. */
+  invitations: { at: Date; sent: boolean; detail: string | null }[];
 }
 
 export interface ClientDetail {
@@ -147,7 +151,7 @@ export async function clientDetail(
   const [client] = await db().select().from(ctoClients).where(eq(ctoClients.id, clientId)).limit(1);
   if (!client) return null;
 
-  const [persons, sessionCounts, logins] = await Promise.all([
+  const [persons, sessionCounts, logins, sends] = await Promise.all([
     db()
       .select({
         id: ctoPersons.id,
@@ -156,6 +160,7 @@ export async function clientDetail(
         role: ctoPersons.role,
         revokedAt: ctoPersons.revokedAt,
         createdAt: ctoPersons.createdAt,
+        invitedAt: ctoPersons.invitedAt,
       })
       .from(ctoPersons)
       .where(eq(ctoPersons.clientId, clientId))
@@ -191,8 +196,31 @@ export async function clientDetail(
         ),
       )
       .groupBy(ctoAccessLog.personId),
+
+    db()
+      .select({
+        personId: ctoAccessLog.personId,
+        event: ctoAccessLog.event,
+        detail: ctoAccessLog.detail,
+        at: ctoAccessLog.at,
+      })
+      .from(ctoAccessLog)
+      .where(
+        and(
+          eq(ctoAccessLog.clientId, clientId),
+          inArray(ctoAccessLog.event, ["invitation_envoyee", "invitation_echec"]),
+        ),
+      )
+      .orderBy(desc(ctoAccessLog.at)),
   ]);
 
+  const invitations = new Map<string, AdminPersonRow["invitations"]>();
+  for (const row of sends) {
+    if (!row.personId) continue;
+    const list = invitations.get(row.personId) ?? [];
+    list.push({ at: row.at, sent: row.event === "invitation_envoyee", detail: row.detail });
+    invitations.set(row.personId, list);
+  }
   const sessions = new Map(sessionCounts.map((row) => [row.personId, row.count]));
   const lastLogins = new Map(logins.map((row) => [row.personId, new Date(row.last)]));
 
@@ -209,6 +237,7 @@ export async function clientDetail(
       ...person,
       openSessions: sessions.get(person.id) ?? 0,
       lastLoginAt: lastLogins.get(person.id) ?? null,
+      invitations: invitations.get(person.id) ?? [],
     })),
   };
 }

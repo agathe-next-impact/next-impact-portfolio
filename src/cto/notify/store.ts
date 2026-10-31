@@ -6,6 +6,7 @@ import {
   issueMagicLink,
   markInvited,
   personsToWelcome,
+  record,
   sendPublicationNotice,
   sendWelcome,
   type PublicationSummary,
@@ -105,10 +106,12 @@ export async function notifyPendingPublications(
           issued.code,
         );
         await markInvited(person.id, now);
+        await record({ event: "invitation_envoyee", personId: person.id, clientId: client.id, detail: `bienvenue · ${person.email}` });
         accueillis.add(person.id);
         welcomed += 1;
       } catch (error) {
         console.error("[cto] bienvenue impossible", error);
+        await record({ event: "invitation_echec", personId: person.id, clientId: client.id, detail: `bienvenue · ${person.email}` });
         warnings.push(`Bienvenue non envoyée à ${person.email} : l'envoi a échoué.`);
       }
     }

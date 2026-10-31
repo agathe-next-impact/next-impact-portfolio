@@ -144,10 +144,26 @@ export default async function ClientDetailPage({
                 </p>
                 <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray">
                   {person.email} · arrivée le {formatDate(person.createdAt)} ·{" "}
+                  {person.invitedAt ? `invitée le ${formatDate(person.invitedAt)}` : "jamais invitée"} ·{" "}
                   {person.lastLoginAt
                     ? `dernière connexion le ${formatDate(person.lastLoginAt)}`
                     : "jamais connectée"}
                 </p>
+                {person.invitations.length > 0 ? (
+                  <details className="mt-2">
+                    <summary className="cursor-pointer font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray">
+                      Invitations ({person.invitations.length})
+                    </summary>
+                    <ul className="mt-2 space-y-1 font-inter-tight text-sm text-mid-gray">
+                      {person.invitations.map((invitation, index) => (
+                        <li key={index}>
+                          {formatDate(invitation.at)} — {invitation.sent ? "envoyée" : "échec de l'envoi"}
+                          {invitation.detail ? ` (${invitation.detail})` : ""}
+                        </li>
+                      ))}
+                    </ul>
+                  </details>
+                ) : null}
               </div>
 
               <div className="flex flex-wrap items-center gap-2">

@@ -225,6 +225,13 @@
       "when": 1793432373950,
       "tag": "0031_veille_fiche",
       "breakpoints": true
+    },
+    {
+      "idx": 32,
+      "version": "7",
+      "when": 1793463437485,
+      "tag": "0032_invitations_journal",
+      "breakpoints": true
     }
   ]
 }

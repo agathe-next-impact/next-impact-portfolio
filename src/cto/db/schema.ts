@@ -96,6 +96,10 @@ export const ctoAccessEventEnum = pgEnum("cto_access_event", [
   // fait. Pas les affichages — une ligne par page vue noierait le journal.
   "suggestion_cliquee",
   "suggestion_masquee",
+  // Les invitations envoyées au client (lien de connexion, bienvenue), échecs
+  // compris : `invited_at` ne garde que la dernière, le journal garde toutes.
+  "invitation_envoyee",
+  "invitation_echec",
 ]);
 
 // ─── Clients et personnes ─────────────────────────────────────────────────

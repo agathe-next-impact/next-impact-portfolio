@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { db } from "../db/client";
 import { ctoClients, ctoPersons } from "../db/schema";
-import { issueMagicLink, markInvited, sendLoginLink } from "../access";
+import { issueMagicLink, markInvited, record, sendLoginLink } from "../access";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Les écritures de l'admin de supervision.
@@ -49,6 +49,7 @@ export async function sendAccessLink(personId: string, origin: string): Promise<
   const [person] = await db()
     .select({
       id: ctoPersons.id,
+      clientId: ctoPersons.clientId,
       email: ctoPersons.email,
       name: ctoPersons.name,
       revokedAt: ctoPersons.revokedAt,
@@ -73,8 +74,14 @@ export async function sendAccessLink(personId: string, origin: string): Promise<
   }
 
   const url = `${origin}/espace-direction/connexion?jeton=${encodeURIComponent(issued.token)}`;
-  await sendLoginLink({ email: person.email, name: person.name }, url, issued.code);
+  try {
+    await sendLoginLink({ email: person.email, name: person.name }, url, issued.code);
+  } catch (error) {
+    await record({ event: "invitation_echec", personId: person.id, clientId: person.clientId, detail: `manuelle · ${person.email}` });
+    throw error;
+  }
   // Invitée à la main : « Prévenir » ne lui enverra pas de bienvenue en plus.
   await markInvited(person.id);
+  await record({ event: "invitation_envoyee", personId: person.id, clientId: person.clientId, detail: `manuelle · ${person.email}` });
   return { ok: true, email: person.email };
 }

@@ -28,10 +28,17 @@ export type AccessEvent =
   | "session_revoquee"
   | "acces_refuse"
   | "suggestion_cliquee"
-  | "suggestion_masquee";
+  | "suggestion_masquee"
+  | "invitation_envoyee"
+  | "invitation_echec";
 
-/** Les événements qui décrivent un usage, pas un accès : exclus du journal de sécurité du client. */
-export const EVENEMENTS_SUGGESTION = ["suggestion_cliquee", "suggestion_masquee"] as const satisfies readonly AccessEvent[];
+/** Les événements qui décrivent un usage ou une action de l'admin, pas un accès : exclus du journal de sécurité du client. */
+export const EVENEMENTS_SUGGESTION = [
+  "suggestion_cliquee",
+  "suggestion_masquee",
+  "invitation_envoyee",
+  "invitation_echec",
+] as const satisfies readonly AccessEvent[];
 
 export interface AccessEntry {
   event: AccessEvent;
@@ -149,4 +156,6 @@ export const EVENT_LABELS: Record<AccessEvent, string> = {
   acces_refuse: "Tentative refusée",
   suggestion_cliquee: "Suggestion : « En parler »",
   suggestion_masquee: "Suggestion masquée",
+  invitation_envoyee: "Invitation envoyée",
+  invitation_echec: "Invitation non envoyée",
 };
