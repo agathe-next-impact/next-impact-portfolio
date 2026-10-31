@@ -10,6 +10,7 @@ import {
   AppWindow,
   BookOpen,
   ChevronRight,
+  ClipboardList,
   Compass,
   Download,
   FileSignature,
@@ -79,6 +80,7 @@ export type NavIconName =
   | "decisions"
   | "audit"
   | "site"
+  | "fiche-technique"
   | "apercus"
   | "cartographie"
   | "agir"
@@ -96,6 +98,7 @@ const ICONS: Record<NavIconName, LucideIcon> = {
   decisions: Gavel,
   audit: Search,
   site: Activity,
+  "fiche-technique": ClipboardList,
   apercus: AppWindow,
   cartographie: Layers,
   agir: ListChecks,

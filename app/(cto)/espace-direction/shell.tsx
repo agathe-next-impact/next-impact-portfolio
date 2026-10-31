@@ -137,7 +137,7 @@ export async function loadEspace(viewer: Viewer): Promise<EspaceContext> {
     // montrer : leur contenu se relit sur leurs pages.
     lettersForClient(viewer.clientId),
     digestsForClient(viewer.clientId),
-    ouverte("veille-technique") ? sentinelleStateFor(viewer.clientId) : null,
+    ouverte("veille-technique") || ouverte("fiche-technique") ? sentinelleStateFor(viewer.clientId) : null,
   ]);
   const now = new Date();
   // Les repères généraux (carte, pastille, barre latérale) montrent le site

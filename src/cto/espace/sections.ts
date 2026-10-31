@@ -40,6 +40,7 @@ export type SectionKey =
   | "decisions"
   | "audit"
   | "site"
+  | "fiche-technique"
   | "apercus"
   | "cartographie"
   | "agir"
@@ -104,6 +105,12 @@ export const SECTIONS: readonly Section[] = [
   { key: "documents", slug: "documents", label: "Documents", group: "missions", services: ["direction-technique"] },
 
   { key: "site", slug: "site", label: "État du site", group: "site", services: ["suivi-technique"] },
+  // L'inventaire relevé par Sentinelle : de quoi le site est fait, composant par
+  // composant. Il vivait au milieu de la veille technique ; c'est une réponse à
+  // « comment va mon site ? », donc sous Votre site. Offerte comme la veille
+  // technique (`veille-offerte.ts`) et, comme elle, hors navigation tant
+  // qu'aucun relevé n'existe.
+  { key: "fiche-technique", slug: "fiche-technique", label: "Fiche technique", group: "site", services: null },
   // Les maquettes et le site en développement, avec leur accès : ouverts dès
   // qu'une version est publiée, sans service à cocher. Un site en refonte
   // n'attend pas un abonnement pour être montré.
@@ -190,6 +197,7 @@ function hasContent(key: SectionKey, contents: Contents): boolean {
     case "apercus":
       return (contents.apercus ?? 0) > 0;
     case "veille-technique":
+    case "fiche-technique":
       return contents.sentinelle === true;
     // Des tarifs ne s'ouvrent pas « parce qu'il y a du contenu » : seul le
     // service coché dans la fiche les montre, régime historique compris.
@@ -359,6 +367,7 @@ function sansInformation(key: SectionKey, infos: Informations): boolean {
     case "veille":
       return infos.veille === 0;
     case "veille-technique":
+    case "fiche-technique":
       return !infos.releveSentinelle;
     case "prestations":
       return infos.prestations === 0;

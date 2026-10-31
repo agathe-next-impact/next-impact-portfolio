@@ -2,16 +2,17 @@ import { lettersForClient } from "@cto/letters";
 import { sentinelleStateFor, type SentinelleAlert, type SentinelleVerdict } from "@cto/sentinelle";
 import { CarteLettre } from "./lettre";
 import { EnPreparation, Espace, type EspaceContext } from "./shell";
-import { Dot, formatDay, Groupe, Label, Legende, Notice, Panel, SectionNav, Stat, Suite, Tag, type Tone } from "./ui";
+import { Dot, formatDay, Label, Legende, Notice, Panel, SectionNav, Stat, Suite, Tag, type Tone } from "./ui";
 import type { Viewer } from "./viewer";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // La veille technique (Sentinelle), en entier, dans l'espace.
 //
-// Trois blocs, dans l'ordre où le client se pose les questions : qu'est-ce qui
+// Deux blocs, dans l'ordre où le client se pose les questions : qu'est-ce qui
 // a été signalé (les alertes, avec leur texte relu et l'action recommandée),
-// qu'est-ce qui approche (les fins de support), qu'est-ce qui est surveillé (la
-// fiche). Puis les lettres bimensuelles, lisibles en entier.
+// qu'est-ce qui approche (les fins de support). Puis les lettres bimensuelles,
+// lisibles en entier. L'inventaire des composants surveillés (la fiche
+// technique) a sa propre page, sous « Votre site » : `./fiche-technique.tsx`.
 //
 // Tout vient du dernier export Sentinelle rangé par le balayage
 // (`cto_sentinelle_snapshots`) : la page ne parle jamais à Sentinelle
@@ -69,11 +70,6 @@ function CarteAlerte({ alert }: { alert: SentinelleAlert }) {
   );
 }
 
-/** « https://www.exemple.fr/ » → « exemple.fr » : de quoi reconnaître un site d'un coup d'œil. */
-function nomDuSite(url: string): string {
-  return url.replace(/^https?:\/\//, "").replace(/^www\./, "").replace(/\/$/, "");
-}
-
 export async function VueVeilleTechnique({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
   const [state, lettres] = await Promise.all([
     sentinelleStateFor(viewer.clientId),
@@ -85,17 +81,14 @@ export async function VueVeilleTechnique({ viewer, context }: { viewer: Viewer; 
     return (
       <Espace viewer={viewer} context={context} active="veille-technique" title="Veille technique">
         <EnPreparation>
-          La surveillance de votre site est en cours de mise en place. Les alertes, la fiche technique et
-          les lettres de veille apparaîtront ici après le premier relevé.
+          La surveillance de votre site est en cours de mise en place. Les alertes et les lettres de veille
+          apparaîtront ici après le premier relevé.
         </EnPreparation>
       </Espace>
     );
   }
 
   const { data } = state;
-  // Plusieurs sites surveillés : chaque composant dit sur lequel il tourne.
-  const sitesVus = new Set(data.stack.components.map((component) => component.site ?? data.client.siteUrl));
-  const plusieursSites = sitesVus.size > 1;
   const alertes = [...data.alerts].sort(
     (a, b) => RANG[a.verdict ?? "info"] - RANG[b.verdict ?? "info"] || b.at.localeCompare(a.at),
   );
@@ -141,7 +134,6 @@ export async function VueVeilleTechnique({ viewer, context }: { viewer: Viewer; 
         items={[
           { href: "#alertes", label: "Alertes", count: alertes.length },
           { href: "#fins-de-support", label: "Fins de support", count: radar.length },
-          { href: "#fiche", label: "Fiche technique", count: data.stack.components.length },
           { href: "#lettres", label: "Lettres", count: lettresTechniques.length },
         ]}
       />
@@ -204,45 +196,6 @@ export async function VueVeilleTechnique({ viewer, context }: { viewer: Viewer; 
           </Panel>
         )}
       </section>
-
-      {/* L'inventaire se consulte pour vérifier ; il se replie derrière son compteur. */}
-      <Groupe id="fiche" titre="Fiche technique" count={data.stack.components.length}>
-        <p className="mb-5 max-w-prose font-inter-tight text-sm text-mid-gray">
-          Ce que la surveillance connaît de votre site, relevé depuis ses éléments publics.
-          {data.stack.withoutVersion > 0
-            ? ` ${data.stack.withoutVersion} composant${data.stack.withoutVersion > 1 ? "s" : ""} sans version connue : la veille ne peut pas dire s'ils sont concernés par une faille.`
-            : ""}
-        </p>
-        {data.stack.components.length === 0 ? (
-          <Panel className="px-5 py-6">
-            <p className="font-inter-tight text-base text-mid-gray">Aucun composant relevé pour l&rsquo;instant.</p>
-          </Panel>
-        ) : (
-          <Panel className="divide-y divide-dark-gray">
-            {data.stack.components.map((component) => (
-              <div
-                key={`${component.type}-${component.slug}-${component.site ?? ""}`}
-                className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 px-5 py-3"
-              >
-                <p className="font-inter-tight text-[15px] text-foreground">
-                  {component.label}
-                  {plusieursSites ? (
-                    <span className="ml-2 font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray">
-                      {nomDuSite(component.site ?? data.client.siteUrl)}
-                    </span>
-                  ) : null}
-                </p>
-                <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray">
-                  {component.version ? `version ${component.version}` : "version inconnue"}
-                </p>
-              </div>
-            ))}
-          </Panel>
-        )}
-        <p className="mt-3 font-inter-tight text-xs text-mid-gray">
-          Relevé du {formatDay(state.fetchedAt)} · {plusieursSites ? `${sitesVus.size} sites surveillés` : data.client.siteUrl}
-        </p>
-      </Groupe>
 
       <section id="lettres" aria-labelledby="lettres-titre" className="mt-10 scroll-mt-24">
         <Legende id="lettres-titre">{`Lettres de veille technique (${lettresTechniques.length})`}</Legende>

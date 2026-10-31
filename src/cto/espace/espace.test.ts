@@ -32,7 +32,16 @@ describe("sections visibles", () => {
   // suivi des missions et prestations ne demande pas la direction technique, et
   // la veille (technique comprise) est offerte à l'ouverture. Vides, elles
   // sortent de la navigation (`sectionsSansInformation`), pas de la carte.
-  const POUR_TOUS = ["tableau", "missions", "agir", "veille", "veille-technique", "prestations", "accompagnement"];
+  const POUR_TOUS = [
+    "tableau",
+    "missions",
+    "fiche-technique",
+    "agir",
+    "veille",
+    "veille-technique",
+    "prestations",
+    "accompagnement",
+  ];
   const avec = (...ajouts: string[]) => {
     const ordre = SECTIONS.map((section) => section.key as string);
     return [...POUR_TOUS, ...ajouts].sort((a, b) => ordre.indexOf(a) - ordre.indexOf(b));
@@ -109,7 +118,13 @@ describe("groupes et synthèses", () => {
   it("n'ouvre une synthèse qu'aux groupes de deux entrées ou plus", () => {
     const groupes = visibleGroups(visibleSections(["direction-technique", "veille-technique"], EMPTY));
     const synthese = Object.fromEntries(groupes.map((g) => [g.group, g.synthese]));
-    expect(synthese).toEqual({ missions: true, site: false, agir: false, veille: true, contrats: true });
+    // Votre site compte la fiche technique (offerte) et la cartographie.
+    expect(synthese).toEqual({ missions: true, site: true, agir: false, veille: true, contrats: true });
+  });
+
+  it("range la fiche technique sous Votre site, avec le relevé Sentinelle pour seule condition", () => {
+    const fiche = SECTIONS.find((s) => s.key === "fiche-technique");
+    expect(fiche).toMatchObject({ group: "site", slug: "fiche-technique", label: "Fiche technique" });
   });
 
   it("donne des adresses de synthèse uniques, relues par groupFromSlug", () => {
@@ -263,5 +278,7 @@ describe("sections sans information", () => {
     const vides = sectionsSansInformation(sections, RIEN);
     expect(vides.has("site")).toBe(true);
     expect(vides.has("veille-technique")).toBe(true);
+    expect(vides.has("fiche-technique")).toBe(true);
+    expect(sectionsSansInformation(sections, { ...RIEN, releveSentinelle: true }).has("fiche-technique")).toBe(false);
   });
 });

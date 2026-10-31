@@ -275,6 +275,42 @@ function CarteCartographie({ viewer, context }: { viewer: Viewer; context: Espac
   );
 }
 
+async function CarteFicheTechnique({ viewer }: { viewer: Viewer }) {
+  const state = await sentinelleStateFor(viewer.clientId);
+  const composants = state?.data.stack.components ?? [];
+  const sansVersion = state?.data.stack.withoutVersion ?? 0;
+  const verdict: Verdict = !state
+    ? { headline: "Fiche en cours d'établissement", tone: "neutre" }
+    : {
+        headline: `${composants.length} ${pluriel(composants.length, "composant relevé", "composants relevés")}${
+          sansVersion > 0 ? `, ${sansVersion} sans version connue` : ""
+        }`,
+        tone: sansVersion > 0 ? "attention" : "neutre",
+      };
+
+  return (
+    <CarteReponse
+      question="De quoi votre site est-il fait ?"
+      verdict={verdict}
+      pied={{ href: lienSection(viewer, "fiche-technique"), label: "Toute la fiche technique" }}
+    >
+      {composants.length === 0 ? (
+        <LigneVide>La plateforme, les extensions et l&rsquo;hébergement apparaîtront ici après le premier relevé.</LigneVide>
+      ) : (
+        composants.slice(0, LIGNES).map((composant) => (
+          <LigneCarte
+            key={`${composant.type}-${composant.slug}-${composant.site ?? ""}`}
+            titre={composant.label}
+            href={lienSection(viewer, "fiche-technique")}
+            tag={composant.openAlerts > 0 ? <Tag tone="alerte">{composant.openAlerts} alerte{composant.openAlerts > 1 ? "s" : ""}</Tag> : null}
+            meta={composant.version ? `version ${composant.version}` : "version inconnue"}
+          />
+        ))
+      )}
+    </CarteReponse>
+  );
+}
+
 // ─── Veille ──────────────────────────────────────────────────────────────
 
 const ALERTE: Record<SentinelleVerdict, { tone: Tone; mot: string }> = {
@@ -417,6 +453,8 @@ async function carte(key: SectionKey, viewer: Viewer, context: EspaceContext): P
       return <CarteDocuments viewer={viewer} context={context} />;
     case "site":
       return <CarteSite viewer={viewer} context={context} />;
+    case "fiche-technique":
+      return <CarteFicheTechnique viewer={viewer} />;
     case "apercus":
       return <CarteApercus viewer={viewer} context={context} />;
     case "cartographie":

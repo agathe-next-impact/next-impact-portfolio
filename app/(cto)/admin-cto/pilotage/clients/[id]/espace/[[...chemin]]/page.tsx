@@ -7,6 +7,7 @@ import { VueAccompagnement } from "../../../../../../espace-direction/accompagne
 import { VueApercus } from "../../../../../../espace-direction/apercus";
 import { VuePrestations } from "../../../../../../espace-direction/prestations";
 import { loadEspace } from "../../../../../../espace-direction/shell";
+import { VueFicheTechnique } from "../../../../../../espace-direction/fiche-technique";
 import { VueVeilleTechnique } from "../../../../../../espace-direction/veille-technique";
 import {
   VueAgir,
@@ -77,6 +78,8 @@ export default async function EspaceAdminPage({
         return <VueAudit viewer={viewer} context={context} />;
       case "site":
         return <VueSite viewer={viewer} context={context} />;
+      case "fiche-technique":
+        return <VueFicheTechnique viewer={viewer} context={context} />;
       case "apercus":
         return <VueApercus viewer={viewer} context={context} />;
       case "cartographie":
