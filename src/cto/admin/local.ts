@@ -3,7 +3,7 @@ import { db } from "../db/client";
 import { ctoClients, ctoPersons, ctoSites } from "../db/schema";
 import { revokeAllSessions } from "../access";
 import { servicesOuverts } from "../notion/map";
-import { provisionOne } from "../sentinelle";
+import { provisionOne, type WatchWish } from "../sentinelle";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Les clients créés et administrés depuis l'admin.
@@ -412,32 +412,58 @@ export async function reglageClient(clientId: string): Promise<ReglageClient | n
  * l'accès n'est pas révoqué. Réservé aux clients locaux : pour un client Notion,
  * la fiche (Site surveillé, Contact veille) fait foi et la synchro provisionne.
  */
-export async function lancerScanSentinelle(clientId: string): Promise<{ ok: boolean; message: string }> {
-  const reglage = await reglageClient(clientId);
-  if (!reglage) return { ok: false, message: "Client introuvable." };
+/** Ce que le client demande à Sentinelle, d'après sa fiche : le « voeu » de provisionnement. */
+async function voeuSentinelle(reglage: ReglageClient): Promise<WatchWish> {
+  const voulu = (reglage.services ?? []).includes("veille-technique") && reglage.status !== "clos";
+
   if (!reglage.local) {
-    return { ok: false, message: "Ce client est piloté par Notion : Sentinelle suit sa fiche (Site surveillé, Contact veille). Lancer plutôt `npm run sentinelle:rescan -- --client <id>`." };
-  }
-  if (!(reglage.services ?? []).includes("veille-technique")) {
-    return { ok: false, message: "Le service « Veille technique » n'est pas activé pour ce client." };
+    // Client Notion : le site et le contact viennent de sa fiche, recopiés au balayage.
+    const [fiche] = await db()
+      .select({ site: ctoClients.watchedSite, contact: ctoClients.watchContact })
+      .from(ctoClients)
+      .where(eq(ctoClients.id, reglage.id))
+      .limit(1);
+    return { clientId: reglage.id, company: reglage.company, wanted: voulu, site: fiche?.site ?? null, contact: fiche?.contact ?? null };
   }
 
   const surveilles = reglage.sites.filter((site) => site.watch && !site.sansSuivi);
   const [personne] = await db()
     .select({ email: ctoPersons.email })
     .from(ctoPersons)
-    .where(and(eq(ctoPersons.clientId, clientId), isNull(ctoPersons.revokedAt), ne(ctoPersons.email, "")))
+    .where(and(eq(ctoPersons.clientId, reglage.id), isNull(ctoPersons.revokedAt), ne(ctoPersons.email, "")))
     .orderBy(asc(ctoPersons.createdAt))
     .limit(1);
+  return {
+    clientId: reglage.id,
+    company: reglage.company,
+    wanted: voulu,
+    site: surveilles[0]?.url ?? null,
+    contact: personne?.email ?? null,
+  };
+}
 
-  return provisionOne(
-    {
-      clientId,
-      company: reglage.company,
-      wanted: reglage.status !== "clos",
-      site: surveilles[0]?.url ?? null,
-      contact: personne?.email ?? null,
-    },
-    { rescan: true },
-  );
+export async function lancerScanSentinelle(clientId: string): Promise<{ ok: boolean; message: string }> {
+  const reglage = await reglageClient(clientId);
+  if (!reglage) return { ok: false, message: "Client introuvable." };
+  if (!(reglage.services ?? []).includes("veille-technique")) {
+    return { ok: false, message: "Le service « Veille technique » n'est pas activé pour ce client." };
+  }
+  if (reglage.status === "clos") return { ok: false, message: "Accompagnement clos : Sentinelle ne le suit plus." };
+  return provisionOne(await voeuSentinelle(reglage), { rescan: true });
+}
+
+/**
+ * Aligne Sentinelle sur le client après un changement de services, de statut ou
+ * de sites : désactive sa veille si le service est retiré ou l'accompagnement
+ * clos, la crée ou la met à jour sinon. Sans effet pour un client que Sentinelle
+ * ne connaît pas et qui ne la demande pas. Ne lève pas : le résultat est une
+ * phrase à ajouter au message de l'admin, ou `null` s'il n'y a rien à dire.
+ */
+export async function alignerSentinelle(clientId: string): Promise<string | null> {
+  const reglage = await reglageClient(clientId);
+  if (!reglage || !reglage.local) return null;
+  if (!reglage.sentinelleClientId && !(reglage.services ?? []).includes("veille-technique")) return null;
+
+  const resultat = await provisionOne(await voeuSentinelle(reglage), { rescan: false });
+  return resultat.ok ? `Sentinelle : ${resultat.message}` : `Sentinelle non alignée : ${resultat.message}`;
 }

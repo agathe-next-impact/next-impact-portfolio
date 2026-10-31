@@ -218,6 +218,13 @@
       "when": 1793430767094,
       "tag": "0030_sites_admin",
       "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "7",
+      "when": 1793432373950,
+      "tag": "0031_veille_fiche",
+      "breakpoints": true
     }
   ]
 }

@@ -98,13 +98,16 @@ export async function Administration({ clientId }: { clientId: string }) {
         <Label>Sentinelle</Label>
         <Panel className="mt-3 flex flex-wrap items-center justify-between gap-4 p-5">
           <p className="max-w-prose font-inter-tight text-sm text-mid-gray">
-            Crée ou aligne le client chez Sentinelle (site principal : le premier site « Veille technique » ; contact : la
-            première personne dont l&rsquo;accès est ouvert) et relance l&rsquo;analyse de tous ses sites. Les composants
-            détectés arrivent en quelques minutes.
+            Crée ou aligne le client chez Sentinelle et relance l&rsquo;analyse de tous ses sites.{" "}
+            {local
+              ? "Site principal : le premier site « Veille technique » ; contact : la première personne dont l'accès est ouvert."
+              : "Site principal et contact : ceux de sa fiche Notion (Site surveillé, Contact veille)."}{" "}
+            Les composants détectés arrivent en quelques minutes. Désactiver le service ou clore le client désactive aussi
+            sa veille chez Sentinelle.
           </p>
           <form action={lancerScan}>
             <input type="hidden" name="clientId" value={reglage.id} />
-            <BoutonEnvoi className={buttonClass.primary} enCours="Lancement…" disabled={!local}>
+            <BoutonEnvoi className={buttonClass.primary} enCours="Lancement…">
               Lancer le scan Sentinelle
             </BoutonEnvoi>
           </form>

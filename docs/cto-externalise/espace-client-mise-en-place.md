@@ -817,3 +817,12 @@ l'espace » permet, pour un client créé depuis l'admin :
 Un client piloté par Notion s'y affiche **en lecture seule** (le modifier ici
 serait écrasé à la synchro). Migration `0030_sites_admin`
 (`cto_sites.notion_page_id` nullable) à appliquer avant le déploiement.
+
+**Sentinelle suit les changements de l'admin.** Retirer le service « Veille
+technique », clore le client, ajouter ou modifier un site « Veille », révoquer la
+personne contact : l'admin réaligne le client chez Sentinelle (désactivation,
+mise à jour, relance de l'analyse si les sites changent) et le dit dans son
+message. Le bouton « Lancer le scan Sentinelle » marche aussi pour un client
+piloté par Notion : son « Site surveillé » et son « Contact veille » sont
+recopiés de la fiche à chaque balayage (`cto_clients.watched_site`,
+`watch_contact`, migration `0031_veille_fiche`).

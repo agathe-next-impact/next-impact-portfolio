@@ -60,6 +60,7 @@ export { lastSyncRun, recordSyncRun, type SyncRun, type SyncRunSource } from "./
 export {
   ajouterPersonneLocale,
   ajouterSiteLocal,
+  alignerSentinelle,
   basculerAccesLocal,
   creerClientLocal,
   estClientLocal,

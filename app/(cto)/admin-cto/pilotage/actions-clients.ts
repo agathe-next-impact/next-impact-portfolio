@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import {
   ajouterPersonneLocale,
   ajouterSiteLocal,
+  alignerSentinelle,
   basculerAccesLocal,
   clientDetail,
   creerClientLocal,
@@ -52,6 +53,12 @@ async function fin(clientId: string, texteFlash: string, ok = true): Promise<nev
   revalidatePath(pageClient(clientId));
   revalidatePath("/admin-cto/pilotage");
   redirect(pageClient(clientId));
+}
+
+/** Le message de l'admin, suivi de ce que Sentinelle a fait pour s'aligner sur le changement. */
+async function etSentinelle(clientId: string, texteFlash: string): Promise<string> {
+  const suite = await alignerSentinelle(clientId).catch(() => null);
+  return suite ? `${texteFlash} ${suite}` : texteFlash;
 }
 
 /** Les lignes de site d'un formulaire : `site.<n>.<champ>`, jusqu'à la première ligne absente. */
@@ -129,7 +136,7 @@ export async function majCoordonnees(formData: FormData): Promise<void> {
   } catch (error) {
     return fin(clientId, message(error), false);
   }
-  return fin(clientId, "Coordonnées enregistrées.");
+  return fin(clientId, await etSentinelle(clientId, "Coordonnées enregistrées."));
 }
 
 /** Active et désactive des services : l'espace du client se recompose au prochain affichage. */
@@ -141,7 +148,10 @@ export async function majServices(formData: FormData): Promise<void> {
   } catch (error) {
     return fin(clientId, message(error), false);
   }
-  return fin(clientId, "Services enregistrés. L'espace du client se met à jour à son prochain affichage.");
+  return fin(
+    clientId,
+    await etSentinelle(clientId, "Services enregistrés. L'espace du client se met à jour à son prochain affichage."),
+  );
 }
 
 export async function ajouterPersonne(formData: FormData): Promise<void> {
@@ -168,7 +178,7 @@ export async function basculerPersonne(formData: FormData): Promise<void> {
   } catch (error) {
     return fin(clientId, message(error), false);
   }
-  return fin(clientId, revoque ? "Accès révoqué, sessions fermées." : "Accès rétabli.");
+  return fin(clientId, await etSentinelle(clientId, revoque ? "Accès révoqué, sessions fermées." : "Accès rétabli."));
 }
 
 export async function ajouterSite(formData: FormData): Promise<void> {
@@ -182,7 +192,7 @@ export async function ajouterSite(formData: FormData): Promise<void> {
   } catch (error) {
     return fin(clientId, message(error), false);
   }
-  return fin(clientId, "Site ajouté.");
+  return fin(clientId, await etSentinelle(clientId, "Site ajouté."));
 }
 
 export async function enregistrerSite(formData: FormData): Promise<void> {
@@ -196,7 +206,7 @@ export async function enregistrerSite(formData: FormData): Promise<void> {
   } catch (error) {
     return fin(clientId, message(error), false);
   }
-  return fin(clientId, "Site enregistré.");
+  return fin(clientId, await etSentinelle(clientId, "Site enregistré."));
 }
 
 export async function retirerSite(formData: FormData): Promise<void> {
@@ -207,7 +217,7 @@ export async function retirerSite(formData: FormData): Promise<void> {
   } catch (error) {
     return fin(clientId, message(error), false);
   }
-  return fin(clientId, "Site retiré de l'espace du client.");
+  return fin(clientId, await etSentinelle(clientId, "Site retiré de l'espace du client."));
 }
 
 /** Provisionne Sentinelle pour ce client et relance l'analyse de tous ses sites. */

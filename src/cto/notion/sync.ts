@@ -455,6 +455,8 @@ async function alignerFiche(
       suiviInclusJusquau: ctoClients.suiviInclusJusquau,
       suggestionsCoupees: ctoClients.suggestionsCoupees,
       notesClient: ctoClients.notesClient,
+      watchedSite: ctoClients.watchedSite,
+      watchContact: ctoClients.watchContact,
       servicesOuverts: ctoClients.servicesOuverts,
       notionDeletedAt: ctoClients.notionDeletedAt,
     })
@@ -476,6 +478,8 @@ async function alignerFiche(
     suiviInclusJusquau?: Date | null;
     suggestionsCoupees?: boolean;
     notesClient?: string | null;
+    watchedSite?: string | null;
+    watchContact?: string | null;
     servicesOuverts?: Record<string, string>;
   } = {};
 
@@ -492,6 +496,9 @@ async function alignerFiche(
     patch.suggestionsCoupees = commercial.suggestionsCoupees;
   }
   if (commercial.notesClient !== actuel.notesClient) patch.notesClient = commercial.notesClient;
+  const veille = clientWatch(page);
+  if (veille.site !== actuel.watchedSite) patch.watchedSite = veille.site;
+  if (veille.contact !== actuel.watchContact) patch.watchContact = veille.contact;
   const ouverts = servicesOuverts(services.codes, actuel.servicesOuverts, new Date());
   if (JSON.stringify(ouverts) !== JSON.stringify(actuel.servicesOuverts)) patch.servicesOuverts = ouverts;
   if (status && status !== actuel.status) patch.status = status;

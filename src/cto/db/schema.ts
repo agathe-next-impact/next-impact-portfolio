@@ -248,6 +248,13 @@ export const ctoClients = pgTable(
      */
     notesClient: text("notes_client"),
     /**
+     * « Site surveillé » et « Contact veille » de la fiche Notion, recopiés à
+     * chaque balayage : la synchro les envoie à Sentinelle, et l'admin s'en sert
+     * pour relancer le scan d'un client piloté par Notion sans relire Notion.
+     */
+    watchedSite: text("watched_site"),
+    watchContact: text("watch_contact"),
+    /**
      * Date à laquelle chaque service a été vu coché pour la première fois
      * (code → ISO). Servait à la semaine de grâce des sections vides,
      * supprimée le 2026-09-27 (une section vide sort aussitôt de la
