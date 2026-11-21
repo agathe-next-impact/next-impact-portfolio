@@ -3,7 +3,8 @@ import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { Reveal } from "@/components/ui/reveal";
 import { OFFERS } from "@/lib/visio-conseil";
-import { formatDelai } from "@/lib/case-studies-data";
+import { formatDelai, ongletDe } from "@/lib/case-studies-data";
+import { LANDING, REFONTE_WP } from "@/lib/prestations-web";
 import type { CaseStudy, OffreConseilKey } from "@/lib/case-studies-data";
 import type { Locale } from "@/i18n/routing";
 
@@ -21,7 +22,7 @@ const STEP_LINK =
 
 /**
  * Le chemin de décision — relie la fiche aux offres vendues : le besoin,
- * l'arbitrage (→ /conseil), la construction (→ /solutions-web + budget).
+ * l'arbitrage (→ /conseil), la construction (→ page de l'offre + budget).
  * Masqué si le cas n'est rattaché à aucune offre (conseil ET construction null).
  */
 export default async function CaseStudyDecisionPath({
@@ -64,6 +65,19 @@ export default async function CaseStudyDecisionPath({
       : t("budgetLineNoDelai", { budget: budgetIndicatif })
     : null;
 
+  // La page de l'offre qui correspond au cas, jamais la page d'orientation
+  // /solutions-web (demande d'Agathe, 2026-11-21) : Vitrine évolutive ou
+  // Refonte WordPress selon l'onglet du cas. Une plateforme ou un outil métier
+  // n'a pas de page d'offre : pas de lien.
+  const onglet = ongletDe(caseStudy);
+  const offre = onglet === "vitrine-evolutive" ? LANDING : onglet === "refonte" ? REFONTE_WP : null;
+  const offreLink = offre
+    ? {
+        href: offre.path,
+        label: locale === "en" ? `See the ${offre.nom} offer` : `Voir la ${offre.nom}`,
+      }
+    : null;
+
   const steps = [
     {
       key: "need",
@@ -91,9 +105,7 @@ export default async function CaseStudyDecisionPath({
             line: offreConstruction
               ? t(`constructionLine.${offreConstruction}`)
               : (budgetText as string),
-            link: offreConstruction
-              ? { href: "/solutions-web" as const, label: t("constructionLink") }
-              : null,
+            link: offreConstruction ? offreLink : null,
           },
         ]
       : []),

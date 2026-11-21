@@ -198,7 +198,7 @@ function Quote({
   );
 }
 
-export default function HomeTestimonials() {
+export default function HomeTestimonials({ index = "№ 03" }: { index?: string }) {
   const locale = useLocale() as Locale;
   const isEn = locale === "en";
   const testimonials = isEn ? EN : FR;
@@ -208,7 +208,7 @@ export default function HomeTestimonials() {
       {/* En-tête */}
       <Reveal className="border-b border-dark-gray px-6 py-12 lg:px-8 lg:py-16">
         <SectionHeading
-          index="№ 03"
+          index={index}
           kicker={isEn ? "Testimonials" : "Témoignages"}
           title={
             isEn ? (

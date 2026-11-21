@@ -8,8 +8,11 @@ const KICKER = "font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray";
 const FOOT_LINK =
   "font-mono text-2xs uppercase tracking-[0.06em] text-mid-gray no-underline transition-colors hover:text-foreground";
 
+// Les deux pages d'offre, à la place de la page d'orientation /solutions-web
+// (demande d'Agathe, 2026-11-21).
 const NAV_LINKS = [
-  { href: "/solutions-web",            key: "services" },
+  { href: "/landing-evolutive",   key: "landingEvolutive" },
+  { href: "/refonte-wordpress",   key: "refonteWordpress" },
   { href: "/wordpress-headless",  key: "wordpressHeadlessPillar" },
   { href: "/etudes-de-cas",       key: "caseStudies" },
   { href: "/documentation",       key: "documentation" },

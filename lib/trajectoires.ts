@@ -21,8 +21,11 @@
 //
 // Le montant est numérique : le budget d'un pack (lib/situations.ts) se
 // calcule, il ne se recopie pas. Les cartes, le menu, /tarifs et les packs
-// lisent ce fichier ; components/services/PricingCards.tsx garde le détail
-// rédactionnel de chaque prestation.
+// lisent ce fichier. Depuis l'ADR-047 (2026-11-21), /solutions-web ne détaille
+// plus les trois prestations : la Refonte se vend sur /refonte-wordpress
+// (lib/prestations-web.ts, qui lit ses prix ici) ; l'Optimisation et
+// l'Évolution ne vivent plus que dans leurs packs et sur /tarifs, en attendant
+// que leur suppression y soit propagée.
 //
 // Module sans dépendance, importable côté serveur comme côté client.
 // ─────────────────────────────────────────────────────────────────────────────
@@ -65,7 +68,12 @@ export interface Trajectoire {
   siteKind: SiteKind;
   /** Les variantes, quand la prestation en a (la Refonte). */
   variantes?: Variante[];
-  /** Ancre de la section détaillée sur /solutions-web. */
+  /**
+   * Où la prestation se présente : la page de son offre. La Refonte a sa page,
+   * /refonte-wordpress ; l'Optimisation et l'Évolution mènent à la page de
+   * leur pack. Plus aucun lien vers la page d'orientation /solutions-web
+   * (demande d'Agathe, 2026-11-21).
+   */
   href: string;
   recommended?: boolean;
 }
@@ -81,7 +89,7 @@ export const TRAJECTOIRES: Record<TrajectoireSlug, Trajectoire> = {
     },
     priceValue: 1500,
     siteKind: "wordpress",
-    href: "/solutions-web#forfait-classique",
+    href: "/packs/site-wordpress-ingerable",
   },
   "forfait-headless": {
     slug: "forfait-headless",
@@ -126,7 +134,8 @@ export const TRAJECTOIRES: Record<TrajectoireSlug, Trajectoire> = {
         siteKind: "headless",
       },
     ],
-    href: "/solutions-web#forfait-headless",
+    // Vendue sur sa propre page depuis l'ADR-047 (2026-11-21).
+    href: "/refonte-wordpress",
     recommended: true,
   },
   "forfait-webapp": {
@@ -139,7 +148,7 @@ export const TRAJECTOIRES: Record<TrajectoireSlug, Trajectoire> = {
     },
     priceValue: 6500,
     siteKind: "webapp",
-    href: "/solutions-web#forfait-webapp",
+    href: "/packs/site-outil-de-travail",
   },
 };
 

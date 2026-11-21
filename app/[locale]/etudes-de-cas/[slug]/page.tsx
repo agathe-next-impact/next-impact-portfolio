@@ -6,6 +6,7 @@ import { Link } from "@/i18n/navigation";
 import CaseStudyCTA from "@/components/case-studies/CaseStudyCTA";
 import CaseStudyDecisionPath from "@/components/case-studies/CaseStudyDecisionPath";
 import CaseStudyProfileContent from "@/components/case-studies/CaseStudyProfileContent";
+import { VIGNETTE_CADRE, VignetteImage } from "@/components/case-studies/vignette-image";
 import { YoutubePlayer } from "@/components/youtube-player";
 import { BlueprintSection } from "@/components/aspect/section";
 import { PageHero } from "@/components/aspect/page-hero";
@@ -79,6 +80,8 @@ function getSimilarCaseStudies(
   return all
     .filter((study) => {
       if (study.id === current.id) return false;
+      // Une démo ne se glisse pas parmi les projets similaires d'une fiche client.
+      if (study.isDemo && !current.isDemo) return false;
       const sameClientType = study.clientType === current.clientType;
       const commonTags = study.tags.filter((tag) => current.tags.includes(tag));
       return sameClientType || commonTags.length > 0;
@@ -402,13 +405,14 @@ export default async function CaseStudyPage({
               {/* Client */}
               <div className="mb-4 border-b border-dark-gray pb-4">
                 <div className="mb-1.5 font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray">
-                  {t("client")}
+                  {/* Une démo n'est pas un client : ni libellé « Client », ni type de client. */}
+                  {caseStudy.isDemo ? t("demo") : t("client")}
                 </div>
                 <div className="text-base font-medium text-foreground">
                   {caseStudy.clientName}
                 </div>
                 <div className="mt-0.5 font-mono text-2xs text-mid-gray">
-                  {clientTypeLabel}
+                  {caseStudy.isDemo ? t("demoNote") : clientTypeLabel}
                 </div>
               </div>
 
@@ -487,7 +491,7 @@ export default async function CaseStudyPage({
                 </div>
               )}
 
-              {/* CTA à deux températures : froid (audit) + chaud (RDV par famille) */}
+              {/* CTA : chaud (RDV par famille) ; le froid « audit gratuit » est retiré (2026-11-21) */}
               <div className="mt-2">
                 <CaseStudyCTA famille={caseStudy.famille} locale={locale} />
               </div>
@@ -511,12 +515,12 @@ export default async function CaseStudyPage({
                   href={`/etudes-de-cas/${study.slug}`}
                   className="group block border-b border-dark-gray last:border-b-0 md:border-b-0 md:border-r md:last:border-r-0"
                 >
-                  <div className="relative aspect-video overflow-hidden">
-                    <Image
+                  {/* Cadre noir et format commun : voir vignette-image.tsx. */}
+                  <div className={VIGNETTE_CADRE}>
+                    <VignetteImage
                       src={study.gallery.url || "/placeholder.svg"}
                       alt={study.title}
-                      fill
-                      className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.02]"
+                      sizes="(min-width: 768px) 33vw, 100vw"
                     />
                   </div>
                   <div className="border-t border-dark-gray px-6 py-5">

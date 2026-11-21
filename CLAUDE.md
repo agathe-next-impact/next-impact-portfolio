@@ -13,8 +13,12 @@
 > sept packs sous `/packs` (Audit ajouté en Diagnostiquer), prestations renommées Optimisation · Refonte ·
 > Évolution, veille technique et stratégique dans chaque offre, prix du suivi
 > validés ; ADR-031 pour la Refonte en WordPress sur mesure ou headless,
-> à égalité, et l'Optimisation de l'existant à 1 500 €). Sources uniques :
-> `lib/situations.ts`, `lib/trajectoires.ts`.
+> à égalité, et l'Optimisation de l'existant à 1 500 € ; ADR-047, 2026-11-21,
+> pour les prestations web en deux points de départ : `/solutions-web` page
+> d'orientation, `/landing-evolutive` et `/refonte-wordpress` pages d'offre,
+> directives `docs/Solutions web analyse, noms d'offres et structure de page.md`,
+> propagation au reste du site encore à faire). Sources uniques :
+> `lib/situations.ts`, `lib/trajectoires.ts`, `lib/prestations-web.ts`.
 
 > PRIORITAIRE : pour tout travail sur les études de cas, lire et suivre
 > ./DIRECTIVES-ETUDES-DE-CAS.md — il prime sur le présent fichier.

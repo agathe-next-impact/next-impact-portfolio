@@ -3,7 +3,9 @@
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
-import { getHeroVariants } from "@/lib/homepage-profiles";
+import { getHomeContent } from "@/lib/home-content";
+import { BesoinTitle } from "@/components/aspect/besoin-title";
+import { CTA_ECHANGE } from "@/lib/visio-conseil";
 
 import type { Locale } from "@/i18n/routing";
 import { BlueprintSection } from "@/components/aspect/section";
@@ -12,19 +14,18 @@ import { AuroraGlow } from "@/components/visuals/aurora-glow";
 import { Marquee } from "@/components/visuals/marquee";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Héros de la home, refait le 2026-09-27 (ADR-018, charte §6 et §9 point 1).
+// Héros de la home, refait le 2026-11-21 (ADR-047) : la home ne reflète plus
+// que l'offre du Studio digital.
 //
-// Une seule décision : le positionnement en quatre mots (charte v1.7,
-// ADR-019), un sous-titre en trois verbes, une phrase de promesse qui porte le
-// mesurable, deux boutons de deux températures (analyse du site, rendez-vous).
-// Les onglets Veille / Conseil / Refonte sont retirés : ils rejouaient, en
-// moins bien, la section de l'offre par besoin qui suit (home-offres), et
-// plaçaient des prix dans le héros. La preuve chiffrée vient juste dessous
-// (ProofStrip, posée par home-client) ; ici, la présence humaine (photo) et les
-// logos clients.
+// Une seule décision : se reconnaître dans l'un des deux points de départ. Le
+// h1 est le nom de l'offre, « Studio Digital », le surtitre « Next Impact » ;
+// la place du sous-titre reste vide (demande d'Agathe), l'accroche pose la
+// règle, les deux prix suivent. Deux boutons : le renvoi vers les deux cartes,
+// juste sous la bande de preuve, puis l'échange gratuit (chaud). La preuve chiffrée vient dessous (ProofStrip) ; ici, la présence
+// humaine (photo) et les logos clients.
 //
-// Titre, description et boutons : HERO_VARIANTS.default
-// (lib/homepage-profiles*.ts, FR + EN).
+// Titre, accroche et prix : `hero` de lib/home-content.ts, qui lit
+// noms et prix dans lib/prestations-web.ts.
 // ─────────────────────────────────────────────────────────────────────────────
 
 const BTN_PRIMARY =
@@ -54,12 +55,8 @@ const LOGOS = [
 export default function Hero() {
   const locale = useLocale() as Locale;
   const t = useTranslations("hero");
-  const variant = getHeroVariants(locale).default;
+  const { hero } = getHomeContent(locale);
   const isEn = locale === "en";
-
-  const reassurance = isEn
-    ? ["Price and timeline in writing", "6 to 10 weeks", "A single point of contact", "Watch at every step"]
-    : ["Prix et délai écrits", "6 à 10 semaines", "Une interlocutrice unique", "Veille à chaque étape"];
 
   return (
     <BlueprintSection
@@ -69,56 +66,45 @@ export default function Hero() {
       innerClassName="px-6 py-16 lg:px-10 lg:py-24"
     >
       <div className="grid gap-12 lg:grid-cols-[1.45fr_1fr] lg:items-center">
-        {/* Le positionnement, les trois verbes, la promesse, deux boutons */}
+        {/* Les deux points de départ, la règle, les deux prix, deux boutons */}
         <Reveal className="flex flex-col gap-6">
           <div className="flex items-center gap-2 font-mono text-2xs uppercase tracking-[0.14em] text-accent-secondary">
             <span>№ 01</span>
             <span className="h-px w-6 bg-accent-secondary/50" />
-            <span className="text-mid-gray">
-              {isEn ? "Outsourced technical expert" : "Expert technique externalisé"}
-            </span>
+            <span className="text-mid-gray">{hero.kicker}</span>
           </div>
-          <h1 className="text-4xl font-extralight leading-[1.08] tracking-tight text-foreground sm:text-5xl lg:text-6xl">
-            {variant.headline}{" "}
-            <em className="font-normal not-italic text-accent-secondary">{variant.subHeadline}</em>
+          {/* Le h1 est le nom de l'offre, « Studio Digital ». */}
+          <h1 className="text-5xl font-extralight leading-[1.02] tracking-tight text-foreground sm:text-6xl lg:text-7xl">
+            <BesoinTitle phrase={hero.titre} accent={hero.titreAccent} />
           </h1>
-          {variant.tagline && (
-            <p className="text-xl font-light leading-snug tracking-tight text-foreground md:text-2xl">
-              {variant.tagline}
-            </p>
-          )}
+          {/* Sous-titre retiré à la demande d'Agathe (2026-11-21) ; sa place
+              reste vide : deux lignes de la même hauteur, sans texte. */}
+          <div aria-hidden className="h-[3.45rem] md:h-[4.15rem]" />
           <p className="max-w-2xl font-inter-tight text-base leading-relaxed text-mid-gray md:text-lg">
-            {variant.description}
+            {hero.accroche}
           </p>
-          <div className="flex flex-wrap items-center gap-3">
-            {/* Premier bouton : l'échange gratuit de 15 minutes, sur Calendly
-                (ADR-023) — lien externe, nouvel onglet. */}
-            <a
-              href={variant.ctaPrimary.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={BTN_PRIMARY}
-            >
-              {variant.ctaPrimary.label}
-              <ArrowRight size={14} />
-            </a>
-            {/* /scan vit hors de app/[locale]/ : balise <a>, pas le Link i18n,
-                qui produirait /en/scan en anglais. */}
-            <a href={variant.ctaSecondary.href} className={BTN_SECONDARY}>
-              {variant.ctaSecondary.label}
-            </a>
-          </div>
-          <ul className="flex flex-wrap gap-2">
-            {reassurance.map((item) => (
-              <li
-                key={item}
-                className="inline-flex items-center gap-1.5 border border-dark-gray px-2.5 py-1 font-mono text-2xs uppercase tracking-[0.08em] text-mid-gray"
-              >
-                <span className="h-1 w-1 rounded-full bg-accent-secondary" />
+          {/* Les deux prix, écrits dès le héros. */}
+          <ul className="flex flex-col gap-1.5 font-mono text-xs uppercase tracking-[0.08em] text-foreground sm:flex-row sm:flex-wrap sm:gap-x-6">
+            {hero.prix.map((item) => (
+              <li key={item} className="flex items-center gap-2">
+                <span aria-hidden className="h-1 w-1 rounded-full bg-accent-secondary" />
                 {item}
               </li>
             ))}
           </ul>
+          <div className="flex flex-wrap items-center gap-3">
+            {/* Ordre inversé à la demande d'Agathe (2026-11-21). Premier bouton,
+                plein : les deux cartes, juste sous la bande de preuve. */}
+            <a href="#prestations" className={BTN_PRIMARY}>
+              Voir les deux prestations
+              <ArrowRight size={14} />
+            </a>
+            {/* Second bouton, en filet : l'échange gratuit de 15 minutes, sur
+                Calendly (ADR-023), lien externe, nouvel onglet. */}
+            <a href={CTA_ECHANGE.href} target="_blank" rel="noopener noreferrer" className={BTN_SECONDARY}>
+              {CTA_ECHANGE.label.fr}
+            </a>
+          </div>
         </Reveal>
 
         {/* Qui le fait : la présence humaine */}
@@ -136,17 +122,8 @@ export default function Hero() {
               className="object-cover object-center"
               sizes="(min-width: 1024px) 420px, 100vw"
             />
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-            <div className="absolute inset-x-0 bottom-0 flex flex-col gap-0.5 px-4 py-3">
-              <span className="font-mono text-2xs uppercase tracking-[0.1em] text-white">
-                Agathe Karinthi-Martin
-              </span>
-              <span className="font-inter-tight text-sm text-white/80">
-                {isEn
-                  ? "15 years publishing in WordPress before building it. I scope, AI executes."
-                  : "15 ans à publier dans WordPress avant d'en développer. Je cadre, l'IA exécute."}
-              </span>
-            </div>
+            {/* Légende de la photo (nom et phrase) retirée à la demande d'Agathe
+                (2026-11-21), avec son dégradé. Le texte alternatif garde le nom. */}
           </div>
           <div className="absolute -top-3 right-0 flex items-center gap-1.5 border border-dark-gray bg-jet px-3 py-1">
             <span className="status-dot" />
@@ -158,20 +135,26 @@ export default function Hero() {
       </div>
 
       {/* Logos clients : preuve sociale discrète */}
-      <div className="mt-14 flex flex-col gap-4 border-t border-dark-gray pt-6">
+      {/* `gap-10` : marge agrandie entre le surtitre et les logos (demande
+          d'Agathe du 2026-11-21, 16 → 40 px). */}
+      <div className="mt-14 flex flex-col gap-10 border-t border-dark-gray pt-6">
         <span className="font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
           {isEn ? "Trusted by" : "Ils m'ont fait confiance"}
         </span>
         {/* Uniquement des assets détourés (fond transparent vérifié). */}
-        <Marquee gap={62} duration={90}>
+        <Marquee gap={80} duration={90}>
           {LOGOS.map((logo) => (
             <Image
               key={logo.src}
               src={logo.src}
               alt={logo.alt}
-              width={108}
-              height={27}
-              className="h-[27px] w-auto max-w-none shrink-0 opacity-90 transition-opacity hover:opacity-100"
+              width={160}
+              height={40}
+              // Monochromes au repos (demande d'Agathe du 2026-11-21) : noirs
+              // sur fond clair (`brightness-0`), blancs sur fond sombre
+              // (`dark:invert`). La couleur d'origine revient au survol, en
+              // ease-in.
+              className="h-10 w-auto max-w-none shrink-0 opacity-90 brightness-0 transition-[filter,opacity] duration-300 ease-in hover:opacity-100 hover:brightness-100 dark:invert dark:hover:invert-0"
             />
           ))}
         </Marquee>

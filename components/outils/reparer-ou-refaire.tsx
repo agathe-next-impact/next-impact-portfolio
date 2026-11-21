@@ -234,7 +234,7 @@ function getCtas(tier: Tier) {
       secondary: { fr: "Décider · 15 min, gratuit", en: "Decide · 15 min, free", href: "/conseil#choix-techno-ia" },
     };
   return {
-    primary: { fr: "Voir les solutions web", en: "See the web solutions", href: "/solutions-web" },
+    primary: { fr: "Voir la Refonte WordPress", en: "See the Refonte WordPress offer", href: "/refonte-wordpress" },
     secondary: { fr: "Décider · 15 min, gratuit", en: "Decide · 15 min, free", href: "/conseil#choix-techno-ia" },
   };
 }

@@ -3,15 +3,19 @@
 import { useState, type CSSProperties } from "react";
 import { ArrowRight } from "lucide-react";
 import { Link } from "@/i18n/navigation";
-import Image from "next/image";
 import { useTranslations, useLocale } from "next-intl";
+import { VIGNETTE_CADRE, VignetteImage } from "@/components/case-studies/vignette-image";
 import { Stagger, StaggerItem } from "@/components/ui/reveal";
-import { FAMILLE_ORDER } from "@/lib/case-studies-data";
-import type { CaseStudyCard, FamilleKey } from "@/lib/case-studies-data";
+import { ONGLET_ORDER, VITRINE_EVOLUTIVE_SLUGS } from "@/lib/case-studies-data";
+import type { CaseStudyCard, OngletKey } from "@/lib/case-studies-data";
 import { cn } from "@/lib/utils";
 
-/** « tous » = vue par défaut : tous les cas publiés, toutes familles confondues. */
-export type RealisationsTab = FamilleKey | "tous";
+/**
+ * Un onglet par offre ou par famille (lib/case-studies-data.ts, ongletDe) :
+ * Refonte, Vitrine évolutive, App web et mobile, Automatisations. L'onglet
+ * « Tous » est supprimé (demande d'Agathe, 2026-11-21).
+ */
+export type RealisationsTab = OngletKey;
 
 interface RealisationsProps {
   /** Cartes calculées côté serveur (getCaseStudyCards) — cas publiés uniquement. */
@@ -21,43 +25,65 @@ interface RealisationsProps {
 
 /** Cas retirés de la liste (demande d'Agathe, 2026-10-27) ; leurs fiches restent en ligne. */
 const MASQUES = ["comme-des-fous", "comme-des-fous-jeux"];
-/** Cas remontés en tête de chaque vue, dans cet ordre. */
-const EN_TETE = ["signaux-faibles", "sowee", "proditec"];
+/** Cas remontés en tête de leur onglet, dans cet ordre. */
+const EN_TETE = ["signaux-faibles", "sowee", "infralliance", "proditec"];
 /** Cartes en pleine largeur de grille (image à gauche, texte à droite en desktop). */
 const PLEINE_LARGEUR = ["signaux-faibles"];
-/** Cas descendus de quelques rangs dans la liste complète. */
-const DESCENDUS: Record<string, number> = { "hermitage-sejours": 3 };
+/**
+ * Cas descendus de quelques rangs dans leur onglet, à partir de leur rang
+ * après le tri ci-dessus. Proditec part de son rang « en tête » et descend de
+ * 5 crans (demande d'Agathe, 2026-11-21) : sans EN_TETE il retomberait bien
+ * plus bas, à sa place d'origine. Sowee descend ensuite de 4 crans depuis la
+ * tête de l'onglet Refonte (demande d'Agathe, 2026-11-21). Les entrées
+ * s'appliquent dans l'ordre d'écriture : Sowee après Proditec, pour que
+ * Proditec garde sa place.
+ */
+const DESCENDUS: Record<string, number> = { proditec: 5, sowee: 4 };
+/** Onglets dont l'ordre est fixé à la main, slug par slug. */
+const ORDRE_FIXE: Partial<Record<RealisationsTab, string[]>> = {
+  "vitrine-evolutive": VITRINE_EVOLUTIVE_SLUGS,
+};
 
 const rang = (slug: string) => {
   const i = EN_TETE.indexOf(slug);
   return i === -1 ? EN_TETE.length : i;
 };
 
-export default function Realisations({ cards: toutes, defaultTab = "tous" }: RealisationsProps) {
+/** Les cartes d'un onglet, dans leur ordre d'affichage. */
+function cartesDeLOnglet(toutes: CaseStudyCard[], tab: RealisationsTab): CaseStudyCard[] {
+  const cards = toutes.filter((c) => c.onglet === tab && !MASQUES.includes(c.slug));
+  const fixe = ORDRE_FIXE[tab];
+  if (fixe) {
+    // Un slug absent de la liste fixe passe après, dans l'ordre des données.
+    const place = (slug: string) => (fixe.includes(slug) ? fixe.indexOf(slug) : fixe.length);
+    return cards.sort((a, b) => place(a.slug) - place(b.slug));
+  }
   // Tri stable : seuls les cas en tête bougent, le reste garde son ordre.
-  const cards = toutes
-    .filter((c) => !MASQUES.includes(c.slug))
-    .sort((a, b) => rang(a.slug) - rang(b.slug));
+  cards.sort((a, b) => rang(a.slug) - rang(b.slug));
   for (const [slug, crans] of Object.entries(DESCENDUS)) {
     const i = cards.findIndex((c) => c.slug === slug);
     if (i === -1) continue;
     const [carte] = cards.splice(i, 1);
     cards.splice(Math.min(i + crans, cards.length), 0, carte);
   }
+  return cards;
+}
+
+export default function Realisations({ cards: toutes, defaultTab }: RealisationsProps) {
   const t = useTranslations("realisations");
   const locale = useLocale();
 
-  // Onglets dérivés des données : une famille sans cas publié est masquée.
-  const tabs: RealisationsTab[] = [
-    "tous",
-    ...FAMILLE_ORDER.filter((famille) => cards.some((c) => c.famille === famille)),
-  ];
+  // Onglets dérivés des données : un onglet sans cas publié est masqué.
+  const parOnglet = ONGLET_ORDER.map((tab) => ({ tab, cards: cartesDeLOnglet(toutes, tab) })).filter(
+    (o) => o.cards.length > 0,
+  );
+  const tabs: RealisationsTab[] = parOnglet.map((o) => o.tab);
   const [activeTab, setActiveTab] = useState<RealisationsTab>(
-    tabs.includes(defaultTab) ? defaultTab : tabs[0],
+    defaultTab && tabs.includes(defaultTab) ? defaultTab : tabs[0],
   );
 
   const cardsFor = (tab: RealisationsTab): CaseStudyCard[] =>
-    tab === "tous" ? cards : cards.filter((c) => c.famille === tab);
+    parOnglet.find((o) => o.tab === tab)?.cards ?? [];
 
   // Mobile : les onglets sur deux lignes (la première en compte la moitié).
   const premiereLigne = Math.floor(tabs.length / 2);
@@ -95,9 +121,10 @@ export default function Realisations({ cards: toutes, defaultTab = "tous" }: Rea
       </div>
 
       {/* Grille de réalisations — cellules jointives bordées.
-          Toutes les familles sont rendues côté serveur (les 24 cartes publiées
-          sont dans le HTML initial, SEO) ; le filtre n'est qu'un masquage CSS. */}
-      {tabs.filter((tab) => tab === "tous" || activeTab === tab).map((tab) => (
+          Sans onglet « Tous », chaque onglet est rendu côté serveur : toutes
+          les cartes publiées restent dans le HTML initial (SEO), le filtre
+          n'est qu'un masquage CSS. */}
+      {tabs.map((tab) => (
           <Stagger
             key={tab}
             stagger={0.04}
@@ -119,18 +146,17 @@ export default function Realisations({ cards: toutes, defaultTab = "tous" }: Rea
                   )}
                 >
                   {/* Image cliquable : doublon souris du lien titre, donc hors
-                      tabulation et masquée aux lecteurs d'écran. */}
+                      tabulation et masquée aux lecteurs d'écran.
+                      Cadre noir et format commun : voir vignette-image.tsx. */}
                   <Link
                     href={card.link}
                     tabIndex={-1}
                     aria-hidden="true"
-                    className={cn("relative block aspect-[16/9] overflow-hidden", large && "lg:aspect-auto lg:min-h-[320px]")}
+                    className={cn(VIGNETTE_CADRE, large && "lg:aspect-auto lg:min-h-[320px]")}
                   >
-                    <Image
+                    <VignetteImage
                       src={card.image}
                       alt={card.alt}
-                      fill
-                      className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
                       sizes={large ? "(min-width: 1024px) 50vw, 100vw" : "(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"}
                     />
                     {card.isDemo && (

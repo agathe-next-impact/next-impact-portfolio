@@ -32,9 +32,16 @@ type ProofItem = {
 export function ProofStrip({
   className = "",
   documented,
+  sansEspaceClient = false,
 }: {
   className?: string;
   documented: number;
+  /**
+   * Home (2026-11-21) : trois cellules seulement. L'espace client relève de
+   * l'accompagnement, pas du Studio digital ; la citation du Figaro, un temps
+   * mise à sa place, a été retirée à la demande d'Agathe.
+   */
+  sansEspaceClient?: boolean;
 }) {
   const locale = useLocale() as Locale;
   const isEn = locale === "en";
@@ -52,14 +59,20 @@ export function ProofStrip({
         { value: "CWV", label: "les trois mesures de vitesse Google, en direct sur ce site" },
         { value: "Espace client", label: "le suivi de votre site, en ligne", href: "/espace-client" },
       ];
+  const shown = sansEspaceClient ? items.slice(0, 3) : items;
+  const trois = shown.length === 3;
 
   return (
     <div className={`bg-obsidian px-2.5 lg:px-0 ${className}`}>
       {/* Cellules en cascade (Stagger) : la grille (bordures Blueprint) reste
           statique, le contenu des cellules se révèle et les chiffres se
           construisent (CountUp) — la preuve accroche l'œil sans layout shift. */}
-      <Stagger className="mx-auto grid w-full max-w-[1200px] grid-cols-2 border-x border-b border-dark-gray lg:grid-cols-4">
-        {items.map((item) => {
+      <Stagger
+        className={`mx-auto grid w-full max-w-[1200px] border-x border-b border-dark-gray ${
+          trois ? "grid-cols-1 sm:grid-cols-3" : "grid-cols-2 lg:grid-cols-4"
+        }`}
+      >
+        {shown.map((item) => {
           const inner = (
             <StaggerItem className="flex w-full flex-col gap-1">
               <span className="flex items-baseline gap-1.5">
@@ -83,8 +96,11 @@ export function ProofStrip({
             </StaggerItem>
           );
 
-          const cellClass =
-            "group flex border-r border-dark-gray px-5 py-4 no-underline last:border-r-0 max-lg:[&:nth-child(2n)]:border-r-0 max-lg:[&:nth-child(-n+2)]:border-b";
+          // Quatre cellules : 2 × 2 sous lg. Trois cellules : empilées sur
+          // mobile, en ligne dès sm.
+          const cellClass = trois
+            ? "group flex border-b border-dark-gray px-5 py-4 no-underline last:border-b-0 sm:border-b-0 sm:border-r sm:last:border-r-0"
+            : "group flex border-r border-dark-gray px-5 py-4 no-underline last:border-r-0 max-lg:[&:nth-child(2n)]:border-r-0 max-lg:[&:nth-child(-n+2)]:border-b";
 
           if (item.external && item.href) {
             return (

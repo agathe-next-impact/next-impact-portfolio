@@ -10,6 +10,12 @@ import {
   type Situation,
 } from "@/lib/situations";
 import { trajectoireDuNom, type Lang } from "@/lib/trajectoires";
+import {
+  LANDING,
+  LANDING_PRIX,
+  REFONTE_PRIX,
+  REFONTE_WP,
+} from "@/lib/prestations-web";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Données du mega menu : l'offre par situation (charte v1.6, ADR-014). Les
@@ -26,16 +32,20 @@ import { trajectoireDuNom, type Lang } from "@/lib/trajectoires";
 //                                              mise en avant), puis Audit.
 //                                              Arbitrage est retiré du menu
 //                                              (2026-09-28).
-//   – « Je veux faire évoluer mon site web » : trois situations, une par
-//                                              prestation. Refonte ou création.
+//   – « Studio digital » (clé `refaire`)     : depuis l'ADR-047, les deux
+//                                              prestations web, Landing
+//                                              Évolutive et Refonte WordPress
+//                                              (voir `studio()` plus bas), à la
+//                                              place des trois situations du
+//                                              besoin « faire évoluer ».
 //   – « Je veux agir dans la durée »         : deux situations, entretenir puis
 //                                              piloter. Toujours en dernier :
 //                                              offres de fin de parcours
 //                                              (charte §5).
 //
 // L'entrée de nav ouvre le panneau au survol et au focus, et mène à la page
-// mère au clic ; la ligne supérieure du panneau (le besoin + « Voir la page
-// … ») y mène aussi (ADR-022, points 14 et 16). Dans les trois moments, Sentinelle n'est pas une
+// mère au clic ; la bannière du panneau (le besoin + « Voir la page … »), en
+// bas du panneau depuis le 2026-11-21, y mène aussi (ADR-022, points 14 et 16). Dans les trois moments, Sentinelle n'est pas une
 // case : elle est incluse dans le suivi. Le panneau « Agents de veille IA »
 // a été retiré le 2026-10-14 (ADR-043).
 //
@@ -73,6 +83,12 @@ export interface MegaSection {
    * (ADR-022). Absente : l'entrée ouvre seulement le panneau.
    */
   href?: string;
+  /**
+   * Nom de la page mère, quand il diffère du libellé de l'entrée de nav :
+   * « Studio digital » ouvre le panneau, « Voir la page Prestations web » y
+   * mène. Absent : le libellé de l'entrée sert aux deux.
+   */
+  pageLabel?: { fr: string; en: string };
   /** Le besoin, dit par le visiteur : titre du panneau. */
   heading: { fr: string; en: string };
   /** Deux ou trois cases, une par situation. */
@@ -177,9 +193,41 @@ function accompagnement(): MegaSection {
   };
 }
 
+// Entrée « Studio digital » du menu (2026-11-21, ADR-047, demande d'Agathe) :
+// les deux prestations web, à égalité, chacune vers sa page d'offre. Elle
+// remplace l'entrée « Prestations web » ; la clé technique `refaire` ne change
+// pas. Sans page mère depuis le 2026-11-21. Nom, situation,
+// promesse et prix sont lus dans lib/prestations-web.ts. Les deux pages sont
+// rédigées en français : l'anglais, fermé, reçoit les mêmes textes.
+function studioItem(offre: typeof LANDING | typeof REFONTE_WP, prix: string): MegaItem {
+  // « Vous lancez ou vous testez. Une grande page aboutie, textes et visuels compris. »
+  const desc = `${offre.etiquette}. ${offre.promesse.split(". ")[0].replace(/\.$/, "")}.`;
+  return {
+    label: { fr: offre.nom, en: offre.nom },
+    desc: { fr: desc, en: desc },
+    href: offre.path,
+    badge: { fr: prix, en: prix },
+    price: { fr: prix, en: prix },
+  };
+}
+
+function studio(): MegaSection {
+  return {
+    key: "refaire",
+    // Pas de page mère (demande d'Agathe, 2026-11-21) : plus aucun lien vers
+    // la page d'orientation /solutions-web. L'entrée ouvre le panneau, chaque
+    // case mène à la page de son offre.
+    heading: {
+      fr: "Lancer un projet, ou refondre un site qui a fait ses preuves",
+      en: "Launch a project, or redesign a site that has proved itself",
+    },
+    items: [studioItem(LANDING, LANDING_PRIX), studioItem(REFONTE_WP, REFONTE_PRIX)],
+  };
+}
+
 export const MEGA_SECTIONS: Record<string, MegaSection> = {
   decider: section("decider", [SCAN_ITEM]),
-  refaire: section("refaire"),
+  refaire: studio(),
   tenir: section("tenir"),
   accompagnement: accompagnement(),
 };

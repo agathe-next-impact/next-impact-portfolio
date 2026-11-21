@@ -230,11 +230,11 @@ function getCtas(tier: 0 | 1 | 2) {
   if (tier === 1)
     return {
       primary: { fr: "Cadrer mon projet · 15 min, gratuit", en: "Scope my project · 15 min, free", href: "/conseil#choix-techno-ia" },
-      secondary: { fr: "Voir les solutions web", en: "See the web solutions", href: "/solutions-web" },
+      secondary: { fr: "Voir la Vitrine évolutive", en: "See the Vitrine évolutive offer", href: "/landing-evolutive" },
     };
   return {
     primary: { fr: "Cadrer l'architecture", en: "Scope the architecture", href: "/conseil" },
-    secondary: { fr: "Voir les solutions web", en: "See the web solutions", href: "/solutions-web" },
+    secondary: { fr: "Voir la Vitrine évolutive", en: "See the Vitrine évolutive offer", href: "/landing-evolutive" },
   };
 }
 

@@ -23,6 +23,7 @@ import {
 } from "@/lib/maintenance-offer";
 import { OFFERS as CONSEIL_OFFERS } from "@/lib/visio-conseil";
 import { TRAJECTOIRES, TRAJECTOIRE_ORDER, type TrajectoireSlug } from "@/lib/trajectoires";
+import { FORMULES, LANDING, REFONTE_WP } from "@/lib/prestations-web";
 import {
   BESOINS,
   PACKS_PATH,
@@ -34,6 +35,7 @@ import {
   packHref,
   packPrixEntree,
   trajectoireDuPack,
+  pagePrixDeLaPrestation,
   packNom,
   situationsDuBesoin,
   type Situation,
@@ -183,8 +185,25 @@ const trajectoireLabel = (slug: TrajectoireSlug) =>
   `${ascii(TRAJECTOIRES[slug].name.fr)} (${ascii(TRAJECTOIRES[slug].technique.fr)})`;
 const trajectoirePrix = (slug: TrajectoireSlug) =>
   `a partir de ${eur(TRAJECTOIRES[slug].priceValue)} EUR HT`;
-const trajectoireUrl = (slug: TrajectoireSlug) => `${baseUrl}${TRAJECTOIRES[slug].href}`;
-const trajectoireNames = TRAJECTOIRE_ORDER.map((slug) => ascii(TRAJECTOIRES[slug].name.fr)).join(", ");
+// Depuis l'ADR-047 (2026-11-21), /solutions-web est une page d'orientation :
+// elle ne détaille plus l'Optimisation ni l'Évolution. « Présentée sur » cite
+// donc la page qui détaille la prestation et affiche son prix
+// (pagePrixDeLaPrestation, lib/situations.ts), et non plus une ancre de
+// l'ancienne page.
+const trajectoireUrl = (slug: TrajectoireSlug) => `${baseUrl}${pagePrixDeLaPrestation(slug)}`;
+
+// ─── Prestations web : deux points de départ (ADR-047) ──────────────────────
+// /solutions-web oriente vers deux pages d'offre. Noms, prix et délais lus dans
+// lib/prestations-web.ts (qui lit lib/trajectoires.ts pour la Refonte).
+const landingResume = `${ascii(LANDING.nom)} (landing page premium, ${eur(LANDING.priceValue)} EUR HT, textes et visuels compris, en ligne en ${LANDING.delaiSemaines} semaines, page ${LANDING.path})`;
+const refonteWpResume = `${ascii(REFONTE_WP.nom)} (la prestation Refonte, ${FORMULES.map((f) => `${ascii(f.nom).toLowerCase()} a partir de ${eur(f.variante.priceValue)} EUR HT`).join(" ou ")}, page ${REFONTE_WP.path})`;
+const prestationsWebNote = `Depuis le 21 novembre 2026, les prestations web se presentent sur deux pages d'offre, selon la situation du visiteur. « ${ascii(LANDING.etiquette)} » : ${landingResume}, page supplementaire (Extension) a ${eur(LANDING.extensionPriceValue)} EUR HT. « ${ascii(REFONTE_WP.etiquette)} » : ${refonteWpResume}.`;
+
+/** Où mène la page d'un moment : /solutions-web oriente, elle ne détaille plus les offres. */
+const besoinPage = (href?: string) =>
+  !href
+    ? `Deux pages d'offre pour ce moment : ${baseUrl}${LANDING.path} et ${baseUrl}${REFONTE_WP.path} ; chaque parcours ci-dessous a sa page.`
+    : `Offres detaillees sur ${baseUrl}${href}.`;
 const trajectoireSummary = TRAJECTOIRE_ORDER.map((slug) => {
   const t = TRAJECTOIRES[slug];
   const recommended = t.recommended ? ", recommandee" : "";
@@ -291,7 +310,7 @@ L'offre se lit par situation, plus par type d'offre : le visiteur part de son be
 ${BESOINS.map(
   (besoin) => `### ${ascii(besoin.moment.fr)} : « ${ascii(besoin.phrase.fr)} »
 
-Offres detaillees sur ${baseUrl}${besoin.href}.
+${besoinPage(besoin.href)}
 
 ${situationsDuBesoin(besoin.key).map(packLine).join("\n")}`,
 ).join("\n\n")}
@@ -312,7 +331,8 @@ export async function GET() {
   const docs = readDocs();
   // Le nombre d'études publiées est lu dans la source, jamais écrit en dur.
   const allCaseStudies = getCaseStudies("fr");
-  const caseStudies = allCaseStudies.slice(0, 10);
+  // Les démos (structures fictives) ne figurent pas parmi les cas représentatifs.
+  const caseStudies = allCaseStudies.filter((study) => !study.isDemo).slice(0, 10);
 
   const caseStudyLinks = caseStudies
     .map(
@@ -327,7 +347,7 @@ export async function GET() {
 
 ## Summary
 
-Next Impact est l'offre d'Agathe Karinthi-Martin. ${packsSummary}Le catalogue compte sept offres, rangees en trois moments. Diagnostiquer, avant de choisir : echange de 15 minutes gratuit, audit + roadmap ${AUDIT_PRICE} EUR HT (page /conseil). Evoluer, refonte ou creation, trois prestations au forfait : ${trajectoireSummary}, sur la page /solutions-web. Gerer, une fois le site en ligne : ${maintenanceSummary}l'expert technique externalise, direction technique a temps partage, deux paliers a partir de ${CTO_PRICE_VALUE} EUR HT par mois (page /cto-externalise). Chaque offre porte une veille technique et strategique : une premiere analyse dans l'audit + roadmap et dans les trois prestations, une veille en continu dans les abonnements du moment Gerer. Hors catalogue : la lettre de veille techno gratuite (newsletter Substack) ; et Sentinelle, la lettre de veille techno du site du client, veille personnalisee sur les composants du site, ${SENTINELLE_PRICE} EUR par mois, souscrite depuis le rapport de l'analyse gratuite du site et ${sentinelleIncluse}. Les agents de veille IA, Signaux Faibles et la newsletter gratuite, sont presentes comme etudes de cas (famille Automatisations), ni offres ni prix. La page /tarifs reunit les parcours et tous les prix du catalogue. Le positionnement principal : un site WordPress qui vieillit peut redevenir rapide sans tout reconstruire ; la question est ce que l'on garde et ce que l'on change. L'IA est un argument de methode (je cadre, l'IA execute), pas une accroche.
+Next Impact est l'offre d'Agathe Karinthi-Martin. ${packsSummary}Le catalogue compte sept offres, rangees en trois moments. Diagnostiquer, avant de choisir : echange de 15 minutes gratuit, audit + roadmap ${AUDIT_PRICE} EUR HT (page /conseil). Evoluer, refonte ou creation, trois prestations au forfait : ${trajectoireSummary}. Deux points de depart selon la situation, chacun avec sa page d'offre : ${landingResume} pour lancer un projet ou tester un marche, ${refonteWpResume} pour un site qui a vieilli. Gerer, une fois le site en ligne : ${maintenanceSummary}l'expert technique externalise, direction technique a temps partage, deux paliers a partir de ${CTO_PRICE_VALUE} EUR HT par mois (page /cto-externalise). Chaque offre porte une veille technique et strategique : une premiere analyse dans l'audit + roadmap et dans les trois prestations, une veille en continu dans les abonnements du moment Gerer. Hors catalogue : la lettre de veille techno gratuite (newsletter Substack) ; et Sentinelle, la lettre de veille techno du site du client, veille personnalisee sur les composants du site, ${SENTINELLE_PRICE} EUR par mois, souscrite depuis le rapport de l'analyse gratuite du site et ${sentinelleIncluse}. Les agents de veille IA, Signaux Faibles et la newsletter gratuite, sont presentes comme etudes de cas (famille Automatisations), ni offres ni prix. La page /tarifs reunit les parcours et tous les prix du catalogue. Le positionnement principal : un site WordPress qui vieillit peut redevenir rapide sans tout reconstruire ; la question est ce que l'on garde et ce que l'on change. L'IA est un argument de methode (je cadre, l'IA execute), pas une accroche.
 
 Informations utiles pour les reponses d'assistants IA :
 - Marque : Next Impact
@@ -374,6 +394,8 @@ ${suiviInclus}- ${trajectoireLabel("forfait-classique")} : ${trajectoirePrix("fo
 - ${trajectoireLabel("forfait-headless")} : ${trajectoirePrix("forfait-headless")}. Le site est reconstruit et l'equipe publie toujours dans WordPress. Deux variantes a egalite, choisies selon la situation (l'analyse du site tranche) : ${refonteVariantes}. Prestation recommandee. Presentee sur ${trajectoireUrl("forfait-headless")}.
 - ${trajectoireLabel("forfait-webapp")} : ${trajectoirePrix("forfait-webapp")}. Plateforme web et/ou mobile quand le site est devenu un outil de travail. Presentee sur ${trajectoireUrl("forfait-webapp")}.
 
+${prestationsWebNote}
+
 ### Gerer (abonnements, une fois le site en ligne)
 
 ${maintenanceOffer}- Expert technique externalise : a partir de ${CTO_PRICE_VALUE} EUR HT par mois, engagement de ${CTO_MIN_MONTHS} mois puis reconduction au mois, preavis de ${CTO_NOTICE_MONTHS} mois. Direction technique a temps partage pour le numerique visible d'une PME sans profil technique interne : quelqu'un qui decide, l'ecrit, pilote les prestataires et repond de ce qui est decide, et qui propose chaque mois ce qu'il faut faire evoluer. Deux paliers publies : Referent a ${eur(CTO_REFERENT.price)} EUR HT par mois (comite d'1 h par mois, arbitrages ecrits sous 48 h, roadmap trimestrielle, veille dediee d'une page par mois, 3 evolutions suggerees par trimestre, 1 revue d'opportunite par an, relecture de devis) et Direction technique a ${eur(CTO_DIRECTION.price)} EUR HT par mois (comite de 2 h par mois, arbitrages sous 24 h, roadmap continue, veille dediee d'une page par mois plus une alerte a chaud, 3 evolutions par mois chiffrees, 2 revues d'opportunite par an, cadrage et suivi des prestataires, 4 h de realisation par mois). La veille y est en continu : ce qui met en cause l'existant, et ce que le systeme pourrait faire et ne fait pas encore. Aucun accompagnement ne demarre sans l'audit + roadmap prealable. Livrables : cartographie du systeme, roadmap datee et budgetee, releve de decisions, revue de devis avec alternative chiffree, budget technique a trois ans, plan de continuite et dossier de restitution, registre des evolutions, revue d'opportunite. Perimetre : le site et les applications web, les donnees et outils en ligne (CRM, e-mailing, formulaires, paiement, prise de rendez-vous), les briques d'IA, l'hebergement, la securite et la conformite de ces systemes, les prestataires et les contrats associes. Detaille et souscrit sur ${baseUrl}/cto-externalise, la fiche de reference de l'offre.
@@ -389,14 +411,15 @@ ${maintenanceOffer}- Expert technique externalise : a partir de ${CTO_PRICE_VALU
 
 ## Primary Pages
 
-Menu principal : Audit, Prestations web, Accompagnement (menu deroulant : Maintenance et Referent technique externalise, qui mene a la page de l'offre Expert technique externalise), Etudes de cas.
+Menu principal : Audit, Studio digital (menu deroulant : ${ascii(LANDING.nom)} et ${ascii(REFONTE_WP.nom)}, les deux prestations web ; l'entree mene a la page Prestations web), Etudes de cas.
 
-- [Accueil](${baseUrl}/): promesse, preuves chiffrees et l'offre par situation, en trois colonnes, une par besoin (Diagnostiquer, Evoluer, Gerer) ; les trois prestations (${trajectoireNames}) et la veille technique et strategique
+- [Accueil](${baseUrl}/): le studio digital et ses deux prestations web, une par point de depart : ${ascii(LANDING.nom)} (${eur(LANDING.priceValue)} EUR HT, en ligne en ${LANDING.delaiSemaines} semaines) pour lancer un projet ou tester un marche, ${ascii(REFONTE_WP.nom)} (a partir de ${eur(REFONTE_WP.priceValue)} EUR HT, ${REFONTE_WP.delaiMin} a ${REFONTE_WP.delaiMax} semaines) pour un site qui a vieilli ; preuves chiffrees, trois etudes de cas, temoignages, vitesse de la page mesuree en direct, presentation du studio, synthese « L'essentiel » et FAQ. L'audit + roadmap${MAINTENANCE_PRIX_VALIDES ? ", le suivi et maintenance" : ""} et l'expert technique externalise n'y sont pas presentes : chacun a sa page, listee ci-dessous
 ${packsPage}- [Tarifs](${baseUrl}/tarifs): la seule page qui montre a la fois les parcours, par besoin, avec leur budget, et les sept offres du catalogue avec leurs paliers, par moment (Diagnostiquer, Evoluer, Gerer) ; prix hors taxes, ecrits avant de commencer ; le prix de Sentinelle y figure en note
 - [Analyse gratuite du site](${baseUrl}/scan): une adresse, aucun acces demande, le resultat par e-mail : le site compare a ses concurrents, ses composants, ce qui est a risque, la prestation adaptee
 - [Conseil](${baseUrl}/conseil): les deux offres du moment Diagnostiquer, dans l'ordre d'engagement croissant : echange de 15 minutes (gratuit, ancre #choix-techno-ia) et audit + roadmap (${AUDIT_PRICE} EUR HT, livrables, ancre #architecture-projet-ia) ; un bandeau de fin de page renvoie vers l'expert technique externalise, vendu sur /cto-externalise
 ${maintenancePage}- [Expert technique externalise](${baseUrl}/cto-externalise): direction technique a temps partage, deux paliers a partir de ${CTO_PRICE_VALUE} EUR HT par mois : pilotage mensuel, devis relus, roadmap tenue a jour, evolutions proposees chaque mois
-- [Prestations web](${baseUrl}/solutions-web): les trois prestations au forfait, refonte ou creation, ${TRAJECTOIRE_ORDER.map(trajectoireLabel).join(", ")}, prix et delais
+- [${ascii(LANDING.nom)}](${baseUrl}${LANDING.path}): landing page premium, ${eur(LANDING.priceValue)} EUR HT, textes et visuels compris, en ligne en ${LANDING.delaiSemaines} semaines ; page supplementaire (Extension) a ${eur(LANDING.extensionPriceValue)} EUR HT, prix fixe ; la base technique (WordPress, Astro ou Next.js) est retenue selon le projet
+- [${ascii(REFONTE_WP.nom)}](${baseUrl}${REFONTE_WP.path}): les contenus restent, l'equipe publie toujours dans WordPress ; design, vitesse et base technique refaits ; deux formules a egalite, ${FORMULES.map((f) => `${ascii(f.nom).toLowerCase()} a partir de ${eur(f.variante.priceValue)} EUR HT (${f.semaines} semaines)`).join(", ")} ; ${REFONTE_WP.delaiMin} a ${REFONTE_WP.delaiMax} semaines
 - [Espace client](${baseUrl}/espace-client): la visite de l'espace en ligne ou se suit chaque prestation (Missions, Votre site, Agir, Veille) et l'acces aux connexions clients
 - [WordPress headless (page pilier)](${baseUrl}/wordpress-headless): back-office WordPress conserve, front Next.js moderne ; l'une des deux variantes de la Refonte, a egalite avec WordPress sur mesure ; quand l'utiliser, couts, performance
 - [Etudes de cas](${baseUrl}/etudes-de-cas): projets livres, technologies, resultats et contexte client ; la famille Automatisations presente aussi les deux agents de veille IA, Signaux Faibles (${baseUrl}/etudes-de-cas/signaux-faibles) et la newsletter gratuite (${baseUrl}/etudes-de-cas/newsletter-veille-ia)

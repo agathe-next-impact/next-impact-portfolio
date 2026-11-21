@@ -85,7 +85,18 @@ const METRICS_EN: MetricDef[] = [
  * page, mesurés en direct dans le navigateur du visiteur via l'API Performance
  * native (aucune dépendance). Le site est sa propre démo.
  */
-export default function HomePerf({ index = "№ 08" }: { index?: string }) {
+export default function HomePerf({
+  index = "№ 08",
+  bare = false,
+}: {
+  index?: string;
+  /**
+   * Module seul : les trois mesures en direct et leur légende, sans en-tête de
+   * section ni bouton. Pour l'insérer dans une section qui porte déjà son
+   * titre (pages de prestations web, ADR-047).
+   */
+  bare?: boolean;
+}) {
   const locale = useLocale() as Locale;
   const isEn = locale === "en";
   const metrics = isEn ? METRICS_EN : METRICS_FR;
@@ -159,35 +170,8 @@ export default function HomePerf({ index = "№ 08" }: { index?: string }) {
   });
 
 
-  return (
-    <BlueprintSection tone="obsidian">
-      {/* En-tête */}
-      <Reveal className="border-b border-dark-gray px-6 py-12 lg:px-8 lg:py-16">
-        <SectionHeading
-          index={index}
-          kicker={isEn ? "Proof · under the hood" : "Preuve · technique"}
-          title={
-            isEn ? (
-              <>
-                A beautiful site that&apos;s{" "}
-                <span className="text-accent-secondary">as fast as it looks</span>
-              </>
-            ) : (
-              <>
-                Un beau site,{" "}
-                <span className="text-accent-secondary">aussi rapide qu&apos;il en a l&apos;air</span>
-              </>
-            )
-          }
-          description={
-            isEn
-              ? "Design isn't everything — here are the Core Web Vitals of this page, measured live in your browser. The technical foundation under every project."
-              : "Le design ne fait pas tout : voici les Core Web Vitals de cette page, mesurés en direct dans votre navigateur. Le socle technique de chaque projet."
-          }
-        />
-      </Reveal>
-
-      {/* Cartes métriques */}
+  // Les trois mesures, relevées en direct dans le navigateur.
+  const metricCards = (
       <Stagger className="grid grid-cols-1 border-b border-dark-gray md:grid-cols-3">
         {metrics.map((m) => {
           const v = measured[m.key];
@@ -246,6 +230,51 @@ export default function HomePerf({ index = "№ 08" }: { index?: string }) {
           );
         })}
       </Stagger>
+  );
+
+  if (bare) {
+    return (
+      <div>
+        {metricCards}
+        <p className="px-6 py-5 font-inter-tight text-sm leading-relaxed text-mid-gray lg:px-8">
+          {isEn
+            ? "Core Web Vitals: the three speed measurements Google uses to rank a site, taken live on this page, in your browser."
+            : "Core Web Vitals : les trois mesures de vitesse que Google utilise pour classer un site, relevées en direct sur cette page, dans votre navigateur."}
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <BlueprintSection tone="obsidian">
+      {/* En-tête */}
+      <Reveal className="border-b border-dark-gray px-6 py-12 lg:px-8 lg:py-16">
+        <SectionHeading
+          index={index}
+          kicker={isEn ? "Proof · under the hood" : "Preuve · technique"}
+          title={
+            isEn ? (
+              <>
+                A beautiful site that&apos;s{" "}
+                <span className="text-accent-secondary">as fast as it looks</span>
+              </>
+            ) : (
+              <>
+                Un beau site,{" "}
+                <span className="text-accent-secondary">aussi rapide qu&apos;il en a l&apos;air</span>
+              </>
+            )
+          }
+          description={
+            isEn
+              ? "Design isn't everything — here are the Core Web Vitals of this page, measured live in your browser. The technical foundation under every project."
+              : "Le design ne fait pas tout : voici les Core Web Vitals de cette page, mesurés en direct dans votre navigateur. Le socle technique de chaque projet."
+          }
+        />
+      </Reveal>
+
+      {/* Cartes métriques */}
+      {metricCards}
 
       {/* Pied — note de mesure + CTA froid + vérification PSI */}
       <Reveal className="flex flex-col gap-6 px-6 py-8 lg:flex-row lg:items-center lg:justify-between lg:px-8">

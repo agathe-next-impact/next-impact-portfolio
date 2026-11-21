@@ -123,44 +123,12 @@ export function MegaMenuPanel({
   const locale = useLocale() as Locale;
   const t = useTranslations("nav");
   // Le nom de l'entrée de nav (« Prestations ») : le bouton dit où il mène.
-  const navLabel = t(section.key as Parameters<typeof t>[0]);
+  // Quand la page mère porte un autre nom que l'entrée (« Studio digital »
+  // mène à la page « Prestations web »), c'est ce nom-là que dit le bouton.
+  const navLabel = section.pageLabel?.[locale] ?? t(section.key as Parameters<typeof t>[0]);
 
   return (
     <div id={`mega-${section.key}`} className="border-x border-b border-dark-gray">
-      {/* Ligne supérieure : mène à la page mère, comme l'entrée de nav qui
-          ouvre le panneau. À gauche le besoin, à droite un bouton qui dit où
-          l'on va (« Voir la page Prestations »), toute la ligne cliquable. */}
-      {/* Sans page mère (« À propos ») : le besoin seul, sans lien. */}
-      {!section.href ? (
-        <div className="flex flex-col gap-0.5 border-b border-dark-gray bg-obsidian px-6 py-4 lg:px-8">
-          <span className="font-mono text-2xs uppercase tracking-[0.14em] text-mid-gray">
-            {locale === "en" ? "Your need" : "Votre besoin"}
-          </span>
-          <span className="text-xl font-light tracking-tight text-foreground">
-            {section.heading[locale]}
-          </span>
-        </div>
-      ) : (
-      <Link
-        href={section.href as NavHref}
-        onClick={onNavigate}
-        className="group flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-b border-dark-gray bg-obsidian px-6 py-4 no-underline transition-colors hover:bg-jet lg:px-8"
-      >
-        <span className="flex flex-col gap-0.5">
-          <span className="font-mono text-2xs uppercase tracking-[0.14em] text-mid-gray">
-            {locale === "en" ? "Your need" : "Votre besoin"}
-          </span>
-          <span className="text-xl font-light tracking-tight text-foreground">
-            {section.heading[locale]}
-          </span>
-        </span>
-        <span className="inline-flex min-h-10 items-center gap-2 rounded-sm border border-accent-secondary px-4 font-mono text-sm font-semibold uppercase tracking-[0.1em] text-accent-secondary transition-colors group-hover:bg-accent-secondary group-hover:text-obsidian">
-          {locale === "en" ? `See the ${navLabel} page` : `Voir la page ${navLabel}`}
-          <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
-        </span>
-      </Link>
-      )}
-
       {/* Une case par offre : une, deux ou trois colonnes selon le menu
           (deux pour « Agents de veille IA », ADR-042). */}
       <div
@@ -181,6 +149,42 @@ export function MegaMenuPanel({
           />
         ))}
       </div>
+
+      {/* Ligne du bas (demande d'Agathe du 2026-11-21 : les offres d'abord,
+          la bannière ensuite, comme dans l'accordéon mobile) : elle mène à la
+          page mère, comme l'entrée de nav qui ouvre le panneau. À gauche le
+          besoin, à droite un bouton qui dit où l'on va (« Voir la page
+          Prestations web »), toute la ligne cliquable. */}
+      {/* Sans page mère (« À propos ») : le besoin seul, sans lien. */}
+      {!section.href ? (
+        <div className="flex flex-col gap-0.5 border-t border-dark-gray bg-obsidian px-6 py-4 lg:px-8">
+          <span className="font-mono text-2xs uppercase tracking-[0.14em] text-mid-gray">
+            {locale === "en" ? "Your need" : "Votre besoin"}
+          </span>
+          <span className="text-xl font-light tracking-tight text-foreground">
+            {section.heading[locale]}
+          </span>
+        </div>
+      ) : (
+      <Link
+        href={section.href as NavHref}
+        onClick={onNavigate}
+        className="group flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-t border-dark-gray bg-obsidian px-6 py-4 no-underline transition-colors hover:bg-jet lg:px-8"
+      >
+        <span className="flex flex-col gap-0.5">
+          <span className="font-mono text-2xs uppercase tracking-[0.14em] text-mid-gray">
+            {locale === "en" ? "Your need" : "Votre besoin"}
+          </span>
+          <span className="text-xl font-light tracking-tight text-foreground">
+            {section.heading[locale]}
+          </span>
+        </span>
+        <span className="inline-flex min-h-10 items-center gap-2 rounded-sm border border-accent-secondary px-4 font-mono text-sm font-semibold uppercase tracking-[0.1em] text-accent-secondary transition-colors group-hover:bg-accent-secondary group-hover:text-obsidian">
+          {locale === "en" ? `See the ${navLabel} page` : `Voir la page ${navLabel}`}
+          <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
+        </span>
+      </Link>
+      )}
     </div>
   );
 }

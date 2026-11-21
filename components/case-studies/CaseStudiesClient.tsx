@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, m as motion } from "framer-motion";
-import { ArrowRight, Play } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import Realisations from "@/components/case-studies/realisations";
 import { useLocale } from "next-intl";
@@ -10,8 +10,7 @@ import { getCaseStudiesPageVariants } from "@/lib/homepage-profiles";
 import type { CaseStudyCard } from "@/lib/case-studies-data";
 import type { Locale } from "@/i18n/routing";
 import { BlueprintSection, SectionHeading, Separator } from "@/components/aspect/section";
-import { PageHero, HERO_BTN_PRIMARY, HERO_BTN_SECONDARY } from "@/components/aspect/page-hero";
-import { CTA_ECHANGE } from "@/lib/visio-conseil";
+import { PageHero } from "@/components/aspect/page-hero";
 import { Reveal } from "@/components/ui/reveal";
 import { NeonArcs } from "@/components/visuals/neon-arcs";
 
@@ -44,19 +43,8 @@ export default function CaseStudiesClient({ cards }: { cards: CaseStudyCard[] })
         kicker={isEn ? "Case studies" : "Études de cas"}
         title={variant.titre}
         description={variant.sousTitre}
-        actions={
-          <>
-            {/* Premier bouton de chaque héros : l'échange gratuit (Calendly). */}
-            <a href={CTA_ECHANGE.href} target="_blank" rel="noopener noreferrer" className={HERO_BTN_PRIMARY}>
-              {isEn ? CTA_ECHANGE.label.en : CTA_ECHANGE.label.fr}
-            </a>
-            {/* Preuve avant demande : la démo vidéo se consulte sans engagement. */}
-            <Link href="/demo" className={HERO_BTN_SECONDARY}>
-              <Play size={14} fill="currentColor" aria-hidden="true" />
-              {isEn ? "Watch the demos in video" : "Voir les démos en vidéo"}
-            </Link>
-          </>
-        }
+        // Pas de boutons dans ce héros (demande d'Agathe, 2026-11-21) : la
+        // grille suit aussitôt, les appels à l'action sont en bas de page.
         backdrop={
           <div className="absolute inset-0 opacity-50">
             <NeonArcs />

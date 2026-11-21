@@ -22,7 +22,7 @@
     "decider": "Audit",
     "accompagnement": "Accompagnement",
     "ctoExterne": "CTO externe",
-    "refaire": "Prestations web",
+    "refaire": "Studio digital",
     "surveiller": "Agents de veille IA",
     "tenir": "Suivi et Pilotage",
     "navMaintenance": "Maintenance",
@@ -63,6 +63,8 @@
     "updated": "Mis à jour : septembre 2026",
     "about": "À propos",
     "services": "Prestations web",
+    "landingEvolutive": "Vitrine évolutive",
+    "refonteWordpress": "Refonte WordPress",
     "caseStudies": "Études de cas",
     "documentation": "Documentation",
     "blog": "Blog",
@@ -280,8 +282,8 @@
   },
   "realisations": {
     "tabs": {
-      "tous": "Tous",
-      "sites-institutionnels": "Sites institutionnels",
+      "refonte": "Refonte",
+      "vitrine-evolutive": "Vitrine évolutive",
       "app-web-mobile": "App web et mobile",
       "automatisations": "Automatisations"
     },
@@ -312,7 +314,9 @@
     "testimonial": "Témoignage client",
     "projectInfo": "Informations du projet",
     "client": "Client",
-    "deliveryDate": "Date de réalisation",
+    "demo": "Démo",
+    "demoNote": "Site de démonstration, structure fictive",
+"deliveryDate": "Date de réalisation",
     "duration": "Durée du projet",
     "technologies": "Technologies utilisées",
     "tags": "Tags",
@@ -372,7 +376,7 @@
         "plateforme": "Une plateforme métier développée sur-mesure.",
         "composant": "Un composant sur-mesure intégré au site existant."
       },
-      "constructionLink": "Voir cette offre sur Solutions web",
+      "constructionLink": "Voir les prestations web",
       "budgetLine": "Projet de ce type : {budget} · {delai}",
       "budgetLineNoDelai": "Projet de ce type : {budget}"
     },
@@ -383,8 +387,8 @@
     }
   },
   "servicesPage": {
-    "metaTitle": "Refonte WordPress : trois prestations pour un site qui vieillit",
-    "metaDescription": "Trois prestations pour un site WordPress qui vieillit : Optimisation, Refonte (recommandée) ou Évolution. Prix et délai écrits avant de commencer, veille incluse.",
+    "metaTitle": "Landing page ou refonte WordPress : deux prestations, prix écrits",
+    "metaDescription": "Deux points de départ selon votre situation : la Vitrine évolutive pour lancer un projet ou tester un marché, la Refonte WordPress pour un site qui a vieilli. Prix écrits avant de commencer.",
     "breadcrumbHome": "Accueil",
     "breadcrumbServices": "Prestations web",
     "calculateGain": {

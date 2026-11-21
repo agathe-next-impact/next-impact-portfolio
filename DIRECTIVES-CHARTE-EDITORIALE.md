@@ -24,6 +24,8 @@
 
 > **Amendement du 28 septembre 2026 (v1.8, ADR-031).** La **Refonte** se livre en deux variantes **à égalité**, choisies selon la situation : **WordPress sur mesure** (thème écrit pour le site, à partir de 2 250 € HT) ou **WordPress headless** (à partir de 4 000 € HT). Elle s'affiche « à partir de 2 250 € HT », nom technique « WordPress sur mesure ou headless », et garde le badge « recommandée ». L'**Optimisation** devient la remise à niveau du site existant, sans reconstruction ni nouveau thème, à partir de 1 500 € HT. Le headless n'est plus l'option par défaut de la refonte. L'analyse du site (`/scan`) tranche entre les deux variantes. Amendés : §1, §5.
 
+> **Amendement du 21 novembre 2026 (ADR-047), partiel.** Les prestations web se lisent en **deux points de départ** : **Vitrine évolutive** (`/landing-evolutive`, 1 700 € HT, textes et visuels compris, en ligne en 4 semaines, Extension à 300 € HT la page) et **Refonte WordPress** (`/refonte-wordpress`, thème sur mesure dès 2 250 € HT, headless dès 4 000 € HT), sous les verbes **Lancer** et **Refondre**. `/solutions-web` devient la page d'orientation qui y mène. Pour ces trois pages, les directives `docs/Solutions web analyse, noms d'offres et structure de page.md` priment sur les §1, §5, §6 et §7 ci-dessous ; source unique : `lib/prestations-web.ts`. Le reste de la charte (catalogue de sept lignes, Optimisation, Évolution, grille du suivi et maintenance, trois mois de suivi inclus) n'est **pas encore amendé** : la suppression d'Optimisation et d'Évolution et la nouvelle grille de maintenance (49 € HT, 89 € HT avec monitoring) restent à propager, voir l'ADR-047.
+
 ---
 
 ## 1. Ce que dit le site aujourd'hui, et ce qu'il doit dire demain

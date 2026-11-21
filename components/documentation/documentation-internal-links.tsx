@@ -65,9 +65,16 @@ const TOOL_LINKS_EN: ToolLink[] = [
 
 const SERVICE_LINKS_FR: ToolLink[] = [
   {
-    href: "/solutions-web",
-    title: "Prestations web",
-    description: "Mise en œuvre après une décision Web & IA claire.",
+    href: "/landing-evolutive",
+    title: "Vitrine évolutive",
+    description: "Une grande page aboutie pour lancer un projet, à prix fixe écrit.",
+    icon: Briefcase,
+    color: "text-orange",
+  },
+  {
+    href: "/refonte-wordpress",
+    title: "Refonte WordPress",
+    description: "Vos contenus restent, le site repart à neuf : deux formules, prix écrits.",
     icon: Briefcase,
     color: "text-orange",
   },
@@ -89,9 +96,16 @@ const SERVICE_LINKS_FR: ToolLink[] = [
 
 const SERVICE_LINKS_EN: ToolLink[] = [
   {
-    href: "/solutions-web",
-    title: "Delivery",
-    description: "Implementation after a clear Web & AI decision.",
+    href: "/landing-evolutive",
+    title: "Vitrine évolutive",
+    description: "One accomplished long page to launch a project, at a written fixed price.",
+    icon: Briefcase,
+    color: "text-orange",
+  },
+  {
+    href: "/refonte-wordpress",
+    title: "Refonte WordPress",
+    description: "Your content stays, the site starts afresh: two options, written prices.",
     icon: Briefcase,
     color: "text-orange",
   },
@@ -146,9 +160,16 @@ const PROFILE_TOOLS_FR: Record<ProfileId | "default", ToolLink[]> = {
       color: "text-coral",
     },
     {
-      href: "/solutions-web",
-      title: "Simulateur de tarifs",
-      description: "Estimez le budget adapté à votre projet.",
+      href: "/landing-evolutive",
+      title: "Vitrine évolutive",
+      description: "Une grande page aboutie pour lancer un projet, à prix fixe écrit.",
+      icon: Calculator,
+      color: "text-lightyellow",
+    },
+    {
+      href: "/refonte-wordpress",
+      title: "Refonte WordPress",
+      description: "Vos contenus restent, le site repart à neuf : deux formules, prix écrits.",
       icon: Calculator,
       color: "text-lightyellow",
     },
@@ -234,9 +255,16 @@ const PROFILE_TOOLS_EN: Record<ProfileId | "default", ToolLink[]> = {
       color: "text-coral",
     },
     {
-      href: "/solutions-web",
-      title: "Pricing simulator",
-      description: "Estimate the budget that fits your project.",
+      href: "/landing-evolutive",
+      title: "Vitrine évolutive",
+      description: "One accomplished long page to launch a project, at a written fixed price.",
+      icon: Calculator,
+      color: "text-lightyellow",
+    },
+    {
+      href: "/refonte-wordpress",
+      title: "Refonte WordPress",
+      description: "Your content stays, the site starts afresh: two options, written prices.",
       icon: Calculator,
       color: "text-lightyellow",
     },
@@ -477,7 +505,8 @@ function getCategoryRelevantLinks(
         ...base,
         { href: "/scan", title: t("AI audit", "Audit IA") },
         { href: "/etudes-de-cas", title: t("Case studies", "Études de cas") },
-        { href: "/solutions-web", title: t("Our offerings", "Nos offres") },
+        { href: "/landing-evolutive", title: "Vitrine évolutive" },
+        { href: "/refonte-wordpress", title: "Refonte WordPress" },
       ];
     case "wordpress":
       return [
@@ -491,7 +520,8 @@ function getCategoryRelevantLinks(
         ...base,
         { href: "/scan", title: t("AI audit", "Audit IA") },
         { href: "/documentation/marketing-digital", title: t("Digital marketing", "Marketing Digital") },
-        { href: "/solutions-web", title: t("Our SEO offerings", "Nos offres SEO") },
+        { href: "/landing-evolutive", title: "Vitrine évolutive" },
+        { href: "/refonte-wordpress", title: "Refonte WordPress" },
       ];
     case "design-ui-ux":
       return [
@@ -514,7 +544,8 @@ function getCategoryRelevantLinks(
         { href: "/outils/nocode-saas-surmesure", title: t("No-code, SaaS or custom?", "No-code, SaaS ou sur-mesure ?") },
         { href: "/outils/audit-pwa", title: t("PWA diagnostic", "Diagnostic PWA") },
         { href: "/etudes-de-cas", title: t("Case studies", "Études de cas") },
-        { href: "/solutions-web", title: t("Our offerings", "Nos offres") },
+        { href: "/landing-evolutive", title: "Vitrine évolutive" },
+        { href: "/refonte-wordpress", title: "Refonte WordPress" },
       ];
     case "projet-site-web":
       return [
@@ -529,7 +560,8 @@ function getCategoryRelevantLinks(
         ...base,
         { href: "/scan", title: t("AI audit", "Audit IA") },
         { href: "/etudes-de-cas", title: t("Case studies", "Études de cas") },
-        { href: "/solutions-web", title: t("Our offerings", "Nos offres") },
+        { href: "/landing-evolutive", title: "Vitrine évolutive" },
+        { href: "/refonte-wordpress", title: "Refonte WordPress" },
         { href: "/contact", title: "Contact" },
       ];
   }

@@ -6,6 +6,8 @@ import { TRAJECTOIRES, TRAJECTOIRE_ORDER, formatEuros } from "@/lib/trajectoires
 // Prix des deux offres de conseil : lus dans lib/visio-conseil.ts. Ce module
 // n'est importé que côté serveur (pages et JSON-LD) : rien ne part au client.
 import { OFFERS as CONSEIL_OFFERS } from "@/lib/visio-conseil";
+// Les deux prestations web (ADR-047) : noms, prix et délais lus dans leur source.
+import { EXTENSION_PRIX, LANDING, LANDING_PRIX, REFONTE_WP } from "@/lib/prestations-web";
 
 const conseilPrice = (id: string, locale: Locale): string =>
   CONSEIL_OFFERS.find((offer) => offer.id === id)!.tiers[0].price[locale];
@@ -15,16 +17,6 @@ function prestationNames(locale: Locale): string {
   const names = TRAJECTOIRE_ORDER.map((slug) => TRAJECTOIRES[slug].name[locale]);
   const last = names.pop();
   return `${names.join(", ")} ${locale === "en" ? "or" : "ou"} ${last}`;
-}
-
-/** « Optimisation dès 1 500 € HT, Refonte dès 2 250 € HT, … » : nom et plancher de chaque prestation. */
-function prestationPrices(locale: Locale): string {
-  return TRAJECTOIRE_ORDER.map((slug) => {
-    const { name, priceValue } = TRAJECTOIRES[slug];
-    return locale === "en"
-      ? `${name.en} from ${formatEuros(priceValue, "en")} excl. VAT`
-      : `${name.fr} dès ${formatEuros(priceValue, "fr")} HT`;
-  }).join(", ");
 }
 
 const OG_LOCALES: Record<Locale, string> = {
@@ -284,82 +276,109 @@ type LocalizedMeta = {
   keywords?: string[];
 };
 
-const HOME_BY_LOCALE: Record<Locale, LocalizedMeta> = {
-  fr: {
-    title: "Refonte de site WordPress : rapide, moderne, sans tout reconstruire · Next Impact",
-    description:
-      "Votre site WordPress vieillit mal ? Remise à niveau, refonte sur mesure ou headless, web app : au forfait, en 6 à 10 semaines. Performance mesurée avant et après.",
-    // Anti-cannibalisation (ADR-014) : la requête de SITUATION « site
-    // WordPress lent » appartient à la page de pack /packs/site-wordpress-lent.
-    // La home garde la requête d'ensemble : la refonte d'un site qui vieillit.
-    // « second avis devis web » est conservé (exception consignée).
-    keywords: [
-      "refonte site WordPress",
-      "refonte WordPress sur mesure",
-      "refonte WordPress headless",
-      "site WordPress qui vieillit",
-      "moderniser site WordPress",
-      "refonte site web forfait",
-      "second avis devis web",
-      "Next Impact",
-    ],
-  },
-  en: {
-    title: "WordPress site redesign: fast, modern, without rebuilding everything · Next Impact",
-    description:
-      "Is your WordPress site aging badly? Upgrade, custom or headless redesign, web app: fixed price, in 6 to 10 weeks. Performance measured before and after.",
-    keywords: [
-      "WordPress site redesign",
-      "custom WordPress redesign",
-      "headless WordPress redesign",
-      "aging WordPress site",
-      "modernize WordPress site",
-      "fixed price website redesign",
-      "web quote second opinion",
-      "Next Impact",
-    ],
-  },
+// Home du Studio digital (ADR-047, 2026-11-21) : les deux prestations, leurs
+// prix lus dans lib/prestations-web.ts. Anti-cannibalisation : la home garde
+// la requête de MARQUE et d'ensemble (« studio digital », « création ou
+// refonte de site ») ; /solutions-web l'arbitrage, /landing-evolutive la
+// vitrine d'une page, /refonte-wordpress l'offre de refonte et son prix.
+// Le titre s'ouvre donc sur le h1 de la home, « Studio digital » : l'ancien
+// (« Vitrine évolutive ou refonte WordPress, prix écrits · Next Impact ») ne
+// le portait pas et doublait presque mot pour mot celui de /solutions-web
+// (« Landing page ou refonte WordPress : deux prestations, prix écrits »).
+// « Prix et délai écrits » reste dans la description.
+const HOME_FR: LocalizedMeta = {
+  title: "Studio digital : vitrine évolutive ou refonte WordPress · Next Impact",
+  description: `Lancer un projet ou refondre un site WordPress : ${LANDING.nom.toLowerCase()} à ${LANDING_PRIX}, en ligne en ${LANDING.delaiSemaines} semaines, ou refonte dès ${formatEuros(REFONTE_WP.priceValue, "fr")} HT. Prix et délai écrits.`,
+  keywords: [
+    "studio digital",
+    "création de site vitrine",
+    "refonte de site WordPress",
+    "site web prix fixe",
+    "développeuse web freelance",
+    "Next Impact",
+  ],
 };
 
-// Page /solutions-web, page d'atterrissage du moment « Évoluer » : la requête
-// d'OFFRE (« refonte WordPress prix », « refonte WordPress sur mesure ou headless »). Le nom
-// et le plancher de chaque prestation sont lus dans lib/trajectoires.ts.
-// Source unique de la page : app/[locale]/solutions-web/page.tsx lit
-// `servicesMeta`, plus le namespace `servicesPage` des messages, qui ne peut
-// pas importer de TypeScript.
-const SERVICES_BY_LOCALE: Record<Locale, LocalizedMeta> = {
-  fr: {
-    title: "Refonte WordPress : trois prestations pour un site qui vieillit",
-    description: `Site WordPress qui vieillit : ${prestationPrices("fr")}. Prix et délai écrits, veille incluse.`,
-    keywords: [
-      "refonte site WordPress prix",
-      "optimisation site WordPress",
-      "refonte WordPress sur mesure",
-      "refonte WordPress headless",
-      "tarifs WordPress headless",
-      "web app sur-mesure",
-      "outil métier sur-mesure",
-    ],
-  },
-  en: {
-    title: "WordPress redesign: three services for an aging site",
-    description: `Aging WordPress site: ${prestationPrices("en")}. Price and timeline in writing, watch analysis included.`,
-    keywords: [
-      "WordPress redesign price",
-      "WordPress site optimization",
-      "custom WordPress redesign",
-      "headless WordPress redesign",
-      "headless WordPress pricing",
-      "custom web app",
-      "custom business tool",
-    ],
-  },
+// La home est rédigée en français (lib/home-content.ts). L'anglais, fermé
+// (ENGLISH_PUBLISHED, /en redirige vers /), reçoit les mêmes métadonnées tant
+// qu'il n'est pas traduit, plutôt qu'un titre anglais resté sur l'ancien
+// catalogue (« Upgrade, custom or headless redesign, web app »), que la page ne
+// montre plus.
+const HOME_BY_LOCALE: Record<Locale, LocalizedMeta> = { fr: HOME_FR, en: HOME_FR };
+
+/** Titre, description et mots-clés de la home, pour la page et son JSON-LD (nœud WebPage). */
+export function homeMeta(locale: Locale = routing.defaultLocale): LocalizedMeta {
+  return HOME_BY_LOCALE[locale];
+}
+
+// Pages de prestations web (ADR-047, 2026-11-21). /solutions-web est la page
+// d'orientation : deux points de départ, la Vitrine évolutive et la Refonte
+// WordPress, chacune vendue sur sa page. Titres et descriptions fixés par les
+// directives du 2026-11-21 ; chaque prix et chaque délai est lu dans sa source
+// (lib/prestations-web.ts, qui lit lui-même lib/trajectoires.ts pour la
+// Refonte). Les trois pages sont rédigées en français ; l'anglais, fermé
+// (ENGLISH_PUBLISHED), reçoit les mêmes textes tant qu'il n'est pas traduit.
+//
+// Anti-cannibalisation : /solutions-web vise la requête d'arbitrage (« landing
+// page ou refonte »), /landing-evolutive la requête « landing page », et
+// /refonte-wordpress la requête d'OFFRE « refonte WordPress prix ».
+// /wordpress-headless garde la requête d'explication du headless.
+const SERVICES_FR: LocalizedMeta = {
+  title: "Landing page ou refonte WordPress : deux prestations, prix écrits",
+  description: `Landing page premium à ${LANDING_PRIX}, textes et visuels compris, en ligne en ${LANDING.delaiSemaines} semaines, ou refonte WordPress sur mesure dès ${formatEuros(REFONTE_WP.priceValue, "fr")} HT.`,
+  // Requête d'ARBITRAGE seulement : « création landing page » appartient à
+  // /landing-evolutive et « refonte site WordPress prix » à /refonte-wordpress,
+  // qui les portaient déjà. Aucun mot-clé en double entre les trois pages.
+  keywords: [
+    "landing page ou refonte de site",
+    "lancer ou refondre un site web",
+    "landing page ou site WordPress",
+    "prestations web prix affichés",
+  ],
 };
+
+const SERVICES_BY_LOCALE: Record<Locale, LocalizedMeta> = { fr: SERVICES_FR, en: SERVICES_FR };
 
 /** Titre, description et mots-clés de /solutions-web, pour la page et son JSON-LD. */
 export function servicesMeta(locale: Locale = routing.defaultLocale): LocalizedMeta {
   return SERVICES_BY_LOCALE[locale];
 }
+
+/**
+ * Titre, description et mots-clés de /landing-evolutive.
+ *
+ * L'offre s'appelle « Vitrine évolutive » (h1 de la page) ; le titre garde la
+ * requête « landing page », le descripteur générique du produit. Le nom de
+ * l'offre ouvre la description et figure en mot-clé : le résultat de recherche
+ * et le h1 disent ainsi le même nom. Ajout du 2026-11-21 au texte des
+ * directives, à valider par Agathe.
+ */
+export const landingMeta: LocalizedMeta = {
+  title: `Landing page premium évolutive, ${LANDING_PRIX}, textes et visuels compris`,
+  description: `${LANDING.nom} : une grande page aboutie, en ligne en ${LANDING.delaiSemaines} semaines. Textes et visuels compris. Pages suivantes à ${EXTENSION_PRIX}.`,
+  keywords: [
+    "landing page premium",
+    "création landing page",
+    "landing page évolutive",
+    "landing page prix",
+    "site one-page",
+    "vitrine évolutive",
+  ],
+};
+
+/** Titre, description et mots-clés de /refonte-wordpress. */
+export const refonteWordpressMeta: LocalizedMeta = {
+  title: `Refonte WordPress sur mesure ou headless, dès ${formatEuros(REFONTE_WP.priceValue, "fr")} HT`,
+  description:
+    "Vos contenus restent, votre équipe publie toujours dans WordPress. Design, vitesse et base technique refaits. Prix et délai écrits.",
+  keywords: [
+    "refonte WordPress",
+    "refonte site WordPress prix",
+    "refonte WordPress sur mesure",
+    "refonte WordPress headless",
+    "thème WordPress sur mesure",
+  ],
+};
 
 // Source de la page /contact (app/[locale]/contact/page.tsx lit
 // `pageMetadata.contact`) : les sujets réellement proposés par le formulaire,

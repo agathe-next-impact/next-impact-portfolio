@@ -22,7 +22,7 @@ const BTN_GHOST =
  * expert + IA en multiplicateur) et les ancrent dans la légitimité personnelle
  * (15 ans d'usage WordPress, 6 ans de développement). Prolonge l'accroche du hero.
  */
-export default function HomeStudio() {
+export default function HomeStudio({ index = "№ 05" }: { index?: string }) {
   const locale = useLocale() as Locale;
   const isEn = locale === "en";
 
@@ -42,7 +42,7 @@ export default function HomeStudio() {
     <BlueprintSection tone="jet" innerClassName="px-6 py-16 lg:px-10 lg:py-24">
       {/* En-tête de section */}
       <Reveal className="flex items-center gap-2 font-mono text-2xs uppercase tracking-[0.14em] text-accent-secondary">
-        <span>№ 05</span>
+        <span>{index}</span>
         <span className="h-px w-6 bg-accent-secondary/50" />
         <span className="text-mid-gray">{isEn ? "The studio" : "Le studio"}</span>
       </Reveal>
@@ -81,8 +81,9 @@ export default function HomeStudio() {
               </>
             ) : (
               <>
-                {"Quinze ans à publier dans WordPress "}
-                <span className="text-accent-secondary">avant d'en développer.</span>
+                {/* Titre fixé par Agathe le 2026-11-21 (home du Studio digital). */}
+                {"Pour impacter "}
+                <span className="text-accent-secondary">avec une vitrine</span>
               </>
             )}
           </h2>

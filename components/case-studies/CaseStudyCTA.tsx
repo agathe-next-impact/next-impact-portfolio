@@ -13,14 +13,15 @@ const BTN_GHOST =
 const CALENDAR_URL = "https://calendar.app.google/RwZqaabSR5aDMnk46";
 
 /**
- * CTA de fin de fiche à deux températures : froid (diagnostic), chaud fonction
- * de la famille du cas (→ RDV). Froid en primaire : un prospect qui vérifie
- * n'est pas prêt pour un RDV.
+ * CTA de fin de fiche : le bouton chaud, fonction de la famille du cas (→ RDV).
  *
- * Exception automatisations : un diagnostic de site web n'a aucun sens pour
- * un cas d'agent IA — le froid mène à l'offre conseil. Le libellé change avec
- * la destination : /conseil n'est pas un outil de 2 minutes, promettre « 2 min »
- * là-dessus serait une promesse cassée.
+ * Le bouton froid « Réserver mon audit gratuit » (→ /scan) est retiré des
+ * fiches à la demande d'Agathe (2026-11-21) : le bouton chaud, désormais seul,
+ * prend le style principal. La clé i18n `cta.cold` reste en place pour le
+ * rétablir.
+ *
+ * Exception automatisations : ces fiches gardent leur bouton froid « Demander
+ * un diagnostic », qui mène à l'offre conseil (/conseil), en plus du chaud.
  */
 export default async function CaseStudyCTA({
   famille,
@@ -34,14 +35,16 @@ export default async function CaseStudyCTA({
 
   return (
     <div className="flex flex-col gap-2.5">
-      <Link href={isAutomation ? "/conseil" : "/scan"} className={BTN_PRIMARY}>
-        {t(isAutomation ? "coldConseil" : "cold")} <ArrowRight size={13} />
-      </Link>
+      {isAutomation && (
+        <Link href="/conseil" className={BTN_PRIMARY}>
+          {t("coldConseil")} <ArrowRight size={13} />
+        </Link>
+      )}
       <a
         href={CALENDAR_URL}
         target="_blank"
         rel="noopener noreferrer"
-        className={BTN_GHOST}
+        className={isAutomation ? BTN_GHOST : BTN_PRIMARY}
       >
         {t(`warm.${famille}`)} <ArrowRight size={13} />
       </a>

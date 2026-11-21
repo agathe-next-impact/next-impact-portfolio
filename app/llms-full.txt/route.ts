@@ -28,6 +28,7 @@ import {
   formatEuros,
   type TrajectoireSlug,
 } from "@/lib/trajectoires";
+import { FORMULES, LANDING, REFONTE_WP } from "@/lib/prestations-web";
 import {
   BESOINS,
   PACKS_PATH,
@@ -39,6 +40,7 @@ import {
   packHref,
   packPrixEntree,
   trajectoireDuPack,
+  pagePrixDeLaPrestation,
   packNom,
   situationsDuBesoin,
   type Situation,
@@ -148,8 +150,26 @@ const trajectoireLabel = (slug: TrajectoireSlug) => {
   const t = TRAJECTOIRES[slug];
   return `${t.name.en} (${t.technique.en}, from ${price(t.priceValue)})`;
 };
-const trajectoireUrl = (slug: TrajectoireSlug) => `${baseUrl}${TRAJECTOIRES[slug].href}`;
-const trajectoireNames = TRAJECTOIRE_ORDER.map((slug) => TRAJECTOIRES[slug].name.en).join(", ");
+// Since ADR-047 (2026-11-21), /solutions-web is an orientation page: it no
+// longer details Optimization or Evolution. "Presented on" therefore cites the
+// page that details the service and displays its price
+// (pagePrixDeLaPrestation, lib/situations.ts), no longer an anchor of the
+// former page.
+const trajectoireUrl = (slug: TrajectoireSlug) => `${baseUrl}${pagePrixDeLaPrestation(slug)}`;
+
+// ─── Web services: two starting points (ADR-047) ────────────────────────────
+// /solutions-web routes to two offer pages. Names, prices and timelines are
+// read from lib/prestations-web.ts (which reads lib/trajectoires.ts for the
+// Redesign). Offer names stay in French: they are the names the site displays.
+const landingSummary = `${LANDING.nom} (premium landing page, ${price(LANDING.priceValue)} excl. VAT, copy and visuals included, live in ${LANDING.delaiSemaines} weeks, page ${LANDING.path})`;
+const refonteWpSummary = `${REFONTE_WP.nom} (the Redesign service, ${FORMULES.map((f) => `${f.slug === "sur-mesure" ? "custom theme" : "headless"} from ${price(f.variante.priceValue)} excl. VAT`).join(" or ")}, page ${REFONTE_WP.path})`;
+const webServicesNote = `Since 21 November 2026, the web services are presented on two offer pages, by the visitor's situation (French only). Launching a project or testing a market: ${landingSummary}, each extra page (Extension) ${price(LANDING.extensionPriceValue)} excl. VAT. Strategy in place, site that has aged: ${refonteWpSummary}.`;
+
+/** Where the page of a moment leads: /solutions-web orients, it no longer details the offers. */
+const besoinPage = (href?: string) =>
+  !href
+    ? `Two offer pages for this moment: ${baseUrl}${LANDING.path} and ${baseUrl}${REFONTE_WP.path}; each path below has its own page.`
+    : `Offers detailed on ${baseUrl}${href}.`;
 const trajectoireSummary = TRAJECTOIRE_ORDER.map((slug) => {
   const t = TRAJECTOIRES[slug];
   return `${t.name.en}: ${t.technique.en}${t.recommended ? ", recommended" : ""}, from ${price(t.priceValue)} excl. VAT`;
@@ -250,7 +270,7 @@ The offer reads by situation, no longer by type of offer: the visitor starts fro
 ${BESOINS.map(
   (besoin) => `### ${besoin.moment.en}: "${besoin.phrase.en}"
 
-Offers detailed on ${baseUrl}${besoin.href}.
+${besoinPage(besoin.href)}
 
 ${situationsDuBesoin(besoin.key).map(packLine).join("\n")}`,
 ).join("\n\n")}
@@ -280,7 +300,7 @@ export async function GET() {
       (study) => `## ${study.title}
 
 URL: ${baseUrl}/etudes-de-cas/${study.slug}
-Client: ${study.clientName}
+${study.isDemo ? "Demo (fictional business, not a client)" : "Client"}: ${study.clientName}
 Technologies: ${study.technologies.join(", ")}
 Description: ${study.description}
 Results: ${study.results.join(" | ")}
@@ -306,7 +326,7 @@ ${entry.content}
 
 ## Entity Summary
 
-Next Impact is a WordPress redesign studio in France led by Agathe Karinthi-Martin. Its core positioning: an aging WordPress site can become fast and modern again without rebuilding everything; the real question is what you keep and what you change. Three services at a fixed price (${trajectoireSummary}), price and timeline written before starting, performance measured before and after. AI is a method argument (the human frames, AI executes), not the pitch. ${packsSummary}The catalogue has seven offers, arranged in three moments. Diagnose, before choosing: a free 15-minute call, audit + roadmap (${AUDIT_PRICE}). Evolve: the three services, for a redesign or a new site. Manage, once the site is live: ${maintenanceSummary}the outsourced technical expert (two tiers, from €${CTO_PRICE_VALUE} excl. VAT per month), for organisations that need ongoing technical direction without hiring. Every offer carries a technical and strategic watch: a first analysis in the audit + roadmap and in the three services, a continuous watch in the subscriptions of the Manage moment. Outside the catalogue: the free tech newsletter (Substack); and Sentinelle (the tech watch letter on the client's own site, personalized watch on the site's components, €${SENTINELLE_PRICE} per month), subscribed from the free site analysis report and ${sentinelleIncluded}. The AI watch agents, Signaux Faibles and the free newsletter, are presented as case studies (Automations family), neither offers nor priced. The /tarifs page lists the paths and every price of the catalogue. The /conseil page carries the two offers of the Diagnose moment in order of increasing commitment (free 15-minute call #choix-techno-ia, audit + roadmap #architecture-projet-ia); a closing banner points to the outsourced technical expert, which is detailed and subscribed on /cto-externalise. Legal entity: sole proprietorship Agathe Karinthi-Martin, French company register SIREN 532 675 386. Core expertise: WordPress, WordPress headless, Next.js, React, TypeScript, PostgreSQL, PWA, technical debt, SEO, technology watch (Master's degree in Technology Watch and Innovation, Aix-Marseille) and project scoping. Verifiable proof: 25+ projects delivered since 2020, ${caseStudies.length} documented case studies, PageSpeed score raised from 45 to 98 after redesign (Proditec case study), featured in Le Figaro (May 2026).
+Next Impact is a WordPress redesign studio in France led by Agathe Karinthi-Martin. Its core positioning: an aging WordPress site can become fast and modern again without rebuilding everything; the real question is what you keep and what you change. Three services at a fixed price (${trajectoireSummary}), price and timeline written before starting, performance measured before and after. AI is a method argument (the human frames, AI executes), not the pitch. ${packsSummary}The catalogue has seven offers, arranged in three moments. Diagnose, before choosing: a free 15-minute call, audit + roadmap (${AUDIT_PRICE}). Evolve: the three services, for a redesign or a new site. Two starting points by situation, each with its own offer page: ${landingSummary} to launch a project or test a market, ${refonteWpSummary} for a site that has aged. Manage, once the site is live: ${maintenanceSummary}the outsourced technical expert (two tiers, from €${CTO_PRICE_VALUE} excl. VAT per month), for organisations that need ongoing technical direction without hiring. Every offer carries a technical and strategic watch: a first analysis in the audit + roadmap and in the three services, a continuous watch in the subscriptions of the Manage moment. Outside the catalogue: the free tech newsletter (Substack); and Sentinelle (the tech watch letter on the client's own site, personalized watch on the site's components, €${SENTINELLE_PRICE} per month), subscribed from the free site analysis report and ${sentinelleIncluded}. The AI watch agents, Signaux Faibles and the free newsletter, are presented as case studies (Automations family), neither offers nor priced. The /tarifs page lists the paths and every price of the catalogue. The /conseil page carries the two offers of the Diagnose moment in order of increasing commitment (free 15-minute call #choix-techno-ia, audit + roadmap #architecture-projet-ia); a closing banner points to the outsourced technical expert, which is detailed and subscribed on /cto-externalise. Legal entity: sole proprietorship Agathe Karinthi-Martin, French company register SIREN 532 675 386. Core expertise: WordPress, WordPress headless, Next.js, React, TypeScript, PostgreSQL, PWA, technical debt, SEO, technology watch (Master's degree in Technology Watch and Innovation, Aix-Marseille) and project scoping. Verifiable proof: 25+ projects delivered since 2020, ${caseStudies.length} documented case studies, PageSpeed score raised from 45 to 98 after redesign (Proditec case study), featured in Le Figaro (May 2026).
 
 ${packsSection}## Offer Architecture
 
@@ -342,6 +362,8 @@ ${careIncluded}- ${trajectoireLabel("forfait-classique")}: the existing WordPres
 - ${trajectoireLabel("forfait-headless")}: the site is rebuilt and the team still publishes in WordPress. Two variants on an equal footing, chosen according to the situation (the site analysis decides): ${refonteVariants}. Recommended service. Presented on ${trajectoireUrl("forfait-headless")}.
 - ${trajectoireLabel("forfait-webapp")}: web and/or mobile platform when the site has become a working tool. Presented on ${trajectoireUrl("forfait-webapp")}.
 
+${webServicesNote}
+
 ### Manage (subscriptions, once the site is live)
 
 ${maintenanceOffer}- Outsourced technical expert (two tiers, from €${CTO_PRICE_VALUE}/month, ${CTO_MIN_MONTHS}-month commitment then rolling monthly with ${CTO_NOTICE_MONTHS} months' notice): technical direction on shared time for the customer-facing digital estate of a company with no technical profile in-house. Someone who decides, writes it down, steers the vendors and answers for what is decided, and who proposes every month what should evolve. Adviser tier, ${price(CTO_REFERENT.price)}/month: a one-hour committee each month, decisions in writing within 48h, a quarterly roadmap, a dedicated watch of one page a month, three qualified evolutions a quarter, one opportunity review a year, quote review. Technical direction tier, ${price(CTO_DIRECTION.price)}/month: a two-hour committee, decisions within 24h, a continuously updated roadmap, a dedicated watch of one page a month plus a same-day alert, three costed evolutions a month, two opportunity reviews a year, vendor scoping and follow-up, four hours of implementation a month. The watch is continuous here: what puts at risk what already runs, and what the system could do and does not do yet. No retainer starts without the audit + roadmap first. Deliverables: system map, dated and budgeted roadmap, record of technical decisions, quote review with a costed alternative, three-year technology budget, continuity plan and handover pack, register of proposed evolutions, opportunity review. Scope: the website and web applications, online data and tools (CRM, emailing, forms, payments, appointment booking), AI components, hosting, security and compliance of those systems, vendors and the contracts that go with them. Detailed and subscribed on ${baseUrl}/cto-externalise, the reference page for this offer.
@@ -357,12 +379,13 @@ ${maintenanceOffer}- Outsourced technical expert (two tiers, from €${CTO_PRICE
 
 ## Key URLs
 
-Main menu: Audit, Services (Prestations web), Support (dropdown: Maintenance and Outsourced technical expert, the menu label for the /cto-externalise page), Case studies.
+Main menu: Audit, Studio digital (dropdown with the two web services, ${LANDING.nom} and ${REFONTE_WP.nom}; the entry itself leads to the web services page), Case studies.
 
-- Home (promise, proof and the offer by situation, three columns, one per need): ${baseUrl}/
+- Home (the digital studio and its two web services, one per starting point: ${LANDING.nom} at ${formatEuros(LANDING.priceValue, "en")} excl. VAT, live in ${LANDING.delaiSemaines} weeks, to launch a project or test a market; ${REFONTE_WP.nom} from ${formatEuros(REFONTE_WP.priceValue, "en")} excl. VAT, ${REFONTE_WP.delaiMin} to ${REFONTE_WP.delaiMax} weeks, for a site that has aged; then proof figures, three case studies, testimonials, the page's speed measured live, the studio, a summary and an FAQ; the audit + roadmap${MAINTENANCE_PRIX_VALIDES ? ", care and maintenance" : ""} and the outsourced technical expert are not presented there, each has its own page; French only): ${baseUrl}/
 ${packsKeyUrl}- Redesign advice, two offers in order of increasing commitment (free 15-minute call #choix-techno-ia, audit + roadmap ${AUDIT_PRICE} #architecture-projet-ia), plus a closing banner that points to the outsourced technical expert: ${baseUrl}/conseil
 ${maintenanceKeyUrl}- Outsourced technical expert (monthly technical direction, two tiers, from €${CTO_PRICE_VALUE}/month): ${baseUrl}/cto-externalise
-- Solutions web (three services at a fixed price: ${trajectoireNames}; redesign or new site): ${baseUrl}/solutions-web
+- ${LANDING.nom}, a premium landing page (${formatEuros(LANDING.priceValue, "en")} excl. VAT, copy and visuals included, live in ${LANDING.delaiSemaines} weeks; each extra page €${LANDING.extensionPriceValue} excl. VAT, fixed price; French only): ${baseUrl}${LANDING.path}
+- Refonte WordPress, WordPress redesign (content kept, the team still publishes in WordPress; two options on an equal footing: ${FORMULES.map((f) => `${f.slug === "sur-mesure" ? "custom theme" : "headless"} from ${formatEuros(f.variante.priceValue, "en")} excl. VAT, ${f.semaines} weeks`).join("; ")}; French only): ${baseUrl}${REFONTE_WP.path}
 - Headless WordPress pillar page (one of the two Redesign variants, alongside custom WordPress): ${baseUrl}/wordpress-headless
 - Free site analysis (compared with competitors, components, what is at risk, the fitting service; result by email, no access requested; French only): ${baseUrl}/scan
 - Prices (the paths by need with their budget, then every offer and tier of the catalogue, by moment; French only): ${baseUrl}/tarifs

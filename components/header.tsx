@@ -2,6 +2,8 @@
 
 import * as React from "react";
 import {
+  ArrowRight,
+  ChevronDown,
   X as CloseIcon,
   Menu as MenuIcon,
   KeyRound,
@@ -13,14 +15,15 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { useDocumentationMode } from "@/contexts/documentation-mode-context";
 import { PROFILES } from "@/lib/documentation-profiles";
 import { packHref } from "@/lib/situations";
-import { CTO_PATH } from "@/lib/cto-externalise";
 import { CTA_CHAUD } from "@/lib/visio-conseil";
+import { MEGA_SECTIONS } from "@/lib/mega-menu";
+import { MegaMenuPanel } from "@/components/mega-menu-panel";
 
 type NavHref = Parameters<typeof Link>[0]["href"];
 
 // Nav principale — trois moments, puis la preuve et la personne.
 //
-// Nav : Audit · Prestations web · Accompagnement (Maintenance + Référent technique externalisé, ADR-046) · Études de cas (libellés
+// Nav : Audit · Studio digital (mega menu des deux prestations web, ADR-047) · Études de cas (libellés
 // choisis par Agathe le 2026-09-27, ADR-022 ; « La veille » retirée et
 // « Pilotage » remplacé par Maintenance et Conseil le 2026-10-14, ADR-043 et
 // ADR-044 ; auparavant Diagnostiquer · Évoluer · Gérer · La veille, charte
@@ -38,15 +41,20 @@ type NavHref = Parameters<typeof Link>[0]["href"];
 // (2026-09-28, remplace le lien vers /contact). L'analyse du site (CTA froid) et la prise de
 // rendez-vous (CTA chaud) restent dans le tiroir mobile et en fin de page.
 
-// Plus aucun mega menu : « Audit » (clé `decider`), « Prestations web » (clé
-// `refaire`) et « CTO externe » sont des liens directs vers leur page. Les
-// panneaux « Agents de veille IA » et « Suivi et Pilotage » étaient retirés
-// le 2026-10-14 (ADR-043, ADR-044).
+// Nav depuis le 2026-11-21 (ADR-047, demande d'Agathe) : Audit · Studio
+// digital · Études de cas. « Audit » (clé `decider`) est un lien direct vers
+// sa page. Les panneaux « Agents de veille IA » et « Suivi et Pilotage »
+// étaient retirés le 2026-10-14 (ADR-043, ADR-044).
 const DIRECT_LINKS = [
   { key: "decider", href: packHref("etat-des-lieux") },
-  { key: "refaire", href: "/solutions-web" },
-  { key: "ctoExterne", href: CTO_PATH },
 ] as const;
+
+// « Studio digital » (clé `refaire`, ex-« Prestations web ») ouvre un mega
+// menu de deux cases, une par prestation web : Vitrine évolutive et Refonte
+// WordPress (section `refaire` de lib/mega-menu.ts). Le clic sur l'entrée mène
+// à la page d'orientation /solutions-web. Le panneau n'est monté dans le DOM
+// que lorsqu'il est ouvert.
+const MEGA_KEYS = ["refaire"] as const;
 
 // Puis des liens simples, sans sous-menu (demandes d'Agathe du 2026-10-14) :
 // « Maintenance » (offre suivi et maintenance), « Conseil » (offre expert
@@ -67,7 +75,11 @@ export default function Header() {
   const t = useTranslations("nav");
   const locale = useLocale() as Locale;
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [activeMenu, setActiveMenu] = React.useState<string | null>(null);
+  const [mobileExpanded, setMobileExpanded] = React.useState<string | null>(null);
   const { profileId, clearProfile } = useDocumentationMode();
+
+  const closeMenu = React.useCallback(() => setActiveMenu(null), []);
 
   // Tiroir mobile ouvert : la page derrière ne défile plus, Échap le ferme.
   React.useEffect(() => {
@@ -84,12 +96,27 @@ export default function Header() {
     };
   }, [mobileOpen]);
 
+  // Échap ferme le panneau de mega menu ouvert.
+  React.useEffect(() => {
+    if (!activeMenu) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setActiveMenu(null);
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [activeMenu]);
+
   return (
     // `id="top"` = cible du lien « ↑ Haut de page » du footer.
     <header id="top" className="sticky top-0 z-50 bg-obsidian px-2.5 lg:px-0">
-      {/* Wrapper relatif : porte la barre. */}
+      {/* Wrapper relatif : porte la barre + le panneau de mega menu. Le survol
+          qui quitte l'ensemble ferme le panneau ; le focus qui sort aussi. */}
       <div
         className="relative mx-auto w-full max-w-[1200px]"
+        onMouseLeave={closeMenu}
+        onBlur={(e) => {
+          if (!e.currentTarget.contains(e.relatedTarget as Node)) closeMenu();
+        }}
       >
         <div className="flex h-16 items-center justify-between border border-x-dark-gray border-b border-b-dark-gray border-t-0 px-5 lg:px-6">
           {/* Logotype */}
@@ -101,21 +128,78 @@ export default function Header() {
             NEXT IMPACT
           </Link>
 
-          {/* Desktop nav : Audit (lien) · Prestations web · Accompagnement (mega) · Études de cas */}
+          {/* Desktop nav : Audit (lien) · Studio digital (mega) · Études de cas */}
           <nav className="hidden flex-1 items-center justify-center gap-1 lg:flex">
             {DIRECT_LINKS.map(({ key, href }) => (
               <Link
                 key={key}
                 href={href as NavHref}
+                onMouseEnter={closeMenu}
+                onFocus={closeMenu}
                 className="inline-flex items-center px-3 py-2 text-sm text-mid-gray no-underline transition-colors hover:text-foreground"
               >
                 {t(key)}
               </Link>
             ))}
+            {MEGA_KEYS.map((key) => {
+              const section = MEGA_SECTIONS[key];
+              const open = activeMenu === key;
+              const className = `inline-flex items-center gap-1 px-3 py-2 text-sm no-underline transition-colors hover:text-foreground ${
+                open ? "text-foreground" : "text-mid-gray"
+              }`;
+              const contenu = (
+                <>
+                  {t(key)}
+                  <ChevronDown
+                    size={13}
+                    aria-hidden
+                    className={`transition-transform ${open ? "rotate-180" : ""}`}
+                  />
+                </>
+              );
+              // Sans page mère (« Studio digital » depuis le 2026-11-21) :
+              // l'entrée est un bouton qui ouvre ou referme le panneau.
+              if (!section.href) {
+                return (
+                  <button
+                    key={key}
+                    type="button"
+                    aria-haspopup="true"
+                    aria-expanded={open}
+                    aria-controls={`mega-${key}`}
+                    onMouseEnter={() => setActiveMenu(key)}
+                    onFocus={() => setActiveMenu(key)}
+                    onClick={() => setActiveMenu(open ? null : key)}
+                    className={className}
+                  >
+                    {contenu}
+                  </button>
+                );
+              }
+              return (
+                // L'entrée mène à sa page mère au clic ; le survol et le focus
+                // ouvrent le panneau.
+                <Link
+                  key={key}
+                  href={section.href as NavHref}
+                  aria-haspopup="true"
+                  aria-expanded={open}
+                  aria-controls={`mega-${key}`}
+                  onMouseEnter={() => setActiveMenu(key)}
+                  onFocus={() => setActiveMenu(key)}
+                  onClick={closeMenu}
+                  className={className}
+                >
+                  {contenu}
+                </Link>
+              );
+            })}
             {SIMPLE_LINKS.map(({ key, href }) => (
               <Link
                 key={key}
                 href={href}
+                onMouseEnter={closeMenu}
+                onFocus={closeMenu}
                 className="inline-flex items-center px-3 py-2 text-sm text-mid-gray no-underline transition-colors hover:text-foreground"
               >
                 {t(key)}
@@ -181,6 +265,12 @@ export default function Header() {
           </div>
         </div>
 
+        {/* Panneau de mega menu (desktop) : monté seulement à l'ouverture. */}
+        {activeMenu && (
+          <div className="absolute left-0 right-0 top-16 z-50 hidden lg:block">
+            <MegaMenuPanel section={MEGA_SECTIONS[activeMenu]} onNavigate={closeMenu} />
+          </div>
+        )}
       </div>
 
       {/* Tiroir mobile, pensé pour un usage simple (demande d'Agathe du
@@ -237,6 +327,79 @@ export default function Header() {
                   {t(key)}
                 </Link>
               ))}
+              {MEGA_KEYS.map((key) => {
+                const section = MEGA_SECTIONS[key];
+                const expanded = mobileExpanded === key;
+                const pageLabel = section.pageLabel?.[locale] ?? t(key);
+                return (
+                  <div key={key} className="border-b border-dark-gray">
+                    <button
+                      type="button"
+                      aria-expanded={expanded}
+                      aria-controls={`mobile-${key}`}
+                      onClick={() => setMobileExpanded((cur) => (cur === key ? null : key))}
+                      className="flex min-h-16 w-full items-center justify-between gap-4 px-5 py-3 text-left"
+                    >
+                      <span className="flex flex-col gap-0.5">
+                        <span
+                          className={`text-xl font-light tracking-tight ${
+                            expanded ? "text-accent-secondary" : "text-foreground"
+                          }`}
+                        >
+                          {t(key)}
+                        </span>
+                        <span className="font-inter-tight text-sm text-mid-gray">
+                          {section.heading[locale]}
+                        </span>
+                      </span>
+                      <ChevronDown
+                        size={20}
+                        aria-hidden
+                        className={`shrink-0 text-mid-gray transition-transform ${expanded ? "rotate-180" : ""}`}
+                      />
+                    </button>
+
+                    {expanded && (
+                      <ul id={`mobile-${key}`} className="flex flex-col gap-2 bg-jet px-3 pb-4 pt-3">
+                        {section.items.map((item) => (
+                          <li key={item.href}>
+                            <Link
+                              href={item.href as NavHref}
+                              onClick={() => setMobileOpen(false)}
+                              className="flex min-h-12 flex-col gap-1.5 rounded-sm border border-dark-gray bg-obsidian/40 px-3 py-3 no-underline transition-colors active:bg-obsidian"
+                            >
+                              <span className="flex items-baseline justify-between gap-3">
+                                <span className="text-base text-foreground">{item.label[locale]}</span>
+                                {item.price && (
+                                  <span className="shrink-0 text-right font-inter-tight text-sm text-accent-secondary">
+                                    {item.price[locale]}
+                                  </span>
+                                )}
+                              </span>
+                              <span className="font-inter-tight text-sm leading-snug text-mid-gray">
+                                {item.desc[locale]}
+                              </span>
+                            </Link>
+                          </li>
+                        ))}
+                        {/* La page mère, en fin de liste. */}
+                        {section.href && (
+                          <li>
+                            <Link
+                              href={section.href as NavHref}
+                              onClick={() => setMobileOpen(false)}
+                              className="flex min-h-12 items-center justify-center gap-2 rounded-sm px-3 font-mono text-xs uppercase tracking-[0.1em] text-accent-secondary no-underline"
+                            >
+                              {locale === "en" ? `See the ${pageLabel} page` : `Voir la page ${pageLabel}`}
+                              <ArrowRight size={14} aria-hidden />
+                            </Link>
+                          </li>
+                        )}
+                      </ul>
+                    )}
+                  </div>
+                );
+              })}
               {SIMPLE_LINKS.map(({ key, href }) => (
                 <Link
                   key={key}

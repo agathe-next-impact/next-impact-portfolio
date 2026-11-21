@@ -119,6 +119,22 @@ métriques existantes restent intactes.
 
 ## 4. Chantier C — Page liste `/etudes-de-cas`
 
+> **État au 2026-11-21 (demande d'Agathe), qui remplace C1 et la taxonomie du § 2
+> pour les onglets de la liste.** Plus d'onglet « Tous » ni de vue par défaut
+> `featured`. Quatre onglets, dans cet ordre : **Vitrine évolutive** (ouvert à
+> l'arrivée), **Refonte**, **App web et mobile**, **Automatisations**. Vignettes
+> de toutes les grilles d'études de cas (liste, bas des pages d'offre, accueil,
+> « projets similaires » d'une fiche) : composant unique
+> `components/case-studies/vignette-image.tsx`, format de la capture
+> R.E.S.E.M.S. (800 × 410) sur cadre noir ; l'image garde sa largeur, le bas
+> est coupé si elle est plus haute. Les sites se
+> classent par offre vendue (ADR-047) : la liste `VITRINE_EVOLUTIVE_SLUGS` de
+> `lib/case-studies-data.ts` (ECOLISE, Séjours L'Hermitage, R.E.S.E.M.S., Maison
+> Verjus, Verdier RH, dans cet ordre) fait l'onglet Vitrine évolutive ; tout
+> autre site de la famille `sites-institutionnels` va en Refonte. `famille`
+> reste la donnée de la fiche (CTA, gabarit). C2 tient toujours : les quatre
+> onglets sont rendus côté serveur, le filtre est un masquage CSS.
+
 **C1. Vue par défaut** = sélection `featured`, triée par `featured` croissant,
 et non plus les 5 web apps. Sélection initiale à configurer dans les données :
 

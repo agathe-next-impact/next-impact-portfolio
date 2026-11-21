@@ -4,7 +4,8 @@
  */
 
 import { ENGLISH_PUBLISHED } from "@/i18n/routing";
-import { siteConfig } from "@/lib/metadata";
+import { homeMeta, siteConfig } from "@/lib/metadata";
+import { LANDING, REFONTE_WP } from "@/lib/prestations-web";
 import {
   CTO_PATH,
   CTO_PRICE_VALUE,
@@ -21,7 +22,7 @@ import {
 } from "@/lib/maintenance-offer";
 import { TRAJECTOIRES, TRAJECTOIRE_ORDER, formatEuros, type TrajectoireSlug } from "@/lib/trajectoires";
 import { OFFERS as CONSEIL_OFFERS, ECHANGE_URL, ECHANGE_NAME } from "@/lib/visio-conseil";
-import { VEILLE_TITRE } from "@/lib/situations";
+import { VEILLE_TITRE, pagePrixDeLaPrestation } from "@/lib/situations";
 
 type SchemaLocale = "fr" | "en";
 
@@ -34,8 +35,9 @@ function schemaLocale(locale?: string): SchemaLocale {
  * Offre récurrente « Expert technique externalisé » (moment « Gérer »,
  * arbitrage du 2026-09-07 ; renommée « CTO externalisé » → « Expert technique
  * externalisé » le 2026-09-10, ADR-010). Déclarée une seule fois : les deux
- * OfferCatalog du site (ContactPage et LocalBusiness de la home) la
- * réutilisent, donc un seul endroit à corriger. Prix exprimé en
+ * OfferCatalog du site (ContactPage et /tarifs) la réutilisent, donc un seul
+ * endroit à corriger. La home ne déclare plus ce catalogue depuis le
+ * 2026-11-21 (ADR-047, voir HomepageJsonLd). Prix exprimé en
  * UnitPriceSpecification parce qu'il est mensuel et plancher (« à partir de ») :
  * `minPrice` + `referenceQuantity` en mois.
  *
@@ -143,8 +145,9 @@ const AUDIT = conseilOffer("architecture-projet-ia");
 
 /**
  * Types de service de l'entité, dans l'ordre des trois moments : Diagnostiquer,
- * Évoluer, Gérer (ADR-013). Déclarés UNE SEULE FOIS : OrganizationJsonLd et le
- * nœud LocalBusiness de la home lisent cette liste. Les trois prestations y
+ * Évoluer, Gérer (ADR-013). Déclarés UNE SEULE FOIS, sur le nœud d'entité du
+ * layout (OrganizationJsonLd, émis sur toutes les pages). Le nœud LocalBusiness
+ * de la home ne les répète plus (ADR-047). Les trois prestations y
  * portent leur nom et leur nom technique, lus dans lib/trajectoires.ts
  * (ADR-014). La veille technique et stratégique, caractéristique de toutes les
  * offres, y figure sous son nom (lib/situations.ts). Le suivi et maintenance
@@ -175,9 +178,11 @@ const SERVICE_TYPES: string[] = [
  * Sentinelle n'y figure pas : hors catalogue, elle garde le schéma propre à sa
  * page /sentinelle. Le suivi et maintenance n'y entre qu'avec
  * MAINTENANCE_PRIX_VALIDES (lib/maintenance-offer.ts).
- * Déclaré UNE SEULE FOIS : les deux `hasOfferCatalog` du site (ContactPage et
- * le nœud LocalBusiness de la home) le réutilisent, donc un seul endroit à
- * corriger quand le catalogue bouge.
+ * Déclaré UNE SEULE FOIS : le `hasOfferCatalog` de ContactPage et le nœud
+ * autonome de /tarifs (OfferCatalogJsonLd) le réutilisent, donc un seul endroit
+ * à corriger quand le catalogue bouge. La home ne le déclare plus depuis le
+ * 2026-11-21 (ADR-047) : elle ne présente que deux prestations, et un schéma ne
+ * déclare pas le prix d'une offre que la page n'affiche pas.
  *
  * Sémantique des prix, alignée sur ce que la charte et les pages affichent :
  * les deux offres de conseil ont un prix EXACT (`price`), les trois
@@ -230,9 +235,14 @@ const OFFER_CATALOG = (locale: SchemaLocale) => {
       // Évoluer : les trois prestations. Le nom affiché sur la carte vient en
       // tête, le nom technique le suit, pour que le schéma nomme l'offre comme
       // la page qui la vend. Nom et plancher lus dans lib/trajectoires.ts.
-      // L'URL est l'ancre de la section de /solutions-web où le prix est
-      // affiché. Les packs ne sont PAS déclarés ici (ADR-014) : un pack assemble
-      // des lignes du catalogue, il n'en est pas une.
+      // L'URL est celle de la page où le prix déclaré se lit. Depuis l'ADR-047
+      // (2026-11-21), /solutions-web est une page d'orientation : elle
+      // n'affiche plus le prix de l'Optimisation ni de l'Évolution, et l'ancre
+      // #forfait-classique n'existe plus. pagePrixDeLaPrestation
+      // (lib/situations.ts) donne donc /refonte-wordpress pour la Refonte et,
+      // pour les deux autres, la page qui affiche leur forfait. Les packs ne
+      // sont PAS déclarés ici (ADR-014) : un pack assemble des lignes du
+      // catalogue, il n'en est pas une.
       ...TRAJECTOIRE_ORDER.map((slug) => {
         const trajectoire = TRAJECTOIRES[slug];
         return {
@@ -241,7 +251,7 @@ const OFFER_CATALOG = (locale: SchemaLocale) => {
           description: trajectoireDescription(slug, locale),
           priceCurrency: "EUR",
           priceSpecification: FROM_PRICE(trajectoire.priceValue),
-          url: url(trajectoire.href),
+          url: url(pagePrixDeLaPrestation(slug)),
         };
       }),
       // Gérer : les deux abonnements, du plus léger au plus engageant.
@@ -952,7 +962,20 @@ export function HomepageJsonLd({ locale }: { locale?: string } = {}) {
   // sont les mêmes entités quelle que soit la langue. Seul le nœud WebPage,
   // qui décrit LA page, change d'URL.
   const homeUrl = isEn ? `${baseUrl}/en` : baseUrl;
+  // Titre et description servis dans le <head> de la home : le nœud WebPage
+  // dit la même chose que la balise title et la meta description.
+  const meta = homeMeta(lang);
 
+  // Depuis le 2026-11-21 (ADR-047), la home ne présente que les deux
+  // prestations du Studio digital. Ce graphe, émis sur la home seulement, ne
+  // répète donc plus ce que la page ne montre pas : ni le catalogue complet et
+  // ses prix (audit, Optimisation, Évolution, suivi et maintenance, expert
+  // technique externalisé), ni la description d'entité « Trois prestations… »,
+  // ni la liste des types de service. Rien n'est perdu pour l'entité : le nœud
+  // #organization du layout (OrganizationJsonLd, toutes les pages) porte sa
+  // description et ses types de service ; le catalogue et ses prix restent
+  // déclarés sur /tarifs et /contact, qui les affichent. Les deux offres de la
+  // home sont déclarées par le ServiceJsonLd de app/[locale]/page.tsx.
   const data = {
     "@context": "https://schema.org",
     "@graph": [
@@ -962,15 +985,16 @@ export function HomepageJsonLd({ locale }: { locale?: string } = {}) {
         "@type": "WebPage",
         "@id": `${homeUrl}#webpage`,
         url: homeUrl,
-        name: siteConfig.name,
+        name: meta.title,
+        description: meta.description,
         inLanguage: isEn ? "en-US" : "fr-FR",
         isPartOf: { "@id": `${baseUrl}/#website` },
         about: { "@id": `${baseUrl}/#organization` },
         primaryImageOfPage: `${baseUrl}${siteConfig.ogImage}`,
-        // Dernier remaniement éditorial substantiel de la home : l'offre s'y
-        // lit par situation, en trois colonnes, une par besoin, et la veille
-        // technique et stratégique y est dite (2026-09-27, ADR-014).
-        dateModified: "2026-09-27",
+        // Dernier remaniement éditorial substantiel de la home : elle ne
+        // reflète plus que l'offre du Studio digital, deux points de départ
+        // (2026-11-21, ADR-047).
+        dateModified: "2026-11-21",
         speakable: {
           "@type": "SpeakableSpecification",
           cssSelector: ["h1", ".home-tldr"],
@@ -983,7 +1007,9 @@ export function HomepageJsonLd({ locale }: { locale?: string } = {}) {
         "@id": `${baseUrl}/#person`,
         name: "Agathe Karinthi-Martin",
         jobTitle: "Conseil techno web à l'heure de l'IA",
-        description: siteConfig.description,
+        // Pas de `description` ici : celle de l'entité (siteConfig.description)
+        // décrit le catalogue de l'entreprise, pas la personne, et cite trois
+        // prestations que la home ne présente plus.
         url: `${baseUrl}/a-propos`,
         image: `${baseUrl}${siteConfig.ogImage}`,
         email: "agathe@next-impact.digital",
@@ -1056,7 +1082,8 @@ export function HomepageJsonLd({ locale }: { locale?: string } = {}) {
         url: baseUrl,
         logo: `${baseUrl}/img/logo-next-impact-bleu.png`,
         image: `${baseUrl}${siteConfig.ogImage}`,
-        description: siteConfig.description,
+        // `description` et `serviceType` : portés par le nœud du layout (même
+        // @id), pas répétés ici (voir la note en tête de fonction).
         telephone: "+33673981638",
         email: "agathe@next-impact.digital",
         founder: { "@id": `${baseUrl}/#person` },
@@ -1090,7 +1117,6 @@ export function HomepageJsonLd({ locale }: { locale?: string } = {}) {
           opens: "09:00",
           closes: "18:00",
         },
-        serviceType: SERVICE_TYPES,
         knowsAbout: [
           "WordPress",
           "Conseil techno web",
@@ -1108,7 +1134,6 @@ export function HomepageJsonLd({ locale }: { locale?: string } = {}) {
           "Refonte de site WordPress",
           VEILLE_TITRE.fr,
         ],
-        hasOfferCatalog: OFFER_CATALOG(lang),
         potentialAction: [
           {
             "@type": "ReserveAction",
@@ -1122,11 +1147,14 @@ export function HomepageJsonLd({ locale }: { locale?: string } = {}) {
           },
           {
             "@type": "CommunicateAction",
-            name: isEn ? "Talk about a redesign project" : "Parler d'un projet de refonte",
+            name: isEn
+              ? "Talk about a redesign project"
+              : "Parler d'un projet de création ou de refonte",
             target: `${baseUrl}${localePath(lang, "/contact")}`,
-            description: isEn
-              ? "Free 15-minute call, audit + roadmap, redesign or new site project (Optimization, Redesign in custom or headless WordPress, or Evolution), care and maintenance, outsourced technical expert or free diagnostic"
-              : "Échange de 15 minutes gratuit, audit + roadmap, projet de refonte ou de création (Optimisation, Refonte en WordPress sur mesure ou headless, ou Évolution), suivi et maintenance, expert technique externalisé ou diagnostic gratuit",
+            // Les deux prestations que la home présente, nommées depuis leur
+            // source. Même texte dans les deux langues : la home n'est rédigée
+            // qu'en français (lib/home-content.ts), l'anglais est fermé.
+            description: `Formulaire de contact pour un projet de création ou de refonte de site : ${LANDING.nom} ou ${REFONTE_WP.nom}`,
           },
         ],
       },

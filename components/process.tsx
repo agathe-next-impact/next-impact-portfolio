@@ -80,7 +80,18 @@ const PHASES_EN: Phase[] = [
   },
 ];
 
-export default function Process({ index = "№ 05" }: { index?: string }) {
+export default function Process({
+  index = "№ 05",
+  recap,
+}: {
+  index?: string;
+  /**
+   * Durées par formule, affichées sous les phases, à la place du récapitulatif
+   * par défaut (page Refonte WordPress : « Thème sur mesure : 6 semaines ·
+   * Headless : 8 semaines », lu dans lib/prestations-web.ts).
+   */
+  recap?: string;
+}) {
   const locale = useLocale() as Locale;
   const isEn = locale === "en";
   const phases = isEn ? PHASES_EN : PHASES_FR;
@@ -138,29 +149,29 @@ export default function Process({ index = "№ 05" }: { index?: string }) {
           {phases.map((phase, i) => (
             <StaggerItem
               key={phase.title}
-              className="grid grid-cols-[56px_1fr_auto] items-start gap-x-6 border-b border-dark-gray py-7"
+              className="grid grid-cols-[56px_1fr] items-start gap-x-6 border-b border-dark-gray py-7"
             >
               {/* Numéro mono accent */}
               <div className="pt-[3px] font-mono text-2xs tracking-[0.08em] text-accent-secondary">
                 {String(i + 1).padStart(2, "0")}
               </div>
 
-              {/* Contenu principal */}
+              {/* Contenu principal : titre, délai, description, livrable,
+                  empilés (demande d'Agathe du 2026-11-21 : le délai n'est plus
+                  dans une colonne à droite). */}
               <div>
-                <h3 className="mb-2 font-light tracking-tight text-foreground text-lg">
+                <h3 className="mb-1.5 font-light tracking-tight text-foreground text-lg">
                   {phase.title}
                 </h3>
+                <p className="mb-2 font-mono text-2xs uppercase tracking-[0.08em] text-accent-secondary">
+                  {phase.duration}
+                </p>
                 <p className="mb-3 max-w-[520px] font-inter-tight text-base leading-relaxed text-mid-gray">
                   {phase.description}
                 </p>
                 <p className="font-mono text-2xs tracking-[0.06em] text-mid-gray">
                   ↳ {phase.deliverable}
                 </p>
-              </div>
-
-              {/* Durée */}
-              <div className="whitespace-nowrap pt-[3px] font-mono text-2xs uppercase tracking-[0.08em] text-mid-gray">
-                {phase.duration}
               </div>
             </StaggerItem>
           ))}
@@ -176,10 +187,12 @@ export default function Process({ index = "№ 05" }: { index?: string }) {
               ? "6 to 10 weeks total, depending on stack and complexity."
               : "6 à 10 semaines au total, selon la stack et la complexité."}
           </p>
-          <span className="whitespace-nowrap font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
-            {isEn
-              ? "Classic: 6 w · Headless: 8 w · Web app: 10 w"
-              : "Classique : 6 s · Headless : 8 s · Web app : 10 s"}
+          {/* Durées en toutes lettres : « 6 s » se lisait « 6 secondes ». */}
+          <span className="font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray sm:whitespace-nowrap">
+            {recap ??
+              (isEn
+                ? "Classic: 6 weeks · Headless: 8 weeks · Web app: 10 weeks"
+                : "Classique : 6 semaines · Headless : 8 semaines · Web app : 10 semaines")}
           </span>
         </div>
       </Reveal>

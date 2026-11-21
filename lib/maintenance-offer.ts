@@ -83,6 +83,28 @@ export const MAINTENANCE_PRICE_SHORT = {
   en: `from ${formatEuros(MAINTENANCE_PRICE_VALUE, "en")}/mo`,
 } as const;
 
+/**
+ * Grille décidée par Agathe le 2026-11-21 (ADR-047) : formule Essentiel à
+ * 49 € HT par mois (hébergement, nom de domaine, mises à jour, sauvegardes),
+ * 89 € HT par mois avec monitoring. Sans obligation ; sans abonnement, un
+ * forfait d'heures d'intervention reste disponible à la demande.
+ *
+ * ⚠️ PAS ENCORE PROPAGÉE. Seules les trois pages de prestations web
+ * (/solutions-web, /landing-evolutive, /refonte-wordpress) lisent cette grille.
+ * `MAINTENANCE_GRID` ci-dessus (89 / 249, 129 / 299) reste la source de
+ * /maintenance-wordpress, de /tarifs, des packs, du formulaire de contact, des
+ * schémas et de llms : ces pages affichent donc encore « à partir de 89 € ».
+ * À fusionner dans `MAINTENANCE_GRID` quand le sort de la formule Actif et de
+ * la grille headless est tranché (points ouverts des directives du 2026-11-21).
+ */
+export const MAINTENANCE_GRILLE_2026_11 = { essentiel: 49, monitoring: 89 } as const;
+
+/** « 49 € HT par mois », « 89 € HT par mois » : la grille du 2026-11-21, formatée. */
+export const MAINTENANCE_2026_11_LABEL = {
+  essentiel: `${formatEuros(MAINTENANCE_GRILLE_2026_11.essentiel, "fr")} HT par mois`,
+  monitoring: `${formatEuros(MAINTENANCE_GRILLE_2026_11.monitoring, "fr")} HT par mois`,
+} as const;
+
 /** Montant de la mise sous suivi, en euros hors taxes (validé, ADR-018). */
 export const MAINTENANCE_ONBOARDING_VALUE = 290;
 

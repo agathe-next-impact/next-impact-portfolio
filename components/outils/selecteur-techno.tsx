@@ -66,9 +66,9 @@ const FAMILIES: Record<Family, FamilyInfo> = {
       "For a showcase or content site where you stay in control day to day, a well-configured WordPress is unbeatable on editorial autonomy and time-to-value.",
     links: [
       { labelFr: "Comprendre le headless (pour comparer)", labelEn: "Understand headless (to compare)", href: "/wordpress-headless" },
-      { labelFr: "Simulateur de tarifs", labelEn: "Pricing simulator", href: "/solutions-web" },
+      { labelFr: "Vitrine évolutive, prix écrit", labelEn: "Vitrine évolutive, written price", href: "/landing-evolutive" },
     ],
-    next: { labelFr: "Voir les solutions web", labelEn: "See the web solutions", href: "/solutions-web" },
+    next: { labelFr: "Voir la Refonte WordPress", labelEn: "See the Refonte WordPress offer", href: "/refonte-wordpress" },
   },
   nocode: {
     labelFr: "No-code (Webflow, Framer, Airtable…)",
@@ -94,7 +94,7 @@ const FAMILIES: Record<Family, FamilyInfo> = {
       { labelFr: "Comprendre le headless", labelEn: "Understand headless", href: "/wordpress-headless" },
       { labelFr: "Quiz WordPress ou Headless", labelEn: "WordPress or Headless quiz", href: "/documentation/wordpress-headless" },
     ],
-    next: { labelFr: "Voir les solutions web", labelEn: "See the web solutions", href: "/solutions-web" },
+    next: { labelFr: "Voir la Refonte WordPress", labelEn: "See the Refonte WordPress offer", href: "/refonte-wordpress" },
   },
   saas: {
     labelFr: "Un logiciel du marché (SaaS)",

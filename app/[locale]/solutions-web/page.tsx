@@ -1,15 +1,40 @@
 import { Metadata } from "next"
-import { getTranslations } from "next-intl/server"
+import { setRequestLocale } from "next-intl/server"
+import { ArrowRight } from "lucide-react"
+
+import { Link } from "@/i18n/navigation"
 import { generatePageMetadata, servicesMeta, siteConfig } from "@/lib/metadata"
 import { ServiceJsonLd, BreadcrumbJsonLd, JsonLd } from "@/components/json-ld"
-import ServicesClient from "@/components/services/ServicesClient"
-import { TenirBanner } from "@/components/tenir/tenir-banner"
-import { TRAJECTOIRES, TRAJECTOIRE_ORDER, formatEuros } from "@/lib/trajectoires"
+import { BlueprintSection, Separator } from "@/components/aspect/section"
+import { CartesOffres } from "@/components/prestations/cartes-offres"
+import { AppelFinal } from "@/components/prestations/parts"
+import {
+  LANDING,
+  LANDING_DELAI,
+  LANDING_PRIX,
+  PRESTATIONS_PATH,
+  RDV_HREF,
+  REFONTE_DELAI,
+  REFONTE_PRIX,
+  REFONTE_WP,
+  SCAN_HREF,
+} from "@/lib/prestations-web"
+import { MAINTENANCE_2026_11_LABEL, MAINTENANCE_PATH } from "@/lib/maintenance-offer"
 import type { Locale } from "@/i18n/routing"
 
-// Titre, description et mots-clés : lus dans lib/metadata.ts (`servicesMeta`),
-// qui lit lui-même le nom et le plancher de chaque prestation dans
-// lib/trajectoires.ts (charte v1.6, ADR-014). Aucun prix n'est écrit ici.
+// Page d'orientation des prestations web (ADR-047, 2026-11-21). Sans héros,
+// quatre blocs : les deux cartes, un bandeau sur la maintenance, la ligne
+// « application », l'appel final. Le visiteur part de sa situation et choisit
+// dès le premier écran
+// entre la Vitrine évolutive et la Refonte WordPress, chacune vendue sur sa
+// page. Aucun prix n'est écrit ici : tout se lit dans lib/prestations-web.ts
+// (et, pour la maintenance, dans lib/maintenance-offer.ts).
+//
+// Page rédigée en français ; l'anglais est fermé (ENGLISH_PUBLISHED) et sa
+// locale reste en noindex tant qu'elle n'est pas traduite.
+
+type Href = Parameters<typeof Link>[0]["href"]
+
 export async function generateMetadata({
   params,
 }: {
@@ -20,9 +45,12 @@ export async function generateMetadata({
   return generatePageMetadata({
     title: meta.title,
     description: meta.description,
-    path: "/solutions-web",
+    path: PRESTATIONS_PATH,
+    eyebrow: "Prestations web",
     keywords: meta.keywords,
     locale,
+    noindex: locale === "en",
+    alternateLocales: ["fr"],
   })
 }
 
@@ -35,102 +63,127 @@ export default async function ServicesPage({
   params: Promise<{ locale: Locale }>
 }) {
   const { locale } = await params
-  const t = await getTranslations({ locale, namespace: "servicesPage" })
-  const isEn = locale === "en"
-  const lang = isEn ? "en" : "fr"
+  setRequestLocale(locale)
   const meta = servicesMeta(locale)
 
   const breadcrumbItems = [
-    { name: t("breadcrumbHome"), url: "/" },
-    { name: t("breadcrumbServices"), url: "/solutions-web" },
+    { name: "Accueil", url: "/" },
+    { name: "Prestations web", url: PRESTATIONS_PATH },
   ]
 
-  // Nœud WebPage « speakable » : désigne aux assistants de lecture le H1 et le
-  // cartouche « L'essentiel » de la page, deux zones réellement affichées et
-  // autoportantes. Même dispositif que la home et la page pilier headless.
+  // Nœud WebPage « speakable » : les deux cartes, la zone réellement affichée
+  // et autoportante de la page (le h1 n'est plus visible).
   const speakableWebPage = {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    "@id": `${siteConfig.url}${isEn ? "/en" : ""}/solutions-web#webpage`,
-    url: `${siteConfig.url}${isEn ? "/en" : ""}/solutions-web`,
+    "@id": `${siteConfig.url}${PRESTATIONS_PATH}#webpage`,
+    url: `${siteConfig.url}${PRESTATIONS_PATH}`,
     name: meta.title,
     description: meta.description,
-    inLanguage: isEn ? "en-US" : "fr-FR",
+    inLanguage: "fr-FR",
     isPartOf: { "@id": `${siteConfig.url}/#website` },
     about: { "@id": `${siteConfig.url}/#organization` },
     speakable: {
       "@type": "SpeakableSpecification",
-      cssSelector: ["h1", ".services-tldr"],
+      cssSelector: [".prestations-orientation"],
     },
   }
-
-  // Les trois prestations, telles que la page les affiche : le nom, le nom
-  // technique en sous-titre, le plancher « à partir de ». Lus dans
-  // lib/trajectoires.ts, comme les cartes.
-  const prestations = TRAJECTOIRE_ORDER.map((slug) => TRAJECTOIRES[slug])
-  const prestationList = prestations
-    .map((p) => {
-      const recommended = p.recommended ? (isEn ? "recommended, " : "recommandée, ") : ""
-      return isEn
-        ? `${p.name.en} (${p.technique.en}, ${recommended}from ${formatEuros(p.priceValue, "en")} excl. VAT)`
-        : `${p.name.fr} (${p.technique.fr}, ${recommended}dès ${formatEuros(p.priceValue, "fr")} HT)`
-    })
-    .join(", ")
 
   return (
     <main>
       <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       <JsonLd data={speakableWebPage} />
-      {/* Schéma aligné sur le contenu réel de la page : les trois prestations
-          du catalogue (charte §5), prix « à partir de » affichés, et la
-          première analyse de veille par laquelle chacune commence. Les packs
-          n'y figurent pas : ce sont des parcours, pas des offres. */}
+      {/* Schéma aligné sur le contenu réel : les deux prestations présentées,
+          chacune à son prix affiché, chacune détaillée sur sa propre page. */}
       <ServiceJsonLd
         locale={locale}
-        name={
-          isEn
-            ? "WordPress redesign: three services for an aging site"
-            : "Refonte WordPress : trois prestations pour un site qui vieillit"
-        }
-        description={
-          isEn
-            ? `Three services for an aging WordPress site: ${prestationList}. Each service starts with a first technical and strategic watch analysis. Price and timeline in writing before starting.`
-            : `Trois prestations pour un site WordPress qui vieillit : ${prestationList}. Chaque prestation commence par une première analyse de veille technique et stratégique. Prix et délai écrits avant de commencer.`
-        }
-        serviceType={isEn ? "Web redesign and development" : "Refonte et développement web"}
-        url="/solutions-web"
+        name="Prestations web : landing page ou refonte WordPress"
+        description={`Deux prestations, deux prix écrits. ${LANDING.nom} : ${LANDING.promesse} ${LANDING_PRIX}, ${LANDING_DELAI.toLowerCase()}. ${REFONTE_WP.nom} : ${REFONTE_WP.promesse} ${REFONTE_PRIX}, ${REFONTE_DELAI}.`}
+        serviceType="Création de landing page et refonte de site WordPress"
+        url={PRESTATIONS_PATH}
         offerCatalog={{
-          name: isEn ? "The three services" : "Les trois prestations",
-          items: prestations.map((p) => ({
-            name: `${p.name[lang]}${isEn ? ": " : " : "}${p.technique[lang]}`,
-            // La phrase « en clair » de la carte (ADR-015), lue dans la source,
-            // puis les variantes à égalité quand la prestation en a (la
-            // Refonte : WordPress sur mesure ou headless, ADR-031).
-            description: p.variantes?.length
-              ? `${p.enClair[lang]} ${
-                  isEn
-                    ? `Two variants on an equal footing, chosen according to the situation: ${p.variantes
-                        .map((v) => `${v.technique.en}, from ${formatEuros(v.priceValue, "en")} excl. VAT`)
-                        .join("; ")}.`
-                    : `Deux variantes à égalité, choisies selon la situation : ${p.variantes
-                        .map((v) => `${v.technique.fr}, à partir de ${formatEuros(v.priceValue, "fr")} HT`)
-                        .join(" ; ")}.`
-                }`
-              : p.enClair[lang],
-            url: p.href,
-            minPrice: p.priceValue,
-          })),
+          name: "Les deux prestations web",
+          items: [
+            {
+              name: LANDING.nom,
+              description: LANDING.promesse,
+              url: LANDING.path,
+              price: LANDING.priceValue,
+            },
+            {
+              name: REFONTE_WP.nom,
+              description: REFONTE_WP.promesse,
+              url: REFONTE_WP.path,
+              minPrice: REFONTE_WP.priceValue,
+            },
+          ],
         }}
       />
-      {/* La FAQ visible et son schéma FAQPage sont portés par ServicesClient →
-          ServicesFAQ → FaqSchema (profile-aware, schéma = contenu affiché). Pas
-          de FAQJsonLd ici : cela créerait un second FAQPage divergent du visible. */}
-      <ServicesClient />
-      {/* Après la livraison : les deux abonnements du moment « Gérer » (suivi
-          et maintenance, expert technique externalisé), Sentinelle en mention
-          incluse (ADR-013). Récurrents, ils ne rentrent pas dans les trois
-          prestations au forfait. */}
-      <TenirBanner tone="jet" />
+
+      {/* Pas de héros (demande d'Agathe du 2026-11-21) : la page s'ouvre sur les
+          deux cartes, le choix se fait dès le premier écran. Le h1 reste dans
+          le HTML, pour les lecteurs d'écran et les moteurs, sans occuper
+          l'écran. */}
+      <h1 className="sr-only">Prestations web : lancer un projet ou refondre un site WordPress</h1>
+
+      {/* Bloc 1 : les deux cartes. Le visiteur se reconnaît dans une
+          situation avant de lire un nom d'offre ou un prix. */}
+      <BlueprintSection tone="obsidian" id="prestations">
+        <CartesOffres className="prestations-orientation" />
+      </BlueprintSection>
+
+      <Separator />
+
+      {/* Bloc 2 : un bandeau sur la maintenance (demande d'Agathe du
+          2026-11-21, à la place de la section « Ce qui est commun »). Une
+          phrase, un prix lu dans lib/maintenance-offer.ts, un lien. */}
+      <BlueprintSection tone="jet" innerClassName="px-6 py-8 lg:px-8">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between md:gap-8">
+          <div className="flex flex-col gap-1.5">
+            <p className="font-mono text-2xs uppercase tracking-[0.14em] text-mid-gray">Après la mise en ligne</p>
+            <p className="text-lg font-light tracking-tight text-foreground md:text-xl">
+              Maintenance à partir de{" "}
+              <span className="text-accent-secondary">{MAINTENANCE_2026_11_LABEL.essentiel}</span>, sans obligation.
+            </p>
+          </div>
+          <Link
+            href={MAINTENANCE_PATH as Href}
+            className="group inline-flex shrink-0 items-center gap-1.5 font-mono text-xs uppercase tracking-[0.08em] text-accent-secondary no-underline hover:text-foreground"
+          >
+            Voir le suivi et la maintenance
+            <ArrowRight size={14} aria-hidden className="transition-transform group-hover:translate-x-0.5" />
+          </Link>
+        </div>
+      </BlueprintSection>
+
+      <Separator />
+
+      {/* Bloc 3 : l'offre application, en une ligne. Ni carte, ni prix mis en
+          avant, ni page dédiée. L'ancre #forfait-webapp est celle des anciens
+          liens vers la prestation Évolution. */}
+      <BlueprintSection tone="obsidian" id="forfait-webapp" innerClassName="px-6 py-10 lg:px-8 lg:py-12">
+        <p className="max-w-3xl font-inter-tight text-base leading-relaxed text-mid-gray md:text-lg">
+          Vous avez besoin d&apos;une application ou d&apos;un outil métier ? C&apos;est possible, sur devis.{" "}
+          <a
+            href={RDV_HREF}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-accent-secondary no-underline hover:text-foreground"
+          >
+            Parlons-en.
+          </a>
+        </p>
+      </BlueprintSection>
+
+      <Separator />
+
+      {/* Bloc 4 : appel final. L'échange gratuit pour qui hésite ; l'analyse du
+          site reste proposée à qui en a déjà un (deux températures). */}
+      <AppelFinal
+        titre="Vous hésitez entre les deux ?"
+        primary={{ label: "Échange gratuit de 15 minutes", href: RDV_HREF, external: true }}
+        secondary={{ label: "Analyser mon site", href: SCAN_HREF, plain: true }}
+      />
     </main>
   )
 }

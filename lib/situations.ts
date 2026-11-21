@@ -10,6 +10,7 @@ import {
   MAINTENANCE_CONTACT_HREF,
   MAINTENANCE_ONBOARDING_VALUE,
   MAINTENANCE_PATH,
+  MAINTENANCE_PRIX_VALIDES,
   SUIVI_INCLUS_MOIS,
   maintenanceMonthly,
 } from "@/lib/maintenance-offer";
@@ -74,8 +75,12 @@ export interface Besoin {
   moment: Bi;
   /** Le besoin, dit par le visiteur. */
   phrase: Bi;
-  /** Page du moment : les offres détaillées. */
-  href: string;
+  /**
+   * Page du moment : les offres détaillées. Absente pour « Évoluer » depuis le
+   * 2026-11-21 (demande d'Agathe) : plus de lien vers la page d'orientation
+   * /solutions-web, chaque offre a sa page.
+   */
+  href?: string;
 }
 
 export const BESOINS: Besoin[] = [
@@ -91,7 +96,6 @@ export const BESOINS: Besoin[] = [
     index: "02",
     moment: { fr: "Évoluer", en: "Evolve" },
     phrase: { fr: "Je veux faire évoluer mon site web", en: "I want my website to evolve" },
-    href: "/solutions-web",
   },
   {
     key: "tenir",
@@ -791,9 +795,9 @@ export const SITUATIONS: Situation[] = [
     page: {
       metaTitle: "Site WordPress ingérable : l'assainir sans changer d'outil",
       metaDescription: `Extensions empilées, mises à jour qui cassent, site qui ralentit : votre WordPress actuel assaini, sans reconstruction, à partir de ${fr(TRAJECTOIRES["forfait-classique"].priceValue)} HT, ${SUIVI_INCLUS_MOIS} mois de suivi inclus.`,
-      // Requête de SITUATION. La requête d'OFFRE (« optimisation site
-      // WordPress », « refonte site WordPress prix ») appartient à
-      // /solutions-web.
+      // Requête de SITUATION. La requête d'OFFRE « refonte site WordPress
+      // prix » appartient à /refonte-wordpress (ADR-047) ; /solutions-web, page
+      // d'orientation, garde la requête d'arbitrage « landing page ou refonte ».
       keywords: [
         "site WordPress ingérable",
         "trop d'extensions WordPress",
@@ -871,8 +875,8 @@ export const SITUATIONS: Situation[] = [
       metaDescription: `Site WordPress lent ou daté, une équipe qui y publie chaque jour ? Reconstruit en WordPress sur mesure ou headless, même outil, à partir de ${fr(TRAJECTOIRES["forfait-headless"].priceValue)} HT, ${SUIVI_INCLUS_MOIS} mois de suivi inclus.`,
       // Requête de SITUATION (le site lent). Les requêtes d'OFFRE et de
       // TECHNIQUE (« refonte WordPress headless », « WordPress headless »,
-      // « Core Web Vitals WordPress ») appartiennent à /solutions-web et à la
-      // page pilier /wordpress-headless.
+      // « Core Web Vitals WordPress ») appartiennent à /refonte-wordpress
+      // (ADR-047) et à la page pilier /wordpress-headless.
       keywords: [
         "site WordPress lent",
         "site WordPress trop lent que faire",
@@ -1333,6 +1337,31 @@ export function trajectoireDuPack(situation: Situation): Trajectoire | undefined
   return TRAJECTOIRE_ORDER.map((slug) => TRAJECTOIRES[slug]).find(
     (tr) => tr.name.fr === situation.offre.fr,
   );
+}
+
+/**
+ * La page qui détaille une prestation ET affiche son prix : celle que citent
+ * les données structurées (JSON-LD) et les fichiers llms, qui ne doivent
+ * déclarer un prix que là où il se lit.
+ *
+ * Depuis l'ADR-047 (2026-11-21), /solutions-web est une page d'orientation :
+ * elle ne détaille plus l'Optimisation ni l'Évolution et n'affiche pas leur
+ * prix. Une prestation dont le lien du catalogue (`href`) mène encore à
+ * /solutions-web est donc désignée ici par la page de son pack, qui affiche
+ * son forfait ; à défaut de page de pack indexable, par /tarifs. La Refonte
+ * garde sa page, /refonte-wordpress.
+ *
+ * Ne sert pas aux liens visibles (cartes, /tarifs, étapes de pack), qui lisent
+ * toujours `TRAJECTOIRES[slug].href`.
+ */
+export function pagePrixDeLaPrestation(slug: TrajectoireSlug): string {
+  const { href } = TRAJECTOIRES[slug];
+  if (!href.startsWith("/solutions-web")) return href;
+  const pack = SITUATIONS.find(
+    (s) => !s.lienExterne && s.page.solution && trajectoireDuPack(s)?.slug === slug,
+  );
+  // Les pages de pack suivent le drapeau du suivi : en noindex tant qu'il vaut false.
+  return pack && MAINTENANCE_PRIX_VALIDES ? packHref(pack.slug) : "/tarifs";
 }
 
 export function getSituation(slug: string): Situation | undefined {

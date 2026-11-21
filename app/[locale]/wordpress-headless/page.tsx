@@ -337,7 +337,10 @@ export default async function WordPressHeadlessPillarPage({
               <Link href="/scan" className={BTN_SECONDARY}>
                 {isEn ? "Analyze your site in 2 minutes" : "Analysez votre site en 2 minutes"}
               </Link>
-              <Link href="/solutions-web" className={BTN_SECONDARY}>
+              {/* L'offre et le prix du headless se lisent sur la page de la
+                  Refonte WordPress (ADR-047), et non plus sur /solutions-web,
+                  devenue page d'orientation. */}
+              <Link href="/refonte-wordpress" className={BTN_SECONDARY}>
                 {isEn ? "See offers and pricing" : "Voir les offres et tarifs"}
               </Link>
             </div>

@@ -29,6 +29,39 @@ export const FAMILLE_ORDER: FamilleKey[] = [
   "automatisations",
 ];
 
+/**
+ * Onglets de la liste /etudes-de-cas (demande d'Agathe, 2026-11-21) : plus
+ * d'onglet « Tous », et les sites se classent par offre vendue (ADR-047),
+ * Refonte ou Vitrine évolutive. Les deux autres familles gardent leur onglet.
+ * `famille` reste la donnée de la fiche (CTA, gabarit) : l'onglet s'en déduit.
+ */
+export type OngletKey = "refonte" | "vitrine-evolutive" | "app-web-mobile" | "automatisations";
+
+/**
+ * Ordre des onglets affichés ; un onglet sans cas publié est masqué. L'onglet
+ * « Automatisations » est retiré de la liste (demande d'Agathe, 2026-11-21) :
+ * ses cas gardent leur fiche en ligne, sans carte dans la liste. Pour le
+ * rétablir, rajouter "automatisations" ici.
+ */
+export const ONGLET_ORDER: OngletKey[] = ["vitrine-evolutive", "refonte", "app-web-mobile"];
+
+/**
+ * Sites vendus comme Vitrine évolutive, dans l'ordre d'affichage de l'onglet.
+ * Tout autre site de la famille « sites-institutionnels » relève de la Refonte.
+ */
+export const VITRINE_EVOLUTIVE_SLUGS = [
+  "hermitage-ecolise",
+  "hermitage-sejours",
+  "resems",
+  "maison-verjus",
+  "verdier-rh",
+];
+
+export function ongletDe(meta: { slug: string; famille: FamilleKey }): OngletKey {
+  if (meta.famille !== "sites-institutionnels") return meta.famille;
+  return VITRINE_EVOLUTIVE_SLUGS.includes(meta.slug) ? "vitrine-evolutive" : "refonte";
+}
+
 export type OffreConstructionKey = "wordpress" | "headless" | "plateforme" | "composant";
 
 export type OffreConseilKey =
@@ -126,6 +159,87 @@ export interface CaseStudy extends CaseStudyMeta, CaseStudyContent {
 // ─── Locale-agnostic meta ──────────────────────────────────────────────────
 
 const META: CaseStudyMeta[] = [
+  {
+    id: "31",
+    slug: "resems",
+    famille: "sites-institutionnels",
+    statut: "publie",
+    featured: null,
+    // Landing page : aucune clé de l'enum ne la décrit (« plateforme » afficherait
+    // « plateforme métier sur-mesure »). null masque le chemin de décision.
+    // TODO(Agathe): clé « landing » vers /landing-evolutive à créer (propagation ADR-047) ?
+    offreConstruction: null,
+    offreConseil: null,
+    budgetIndicatif: null,
+    delai: null, // TODO(Agathe): durée de réalisation
+    clientId: null,
+    // Réseau d'établissements en phase pilote, forme juridique non relevée. TODO(Agathe): confirmer
+    clientType: "groupement",
+    clientName: "R.E.S.E.M.S.",
+    imageUrl: "", // TODO(Agathe): logo du réseau si souhaité
+    // Capture fournie par Agathe le 21/11/2026 (héros de la landing).
+    galleryUrl: "/img/desktop-screen-resems.jpg",
+    cardImageUrl: "/img/desktop-screen-resems.webp",
+    // Premier déploiement Vercel de la landing : 22/10/2026.
+    date: { month: 10, year: 2026 },
+    technologies: ["HTML", "CSS", "Animations au défilement", "Vercel"],
+    // Pas de `website` : au 21/11/2026, resems.fr sert encore la page précédente
+    // du réseau, pas cette landing. TODO(Agathe): renseigner l'adresse publique.
+    youtubeVideoId: "hevPaiG4DHU",
+  },
+  {
+    id: "32",
+    slug: "maison-verjus",
+    famille: "sites-institutionnels",
+    statut: "publie",
+    featured: null,
+    // Vitrine d'une page : aucune clé de l'enum ne la décrit, null masque le chemin
+    // de décision. TODO(Agathe): clé « landing » vers /landing-evolutive (ADR-047) ?
+    offreConstruction: null,
+    offreConseil: null,
+    budgetIndicatif: null,
+    delai: null, // TODO(Agathe): durée de réalisation
+    clientId: null,
+    // Restaurant fictif (profil du 24/10/2026) : démonstration, pas un projet client.
+    isDemo: true,
+    clientType: "pme",
+    clientName: "Maison Verjus",
+    imageUrl: "",
+    // Capture fournie par Agathe le 21/11/2026 (héros de la vitrine).
+    galleryUrl: "/img/desktop-screen-maison-verjus.jpg",
+    cardImageUrl: "/img/desktop-screen-maison-verjus.webp",
+    // Publication du modèle « Glass » dans La Petite Vitrine : 25/10/2026.
+    date: { month: 10, year: 2026 },
+    technologies: ["HTML", "CSS", "JavaScript", "La Petite Vitrine"],
+    // Pas de `website` : lien retiré à la demande d'Agathe (2026-11-21).
+    youtubeVideoId: "dCu-1sNurkU",
+  },
+  {
+    id: "33",
+    slug: "verdier-rh",
+    famille: "sites-institutionnels",
+    statut: "publie",
+    featured: null,
+    // Même remarque que maison-verjus. TODO(Agathe): clé « landing » (ADR-047) ?
+    offreConstruction: null,
+    offreConseil: null,
+    budgetIndicatif: null,
+    delai: null, // TODO(Agathe): durée de réalisation
+    clientId: null,
+    // Formatrice fictive (profil du 19/10/2026) : démonstration, pas un projet client.
+    isDemo: true,
+    clientType: "independant",
+    clientName: "Verdier RH",
+    imageUrl: "",
+    // Capture fournie par Agathe le 21/11/2026 (héros du site).
+    galleryUrl: "/img/desktop-screen-verdier-rh.jpg",
+    cardImageUrl: "/img/desktop-screen-verdier-rh.webp",
+    // Entrée du modèle dans le dépôt La Petite Vitrine : octobre 2026.
+    date: { month: 10, year: 2026 },
+    technologies: ["HTML", "CSS", "JavaScript", "La Petite Vitrine"],
+    // Pas de `website` : lien retiré à la demande d'Agathe (2026-11-21).
+    youtubeVideoId: "aUusbe8_vWE",
+  },
   {
     id: "30",
     slug: "newsletter-veille-ia",
@@ -668,20 +782,33 @@ const META: CaseStudyMeta[] = [
     famille: "sites-institutionnels",
     statut: "publie",
     featured: null,
-    offreConstruction: "wordpress",
+    // Refonte de 2026 : WordPress headless + Next.js. La fiche décrivait
+    // jusqu'au 2026-11-21 le premier site de 2023 (WordPress + Elementor), que
+    // cette refonte remplace à la même adresse.
+    offreConstruction: "headless",
     offreConseil: null,
     budgetIndicatif: null,
-    delai: { value: 2, unit: "semaines" },
+    delai: { value: 2, unit: "mois" }, // donné par Agathe le 2026-11-21
     clientId: null,
+    // Captures du nouveau site (héros « constellation »), générées depuis
+    // public/img/desktop-screen-infralliance.png.
     cardImageUrl: "/img/desktop-screen-infralliance.webp",
     clientType: "groupement",
     clientName: "Infralliance",
     imageUrl: "/img/logo-infralliance.png",
     galleryUrl: "/img/desktop-screen-infralliance.jpg",
-    date: { month: 4, year: 2023 },
-    technologies: ["WordPress", "Elementor Pro", "Advanced Custom Fields"],
+    date: { month: 11, year: 2026 },
+    technologies: [
+      "WordPress",
+      "Headless CMS",
+      "WPGraphQL",
+      "Advanced Custom Fields",
+      "Next.js",
+      "TypeScript",
+      "Tailwind CSS",
+    ],
     website: "https://infralliance.net",
-    youtubeVideoId: "LtMBegTX06Q",
+    youtubeVideoId: "a9Z7fnHIr4U",
   },
   {
     id: "12",
@@ -768,6 +895,101 @@ const META: CaseStudyMeta[] = [
 // ─── French content ────────────────────────────────────────────────────────
 
 const CONTENT_FR: Record<string, CaseStudyContent> = {
+  // Faits relevés le 21/11/2026 sur la landing déployée sur Vercel (structure,
+  // textes, styles) et sur resems.fr (présentation du réseau). Aucun chiffre de
+  // résultat fourni. TODO(Agathe): délai, retours du réseau, citation, adhésions.
+  resems: {
+    title: "R.E.S.E.M.S. · Une page pour rejoindre un réseau d'échange de séjours",
+    // Le titre affiché fait 69 caractères : coupé dans les résultats de recherche.
+    seoTitle: "R.E.S.E.M.S. : landing page d'un réseau d'échange de séjours",
+    description:
+      "Création de la landing page de R.E.S.E.M.S., réseau d'échange de séjours entre établissements médico-sociaux : six photos en bandeau animé, le parcours d'un échange raconté en quatre étapes au fil du défilement, et un appel à rejoindre le groupe pilote.",
+    detailedDescription: `R.E.S.E.M.S. est le Réseau d'Échanges de Séjours entre Établissements Médico-Sociaux. Le principe : un établissement met ses locaux à disposition pendant les périodes qu'il choisit, et peut en retour être accueilli chez un partenaire. Les personnes accompagnées partent avec leur groupe de vie et leurs accompagnants, dans un lieu déjà adapté, sans facturation de l'hébergement. Le projet est porté par une éducatrice spécialisée et un ingénieur ; il est en phase pilote en 2026. La page a donc un seul rôle : faire comprendre le principe à un responsable d'établissement et l'amener à rejoindre le groupe pilote.\n\nJ'ai conçu et réalisé une landing page, une grande page unique pensée pour une seule action, construite comme une grille éditoriale : filets noirs, damier de quatre couleurs, titres en Fraunces et texte en Lato. En tête, une barre flottante porte le nom du réseau et un menu de sept entrées. Juste dessous, un bandeau de six photos : une seule s'ouvre en couleur, les autres restent en noir et blanc, et le bandeau avance tout seul toutes les 4,2 secondes. Chaque photo porte un verbe du réseau : découvrir, partager, explorer, accueillir, coopérer, accompagner. Le titre arrive ensuite : « Des séjours adaptés, par l'échange. »\n\nLa suite répond aux questions dans l'ordre où elles se posent. Trois principes d'abord : gratuité et réciprocité, des lieux réellement adaptés, un cadre conventionné. Puis « L'histoire d'un échange, en quatre étapes » : inscription, recherche de partenaires, organisation du séjour, séjour. Cette section se lit au défilement, avec un même exemple pour fil : un IME de Provence cherche un lieu, une MAS du Cantal a des locaux disponibles. La fiche de l'établissement s'affiche, un trait relie les deux lieux, les points à régler apparaissent un à un, puis vient le séjour. Les conditions de participation suivent, avec les établissements concernés (DIME, DITEP, MAS, FAM, FO, foyers de vie, MECS), puis l'appel à rejoindre le groupe pilote et les deux porteurs du projet.\n\nLes contenus viennent du réseau : je les ai resserrés et ordonnés en un seul parcours. Côté technique, la page est servie depuis Vercel ; sa première version a été déployée le 22 octobre 2026. Les animations au défilement reposent sur les fonctions natives du navigateur (CSS), sans bibliothèque d'animation. Là où le navigateur ne les connaît pas, chaque étape s'affiche avec son illustration, sans effet. Les mouvements se coupent pour les visiteurs qui ont demandé à les réduire dans leurs réglages, et le bandeau de photos se resserre sur mobile.`,
+    objectives: [
+      "Faire comprendre le principe de l'échange de locaux à un responsable d'établissement, en une seule page",
+      "Montrer les séjours avant de les expliquer : des photos et des verbes en tête de page",
+      "Raconter un échange de bout en bout, de l'inscription au séjour",
+      "Répondre aux questions de cadre : gratuité, réciprocité, convention, établissements concernés",
+      "Amener le visiteur à rejoindre le groupe pilote",
+    ],
+    results: [
+      "Landing page conçue et réalisée pour le réseau, première version déployée le 22 octobre 2026",
+      "Bandeau de six photos en accordéon : une photo en couleur à la fois, relève automatique toutes les 4,2 secondes",
+      "Parcours d'un échange en quatre étapes, animé au défilement, avec un exemple suivi de bout en bout",
+      "Trois principes, trois conditions de participation et sept types d'établissements concernés, lisibles sans quitter la page",
+      "Animations coupées pour les visiteurs qui ont réduit les mouvements, et affichage de repli sans animation là où le navigateur ne les prend pas en charge",
+    ],
+    galleryAlt:
+      "Landing page de R.E.S.E.M.S. : barre flottante, bandeau de six photos dont une en couleur, et titre « Des séjours adaptés, par l'échange. »",
+    tags: ["Médico-social", "Réseau d'établissements", "Landing page", "Séjours adaptés"],
+    cardTitle: "R.E.S.E.M.S. · Échange de séjours",
+    cardDescription:
+      "Landing page d'un réseau d'échange de séjours entre établissements médico-sociaux : six photos en bandeau, un échange raconté en quatre étapes.",
+    cardAlt:
+      "Landing page de R.E.S.E.M.S., réseau d'échange de séjours entre établissements médico-sociaux",
+  },
+  // Démonstration (restaurant fictif). Faits relevés le 21/11/2026 dans le dépôt
+  // lapetitevitrine-front (content/themes/glass-restaurant/fr.json, page du
+  // modèle, historique git) et dans le profil fictif du 24/10/2026.
+  "maison-verjus": {
+    title: "Maison Verjus · Une vitrine de restaurant gastronomique",
+    description:
+      "Site de démonstration : la vitrine d'un restaurant gastronomique fictif, Maison Verjus. Une vidéo plein cadre, une carte de réservation posée sur l'image, quatre menus, l'univers de la maison et l'accès, sur une seule page.",
+    detailedDescription: `Maison Verjus n'existe pas. C'est un restaurant inventé pour cette démonstration : une table deux étoiles installée dans une ancienne minoterie d'Angoulême, 38 couverts, une terrasse sur la Charente. J'ai d'abord établi son profil complet, de l'histoire de la maison aux menus, pour travailler avec des contenus crédibles plutôt qu'avec du faux texte. Un restaurant de ce niveau vend une expérience avant de vendre un repas : sa vitrine doit donner envie de venir, puis conduire à la réservation sans détour.\n\nJ'ai conçu et réalisé une vitrine d'une seule page, sombre et immersive. L'écran d'ouverture est une vidéo plein cadre : une table dressée, une bougie, le nom de la maison en grandes lettres. Juste dessous, une carte de réservation en verre dépoli (le fond reste visible, flouté, derrière le panneau) propose quatre choix : la date, le service, le nombre de convives et le menu, avec le rappel des prix, de 98 € à 245 € par personne. Le menu de navigation tient en cinq entrées : Menus, Table & cave, Maison, Paroles, Accès.\n\nLa suite déroule la maison dans l'ordre d'une visite. L'histoire du lieu et trois repères : 2014, 38 couverts, deux étoiles. Quatre menus, du déjeuner en quatre services au menu « Terroir » en neuf services : chacun affiche son prix et s'ouvre sur ses plats. Trois volets pour l'univers : la table, la cave de 14 000 bouteilles, le potager de 6 000 m² à douze kilomètres. Trois paroles de la maison, puis l'accès : l'adresse, la gare à 1 h 50 de Paris en TGV, les cinq chambres à proximité.\n\nCôté technique, la page est autonome : du HTML, du CSS et un peu de JavaScript, sans framework à charger. Tous les textes, les prix et les images sont lus dans un seul fichier de contenu : changer un menu ou un prix ne demande pas de toucher à la mise en page. La mise en page s'adapte du mobile au grand écran, et les animations se coupent pour les visiteurs qui ont demandé à réduire les mouvements. Cette vitrine sert de démonstration au modèle « Glass » de La Petite Vitrine, où elle est publiée depuis le 25 octobre 2026.`,
+    objectives: [
+      "Faire ressentir la maison dès l'ouverture : la salle, la lumière, le nom",
+      "Mettre la réservation à portée de main dès le premier écran",
+      "Présenter les quatre menus avec leurs prix et leurs plats",
+      "Raconter ce qui fait la maison : la table, la cave, le potager",
+      "Garder des contenus modifiables sans toucher à la mise en page",
+    ],
+    results: [
+      "Vitrine d'une seule page, publiée comme démonstration du modèle « Glass » de La Petite Vitrine le 25 octobre 2026",
+      "Vidéo plein cadre à l'ouverture et carte de réservation en quatre champs : date, service, convives, menu",
+      "Quatre menus de 98 € à 245 €, trois volets d'univers, trois paroles de la maison",
+      "Textes, prix et images lus dans un seul fichier de contenu",
+      "Animations coupées pour les visiteurs qui ont réduit les mouvements, mise en page adaptée du mobile au grand écran",
+    ],
+    galleryAlt:
+      "Vitrine de Maison Verjus : table dressée à la bougie en fond, nom de la maison en grandes lettres et carte de réservation en bas d'écran",
+    tags: ["Démo", "Restaurant", "Vitrine une page", "La Petite Vitrine"],
+    cardTitle: "Maison Verjus · Restaurant gastronomique",
+    cardDescription:
+      "Démo : la vitrine d'un restaurant gastronomique fictif, avec vidéo plein cadre, réservation dès le premier écran et quatre menus.",
+    cardAlt: "Vitrine de démonstration de Maison Verjus, restaurant gastronomique fictif",
+  },
+  // Démonstration (formatrice fictive). Faits relevés le 21/11/2026 dans le dépôt
+  // lapetitevitrine-front (content/themes/brutal-formatrice-rh/fr.json,
+  // docs/catalog-sources/brutal-formatrice-rh/source-notes.md) et dans le profil
+  // fictif du 19/10/2026.
+  "verdier-rh": {
+    title: "Verdier RH · Un site à deux entrées pour une formatrice et consultante",
+    seoTitle: "Verdier RH : site à deux entrées d'une formatrice RH",
+    description:
+      "Site de démonstration : la vitrine d'une formatrice et consultante RH fictive, Verdier RH. Deux publics présentés à égalité, six profils qui affichent chacun leur offre, des tarifs filtrables et un formulaire qui se préremplit.",
+    detailedDescription: `Verdier RH n'existe pas. C'est un profil inventé pour cette démonstration : Nathalie Verdier, formatrice et consultante RH à Lyon, organisme de formation certifié Qualiopi. Son activité a une particularité fréquente chez les indépendants : elle s'adresse à deux publics qui n'achètent pas la même chose. D'un côté les entreprises, avec des formations, du conseil et des bilans de compétences. De l'autre l'enseignement professionnel, du lycée à l'IUT. Formats, tarifs et financements diffèrent. Un site construit pour un seul public laisse l'autre chercher sa place.\n\nJ'ai conçu et réalisé un site d'une seule page à « double entrée » : les deux publics sont présentés au même niveau, chacun avec trois profils. Un dirigeant de TPE ou de PME sans service RH, un manager nouvellement nommé, un salarié en bilan de compétences ; un lycée professionnel, un CFA, un IUT. Choisir un profil affiche son panneau : ce qui lui est proposé, dans quel format, avec quel financement. Le même choix préremplit le formulaire de contact. Les liens du menu et du pied de page mènent directement au bon public.\n\nLe reste de la page apporte la preuve dans un ordre numéroté, de [01] à [08]. Huit domaines d'expertise, chacun marqué formation, conseil ou les deux. Six prestations avec leur format, leur public et leur tarif hors taxes, filtrables par type. La méthode, avec 70 % du temps consacré à la pratique et une évaluation en trois temps. Quatre références chiffrées et cinq indicateurs qualité avec leurs jauges, signalés comme fictifs. Le parcours et les diplômes, puis le contact. Le style est franc : grandes capitales, bleu marine et corail, numéros de section apparents.\n\nCôté technique, la page est écrite à la main : du HTML, du CSS et un seul script, sans framework. Je l'ai ensuite intégrée à La Petite Vitrine comme modèle « Brutal - Services » : tous les contenus sont lus dans un fichier, les onglets de profils se génèrent depuis la liste des profils, et un public laissé sans profil disparaît de la page. Les onglets se parcourent aux flèches du clavier, le menu mobile se ferme à la touche Échap. Le formulaire de la démonstration vérifie l'e-mail et le consentement, et n'envoie rien.`,
+    objectives: [
+      "Présenter deux publics au même niveau, sans en reléguer un en bas de page",
+      "Permettre à chaque visiteur de se reconnaître dans un profil et de voir aussitôt ce qui le concerne",
+      "Afficher l'offre et les tarifs hors taxes, filtrables par type de prestation",
+      "Prouver par des références chiffrées et des indicateurs qualité",
+      "Préparer la prise de contact : un formulaire prérempli selon le profil choisi",
+    ],
+    results: [
+      "Site d'une seule page en huit sections numérotées, intégré à La Petite Vitrine comme modèle « Brutal - Services »",
+      "Deux publics, six profils : choisir un profil affiche son panneau d'offre et préremplit le formulaire",
+      "Huit domaines d'expertise et six prestations avec format, public et tarif hors taxes, filtrables par type",
+      "Quatre références chiffrées et cinq indicateurs qualité, signalés comme fictifs",
+      "Onglets de profils utilisables au clavier, menu mobile refermable à la touche Échap, formulaire de démonstration qui n'envoie rien",
+    ],
+    galleryAlt:
+      "Site de Verdier RH : menu à six entrées, nom en grandes capitales bleu marine, encart « Certifiée Qualiopi » et photo d'un atelier de formation",
+    tags: ["Démo", "Formation et conseil", "Vitrine une page", "La Petite Vitrine"],
+    cardTitle: "Verdier RH · Formation et conseil",
+    cardDescription:
+      "Démo : le site d'une formatrice et consultante RH fictive, avec deux publics à égalité, six profils et des tarifs filtrables.",
+    cardAlt: "Site de démonstration de Verdier RH, formatrice et consultante RH fictive",
+  },
   // Produit interne. Faits relevés sur l'archive Substack publique (14/10/2026),
   // dans lib/newsletter.ts et dans la skill Claude `newsletter-hebdo`.
   // TODO(Agathe): nombre d'abonnés (Substack + LinkedIn) et taux d'ouverture si tu veux les publier.
@@ -1424,25 +1646,32 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
     cardAlt: "Site vitrine de Mediatico",
   },
   infralliance: {
-    title: "Infralliance",
+    title: "Infralliance · Refonte headless",
+    seoTitle: "Infralliance : refonte du site en WordPress headless et Next.js",
     description:
-      "Création d'un site vitrine pour Infralliance, Think and Do Thank des opérateurs d'infrastructures numériques.",
-    detailedDescription:
-      "Infralliance, un think and do tank des opérateurs d'infrastructures numériques, souhaitait créer un site vitrine pour présenter ses actions et ses membres.\n\nJ'ai développé un site WordPress avec un design épuré et une navigation intuitive. Le site met en avant les actions de l'association, ainsi que son réseau d'opérateurs d'infrastructures numériques.\n\nLe site a été mis en ligne avant l'événement de lancement de l'association, permettant à Infralliance de communiquer efficacement sur ses enjeux et ses projets.",
+      "Refonte du site d'Infralliance, think & do tank des opérateurs d'infrastructures numériques : l'équipe publie toujours dans WordPress et compose ses pages avec 20 blocs, le site affiché est reconstruit avec Next.js.",
+    detailedDescription: `Infralliance est le think & do tank des opérateurs d'infrastructures numériques : opérateurs, hébergeurs et institutions y travaillent à une souveraineté numérique construite depuis l'infrastructure. J'avais réalisé son premier site en 2023, un WordPress mis en ligne avant l'événement de lancement. Trois ans plus tard, le collectif a grandi : des membres à présenter un par un, des publications à diffuser, un agenda, des actualités. Le site devait suivre, sans que l'équipe change d'outil.\n\nJ'ai donc reconstruit le site en WordPress headless. WordPress reste l'outil de publication : l'équipe y compose ses pages avec 20 blocs conçus pour le site (héros animé, manifeste, missions, gouvernance, frise historique, annuaire et bandeau des membres, agenda, journal, ressources, contact) et y gère 4 types de contenu, membres, publications, événements et actualités. Le site que voient les visiteurs est une application Next.js : les pages sont générées à l'avance et mises à jour dès qu'un contenu est publié, sans intervention technique.\n\nLe héros donne le ton : un réseau de nœuds qui s'allument, sur un fond bleu nuit quadrillé qui court sur tout le site. Chaque membre a sa fiche. Les publications se téléchargent après identification : nom, organisation et adresse e-mail arrivent dans WordPress, où l'équipe retrouve qui a téléchargé quoi. Depuis WordPress, un lien d'aperçu montre un brouillon tel qu'il s'affichera une fois en ligne, avant de le publier.\n\nCôté référencement, chaque page reçoit ses métadonnées, ses données structurées et son image de partage générée automatiquement ; ce que l'équipe saisit dans WordPress garde la priorité. Le site publie aussi un flux des actualités et un fichier llms.txt, la présentation destinée aux assistants IA. Le site affiché a son propre serveur ; WordPress vit sur un sous-domaine séparé du site public.`,
     objectives: [
-      "Présenter les actions et les projets de l'association",
-      "Mettre en avant le réseau des opérateurs d'infrastructures numériques",
-      "Communiquer sur les enjeux de l'infrastructure numérique",
+      "Refondre le site de 2023 sans changer l'outil de publication de l'équipe",
+      "Donner à l'équipe des blocs pour composer ses pages elle-même, sans développeur",
+      "Présenter les membres, les publications, l'agenda et les actualités comme des contenus à part entière",
+      "Savoir qui télécharge les publications, pour animer le réseau",
+      "Rendre le site lisible par les moteurs de recherche et par les assistants IA",
     ],
     results: [
-      "Site vitrine moderne et professionnel",
-      "Mise en ligne avant l'événement de lancement de l'association",
-      "Simple à administrer pour l'équipe interne",
+      "Site en ligne en novembre 2026, à la même adresse que le site de 2023",
+      "20 blocs de page et 4 types de contenu (membres, publications, événements, actualités) administrés dans WordPress",
+      "Pages générées à l'avance par Next.js et mises à jour à chaque publication",
+      "Publications téléchargeables après identification : nom, organisation et e-mail enregistrés dans WordPress",
+      "Aperçu des brouillons depuis WordPress, données structurées, images de partage générées et fichier llms.txt",
     ],
-    galleryAlt: "Page d'accueil du site Connexion Plus",
-    tags: ["WordPress", "Advanced Custom Fields", "Elementor Pro"],
-    cardDescription: "Site vitrine d'Infralliance",
-    cardAlt: "Site vitrine d'Infralliance",
+    galleryAlt:
+      "Page d'accueil du site d'Infralliance : menu, titre « Infralliance » et réseau de nœuds lumineux sur fond bleu nuit",
+    tags: ["Groupement", "WordPress headless", "Next.js", "Refonte"],
+    cardTitle: "Infralliance",
+    cardDescription:
+      "Refonte en WordPress headless et Next.js du site du think & do tank des opérateurs d'infrastructures numériques.",
+    cardAlt: "Page d'accueil du site d'Infralliance, refondu en WordPress headless",
   },
   "connexion-plus": {
     title: "GEM Connexion",
@@ -1582,6 +1811,90 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
 // ─── English content ───────────────────────────────────────────────────────
 
 const CONTENT_EN: Record<string, CaseStudyContent> = {
+  "maison-verjus": {
+    title: "Maison Verjus · A fine-dining restaurant website",
+    description:
+      "Demo site: the website of a fictional fine-dining restaurant, Maison Verjus. A full-screen video, a booking card laid over the image, four menus, the world of the house and directions, on a single page.",
+    detailedDescription: `Maison Verjus does not exist. It is a restaurant invented for this demo: a two-star table set in a former flour mill in Angoulême, 38 covers, a terrace on the Charente river. I first drew up its full profile, from the history of the house to the menus, to work with credible content rather than filler text. A restaurant at this level sells an experience before it sells a meal: its website must make people want to come, then lead to the booking without detours.\n\nI designed and built a single-page website, dark and immersive. The opening screen is a full-screen video: a laid table, a candle, the name of the house in large letters. Right below, a frosted-glass booking card (the background stays visible, blurred, behind the panel) offers four choices: date, service, number of guests and menu, with a reminder of the prices, from €98 to €245 per person. The navigation menu holds five entries: Menus, Table & cave, Maison, Paroles, Accès.\n\nThe rest unfolds the house in the order of a visit. The history of the place and three markers: 2014, 38 covers, two stars. Four menus, from the four-course lunch to the nine-course "Terroir" menu: each shows its price and opens onto its dishes. Three panels for the world of the house: the table, the 14,000-bottle cellar, the 6,000 m² kitchen garden twelve kilometres away. Three quotes from the house, then directions: the address, the station 1h50 from Paris by TGV, the five rooms nearby.\n\nOn the technical side, the page is self-contained: HTML, CSS and a little JavaScript, with no framework to load. All texts, prices and images are read from a single content file: changing a menu or a price does not require touching the layout. The layout adapts from mobile to large screens, and animations are switched off for visitors who have asked to reduce motion. This website serves as the demo for the "Glass" template of La Petite Vitrine, where it has been published since 25 October 2026.`,
+    objectives: [
+      "Let visitors feel the house from the first screen: the room, the light, the name",
+      "Put the booking within reach from the first screen",
+      "Present the four menus with their prices and their dishes",
+      "Tell what makes the house: the table, the cellar, the kitchen garden",
+      "Keep content editable without touching the layout",
+    ],
+    results: [
+      "Single-page website, published as the demo of the \"Glass\" template of La Petite Vitrine on 25 October 2026",
+      "Full-screen video on opening and a booking card with four fields: date, service, guests, menu",
+      "Four menus from €98 to €245, three panels on the world of the house, three quotes from the house",
+      "Texts, prices and images read from a single content file",
+      "Animations switched off for visitors who have reduced motion, layout adapted from mobile to large screens",
+    ],
+    galleryAlt:
+      "Maison Verjus website: candlelit laid table in the background, name of the house in large letters and booking card at the bottom of the screen",
+    tags: ["Demo", "Restaurant", "Single-page website", "La Petite Vitrine"],
+    cardTitle: "Maison Verjus · Fine-dining restaurant",
+    cardDescription:
+      "Demo: the website of a fictional fine-dining restaurant, with a full-screen video, booking from the first screen and four menus.",
+    cardAlt: "Demo website for Maison Verjus, a fictional fine-dining restaurant",
+  },
+  "verdier-rh": {
+    title: "Verdier RH · A two-entry website for a trainer and consultant",
+    seoTitle: "Verdier RH: two-entry website for an HR trainer",
+    description:
+      "Demo site: the website of a fictional HR trainer and consultant, Verdier RH. Two audiences presented on an equal footing, six profiles that each display their offer, filterable prices and a form that fills itself in.",
+    detailedDescription: `Verdier RH does not exist. It is a profile invented for this demo: Nathalie Verdier, HR trainer and consultant in Lyon, a Qualiopi-certified training organisation. Her business has a feature that is common among freelancers: it speaks to two audiences that do not buy the same thing. On one side, companies, with training, consulting and skills assessments. On the other, vocational education, from vocational high school to the IUT. Formats, prices and funding differ. A website built for a single audience leaves the other looking for its place.\n\nI designed and built a single-page "two-entry" website: the two audiences are presented at the same level, each with three profiles. The head of a small or medium-sized business with no HR department, a newly appointed manager, an employee taking a skills assessment; a vocational high school, a CFA, an IUT. Choosing a profile displays its panel: what is offered, in which format, with which funding. The same choice pre-fills the contact form. The links in the menu and the footer lead straight to the right audience.\n\nThe rest of the page provides the proof in a numbered order, from [01] to [08]. Eight areas of expertise, each marked training, consulting or both. Six services with their format, their audience and their price excluding VAT, filterable by type. The method, with 70% of the time spent on practice and a three-stage assessment. Four references with figures and five quality indicators with their gauges, flagged as fictional. The career path and the qualifications, then the contact section. The style is blunt: large capitals, navy blue and coral, visible section numbers.\n\nOn the technical side, the page is written by hand: HTML, CSS and a single script, with no framework. I then integrated it into La Petite Vitrine as the "Brutal - Services" template: all content is read from a file, the profile tabs are generated from the list of profiles, and an audience left without a profile disappears from the page. The tabs can be browsed with the keyboard arrows, the mobile menu closes with the Escape key. The demo form checks the email and the consent, and sends nothing.`,
+    objectives: [
+      "Present two audiences at the same level, without pushing one to the bottom of the page",
+      "Let every visitor recognise themselves in a profile and see at once what concerns them",
+      "Display the offer and the prices excluding VAT, filterable by type of service",
+      "Prove with references that carry figures and with quality indicators",
+      "Prepare the first contact: a form pre-filled according to the chosen profile",
+    ],
+    results: [
+      "Single-page website in eight numbered sections, integrated into La Petite Vitrine as the \"Brutal - Services\" template",
+      "Two audiences, six profiles: choosing a profile displays its offer panel and pre-fills the form",
+      "Eight areas of expertise and six services with format, audience and price excluding VAT, filterable by type",
+      "Four references with figures and five quality indicators, flagged as fictional",
+      "Profile tabs usable with the keyboard, mobile menu that closes with the Escape key, demo form that sends nothing",
+    ],
+    galleryAlt:
+      "Verdier RH website: six-entry menu, name in large navy blue capitals, \"Certifiée Qualiopi\" badge and photo of a training workshop",
+    tags: ["Demo", "Training and consulting", "Single-page website", "La Petite Vitrine"],
+    cardTitle: "Verdier RH · Training and consulting",
+    cardDescription:
+      "Demo: the website of a fictional HR trainer and consultant, with two audiences on an equal footing, six profiles and filterable prices.",
+    cardAlt: "Demo website for Verdier RH, a fictional HR trainer and consultant",
+  },
+  resems: {
+    title: "R.E.S.E.M.S. · A page to join a stay-exchange network",
+    seoTitle: "R.E.S.E.M.S.: landing page for a stay-exchange network",
+    description:
+      "Built the landing page for R.E.S.E.M.S., a stay-exchange network between French health and social care facilities: six photos in an animated strip, the journey of an exchange told in four steps as you scroll, and a call to join the pilot group.",
+    detailedDescription: `R.E.S.E.M.S. is the Réseau d'Échanges de Séjours entre Établissements Médico-Sociaux, a stay-exchange network between health and social care facilities. The principle: a facility makes its premises available during the periods it chooses, and can in return be hosted by a partner. The people it supports travel with their living group and their carers, to a place that is already adapted, with no charge for accommodation. The project is led by a special needs educator and an engineer; it is in its pilot phase in 2026. So the page has a single role: make the principle clear to a facility manager and lead them to join the pilot group.\n\nI designed and built a landing page, one long page designed for a single action, built as an editorial grid: black rules, a checkerboard of four colours, headings in Fraunces and body text in Lato. At the top, a floating bar carries the network's name and a seven-entry menu. Right below, a strip of six photos: only one opens in colour, the others stay in black and white, and the strip moves on by itself every 4.2 seconds. Each photo carries one of the network's verbs: discover, share, explore, welcome, cooperate, support. Then comes the headline: "Des séjours adaptés, par l'échange." (adapted stays, through exchange).\n\nThe rest answers questions in the order they come up. Three principles first: free of charge and reciprocal, places that are truly adapted, a framework set by agreement. Then "The story of an exchange, in four steps": registration, partner search, organising the stay, the stay. This section is read as you scroll, with one example as its thread: an IME in Provence is looking for a place, a MAS in Cantal has premises available. The facility's record appears, a line links the two places, the points to settle appear one by one, then comes the stay. The conditions for taking part follow, with the facilities concerned (DIME, DITEP, MAS, FAM, FO, foyers de vie, MECS), then the call to join the pilot group and the two people leading the project.\n\nThe content comes from the network: I tightened it and ordered it into a single path. On the technical side, the page is served from Vercel; its first version was deployed on 22 October 2026. The scroll animations rely on the browser's native features (CSS), with no animation library. Where the browser does not know them, each step is shown with its illustration, without effects. Motion is switched off for visitors who have asked to reduce it in their settings, and the photo strip tightens on mobile.`,
+    objectives: [
+      "Make the principle of exchanging premises clear to a facility manager, in a single page",
+      "Show the stays before explaining them: photos and verbs at the top of the page",
+      "Tell the story of an exchange from end to end, from registration to the stay",
+      "Answer the framework questions: free of charge, reciprocity, agreement, facilities concerned",
+      "Lead the visitor to join the pilot group",
+    ],
+    results: [
+      "Landing page designed and built for the network, first version deployed on 22 October 2026",
+      "Accordion strip of six photos: one photo in colour at a time, moving on automatically every 4.2 seconds",
+      "Journey of an exchange in four steps, animated on scroll, with one example followed from end to end",
+      "Three principles, three conditions for taking part and seven types of facilities concerned, readable without leaving the page",
+      "Animations switched off for visitors who have reduced motion, and a fallback display without animation where the browser does not support them",
+    ],
+    galleryAlt:
+      "R.E.S.E.M.S. landing page: floating bar, strip of six photos with one in colour, and the headline \"Des séjours adaptés, par l'échange.\"",
+    tags: ["Health and social care", "Network of facilities", "Landing page", "Adapted stays"],
+    cardTitle: "R.E.S.E.M.S. · Stay exchange",
+    cardDescription:
+      "Landing page for a stay-exchange network between health and social care facilities: six photos in a strip, an exchange told in four steps.",
+    cardAlt:
+      "Landing page for R.E.S.E.M.S., a stay-exchange network between health and social care facilities",
+  },
   "newsletter-veille-ia": {
     title: "Quelle techno pour mon site web à l'heure de l'IA ? · A free monitoring newsletter",
     seoTitle: "Free monitoring newsletter: which technology for my website in the age of AI?",
@@ -2230,25 +2543,32 @@ const CONTENT_EN: Record<string, CaseStudyContent> = {
     cardAlt: "Mediatico brochure site",
   },
   infralliance: {
-    title: "Infralliance",
+    title: "Infralliance · Headless redesign",
+    seoTitle: "Infralliance: site redesign with headless WordPress and Next.js",
     description:
-      "Built a brochure site for Infralliance, a Think and Do Tank of digital-infrastructure operators.",
-    detailedDescription:
-      "Infralliance, a think and do tank of digital-infrastructure operators, wanted a brochure site to showcase its work and its members.\n\nI built a WordPress site with a clean design and intuitive navigation. The site highlights the alliance's work and its network of digital-infrastructure operators.\n\nThe site shipped ahead of the alliance's launch event, letting Infralliance communicate effectively about its priorities and projects.",
+      "Redesign of the website of Infralliance, the think & do tank of digital-infrastructure operators: the team still publishes in WordPress and builds its pages from 20 blocks, while the visible site is rebuilt with Next.js.",
+    detailedDescription: `Infralliance is the think & do tank of digital-infrastructure operators: operators, hosting providers and institutions work there on a digital sovereignty built from the infrastructure up. I had built its first site in 2023, a WordPress site that shipped ahead of the launch event. Three years later, the collective has grown: members to present one by one, publications to share, an agenda, news. The site had to keep up, without the team changing tools.\n\nSo I rebuilt the site as headless WordPress. WordPress remains the publishing tool: the team builds its pages there from 20 blocks designed for the site (animated hero, manifesto, missions, governance, history timeline, member directory and member banner, agenda, journal, resources, contact) and manages 4 content types: members, publications, events and news. The site visitors see is a Next.js application: pages are generated ahead of time and updated as soon as content is published, with no technical intervention.\n\nThe hero sets the tone: a network of nodes lighting up, on a midnight-blue grid background that runs across the whole site. Each member has its own page. Publications are downloaded after identification: name, organisation and email address land in WordPress, where the team can see who downloaded what. From WordPress, a preview link shows a draft as it will appear once live, before publishing it.\n\nOn the search side, every page gets its metadata, its structured data and an automatically generated sharing image; whatever the team enters in WordPress takes priority. The site also publishes a news feed and an llms.txt file, the presentation intended for AI assistants. The visible site has its own server; WordPress lives on a subdomain separate from the public site.`,
     objectives: [
-      "Showcase the alliance's work and projects",
-      "Highlight the digital-infrastructure-operator network",
-      "Communicate on the digital-infrastructure agenda",
+      "Redesign the 2023 site without changing the team's publishing tool",
+      "Give the team blocks to build its pages itself, without a developer",
+      "Present members, publications, the agenda and news as content in their own right",
+      "Know who downloads the publications, to keep the network active",
+      "Make the site readable by search engines and by AI assistants",
     ],
     results: [
-      "Modern, professional brochure site",
-      "Shipped before the alliance's launch event",
-      "Easy for the in-house team to administer",
+      "Site live in November 2026, at the same address as the 2023 site",
+      "20 page blocks and 4 content types (members, publications, events, news) managed in WordPress",
+      "Pages generated ahead of time by Next.js and updated on every publication",
+      "Publications downloadable after identification: name, organisation and email recorded in WordPress",
+      "Draft preview from WordPress, structured data, generated sharing images and an llms.txt file",
     ],
-    galleryAlt: "Connexion Plus homepage",
-    tags: ["WordPress", "Advanced Custom Fields", "Elementor Pro"],
-    cardDescription: "Infralliance brochure site",
-    cardAlt: "Infralliance brochure site",
+    galleryAlt:
+      "Homepage of the Infralliance website: menu, “Infralliance” title and a network of glowing nodes on a midnight-blue background",
+    tags: ["Alliance", "Headless WordPress", "Next.js", "Redesign"],
+    cardTitle: "Infralliance",
+    cardDescription:
+      "Headless WordPress and Next.js redesign of the website of the think & do tank of digital-infrastructure operators.",
+    cardAlt: "Homepage of the Infralliance website, rebuilt as headless WordPress",
   },
   "connexion-plus": {
     title: "GEM Connexion",
@@ -2421,6 +2741,24 @@ function getClientTestimonial(
 // ─── Result highlights (per slug, per locale) ──────────────────────────────
 
 const RESULT_HIGHLIGHTS_FR: Record<string, ResultHighlight[]> = {
+  // Relevé sur la landing déployée (21/11/2026). TODO(Agathe): délai, adhésions au groupe pilote si disponibles
+  resems: [
+    { value: "1 page", label: "Du principe du réseau à l'adhésion au groupe pilote" },
+    { value: "4 étapes", label: "Un échange raconté de bout en bout, au défilement" },
+    { value: "6 photos", label: "En bandeau animé, une par verbe du réseau" },
+  ],
+  // Démo. Relevé dans content/themes/glass-restaurant/fr.json (lapetitevitrine-front), 21/11/2026.
+  "maison-verjus": [
+    { value: "4 champs", label: "Pour réserver dès le premier écran" },
+    { value: "4 menus", label: "De 98 € à 245 €, avec leurs plats" },
+    { value: "1 fichier", label: "Pour tous les textes, les prix et les images" },
+  ],
+  // Démo. Relevé dans content/themes/brutal-formatrice-rh/fr.json (lapetitevitrine-front), 21/11/2026.
+  "verdier-rh": [
+    { value: "2 publics", label: "Présentés au même niveau, dès le haut de page" },
+    { value: "6 profils", label: "Chacun avec son offre, son format et son financement" },
+    { value: "6 prestations", label: "Avec tarifs hors taxes, filtrables par type" },
+  ],
   // Archive Substack publique relevée le 14/10/2026 + skill `newsletter-hebdo`.
   // TODO(Agathe): remplacer un chiffre par le nombre d'abonnés si tu veux le publier.
   "newsletter-veille-ia": [
@@ -2553,10 +2891,12 @@ const RESULT_HIGHLIGHTS_FR: Record<string, ResultHighlight[]> = {
     { value: "FSE", label: "Full Site Editing WordPress" },
     { value: "0 bug", label: "Stabilisation réussie" },
   ],
+  // Comptés dans le dépôt du projet (catalogue des blocs ACF, types de contenu
+  // WPGraphQL) le 2026-11-21 ; délai donné par Agathe. TODO(Agathe): PageSpeed si disponible
   infralliance: [
-    { value: "2 semaines", label: "Délai de livraison" },
-    { value: "J-0", label: "Livré avant le lancement" },
-    { value: "Autonomie", label: "Administration simplifiée" },
+    { value: "20 blocs", label: "Pour composer les pages dans WordPress" },
+    { value: "4 types", label: "Membres, publications, événements, actualités" },
+    { value: "2 mois", label: "Délai de réalisation" },
   ],
   "connexion-plus": [
     { value: "4 semaines", label: "Délai de réalisation" },
@@ -2571,6 +2911,24 @@ const RESULT_HIGHLIGHTS_FR: Record<string, ResultHighlight[]> = {
 };
 
 const RESULT_HIGHLIGHTS_EN: Record<string, ResultHighlight[]> = {
+  // Demo. Taken from content/themes/glass-restaurant/fr.json (lapetitevitrine-front), 2026-11-21.
+  "maison-verjus": [
+    { value: "4 fields", label: "To book from the first screen" },
+    { value: "4 menus", label: "From €98 to €245, with their dishes" },
+    { value: "1 file", label: "For all texts, prices and images" },
+  ],
+  // Demo. Taken from content/themes/brutal-formatrice-rh/fr.json (lapetitevitrine-front), 2026-11-21.
+  "verdier-rh": [
+    { value: "2 audiences", label: "Presented at the same level, from the top of the page" },
+    { value: "6 profiles", label: "Each with its offer, its format and its funding" },
+    { value: "6 services", label: "With prices excluding VAT, filterable by type" },
+  ],
+  // Taken from the deployed landing page (2026-11-21). TODO(Agathe): delivery time, pilot group sign-ups if available
+  resems: [
+    { value: "1 page", label: "From the network's principle to joining the pilot group" },
+    { value: "4 steps", label: "An exchange told from end to end, on scroll" },
+    { value: "6 photos", label: "In an animated strip, one per verb of the network" },
+  ],
   "newsletter-veille-ia": [
     { value: "22 editions", label: "Published from 18 May to 13 October 2026" },
     { value: "4 to 5 min", label: "Reading time per edition, 900 to 1,300 words" },
@@ -2701,9 +3059,9 @@ const RESULT_HIGHLIGHTS_EN: Record<string, ResultHighlight[]> = {
     { value: "0 bugs", label: "Stabilization shipped" },
   ],
   infralliance: [
-    { value: "2 weeks", label: "Delivery time" },
-    { value: "D-0", label: "Shipped before launch" },
-    { value: "Autonomy", label: "Streamlined admin" },
+    { value: "20 blocks", label: "To build pages in WordPress" },
+    { value: "4 types", label: "Members, publications, events, news" },
+    { value: "2 months", label: "Build time" },
   ],
   "connexion-plus": [
     { value: "4 weeks", label: "Build time" },
@@ -2786,6 +3144,8 @@ export function formatDelai(delai: Delai, locale: Locale): string {
 export interface CaseStudyCard {
   slug: string;
   famille: FamilleKey;
+  /** Onglet de la liste, déduit de la famille et de l'offre (ongletDe). */
+  onglet: OngletKey;
   /** Rang dans la vue par défaut « Sélection » de la liste ; null = absent. */
   featured: number | null;
   link: string;
@@ -2816,6 +3176,7 @@ export function getCaseStudyCards(locale: Locale): CaseStudyCard[] {
     return {
       slug: meta.slug,
       famille: meta.famille,
+      onglet: ongletDe(meta),
       featured: meta.featured,
       link: `/etudes-de-cas/${meta.slug}`,
       image: meta.cardImageUrl ?? meta.galleryUrl,

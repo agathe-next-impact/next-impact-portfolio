@@ -253,12 +253,21 @@ const choisir: HubTheme = {
     },
     {
       icon: Calculator,
-      name: { fr: "Simulateur de tarifs", en: "Pricing simulator" },
+      name: { fr: "Vitrine évolutive, prix écrit", en: "Vitrine évolutive, written price" },
       blurb: {
-        fr: "Une fourchette de budget indicative selon le type de site et les fonctionnalités.",
-        en: "An indicative budget range by site type and features.",
+        fr: "Le prix écrit d'une grande page aboutie, pour lancer un projet ou situer un devis.",
+        en: "The written price of one accomplished long page, to launch a project or gauge a quote.",
       },
-      href: "/solutions-web",
+      href: "/landing-evolutive",
+    },
+    {
+      icon: Calculator,
+      name: { fr: "Refonte WordPress, prix écrits", en: "Refonte WordPress, written prices" },
+      blurb: {
+        fr: "Le prix écrit d'une refonte WordPress, en deux formules, pour situer un devis.",
+        en: "The written price of a WordPress redesign, in two options, to gauge a quote.",
+      },
+      href: "/refonte-wordpress",
     },
   ],
   prestas: [
@@ -716,13 +725,21 @@ const avantSigner: HubTheme = {
     },
     {
       icon: Calculator,
-      name: { fr: "Simulateur de tarifs", en: "Pricing simulator" },
+      name: { fr: "Vitrine évolutive, prix écrit", en: "Vitrine évolutive, written price" },
       blurb: {
-        fr: "Le prix attendu pour votre type de projet, pour situer un devis.",
-        en: "The expected price for your type of project, to gauge a quote.",
+        fr: "Le prix écrit d'une grande page aboutie, pour lancer un projet ou situer un devis.",
+        en: "The written price of one accomplished long page, to launch a project or gauge a quote.",
       },
-      // Héritage corrigé : /tarifs est en 301 vers /solutions-web (next.config.mjs).
-      href: "/solutions-web",
+      href: "/landing-evolutive",
+    },
+    {
+      icon: Calculator,
+      name: { fr: "Refonte WordPress, prix écrits", en: "Refonte WordPress, written prices" },
+      blurb: {
+        fr: "Le prix écrit d'une refonte WordPress, en deux formules, pour situer un devis.",
+        en: "The written price of a WordPress redesign, in two options, to gauge a quote.",
+      },
+      href: "/refonte-wordpress",
     },
   ],
   prestas: [
@@ -871,8 +888,8 @@ const outilsMetier: HubTheme = {
         fr: "Le besoin justifie le sur-mesure ? Conception d'annuaire, carte ou espace métier.",
         en: "Does the need justify custom? Directory, map or member-area design and build.",
       },
-      cta: { fr: "Voir les services", en: "See the services" },
-      href: "/solutions-web",
+      cta: { fr: "Voir l'offre", en: "See the offer" },
+      href: "/packs/site-outil-de-travail",
     },
     ROADMAP(
       "tiede",

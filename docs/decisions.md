@@ -1127,3 +1127,100 @@ Complément à l'ADR-045 (même jour, demande d'Agathe) : « Prestations » devi
 mega menu (`nav.refaire`), `nav.services`, fil d'Ariane, surtitre
 « Prestations web · Trois prestations », liens de la documentation,
 llms.txt. « Trois prestations » reste le nom des offres dans le texte courant.
+
+## ADR-047 — 2026-11-21 — Prestations web : deux points de départ, une page par prestation
+
+Demande d'Agathe, sur la base de ses directives du même jour
+(`docs/Solutions web analyse, noms d'offres et structure de page.md`), qui
+priment sur la charte v1.8 pour les trois pages concernées.
+
+- `/solutions-web` devient une **page d'orientation** en quatre blocs, **sans
+  héros** (demande d'Agathe en fin de session : la page s'ouvre sur les cartes,
+  le h1 reste dans le HTML en `sr-only`) : deux cartes par situation (« Vous
+  lancez ou vous testez », « Votre stratégie est stable »), un bandeau sur la
+  maintenance (à la place de la section « Ce qui est commun » des directives),
+  l'offre application en une ligne (« sur devis »), l'appel final. Elle ne
+  détaille plus trois prestations.
+- Deux pages d'offre, en miroir, huit blocs chacune : **Vitrine évolutive**
+  (nommée « Landing Évolutive » dans les directives, renommée le même jour à la
+  demande d'Agathe ; l'adresse `/landing-evolutive` et les identifiants du code
+  ne changent pas)
+  (`/landing-evolutive`, sur-titre « Lancer » : 1 700 € HT, textes et visuels
+  compris, en ligne en 4 semaines, Extension à 300 € HT la page) et **Refonte
+  WordPress** (`/refonte-wordpress`, sur-titre « Refondre » : thème sur mesure
+  dès 2 250 € HT, headless dès 4 000 € HT, à égalité, ADR-031).
+- Le héros des deux pages d'offre garde une **vidéo** en colonne droite
+  (demande d'Agathe en cours de session). Une seule vidéo des prestations
+  existe : les deux pages la partagent (`HERO_VIDEOS`,
+  `lib/prestations-web.ts`).
+- Source unique : `lib/prestations-web.ts` (noms, verbes, prix de la landing,
+  délais, FAQ, sélection des études de cas). Les prix de la Refonte restent lus
+  dans `lib/trajectoires.ts`. Composants : `components/prestations/`.
+- Bas des deux pages d'offre : un même composant, « Réalisations et
+  inspirations », études de cas puis démos, chaque vignette étiquetée
+  « Réalisation client » ou « Démo » d'après `isDemo`.
+- Un seul outil de rendez-vous sur ces pages : l'échange gratuit (Calendly).
+  Le lien Google Agenda de l'ancienne page disparaît.
+- Durées de la méthode écrites en toutes lettres (« 6 semaines », plus « 6 s »),
+  y compris sur la home et les pages de pack (`components/process.tsx`).
+- Supprimés, devenus orphelins : `ServicesClient`, `OfferSections`,
+  `ServicesFAQ`, `MaintenanceSection`, `PricingCards`.
+
+Écarts assumés à la charte v1.8, dictés par les directives : le premier bouton
+du héros n'est plus « Échange gratuit » (Landing : « Démarrer ma landing » ;
+Refonte : « Analyser mon site ») ; l'offre application se dit « sur devis » ;
+la Refonte ne porte plus le badge « recommandée » sur ces pages (deux points de
+départ à égalité).
+
+**Non propagé, à trancher avant mise en ligne** (points ouverts des
+directives) :
+
+- **Maintenance.** Les trois pages annoncent « à partir de 49 € HT par mois »
+  (`MAINTENANCE_GRILLE_2026_11`, `lib/maintenance-offer.ts`) et renvoient vers
+  `/maintenance-wordpress`, qui affiche encore 89 et 249 € HT
+  (`MAINTENANCE_GRID`). La grille n'est pas fusionnée tant que le sort de la
+  formule Actif et de la grille headless n'est pas arrêté. Les « 3 mois de
+  suivi inclus » (`SUIVI_INCLUS_MOIS`) ne sont plus dits sur ces trois pages,
+  mais restent sur les packs, `/tarifs` et dans les budgets calculés.
+- **Optimisation et Évolution.** Retirées de ces trois pages et de leurs
+  métadonnées seulement. Elles restent dans `lib/trajectoires.ts`, les packs
+  (`/packs/site-wordpress-ingerable`, `/packs/site-outil-de-travail`),
+  `/tarifs`, la home, le formulaire de contact, llms et la charte.
+- **Études de cas.** Filtres par prestation et par nature, et ajout des démos
+  d'inspiration : non faits. Une seule démo existe (`next-event`) ; aucune pour
+  la landing.
+- **`/wordpress-headless`.** Inchangée ; la formule Headless de
+  `/refonte-wordpress` y renvoie.
+- Charte à passer en v1.9 une fois ces points arrêtés (§1, §5, §6, §10, §11).
+
+Complément du même jour (demandes d'Agathe) : dans le menu principal, l'entrée
+« Prestations web » (clé `refaire`) devient **« Studio digital »** (EN
+« Digital studio ») et ouvre un **mega menu de deux cases**, une par prestation
+web, chacune vers sa page d'offre, à égalité, sans pastille « recommandé ».
+Navigation : Audit · Studio digital · Études de cas. Le clic sur l'entrée et le
+bouton du panneau (« Voir la page Prestations web ») mènent à `/solutions-web`,
+dont le nom de page reste « Prestations web » (fil d'Ariane, footer). Section
+`refaire` de `lib/mega-menu.ts` (`studio()`, lue dans
+`lib/prestations-web.ts`), champ `pageLabel` de `MegaSection`, `MEGA_KEYS` dans
+`components/header.tsx` (panneau au survol et au focus sur ordinateur, accordéon
+dans le tiroir mobile). Les trois situations du besoin « faire évoluer » ne sont
+plus dans le menu.
+
+Complément du même jour (demande d'Agathe) : **la home ne reflète plus que
+l'offre du Studio digital.** Ordre : héros (h1 « Studio Digital », surtitre « Next Impact », en sous-titre « Lancer un
+projet, tester un marché. Ou refondre un site qui a fait ses preuves. », les
+deux prix, bouton « Échange gratuit » puis renvoi vers les cartes), bande de preuve à trois cellules (45 → 98, projets documentés, Core Web
+Vitals ; ni espace client, ni Le Figaro),
+les deux cartes (le composant de `/solutions-web`,
+`components/prestations/cartes-offres.tsx`), trois études de cas
+(`REALISATIONS_HOME`, sélection d'Agathe : Sowee, Infralliance, L'Hermitage ·
+ECOLISE), témoignages, vitesse mesurée en direct, le studio,
+« L'essentiel », FAQ, appel final à deux températures. Retirés de la home : les
+onglets Audit / Prestations web / Accompagnement, la section veille, l'étude
+phare Réseauteurs, le bandeau échange et audit. Supprimés, devenus orphelins :
+`home-client`, `home-offres`, `home-veille`, `featured-realisation`. Contenu
+dans `lib/home-content.ts` (héros, « L'essentiel », FAQ), en français seulement.
+Revient sur la charte v1.7 (§6 Home : héros sur les trois idées, offre par
+famille en trois onglets, section veille). `HERO_VARIANTS` et
+`SERVICES_PAGE_VARIANTS` de `lib/homepage-profiles*.ts` ne sont plus lus par
+ces pages.
