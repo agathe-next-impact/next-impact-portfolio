@@ -75,11 +75,6 @@ export default function VisioConseilPage() {
             accent={isEn ? "decide" : "décider"}
           />
         }
-        description={
-          isEn
-            ? "Your site is aging and the direction is still open: keep, evolve or rebuild. A free 15-minute call, then an audit if the decision commits a budget, before any quote and any line of code."
-            : "Votre site vieillit et la direction reste à trancher : garder, faire évoluer ou refaire. Un échange gratuit de 15 minutes, puis un audit si la décision engage un budget, avant tout devis et toute ligne de code."
-        }
         // Un seul lien dans le héros : l'échange gratuit (demande du 2026-09-28).
         actions={
           <a

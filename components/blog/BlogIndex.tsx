@@ -27,11 +27,6 @@ export function BlogIndex({ posts }: BlogIndexProps) {
           <h1 className="mt-4 max-w-3xl text-3xl font-light tracking-tight text-foreground md:text-4xl lg:text-5xl">
             Blog
           </h1>
-          <p className="mt-4 max-w-2xl font-inter-tight text-base leading-relaxed text-mid-gray md:text-lg">
-            {isEn
-              ? "Notes, lessons learned and behind-the-scenes from my web projects."
-              : "Notes, retours d'expérience et coulisses de mes projets web."}
-          </p>
         </Reveal>
 
         {/* Grille de cartes bordées jointives */}

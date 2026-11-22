@@ -59,7 +59,6 @@ export function ThemePage({
   return (
     <PageLayout
       titre={tx(theme.question, locale)}
-      sousTitre={tx(theme.intro, locale)}
       secNo={theme.index}
       breadcrumb={breadcrumb}
     >

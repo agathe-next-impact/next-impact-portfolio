@@ -69,11 +69,6 @@ export default async function NocodeSaasSurmesurePage({
       <PageLayout
         compact
         titre={isEn ? "No-code, SaaS or custom?" : "No-code, SaaS ou sur-mesure ?"}
-        sousTitre={
-          isEn
-            ? "Build, buy or no-code? 8 criteria, one recommendation among three families, and the right next step for your case."
-            : "Construire, acheter ou no-code ? 8 critères, une recommandation parmi trois familles, et la bonne prochaine étape pour votre cas."
-        }
       >
         <BlueprintSection
           tone="obsidian"

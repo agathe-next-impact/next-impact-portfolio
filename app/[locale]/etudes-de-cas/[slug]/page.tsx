@@ -165,7 +165,6 @@ export default async function CaseStudyPage({
           index={clientTypeLabel}
           kicker={`${caseStudy.date.month ? monthsRaw[caseStudy.date.month - 1] : ""} ${caseStudy.date.year ?? ""}`.trim()}
           title={caseStudy.title}
-          description={caseStudy.description}
           backdrop={<AuroraGlow intensity="subtle" />}
           breadcrumb={
             <Link

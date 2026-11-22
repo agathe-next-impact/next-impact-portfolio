@@ -69,11 +69,6 @@ export default async function ChecklistGeoPage({
       <PageLayout
         compact
         titre={isEn ? "The GEO checklist" : "La checklist GEO"}
-        sousTitre={
-          isEn
-            ? "24 concrete actions to get cited by AI engines, grouped by the 4 GEO priorities for an SMB: checkable online, downloadable as PDF."
-            : "24 actions concrètes pour être cité par les moteurs IA, groupées par les 4 chantiers GEO d'une PME : cochable en ligne, téléchargeable en PDF."
-        }
       >
         <BlueprintSection
           tone="obsidian"

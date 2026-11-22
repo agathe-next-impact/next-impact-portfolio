@@ -55,7 +55,7 @@ export default async function Home({
         url="/cahier-des-charges"
         applicationCategory="BusinessApplication"
       />
-      <PageLayout titre={t("title")} sousTitre={t("subtitle")}>
+      <PageLayout titre={t("title")}>
         <BlueprintSection tone="obsidian" innerClassName="px-6 py-12 lg:px-8 lg:py-16">
           <Link
             href="/outils"

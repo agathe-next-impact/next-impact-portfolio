@@ -124,8 +124,9 @@ export default async function RefonteWordpressPage({
 
       {/* Bloc 1 : héros. Sur-titre = le verbe, h1 = le nom de l'offre (demande
           d'Agathe du 2026-11-21) ; l'ancien titre, la promesse, passe en
-          sous-titre. La vidéo en colonne droite, la ligne de prix sous
-          l'accroche ; l'analyse du site en bouton principal. */}
+          sous-titre. La vidéo en colonne droite, la ligne de prix sous le
+          sous-titre ; l'analyse du site en bouton principal. Sans descriptif
+          depuis le 2026-11-22 (demande d'Agathe). */}
       <PageHero
         index="№ 01"
         kicker={REFONTE_WP.verbe}
@@ -135,13 +136,7 @@ export default async function RefonteWordpressPage({
           </>
         }
         subtitle="Vos contenus restent. Tout ce qui les porte est refait."
-        description={
-          <>
-            Votre stratégie ne change pas, vos textes non plus. Le site retrouve un design actuel, une vraie vitesse
-            et une base technique saine, sans changer les habitudes de votre équipe.
-            <LignePrix items={[REFONTE_PRIX, REFONTE_DELAI]} />
-          </>
-        }
+        facts={<LignePrix items={[REFONTE_PRIX, REFONTE_DELAI]} />}
         backdrop={<BlueprintGrid />}
         actions={
           <>
@@ -150,6 +145,7 @@ export default async function RefonteWordpressPage({
           </>
         }
         aside={<HeroVideo src={HERO_VIDEOS.refonte.src} label={HERO_VIDEOS.refonte.label} />}
+        asideFirstOnMobile
       />
 
       <Separator />

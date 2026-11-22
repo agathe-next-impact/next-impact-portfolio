@@ -90,7 +90,6 @@ export default async function DocumentationPage({
       />
       <PageLayout
         titre={t("hubTitle")}
-        sousTitre={t("hubSubtitle")}
         headerSlot={<DocumentationSearch items={searchItems} locale={locale} />}
       >
         <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>

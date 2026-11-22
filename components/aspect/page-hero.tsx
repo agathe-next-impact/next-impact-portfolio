@@ -13,7 +13,7 @@ export const HERO_BTN_SECONDARY =
  * PageHero — héros de page harmonisé sur celui de /veille : équerres d'angle,
  * kicker `№ + libellé`, H1 `font-light` (mettre la portion saillante du titre
  * dans un `<em className="font-normal not-italic text-accent-secondary">`),
- * description, rangée de CTA (`actions`), micro-ligne mono (`note`).
+ * ligne de faits (`facts`), rangée de CTA (`actions`), micro-ligne mono (`note`).
  * Composant serveur (aucun hook) — importable des deux côtés.
  */
 export function PageHero({
@@ -21,11 +21,12 @@ export function PageHero({
   kicker,
   title,
   subtitle,
-  description,
+  facts,
   actions,
   note,
   breadcrumb,
   aside,
+  asideFirstOnMobile = false,
   backdrop,
   id,
   className,
@@ -38,8 +39,13 @@ export function PageHero({
   title: React.ReactNode;
   /** Sous-titre visible sous le h1 (ex. la solution technique d'une prestation). */
   subtitle?: React.ReactNode;
-  description?: React.ReactNode;
-  /** Rangée de CTA sous la description (HERO_BTN_PRIMARY / HERO_BTN_SECONDARY). */
+  /**
+   * Ligne de faits sous le titre (prix, délai : `LignePrix`). Pas de phrase
+   * descriptive : les héros n'en portent plus (demande d'Agathe du
+   * 2026-11-22), d'où l'absence de prop `description`.
+   */
+  facts?: React.ReactNode;
+  /** Rangée de CTA sous le titre (HERO_BTN_PRIMARY / HERO_BTN_SECONDARY). */
   actions?: React.ReactNode;
   /** Micro-ligne mono de réassurance sous les CTA. */
   note?: React.ReactNode;
@@ -47,6 +53,12 @@ export function PageHero({
   breadcrumb?: React.ReactNode;
   /** Colonne de droite du héros (ex. portrait) — grille 1.2fr/0.8fr en lg. */
   aside?: React.ReactNode;
+  /**
+   * Sous `lg` (colonnes empilées), affiche `aside` au-dessus du contenu : la
+   * vidéo d'abord, puis le texte. L'ordre du DOM ne change pas, le h1 reste
+   * en tête pour les lecteurs d'écran et les moteurs.
+   */
+  asideFirstOnMobile?: boolean;
   backdrop?: React.ReactNode;
   id?: string;
   /** Classes ajoutées à la section (ex. surcharge locale de tokens). */
@@ -66,8 +78,8 @@ export function PageHero({
         kicker={kicker}
         title={title}
         subtitle={subtitle}
-        description={description}
       />
+      {facts}
       {actions && (
         <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
           {actions}
@@ -97,7 +109,7 @@ export function PageHero({
       {breadcrumb}
       {aside ? (
         <div className="grid items-center gap-10 lg:grid-cols-[1.2fr_0.8fr]">
-          <div>{body}</div>
+          <div className={asideFirstOnMobile ? "order-last lg:order-none" : undefined}>{body}</div>
           {aside}
         </div>
       ) : (

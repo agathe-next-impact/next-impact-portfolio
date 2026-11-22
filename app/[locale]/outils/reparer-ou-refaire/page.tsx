@@ -69,11 +69,6 @@ export default async function ReparerOuRefairePage({
       <PageLayout
         compact
         titre={isEn ? "Repair or rebuild?" : "Réparer ou refaire ?"}
-        sousTitre={
-          isEn
-            ? "Is your site at the end of the road? 9 checks, a health score and a clear signal: repair, optimize or rebuild."
-            : "Votre site est-il en bout de course ? 9 vérifications, un score de santé et un signal clair : réparer, optimiser ou refondre."
-        }
       >
         <BlueprintSection
           tone="obsidian"

@@ -38,7 +38,7 @@ import { getSituation, packHref } from "@/lib/situations";
 // « Gérer » du menu (charte v1.6, ADR-013 et ADR-014).
 //
 // h1 « Maintenir et évoluer » (demande d'Agathe du
-// 2026-09-27). Ordre : douleur (description du héros) ; les deux services du
+// 2026-09-27). Ordre : le héros, sans descriptif depuis le 2026-11-22 ; les deux services du
 // moment (maintenir : suivi et maintenance, évoluer : expert technique
 // externalisé) ; « La base de la qualité » : monitoring et veille, socle commun aux deux
 // (les cinq mesures sont ce que l'espace en ligne affiche déjà) ; FAQ ; deux
@@ -261,8 +261,8 @@ export default async function MaintenancePage({
       />
       <FAQJsonLd questions={FAQ} />
 
-      {/* ── Héros : h1 demandé par Agathe le 2026-09-27 ; la douleur ouvre
-          la description. ─────────────────────────────────────────────── */}
+      {/* ── Héros : h1 demandé par Agathe le 2026-09-27 ; sans descriptif
+          depuis le 2026-11-22. ───────────────────────────────────────── */}
       <PageHero
         index="№ 00"
         kicker="Gérer · Maintenance et expertise"
@@ -271,7 +271,6 @@ export default async function MaintenancePage({
             Maintenir et <em className="font-normal not-italic text-accent-secondary">évoluer</em>
           </>
         }
-        description="Une mise à jour ratée ne devrait pas se découvrir par un client. Je surveille votre site, je le tiens à jour et je vous rends compte chaque mois dans un rapport lisible sans être développeur. Quand les décisions techniques s'accumulent, je les tranche avec vous et je pilote ce qui doit évoluer."
         actions={
           <>
             {/* L'échange gratuit en premier (Calendly, nouvel onglet) ; /scan vit

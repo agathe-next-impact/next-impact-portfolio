@@ -52,11 +52,6 @@ export default async function EligibilityPage({
           ? "Project diagnostic"
           : "Diagnostic de projet"
       }
-      sousTitre={
-        locale === "en"
-          ? "Five questions to find the service that fits your project: Optimization, Redesign or Evolution, with its price excl. VAT."
-          : "Cinq questions pour trouver la prestation adaptée à votre projet : Optimisation, Refonte ou Évolution, avec son prix HT."
-      }
     >
       <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
         <div className="container">

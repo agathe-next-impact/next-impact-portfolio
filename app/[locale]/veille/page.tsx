@@ -264,14 +264,6 @@ export default async function VeillePage({
             <em className="font-normal not-italic text-accent-secondary">relus par un humain</em>
           </>
         }
-        description={
-          <>
-            Signaux Faibles suit ce qui change autour de votre organisation et
-            vous dit, chaque semaine, ce que ça change pour vos décisions. La
-            lettre de veille techno, gratuite, suit le marché web & IA. Les agents
-            lisent, je relis avant chaque envoi.
-          </>
-        }
         // Un seul bouton dans le héros (demande d'Agathe, 2026-09-28).
         actions={
           <Link href="/contact" className={BTN_PRIMARY}>

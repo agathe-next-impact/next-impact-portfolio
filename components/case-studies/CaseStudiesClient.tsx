@@ -42,7 +42,6 @@ export default function CaseStudiesClient({ cards }: { cards: CaseStudyCard[] })
         index="№ 01"
         kicker={isEn ? "Case studies" : "Études de cas"}
         title={variant.titre}
-        description={variant.sousTitre}
         // Pas de boutons dans ce héros (demande d'Agathe, 2026-11-21) : la
         // grille suit aussitôt, les appels à l'action sont en bas de page.
         backdrop={

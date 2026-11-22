@@ -69,11 +69,6 @@ export default async function PrototypeIaPage({
       <PageLayout
         compact
         titre={isEn ? "AI prototype: throwaway or maintainable?" : "Prototype IA : jetable ou maintenable ?"}
-        sousTitre={
-          isEn
-            ? "AI can code fast, but should you build? 9 checks and a clear signal: keep the prototype, scope it, or rebuild it for production."
-            : "L'IA code vite, mais faut-il construire ? 9 vérifications et un signal clair : garder le prototype, le cadrer, ou le reconstruire pour la production."
-        }
       >
         <BlueprintSection
           tone="obsidian"

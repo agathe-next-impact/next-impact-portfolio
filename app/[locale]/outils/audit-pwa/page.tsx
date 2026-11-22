@@ -73,11 +73,6 @@ export default async function AuditPwaPage({
             ? "PWA opportunity diagnostic"
             : "Diagnostic d'opportunité PWA"
         }
-        sousTitre={
-          isEn
-            ? "Should your project become an installable mobile app? 9 questions, an opportunity score and a decision signal."
-            : "Votre projet gagnerait-il à devenir une app mobile installable ? 9 questions, un score d'opportunité et un signal de décision."
-        }
       >
         <BlueprintSection
           tone="obsidian"

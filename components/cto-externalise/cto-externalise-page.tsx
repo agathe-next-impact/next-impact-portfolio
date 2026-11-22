@@ -68,11 +68,6 @@ export default function CtoExternalisePage() {
             </>
           )
         }
-        description={
-          isEn
-            ? "An outsourced technical expert is technical direction on shared time for your customer-facing digital estate: someone who decides, writes it down, steers your vendors and answers for what is decided. A few days a month, without hiring."
-            : "L'expert technique externalisé, c'est une direction technique à temps partagé pour votre numérique visible : quelqu'un qui décide, l'écrit, pilote vos prestataires et répond de ce qui est décidé. Quelques jours par mois, sans recruter."
-        }
         actions={
           <>
             {/* Premier bouton de chaque héros : l'échange gratuit (Calendly). */}

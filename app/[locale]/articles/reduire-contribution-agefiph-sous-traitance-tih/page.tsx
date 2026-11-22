@@ -107,7 +107,6 @@ export default function ArticleReduireAgefiph() {
 
       <PageLayout
         titre="Comment réduire sa contribution AGEFIPH ?"
-        sousTitre=""
       >
         <article style={{ marginBottom: 48 }}>
 

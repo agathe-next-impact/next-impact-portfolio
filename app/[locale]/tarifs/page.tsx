@@ -73,7 +73,6 @@ export default async function TarifsPage({
             Tous les prix, <em className="font-normal not-italic text-accent-secondary">avant tout rendez-vous</em>.
           </>
         }
-        description="Chaque offre, chaque palier, rangés en trois moments : diagnostiquer, faire évoluer, gérer. Prix hors taxes, écrits avant de commencer."
       />
       <Separator />
       <TarifsMoments />

@@ -153,7 +153,6 @@ export default async function EspaceClientPage({
             <em className="font-normal not-italic text-accent-secondary">au même endroit</em>.
           </>
         }
-        description="Chaque prestation se suit dans un espace en ligne : l'audit, l'état de votre site, les rapports, les décisions, la veille. Vous y voyez ce qui a été fait, ce qui reste à décider, et vous pouvez tout télécharger."
         actions={
           <>
             {/* Premier bouton de chaque héros : l'échange gratuit (Calendly).

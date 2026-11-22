@@ -69,11 +69,6 @@ export default async function DecrypteurDevisPage({
       <PageLayout
         compact
         titre={isEn ? "Web quote decoder" : "Décrypteur de devis web"}
-        sousTitre={
-          isEn
-            ? "Received a quote for a website or web tool? 9 checks, a health score and the right questions to ask before you sign."
-            : "Vous avez reçu un devis pour un site ou un outil web ? 9 vérifications, un score de santé et les bonnes questions à poser avant de signer."
-        }
       >
         <BlueprintSection
           tone="obsidian"

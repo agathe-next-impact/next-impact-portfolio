@@ -48,12 +48,12 @@ export function HeroVideo({ src, label }: { src: string; label: string }) {
 }
 
 /**
- * Ligne de prix du héros, sous l'accroche : « 1 700 € HT · En ligne en
- * 4 semaines · … ». Rendue en <span> : elle vit dans le <p> de la description.
+ * Ligne de prix du héros, sous le titre : « 1 700 € HT · En ligne en
+ * 4 semaines · … ». Passée au slot `facts` de PageHero.
  */
 export function LignePrix({ items }: { items: string[] }) {
   return (
-    <span className="mt-6 flex flex-wrap items-baseline gap-x-3 gap-y-1.5 font-mono text-xs uppercase tracking-[0.08em] text-foreground">
+    <p className="mt-6 flex max-w-2xl flex-wrap items-baseline gap-x-3 gap-y-1.5 font-mono text-xs uppercase tracking-[0.08em] text-foreground">
       {items.map((item, i) => (
         <React.Fragment key={item}>
           {i > 0 && (
@@ -64,7 +64,7 @@ export function LignePrix({ items }: { items: string[] }) {
           <span className={i === 0 ? "text-accent-secondary" : undefined}>{item}</span>
         </React.Fragment>
       ))}
-    </span>
+    </p>
   );
 }
 

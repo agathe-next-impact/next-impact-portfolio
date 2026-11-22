@@ -90,7 +90,7 @@ export default async function OutilsPage({
         url="/outils"
         items={outilsItems}
       />
-      <PageLayout compact titre={t("title")} sousTitre={t("subtitle")}>
+      <PageLayout compact titre={t("title")}>
         <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
           <div className="container">
             <OutilsBentoGrid />

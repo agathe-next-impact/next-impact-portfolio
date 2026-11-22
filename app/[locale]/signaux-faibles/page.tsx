@@ -131,7 +131,6 @@ export default async function SignauxFaiblesPage({
             <em className="font-normal not-italic text-accent-secondary">qui tient dans la durée</em>
           </>
         }
-        description="Une fin de financement, un concurrent qui ouvre, une obligation qui tombe : ces signaux existent, mais dispersés. Des agents IA les lisent chaque semaine et vous disent ce que ça change pour vos décisions. Je relis avant chaque envoi."
         actions={
           <>
             <a href={CTA_ECHANGE.href} target="_blank" rel="noopener noreferrer" className={HERO_BTN_PRIMARY}>

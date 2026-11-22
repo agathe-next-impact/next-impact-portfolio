@@ -1224,3 +1224,28 @@ Revient sur la charte v1.7 (§6 Home : héros sur les trois idées, offre par
 famille en trois onglets, section veille). `HERO_VARIANTS` et
 `SERVICES_PAGE_VARIANTS` de `lib/homepage-profiles*.ts` ne sont plus lus par
 ces pages.
+
+Complément du 2026-11-22 (demande d'Agathe) : le h1 du héros de la home devient
+« Projets de sites vitrines », avec en sous-titre « Création & Refonte »
+(`hero.titre` et `hero.sousTitre` de `lib/home-content.ts`). Le surtitre
+« Next Impact », l'accroche, les deux prix et les deux boutons ne changent pas.
+
+Second complément du 2026-11-22 (demande d'Agathe) : les héros ne portent plus
+de descriptif. La phrase sous le titre est retirée de tous les héros de la
+vitrine, home comprise (l'accroche du complément précédent disparaît donc).
+Restent le surtitre, le titre, le sous-titre quand il existe, la ligne de prix
+et les boutons, aux mêmes espacements. `PageHero` n'a plus de prop
+`description` : la ligne de prix passe par `facts` ; `PageLayout` n'a plus de
+`sousTitre`. Exception : `/wordpress-headless` garde sa définition sous le h1,
+cible du balisage Speakable (`#pillar-definition`). Sur mobile, les héros de
+`/landing-evolutive`, `/refonte-wordpress` et `/packs/etat-des-lieux` affichent
+la vidéo avant le texte (`asideFirstOnMobile`). Revient sur la charte (§6,
+« description qui porte le mesurable » et « chapô du héros » de la v1.7) : la
+charte reste à aligner.
+
+Troisième complément du 2026-11-22 (demande d'Agathe) : le h1 de la home devient
+« Un site vitrine qui évolue avec vous », accent sur « évolue avec vous ». Il
+remplace « Projets de sites vitrines », puis « Sites vitrine basés sur les
+preuves », essayés le même jour. Le sous-titre « Création & Refonte » reste. La
+balise title de la home (« Studio digital : vitrine évolutive ou refonte
+WordPress ») n'est pas modifiée.

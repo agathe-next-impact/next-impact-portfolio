@@ -37,12 +37,13 @@ export interface HomeFaqItem {
 export interface HomeContent {
   hero: {
     kicker: string;
-    /** Le h1 : « Studio Digital » (demande d'Agathe du 2026-11-21). */
+    /** Le h1 : « Un site vitrine qui évolue avec vous » (demande d'Agathe du 2026-11-22). */
     titre: string;
     /** Portion du h1 mise à l'accent. */
     titreAccent: string;
-    accroche: string;
-    /** Les deux prix, sous l'accroche. */
+    /** Le sous-titre, sous le h1 : « Création & Refonte ». */
+    sousTitre: string;
+    /** Les deux prix, sous le sous-titre (plus d'accroche depuis le 2026-11-22). */
     prix: string[];
   };
   tldr: { label: string; lines: string[] };
@@ -52,10 +53,9 @@ export interface HomeContent {
 const FR: HomeContent = {
   hero: {
     kicker: "Next Impact",
-    titre: "Studio Digital",
-    titreAccent: "Digital",
-    accroche:
-      "Deux prestations, deux prix écrits. Partez de votre situation, pas d'une liste de technologies.",
+    titre: "Un site vitrine qui évolue avec vous",
+    titreAccent: "évolue avec vous",
+    sousTitre: "Création & Refonte",
     prix: [`${LANDING.nom} : ${LANDING_PRIX}`, `${REFONTE_WP.nom} : ${minuscule(REFONTE_PRIX)}`],
   },
   tldr: {

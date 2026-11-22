@@ -121,24 +121,19 @@ export default async function LandingEvolutivePage({
       />
 
       {/* Bloc 1 : héros. La vidéo en colonne droite, la ligne de prix sous
-          l'accroche. */}
+          le titre. Sans descriptif depuis le 2026-11-22 (demande d'Agathe). */}
       <PageHero
         index="№ 01"
         kicker="Lancement d'offre"
         title={<em className="font-normal not-italic text-accent-secondary">Vitrine évolutive</em>}
-        description={
-          <>
-            Une grande page qui dit l&apos;essentiel, travaillée dans sa structure, ses textes et son rendu, pensée
-            pour convertir. Vous êtes en ligne en {LANDING.delaiSemaines} semaines et vous décidez des pages
-            suivantes sur des faits.
-            <LignePrix
-              items={[
-                `${LANDING_PRIX}, textes et visuels compris`,
-                LANDING_DELAI,
-                `Page supplémentaire : ${EXTENSION_PRIX}`,
-              ]}
-            />
-          </>
+        facts={
+          <LignePrix
+            items={[
+              `${LANDING_PRIX}, textes et visuels compris`,
+              LANDING_DELAI,
+              `Page supplémentaire : ${EXTENSION_PRIX}`,
+            ]}
+          />
         }
         backdrop={<BlueprintGrid />}
         actions={
@@ -148,6 +143,7 @@ export default async function LandingEvolutivePage({
           </>
         }
         aside={<HeroVideo src={HERO_VIDEOS.landing.src} label={HERO_VIDEOS.landing.label} />}
+        asideFirstOnMobile
       />
 
       <Separator />

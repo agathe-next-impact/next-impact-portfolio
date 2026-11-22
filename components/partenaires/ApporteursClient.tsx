@@ -131,11 +131,6 @@ export default function ApporteursClient() {
               Recommandez-la, touchez {COMMISSION_MIN} à {COMMISSION_MAX} % du projet.
             </span>
           </h1>
-          <p className="mt-6 max-w-xl font-inter-tight text-base leading-relaxed text-mid-gray md:text-lg">
-            Consultants, freelances, graphistes, experts-comptables : si votre réseau a
-            besoin d'un site rapide et sérieux, présentez-moi le contact. Je gère tout,
-            vous touchez une commission à l'encaissement.
-          </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
             {/* Premier bouton de chaque héros : l'échange gratuit (Calendly). */}
             <a href={CTA_ECHANGE.href} target="_blank" rel="noopener noreferrer" className={BTN_PRIMARY}>

@@ -18,13 +18,14 @@ import { Marquee } from "@/components/visuals/marquee";
 // que l'offre du Studio digital.
 //
 // Une seule décision : se reconnaître dans l'un des deux points de départ. Le
-// h1 est le nom de l'offre, « Studio Digital », le surtitre « Next Impact » ;
-// la place du sous-titre reste vide (demande d'Agathe), l'accroche pose la
-// règle, les deux prix suivent. Deux boutons : le renvoi vers les deux cartes,
+// h1 est « Un site vitrine qui évolue avec vous », le surtitre « Next Impact », le
+// sous-titre « Création & Refonte » (demande d'Agathe du 2026-11-22) ;
+// les deux prix suivent, sans phrase d'accroche (retirée de tous les héros à la
+// demande d'Agathe, 2026-11-22). Deux boutons : le renvoi vers les deux cartes,
 // juste sous la bande de preuve, puis l'échange gratuit (chaud). La preuve chiffrée vient dessous (ProofStrip) ; ici, la présence
 // humaine (photo) et les logos clients.
 //
-// Titre, accroche et prix : `hero` de lib/home-content.ts, qui lit
+// Titre, sous-titre et prix : `hero` de lib/home-content.ts, qui lit
 // noms et prix dans lib/prestations-web.ts.
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -66,22 +67,21 @@ export default function Hero() {
       innerClassName="px-6 py-16 lg:px-10 lg:py-24"
     >
       <div className="grid gap-12 lg:grid-cols-[1.45fr_1fr] lg:items-center">
-        {/* Les deux points de départ, la règle, les deux prix, deux boutons */}
+        {/* Les deux points de départ, les deux prix, deux boutons */}
         <Reveal className="flex flex-col gap-6">
           <div className="flex items-center gap-2 font-mono text-2xs uppercase tracking-[0.14em] text-accent-secondary">
             <span>№ 01</span>
             <span className="h-px w-6 bg-accent-secondary/50" />
             <span className="text-mid-gray">{hero.kicker}</span>
           </div>
-          {/* Le h1 est le nom de l'offre, « Studio Digital ». */}
+          {/* Le h1 dit ce qui se fait ici : « Un site vitrine qui évolue avec vous ». */}
           <h1 className="text-5xl font-extralight leading-[1.02] tracking-tight text-foreground sm:text-6xl lg:text-7xl">
             <BesoinTitle phrase={hero.titre} accent={hero.titreAccent} />
           </h1>
-          {/* Sous-titre retiré à la demande d'Agathe (2026-11-21) ; sa place
-              reste vide : deux lignes de la même hauteur, sans texte. */}
-          <div aria-hidden className="h-[3.45rem] md:h-[4.15rem]" />
-          <p className="max-w-2xl font-inter-tight text-base leading-relaxed text-mid-gray md:text-lg">
-            {hero.accroche}
+          {/* Sous-titre remis à la demande d'Agathe (2026-11-22) : les deux
+              points de départ, « Création & Refonte ». */}
+          <p className="text-xl font-light leading-snug tracking-tight text-foreground md:text-2xl">
+            {hero.sousTitre}
           </p>
           {/* Les deux prix, écrits dès le héros. */}
           <ul className="flex flex-col gap-1.5 font-mono text-xs uppercase tracking-[0.08em] text-foreground sm:flex-row sm:flex-wrap sm:gap-x-6">

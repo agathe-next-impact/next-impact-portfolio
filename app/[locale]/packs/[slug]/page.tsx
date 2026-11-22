@@ -35,8 +35,8 @@ import { CTA_ECHANGE } from "@/lib/visio-conseil";
 // v1.6, ADR-014). C'est la page d'atterrissage d'un message de prospection : un
 // message par situation, une page par message.
 //
-// Ordre de conviction (charte §5) : la douleur et la promesse (héros), la
-// preuve, le pack en trois étapes, la veille qui le distingue, le budget et ce
+// Ordre de conviction (charte §5) : le héros (titre seul, sans descriptif
+// depuis le 2026-11-22), la preuve, le pack en trois étapes, la veille qui le distingue, le budget et ce
 // qui est inclus, FAQ, deux boutons de deux
 // températures. Les abonnements restent la dernière étape du parcours.
 //
@@ -354,16 +354,15 @@ export default async function PackPage({
       {/* La FAQ structurée ne décrit que ce qui est affiché : pas de FAQ sur une page réduite. */}
       {!page.prestation && !trajectoire && <FAQJsonLd questions={page.faq} />}
 
-      {/* ── Héros : la douleur, puis la promesse ───────────────────────── */}
+      {/* ── Héros : le titre, sans descriptif (retiré le 2026-11-22) ───── */}
       <PageHero
         index={`№ ${besoin.index}`}
         kicker={besoin.moment.fr}
-        // h1 = nom de la case du mega menu (packNom, même source que le menu) ;
-        // l'ancien titre, le bénéfice, ouvre la description.
+        // h1 = nom de la case du mega menu (packNom, même source que le menu).
         title={
           heroAudit ? (
             // Page Audit + roadmap : la section 1 (« La prestation ») devient le
-            // héros — nom, prix, description et vidéo de l'espace client.
+            // héros — nom, prix et vidéo de l'espace client.
             <>
               {situation.offre.fr},{" "}
               <span className="text-accent-secondary">{formatEuros(budget.total, "fr")} HT</span>
@@ -378,11 +377,6 @@ export default async function PackPage({
         // Prestation de réalisation : la solution technique en sous-titre
         // (demande d'Agathe du 2026-09-27).
         subtitle={trajectoire?.technique.fr}
-        description={
-          heroAudit && page.prestation
-            ? page.prestation.description
-            : `${page.titre.avant}${page.titre.accent}${page.titre.apres} ${page.promesse}`
-        }
         actions={
           <>
             {/* Audit : l'offre d'abord (demande d'audit), puis l'échange gratuit
@@ -430,6 +424,8 @@ export default async function PackPage({
             <HeroNavCards label="Sur cette page" cards={heroCards} />
           )
         }
+        // Sous `lg`, la vidéo passe au-dessus du texte (page Audit seulement).
+        asideFirstOnMobile={heroAudit}
       />
 
       <Separator />

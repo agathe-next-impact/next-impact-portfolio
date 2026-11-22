@@ -100,7 +100,6 @@ export default async function PacksPage({
             <em className="font-normal not-italic text-accent-secondary">L'offre suit votre situation</em>.
           </>
         }
-        description="Trois besoins. Pour chacun, reconnaissez votre situation : elle mène au parcours qui y répond, avec ce qui vient avant, pendant et après, et son budget."
         actions={
           <>
             {/* L'échange gratuit en premier (Calendly, nouvel onglet) ; /scan vit

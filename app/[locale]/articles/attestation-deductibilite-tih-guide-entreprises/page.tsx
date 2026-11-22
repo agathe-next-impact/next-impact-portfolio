@@ -82,7 +82,6 @@ export default function ArticleAttestationTIH() {
 
       <PageLayout
         titre="Attestation de déductibilité TIH"
-        sousTitre="Comment obtenir, vérifier et intégrer l'attestation à votre déclaration OETH"
       >
         <article>
           {/* Introduction */}

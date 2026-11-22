@@ -50,7 +50,6 @@ export default async function ContactPage({
         compact
         kicker={t("breadcrumbContact")}
         title={t("title")}
-        description={t("subtitle")}
         backdrop={
           <div className="absolute inset-x-0 bottom-0 h-1/2 opacity-30">
             <SignalPaths />

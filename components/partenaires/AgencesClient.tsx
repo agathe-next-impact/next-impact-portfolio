@@ -124,10 +124,6 @@ export default function AgencesClient() {
               Vous n'avez pas le pôle dev ? Je le construis sous votre marque.
             </span>
           </h1>
-          <p className="mt-6 max-w-xl font-inter-tight text-base leading-relaxed text-mid-gray md:text-lg">
-            Double culture WordPress + web moderne, forfait garanti, délais tenus. Vous
-            gardez la relation client — je prends la technique.
-          </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
             {/* Premier bouton de chaque héros : l'échange gratuit (Calendly). */}
             <a href={CTA_ECHANGE.href} target="_blank" rel="noopener noreferrer" className={BTN_PRIMARY}>

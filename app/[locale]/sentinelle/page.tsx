@@ -209,7 +209,7 @@ export default async function SentinellePage({
         offer={{ price: OFFER_AMOUNT_CENTS / 100, billingUnitCode: "MON" }}
       />
 
-      {/* ── Héros : ce qu'est la lettre, en deux phrases ─────────────────── */}
+      {/* ── Héros : le titre, sans descriptif (retiré le 2026-11-22) ─────── */}
       <BlueprintSection ticks innerClassName="px-6 py-16 lg:px-12 lg:py-24">
         <SectionHeading
           index="№ 00"
@@ -221,7 +221,6 @@ export default async function SentinellePage({
               <em className="font-normal not-italic text-accent-secondary">votre site web</em>
             </>
           }
-          description="Deux fois par mois, une lettre sur votre site : ce qui a changé autour de lui, ce que ça change pour vous, et quoi faire. Entre deux lettres, une alerte si une faille touche un composant installé chez vous."
         />
 
         {/* Un seul bouton dans le héros (demande d'Agathe, 2026-09-28) : le

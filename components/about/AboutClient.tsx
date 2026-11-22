@@ -130,11 +130,6 @@ export default function AboutClient() {
         index="№ 01"
         kicker={t("hero.kicker")}
         title={t("hero.title")}
-        description={t.rich("hero.lead", {
-          em: (chunks) => (
-            <em className="not-italic text-accent-secondary">{chunks}</em>
-          ),
-        })}
         backdrop={
           <div className="absolute inset-x-0 bottom-0 h-1/2 opacity-30">
             <SignalPaths />
@@ -155,11 +150,7 @@ export default function AboutClient() {
             />
           </Reveal>
         }
-      >
-        <p className="mt-6 max-w-xl font-inter-tight text-base leading-relaxed text-mid-gray md:text-lg">
-          {t("hero.subtext")}
-        </p>
-      </PageHero>
+      />
 
       {/* № 02 — Le parcours */}
       <BlueprintSection tone="obsidian">

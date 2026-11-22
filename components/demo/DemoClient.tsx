@@ -31,11 +31,6 @@ export default function DemoClient({
       <PageLayout
         compact
         titre={isEn ? "Demos" : "Démos"}
-        sousTitre={
-          isEn
-            ? "From Réseauteurs, France's national networking platform, to Headless WordPress sites and mobile PWAs: every Next Impact project in action, from newest to oldest."
-            : "De Réseauteurs, la plateforme nationale du networking, aux sites WordPress Headless en passant par les apps mobiles PWA : les réalisations Next Impact en action, des plus récentes aux plus anciennes."
-        }
       >
         <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
           <div className="container">

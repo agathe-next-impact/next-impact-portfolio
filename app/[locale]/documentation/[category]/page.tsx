@@ -17,8 +17,10 @@ import type { Locale } from "@/i18n/routing";
 // Revalidate toutes les 24 heures
 export const revalidate = 86400;
 
-// Titres et descriptions par locale : le même objet alimente la meta ET le
-// header visible (H1 + chapo), pour que les deux ne divergent jamais.
+// Titres et descriptions par locale. Le titre alimente la meta ET le h1
+// visible, pour que les deux ne divergent jamais. La description n'alimente
+// plus que la meta : le chapô sous le h1 a été retiré avec les descriptifs de
+// héros (demande d'Agathe du 2026-11-22).
 type CategoryInfo = {
   title: string;
   description: string;
@@ -127,7 +129,6 @@ export default async function CategoryPage(props: CategoryPageProps) {
 
   const info = localizedCategoryInfo(category, locale)
   const categoryTitle = info.title || category.charAt(0).toUpperCase() + category.slice(1).replace(/-/g, " ")
-  const categoryDescription = info.description || ""
   const t = await getTranslations({ locale, namespace: "documentationPage" });
 
   const breadcrumbItems = [
@@ -155,12 +156,6 @@ export default async function CategoryPage(props: CategoryPageProps) {
             </h1>
             <div className="sec-meta">Documentation</div>
           </div>
-          {categoryDescription && (
-            <p style={{ fontSize: 15, color: "var(--ink-2)", maxWidth: 640, marginBottom: "2.5rem" }}>
-              {categoryDescription}
-            </p>
-          )}
-
           {/* Page pilier : vue d'ensemble dédiée pour la catégorie wordpress-headless. */}
           {category === "wordpress-headless" && (
             <Link
